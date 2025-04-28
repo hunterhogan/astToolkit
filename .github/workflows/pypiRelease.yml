@@ -1,0 +1,77 @@
+# See https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#publishing-to-package-registries
+
+name: Make PyPI Release
+
+on:
+  workflow_run:
+    workflows: ["Python Tests"]
+    types: [completed]
+  workflow_dispatch:
+  release:
+    types: [published, released]
+
+permissions:
+  contents: read
+
+jobs:
+  check-version:
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    outputs:
+      should_publish: ${{ steps.check.outputs.should_publish }}
+      url: ${{ steps.check.outputs.url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - run: pip install requests toml
+      - name: Check PyPI version
+        id: check
+        run: |
+          python -c "
+          import os, requests, toml
+          dictionaryProject = toml.load('pyproject.toml')['project']
+          version = dictionaryProject['version']
+          name = dictionaryProject['name']
+          if version not in requests.get(f'https://pypi.org/pypi/{name}/json').json()['releases']:
+            with open(os.environ['GITHUB_OUTPUT'], 'a') as writeStream:
+                writeStream.write('should_publish=true\n')
+                writeStream.write(f'url=https://pypi.org/project/{name}/{version}\n')
+          "
+
+  release-build:
+    needs: check-version
+    if: needs.check-version.outputs.should_publish == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - run: pipx run build
+      - name: Upload distributions
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-dists
+          path: dist/
+
+  pypi-publish:
+    needs: [check-version, release-build]
+    if: needs.check-version.outputs.should_publish == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: ${{ needs.check-version.outputs.url }}
+    permissions:
+      id-token: write
+    steps:
+      - name: Retrieve release distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: release-dists
+          path: dist/
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@76f52bc884231f62b9a034ebfe128415bbaabdfc #v1.12.2
+        with:
+          packages-dir: dist/

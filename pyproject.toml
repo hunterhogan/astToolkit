@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+authors = [{ name = "Hunter Hogan", email = "HunterHogan@pm.me" }]
+classifiers = [
+	"Development Status :: 5 - Production/Stable",
+	"Environment :: Console",
+	"Intended Audience :: End Users/Desktop",
+	"Intended Audience :: Other Audience",
+	"Natural Language :: English",
+	"Operating System :: OS Independent",
+	"Programming Language :: Python",
+	"Programming Language :: Python :: 3",
+	"Programming Language :: Python :: 3.10",
+	"Programming Language :: Python :: 3.11",
+	"Programming Language :: Python :: 3.12",
+	"Programming Language :: Python :: 3.13",
+	"Typing :: Typed",]
+dependencies = ["autoflake", "python_minifier", "tomli", "Z0Z_tools"]
+description = "AST manipulation and transformation tools for Python code"
+keywords = ["ast", "abstract syntax tree", "code generation", "code transformation"]
+license = { 'text' = "CC-BY-NC-4.0" }
+name = "astToolkit"
+optional-dependencies = { testing = [
+	"mypy",
+	"pytest",
+	"pytest-cov",
+	"pytest-xdist",
+	"pyupgrade",] }
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.10"
+urls = { Donate = "https://www.patreon.com/integrated", Homepage = "https://github.com/hunterhogan/astToolkit", Issues = "https://github.com/hunterhogan/astToolkit/issues", Repository = "https://github.com/hunterhogan/astToolkit.git" }
+version = "0.1.0"
+
+[tool.coverage]
+report = { exclude_lines = [
+	"if TYPE_CHECKING:",
+	"if __name__ == \"__main__\":",
+], ignore_errors = false }
+run = { branch = true, concurrency = [
+	"multiprocessing",
+], data_file = "tests/coverage/.coverage", omit = [
+	"tests/*",
+], parallel = true, source = [
+	".",] }
+xml = { output = "tests/coverage/coverage.xml" }
+
+[tool.pytest.ini_options]
+log_auto_indent = true
+addopts = ["--color=yes"]
+testpaths = ["tests"]
+
+[tool.setuptools]
+package-data = { "*" = ["py.typed"] }
+packages = { find = {} }
+
+[tool.updateCitation]
+filenameCitationDOTcff = 'CITATION.cff'
+pathFilenameCitationSSOT = "citations/CITATION.cff"

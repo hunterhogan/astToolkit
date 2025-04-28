@@ -1,0 +1,18 @@
+abstract: "astToolkit provides a comprehensive set of utilities for manipulating, analyzing, and transforming Python Abstract Syntax Trees. It offers type-safe operations, code generation tools, and traversal utilities for working with Python AST nodes."
+authors:
+- given-names: Hunter
+  family-names: Hogan
+  email: HunterHogan@pm.me
+cff-version: 1.2.0
+commit:
+date-released:
+identifiers:
+keywords:
+- AST manipulation
+- code generation
+- code transformation
+- dataclass transformation
+- source code analysis
+license: CC-BY-NC-4.0
+message: Cite this software with the metadata in this file.
+type: software

@@ -1,0 +1,26 @@
+name: Update CITATION.cff
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+defaults:
+  run:
+    shell: cmd
+
+jobs:
+  updateCitation:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - name: Install and run updateCitation
+        run: |
+          pip install updateCitation
+          python -c "import updateCitation; updateCitation.here()"

@@ -1,0 +1,56 @@
+name: Python Tests
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+
+  get-python-versions:
+    runs-on: ubuntu-latest
+    outputs:
+      python-versions: ${{ steps.get-python-versions.outputs.versions }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install packaging requests tomli
+      - id: get-python-versions
+        run: |
+          python -c "
+          from packaging.specifiers import SpecifierSet
+          from packaging.version import Version
+          from pathlib import Path
+          import itertools, json, requests, tomli, os
+
+          specifications = SpecifierSet(tomli.loads(Path('pyproject.toml').read_text())['project']['requires-python'])
+
+          listPythonVersions = [str(max(group)) for _key, group in itertools.groupby(
+            specifications.filter(Version(item['version']) for item in requests.get(
+              'https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json').json())
+            , lambda V: V.release[0:-1])]
+
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as writeStream:
+              writeStream.write(f'versions={json.dumps(listPythonVersions)}\n')
+          "
+
+  make-testbeds:
+    needs: get-python-versions
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ${{fromJson(needs.get-python-versions.outputs.python-versions)}}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install package[testing]
+        run: |
+          python -m pip install --upgrade pip
+          pip install ".[testing]"
+
+      - run: pytest
