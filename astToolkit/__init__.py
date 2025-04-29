@@ -21,7 +21,7 @@ from astToolkit._types import (
 
 from astToolkit._astTypes import *  # noqa: F403
 
-from astToolkit._toolkitPython import (
+from astToolkit._toolkitNodeVisitor import (
 	importLogicalPath2Callable as importLogicalPath2Callable,
 	importPathFilename2Callable as importPathFilename2Callable,
 	NodeChanger as NodeChanger,
