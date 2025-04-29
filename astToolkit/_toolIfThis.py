@@ -20,7 +20,7 @@ they implement a declarative approach to AST manipulation that separates node id
 """
 
 from collections.abc import Callable
-from astToolkit import ast_Identifier, Be, DOT, ImaCallToName
+from astToolkit import ast_Identifier, Be, DOT
 from typing import Any, TypeGuard
 import ast
 
@@ -72,19 +72,15 @@ class IfThis:
 		def workhorse(node: ast.AST) -> TypeGuard[ast.Attribute]:
 			return Be.Attribute(node) and IfThis.isNestedName_Identifier(identifier)(DOT.value(node))
 		return workhorse
+
 	@staticmethod
 	def isAttributeName(node: ast.AST) -> TypeGuard[ast.Attribute]:
 		""" Displayed as Name.attribute."""
 		return Be.Attribute(node) and Be.Name(DOT.value(node))
+
 	@staticmethod
 	def isAttributeNamespace_Identifier(namespace: ast_Identifier, identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.Attribute] | bool]:
 		return lambda node: IfThis.isAttributeName(node) and IfThis.isName_Identifier(namespace)(DOT.value(node)) and IfThis.isIdentifier(identifier)(DOT.attr(node))
-
-	@staticmethod
-	def isAttributeNamespace_IdentifierLessThanOrEqual(namespace: ast_Identifier, identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.Compare] | bool]:
-		return lambda node: (Be.Compare(node)
-					and IfThis.isAttributeNamespace_Identifier(namespace, identifier)(node.left)
-					and Be.LtE(node.ops[0]))
 
 	@staticmethod
 	def isAugAssignAndTargetIs(targetPredicate: Callable[[ast.expr], TypeGuard[ast.expr] | bool]) -> Callable[[ast.AST], TypeGuard[ast.AugAssign] | bool]:
@@ -93,8 +89,8 @@ class IfThis:
 		return workhorse
 
 	@staticmethod
-	def isCall_Identifier(identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ImaCallToName] | bool]:
-		def workhorse(node: ast.AST) -> TypeGuard[ImaCallToName] | bool:
+	def isCall_Identifier(identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.Call] | bool]:
+		def workhorse(node: ast.AST) -> TypeGuard[ast.Call] | bool:
 			return IfThis.isCallToName(node) and IfThis.isIdentifier(identifier)(DOT.id(DOT.func(node)))
 		return workhorse
 
@@ -103,8 +99,9 @@ class IfThis:
 		def workhorse(node: ast.AST) -> TypeGuard[ast.Call] | bool:
 			return Be.Call(node) and IfThis.isAttributeNamespace_Identifier(namespace, identifier)(DOT.func(node))
 		return workhorse
+
 	@staticmethod
-	def isCallToName(node: ast.AST) -> TypeGuard[ImaCallToName]:
+	def isCallToName(node: ast.AST) -> TypeGuard[ast.Call]:
 		return Be.Call(node) and Be.Name(DOT.func(node))
 
 	@staticmethod
@@ -131,6 +128,7 @@ class IfThis:
 	@staticmethod
 	def isName_Identifier(identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.Name] | bool]:
 		return lambda node: Be.Name(node) and IfThis.isIdentifier(identifier)(DOT.id(node))
+
 	@staticmethod
 	def isNestedName_Identifier(identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.Attribute | ast.Starred | ast.Subscript] | bool]:
 		""" `node` is `ast.Name`

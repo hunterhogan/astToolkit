@@ -1,7 +1,6 @@
-from astToolkit import str_nameDOTname, The
 from pathlib import PurePosixPath
 from string import ascii_letters
-from toolFactory import ast_Identifier, list_astDOTnew, sys_version_infoTarget
+from toolFactory import ast_Identifier, fileExtension, list_astDOTnew, pathPackage, str_nameDOTname, sys_version_infoTarget
 from toolFactory.astFactory_annex import handmadeMethodsGrab, handmadeTypeAlias_astTypes, MakeAttributeFunctionDef, MakeImportFunctionDef
 from toolFactory.docstrings import docstringWarning, ClassDefDocstringBe, ClassDefDocstringDOT, ClassDefDocstringGrab, ClassDefDocstringMake
 from typing import cast, TypedDict
@@ -69,13 +68,13 @@ class Prepend_ast2astClasses(ast.NodeTransformer):
 			return self.dictionarySubstitutions[node.id]
 		return node
 
-def makeTools(astStubFile: ast.AST, logicalPathInfix: str_nameDOTname = None) -> None:
+def makeTools(astStubFile: ast.AST) -> None:
 	def writeModule(astModule: ast.Module, moduleIdentifier: ast_Identifier) -> None:
 		ast.fix_missing_locations(astModule)
 		pythonSource: str = ast.unparse(astModule)
 		if 'Grab' in moduleIdentifier or 'DOT' in moduleIdentifier:
 			pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
-		pathFilenameModule = PurePosixPath(The.pathPackage, moduleIdentifier + The.fileExtension)
+		pathFilenameModule = PurePosixPath(pathPackage, moduleIdentifier + fileExtension)
 		writeStringToHere(pythonSource, pathFilenameModule)
 
 	# Create each ClassDef and add directly to it instead of creating unnecessary intermediate structures.
@@ -373,6 +372,13 @@ def makeTools(astStubFile: ast.AST, logicalPathInfix: str_nameDOTname = None) ->
 					, returns=attributeAnnotationAsAST
 				))
 
+		# `astTypesModule`: When one attribute has multiple return types
+		if list_hasDOTNameTypeAliasAnnotations:
+			astAnnAssignValue = list_hasDOTNameTypeAliasAnnotations[0]
+			for index in range(1, len(list_hasDOTNameTypeAliasAnnotations)):
+				astAnnAssignValue = ast.BinOp(left=astAnnAssignValue, op=ast.BitOr(), right=list_hasDOTNameTypeAliasAnnotations[index])
+			astTypesModule.body.append(ast.AnnAssign(hasDOTName_Store, typing_TypeAliasName, astAnnAssignValue, 1))
+
 		ClassDefDOT.body.append(ast.FunctionDef(name=attributeIdentifier
 				, args=ast.arguments(posonlyargs=[], args=[ast.arg(arg='node', annotation=hasDOTName_Load)], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
 				, body=[ast.Return(value=ast.Attribute(value=ast.Name('node', ast.Load()), attr=attributeIdentifier, ctx=ast.Load()))]
@@ -380,6 +386,10 @@ def makeTools(astStubFile: ast.AST, logicalPathInfix: str_nameDOTname = None) ->
 				, returns=attributeAnnotationUnifiedAsAST
 			))
 
+		astAssignValue = ast.Call(ast.Name('action', ast.Load()), args=[ast.Attribute(ast.Name('node', ast.Load()), attr=attributeIdentifier, ctx=ast.Load())])
+		if (isinstance(attributeAnnotationUnifiedAsAST, ast.Subscript) and isinstance(attributeAnnotationUnifiedAsAST.value, ast.Name) and attributeAnnotationUnifiedAsAST.value.id == 'Sequence'
+		or isinstance(attributeAnnotationUnifiedAsAST, ast.BinOp) and isinstance(attributeAnnotationUnifiedAsAST.right, ast.Subscript) and isinstance(attributeAnnotationUnifiedAsAST.right.value, ast.Name) and attributeAnnotationUnifiedAsAST.right.value.id == 'Sequence'):
+			astAssignValue = ast.Call(ast.Name('list', ctx=ast.Load()), args=[ast.Call(ast.Name('action', ast.Load()), args=[ast.Attribute(ast.Name('node', ast.Load()), attr=attributeIdentifier, ctx=ast.Load())])])
 		ClassDefGrab.body.append(ast.FunctionDef(name=attributeIdentifier + 'Attribute'
 			, args=ast.arguments(posonlyargs=[]
 				, args=[ast.arg('action'
@@ -392,19 +402,12 @@ def makeTools(astStubFile: ast.AST, logicalPathInfix: str_nameDOTname = None) ->
 			, body=[ast.FunctionDef(name='workhorse',
 						args=ast.arguments(args=[ast.arg('node', hasDOTName_Load)]),
 					body=[ast.Assign(targets=[ast.Attribute(ast.Name('node', ast.Load()), attr=attributeIdentifier, ctx=ast.Store())],
-						value=ast.Call(ast.Name('action', ast.Load()), args=[ast.Attribute(ast.Name('node', ast.Load()), attr=attributeIdentifier, ctx=ast.Load())]))
+						value = astAssignValue)
 						, ast.Return(ast.Name('node', ast.Load()))],
 						returns=hasDOTName_Load),
 			ast.Return(ast.Name('workhorse', ctx=ast.Load()))]
 			, decorator_list=[staticmethodName], type_comment=None
 			, returns=ast.Subscript(ast.Name('Callable', ast.Load()), ast.Tuple([ast.List([hasDOTName_Load], ast.Load()), hasDOTName_Load], ast.Load()), ast.Load())))
-
-		# `astTypesModule`: When one attribute has multiple return types
-		if list_hasDOTNameTypeAliasAnnotations:
-			astAnnAssignValue = list_hasDOTNameTypeAliasAnnotations[0]
-			for index in range(1, len(list_hasDOTNameTypeAliasAnnotations)):
-				astAnnAssignValue = ast.BinOp(left=astAnnAssignValue, op=ast.BitOr(), right=list_hasDOTNameTypeAliasAnnotations[index])
-			astTypesModule.body.append(ast.AnnAssign(hasDOTName_Store, typing_TypeAliasName, astAnnAssignValue, 1))
 
 	writeModule(astTypesModule, '_astTypes')
 
@@ -428,7 +431,8 @@ def makeTools(astStubFile: ast.AST, logicalPathInfix: str_nameDOTname = None) ->
 
 	writeModule(ast.Module(
 		body=[ast.Expr(ast.Constant(docstringWarning))
-			, ast.ImportFrom('collections.abc', [ast.alias('Sequence')], 0)			, ast.ImportFrom('astToolkit._astTypes', [ast.alias('*')], 0)
+			, ast.ImportFrom('astToolkit._astTypes', [ast.alias('*')], 0)
+			, ast.ImportFrom('collections.abc', [ast.alias('Sequence')], 0)
 			, ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in ['ast_Identifier', 'ast_expr_Slice', 'astDOTtype_param']], 0)
 			, ast.ImportFrom('typing', [ast.alias(identifier) for identifier in ['Any', 'Literal', 'overload']], 0)
 			, ast.Import([ast.alias('ast')])
@@ -440,9 +444,10 @@ def makeTools(astStubFile: ast.AST, logicalPathInfix: str_nameDOTname = None) ->
 
 	writeModule(ast.Module(
 		body=[ast.Expr(ast.Constant(docstringWarning))
-			, ast.ImportFrom('collections.abc', [ast.alias('Callable'), ast.alias('Sequence')], 0)
-			, astImportFromClassNewInPythonVersion			, ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in ['ast_Identifier', 'ast_expr_Slice', 'NodeORattribute', 'ImaCallToName']], 0)
 			, ast.ImportFrom('astToolkit._astTypes', [ast.alias('*')], 0)
+			, astImportFromClassNewInPythonVersion
+			, ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in ['ast_Identifier', 'ast_expr_Slice', 'NodeORattribute']], 0)
+			, ast.ImportFrom('collections.abc', [ast.alias('Callable'), ast.alias('Sequence')], 0)
 			, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('Literal')], 0)
 			, ast.Import([ast.alias('ast')])
 			, ClassDefGrab
@@ -453,9 +458,9 @@ def makeTools(astStubFile: ast.AST, logicalPathInfix: str_nameDOTname = None) ->
 
 	writeModule(ast.Module(
 		body=[ast.Expr(ast.Constant(docstringWarning))
-			, ast.ImportFrom('collections.abc', [ast.alias('Sequence')], 0)
 			, astImportFromClassNewInPythonVersion
 			, ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in ['ast_Identifier', 'ast_expr_Slice', 'intORstr', 'intORstrORtype_params', 'intORtype_params', 'str_nameDOTname']], 0)
+			, ast.ImportFrom('collections.abc', [ast.alias('Sequence')], 0)
 			, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('Literal')], 0)
 			, ast.Import([ast.alias('ast')])
 			, ClassDefMake

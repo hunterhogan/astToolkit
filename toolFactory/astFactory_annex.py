@@ -22,8 +22,8 @@ def andDoAllOf(listOfActions: list[Callable[[NodeORattribute], NodeORattribute]]
 """
 
 Grab_funcDOTidAttribute: str ="""@staticmethod
-def funcDOTidAttribute(action: Callable[[ast_Identifier], Any]) -> Callable[[ImaCallToName], ImaCallToName]:
-	def workhorse(node: ImaCallToName) -> ImaCallToName:
+def funcDOTidAttribute(action: Callable[[ast_Identifier], Any]) -> Callable[[ast.Call], ast.Call]:
+	def workhorse(node: ast.Call) -> ast.Call:
 		node.func = Grab.idAttribute(action)(node.func)
 		return node
 	return workhorse

@@ -1,7 +1,7 @@
 # ruff: noqa: F403, F405
 """This file is generated automatically, so changes to this file will be lost."""
-from collections.abc import Sequence
 from astToolkit._astTypes import *
+from collections.abc import Sequence
 from astToolkit import ast_Identifier, ast_expr_Slice, astDOTtype_param
 from typing import Any, Literal, overload
 import ast

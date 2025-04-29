@@ -193,12 +193,12 @@ def removeUnusedParameters(ingredientsFunction: IngredientsFunction) -> Ingredie
 
 	return ingredientsFunction
 
-def Z0Z_lameFindReplace(astTree: 个, mappingFindReplaceNodes: Mapping[ast.AST, ast.AST]) -> 个:
+def unparseFindReplace(astTree: 个, mappingFindReplaceNodes: Mapping[ast.AST, ast.AST]) -> 个:
 	"""
 	Recursively replace AST nodes based on a mapping of find-replace pairs.
 
 	This function applies brute-force node replacement throughout an AST tree
-	by comparing textual representations of nodes. While not the most efficient
+	by comparing textual representations of nodes. While not the most semantic
 	approach, it provides a reliable way to replace complex nested structures
 	when more precise targeting methods are difficult to implement.
 
@@ -211,7 +211,7 @@ def Z0Z_lameFindReplace(astTree: 个, mappingFindReplaceNodes: Mapping[ast.AST, 
 		mappingFindReplaceNodes: A mapping from source nodes to replacement nodes.
 
 	Returns:
-		The modified AST structure with all matching nodes replaced.
+		newTree: The modified AST structure with all matching nodes replaced.
 	"""
 	keepGoing = True
 	newTree = deepcopy(astTree)
