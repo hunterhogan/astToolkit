@@ -21,7 +21,7 @@ from astToolkit._types import (
 
 from astToolkit._astTypes import *  # noqa: F403
 
-from astToolkit._toolboxPython import (
+from astToolkit._toolkitPython import (
 	importLogicalPath2Callable as importLogicalPath2Callable,
 	importPathFilename2Callable as importPathFilename2Callable,
 	NodeChanger as NodeChanger,
@@ -38,13 +38,13 @@ from astToolkit._toolMake import Make as Make
 from astToolkit._toolIfThis import IfThis as IfThis
 from astToolkit._toolThen import Then as Then
 
-from astToolkit._toolboxContainers import (
+from astToolkit._toolkitContainers import (
 	IngredientsFunction as IngredientsFunction,
 	IngredientsModule as IngredientsModule,
 	LedgerOfImports as LedgerOfImports,
 )
 
-from astToolkit._toolboxAST import (
+from astToolkit._toolkitAST import (
 	astModuleToIngredientsFunction as astModuleToIngredientsFunction,
 	extractClassDef as extractClassDef,
 	extractFunctionDef as extractFunctionDef,

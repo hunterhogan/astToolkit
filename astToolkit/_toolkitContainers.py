@@ -160,7 +160,7 @@ class IngredientsFunction:
 	"""
 	astFunctionDef: ast.FunctionDef
 	imports: LedgerOfImports = dataclasses.field(default_factory=LedgerOfImports)
-	type_ignores: list[ast.TypeIgnore] = dataclasses.field(default_factory=list)
+	type_ignores: list[ast.TypeIgnore] = dataclasses.field(default_factory=lambda: list[ast.TypeIgnore]())
 
 @dataclasses.dataclass
 class IngredientsModule:
@@ -198,16 +198,16 @@ class IngredientsModule:
 	"""
 	imports: LedgerOfImports = dataclasses.field(default_factory=LedgerOfImports)
 	"""Modify this field using the methods in `LedgerOfImports`."""
-	prologue: ast.Module = Make.Module([],[])
+	prologue: ast.Module = Make.Module([])
 	"""Statements after the imports and before the functions in listIngredientsFunctions."""
-	listIngredientsFunctions: list[IngredientsFunction] = dataclasses.field(default_factory=list)
-	epilogue: ast.Module = Make.Module([],[])
+	listIngredientsFunctions: list[IngredientsFunction] = dataclasses.field(default_factory=lambda: list[IngredientsFunction]())
+	epilogue: ast.Module = Make.Module([])
 	"""Statements after the functions in listIngredientsFunctions and before `launcher`."""
-	launcher: ast.Module = Make.Module([],[])
+	launcher: ast.Module = Make.Module([])
 	"""`if __name__ == '__main__':`"""
 
 	# `ast.TypeIgnore` statements to supplement those in other fields; `type_ignores` is a parameter for `ast.Module` constructor
-	supplemental_type_ignores: list[ast.TypeIgnore] = dataclasses.field(default_factory=list)
+	supplemental_type_ignores: list[ast.TypeIgnore] = dataclasses.field(default_factory=lambda: list[ast.TypeIgnore]())
 
 	def __post_init__(self, ingredientsFunction: Sequence[IngredientsFunction] | IngredientsFunction | None = None) -> None:
 		if ingredientsFunction is not None:
