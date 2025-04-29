@@ -1,10 +1,8 @@
-from autoflake import fix_code as autoflake_fix_code
-from collections.abc import Callable, Mapping
-from copy import deepcopy
 from astToolkit import (
 	ast_Identifier,
 	Be,
 	DOT,
+	FREAKOUT,
 	Grab,
 	IfThis,
 	IngredientsFunction,
@@ -15,11 +13,13 @@ from astToolkit import (
 	Then,
 	个,
 )
-from astToolkit import FREAKOUT
-from Z0Z_tools import writeStringToHere
+from autoflake import fix_code as autoflake_fix_code
+from collections.abc import Callable, Mapping
+from copy import deepcopy
 from os import PathLike
 from pathlib import PurePath
 from typing import Any, cast
+from Z0Z_tools import writeStringToHere
 import ast
 
 def makeDictionaryFunctionDef(module: ast.Module) -> dict[ast_Identifier, ast.FunctionDef]:
@@ -109,43 +109,6 @@ def inlineFunctionDef(identifierToInline: ast_Identifier, module: ast.Module) ->
 	ast.fix_missing_locations(FunctionDefToInline)
 	return FunctionDefToInline
 
-def write_astModule(ingredients: IngredientsModule, pathFilename: PathLike[Any] | PurePath, packageName: ast_Identifier | None = None) -> None:
-	"""
-	Convert an IngredientsModule to Python source code and write it to a file.
-
-	This function renders an IngredientsModule into executable Python code,
-	applies code quality improvements like import organization via autoflake,
-	and writes the result to the specified file path.
-
-	The function performs several key steps:
-	1. Converts the AST module structure to a valid Python AST
-	2. Fixes location attributes in the AST for proper formatting
-	3. Converts the AST to Python source code
-	4. Optimizes imports using autoflake
-	5. Writes the final source code to the specified file location
-
-	This is typically the final step in the code generation assembly line,
-	producing optimized Python modules ready for execution.
-
-	Parameters:
-		ingredients: The IngredientsModule containing the module definition.
-		pathFilename: The file path where the module should be written.
-		packageName: Optional package name to preserve in import optimization.
-
-	Raises:
-		FREAKOUT: If the generated source code is empty.
-	"""
-	astModule = Make.Module(ingredients.body, ingredients.type_ignores)
-	ast.fix_missing_locations(astModule)
-	pythonSource: str = ast.unparse(astModule)
-	if not pythonSource: raise FREAKOUT
-	autoflake_additional_imports: list[str] = ingredients.imports.exportListModuleIdentifiers()
-	if packageName:
-		autoflake_additional_imports.append(packageName)
-	pythonSource = autoflake_fix_code(pythonSource, autoflake_additional_imports, expand_star_imports=False, remove_all_unused_imports=True, remove_duplicate_keys = False, remove_unused_variables = False)
-	# pythonSource = python_minifier.minify(pythonSource, remove_annotations=False, hoist_literals=False)
-	writeStringToHere(pythonSource, pathFilename)
-
 def removeUnusedParameters(ingredientsFunction: IngredientsFunction) -> IngredientsFunction:
 	"""
 	Removes unused parameters from a function's AST definition, return statement, and annotation.
@@ -225,3 +188,39 @@ def unparseFindReplace(astTree: 个, mappingFindReplaceNodes: Mapping[ast.AST, a
 		else:
 			astTree = deepcopy(newTree)
 	return newTree
+
+def write_astModule(ingredients: IngredientsModule, pathFilename: PathLike[Any] | PurePath, packageName: ast_Identifier | None = None) -> None:
+	"""
+	Convert an IngredientsModule to Python source code and write it to a file.
+
+	This function renders an IngredientsModule into executable Python code,
+	applies code quality improvements like import organization via autoflake,
+	and writes the result to the specified file path.
+
+	The function performs several key steps:
+	1. Converts the AST module structure to a valid Python AST
+	2. Fixes location attributes in the AST for proper formatting
+	3. Converts the AST to Python source code
+	4. Optimizes imports using autoflake
+	5. Writes the final source code to the specified file location
+
+	This is typically the final step in the code generation assembly line,
+	producing optimized Python modules ready for execution.
+
+	Parameters:
+		ingredients: The IngredientsModule containing the module definition.
+		pathFilename: The file path where the module should be written.
+		packageName: Optional package name to preserve in import optimization.
+
+	Raises:
+		FREAKOUT: If the generated source code is empty.
+	"""
+	astModule = Make.Module(ingredients.body, ingredients.type_ignores)
+	ast.fix_missing_locations(astModule)
+	pythonSource: str = ast.unparse(astModule)
+	if not pythonSource: raise FREAKOUT
+	autoflake_additional_imports: list[str] = ingredients.imports.exportListModuleIdentifiers()
+	if packageName:
+		autoflake_additional_imports.append(packageName)
+	pythonSource = autoflake_fix_code(pythonSource, autoflake_additional_imports, expand_star_imports=False, remove_all_unused_imports=True, remove_duplicate_keys = False, remove_unused_variables = False)
+	writeStringToHere(pythonSource, pathFilename)

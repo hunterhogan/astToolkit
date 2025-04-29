@@ -22,12 +22,8 @@ from astToolkit._types import (
 from astToolkit._astTypes import *  # noqa: F403
 
 from astToolkit._toolkitNodeVisitor import (
-	importLogicalPath2Callable as importLogicalPath2Callable,
-	importPathFilename2Callable as importPathFilename2Callable,
 	NodeChanger as NodeChanger,
 	NodeTourist as NodeTourist,
-	parseLogicalPath2astModule as parseLogicalPath2astModule,
-	parsePathFilename2astModule as parsePathFilename2astModule,
 )
 
 from astToolkit._toolBe import Be as Be
@@ -48,4 +44,6 @@ from astToolkit._toolkitAST import (
 	astModuleToIngredientsFunction as astModuleToIngredientsFunction,
 	extractClassDef as extractClassDef,
 	extractFunctionDef as extractFunctionDef,
+	parseLogicalPath2astModule as parseLogicalPath2astModule,
+	parsePathFilename2astModule as parsePathFilename2astModule,
 )
