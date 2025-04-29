@@ -21,7 +21,7 @@ they implement a declarative approach to AST manipulation that separates node id
 
 from collections.abc import Callable
 from astToolkit import ast_Identifier, Be, DOT
-from typing import Any, TypeGuard
+from typing import Any, TypeGuard, cast
 import ast
 
 class IfThis:
@@ -91,7 +91,7 @@ class IfThis:
 	@staticmethod
 	def isCall_Identifier(identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.Call] | bool]:
 		def workhorse(node: ast.AST) -> TypeGuard[ast.Call] | bool:
-			return IfThis.isCallToName(node) and IfThis.isIdentifier(identifier)(DOT.id(DOT.func(node)))
+			return IfThis.isCallToName(node) and IfThis.isIdentifier(identifier)(DOT.id(cast(ast.Name, DOT.func(node))))
 		return workhorse
 
 	@staticmethod

@@ -643,11 +643,3 @@ class Grab:
                 node = action(node)
             return node
         return workhorse
-
-    @staticmethod
-    def funcDOTidAttribute(action: Callable[[ast_Identifier], Any]) -> Callable[[ast.Call], ast.Call]:
-
-        def workhorse(node: ast.Call) -> ast.Call:
-            node.func = Grab.idAttribute(action)(node.func)
-            return node
-        return workhorse

@@ -1,5 +1,5 @@
 from autoflake import fix_code as autoflake_fix_code
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from copy import deepcopy
 from astToolkit import (
 	ast_Identifier,
@@ -19,7 +19,7 @@ from astToolkit import FREAKOUT
 from Z0Z_tools import writeStringToHere
 from os import PathLike
 from pathlib import PurePath
-from typing import Any
+from typing import Any, cast
 import ast
 
 def makeDictionaryFunctionDef(module: ast.Module) -> dict[ast_Identifier, ast.FunctionDef]:
@@ -65,7 +65,7 @@ def inlineFunctionDef(identifierToInline: ast_Identifier, module: ast.Module) ->
 		raise ValueError(f"FunctionDefToInline not found in dictionaryIdentifier2FunctionDef: {identifierToInline = }") from ERRORmessage
 
 	listIdentifiersCalledFunctions: list[ast_Identifier] = []
-	findIdentifiersToInline = NodeTourist(findThis = IfThis.isCallToName, doThat = Grab.funcDOTidAttribute(Then.appendTo(listIdentifiersCalledFunctions)))
+	findIdentifiersToInline = NodeTourist(findThis = IfThis.isCallToName, doThat = Grab.funcAttribute(cast(Callable[[ast.expr], ast.expr], Grab.idAttribute(cast(Callable[[ast_Identifier], ast_Identifier], Then.appendTo(listIdentifiersCalledFunctions))))))
 	findIdentifiersToInline.visit(FunctionDefToInline)
 
 	dictionary4Inlining: dict[ast_Identifier, ast.FunctionDef] = {}
