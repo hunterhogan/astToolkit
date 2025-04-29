@@ -1,7 +1,7 @@
 from pathlib import PurePosixPath
 from string import ascii_letters
 from toolFactory import ast_Identifier, fileExtension, list_astDOTnew, pathPackage, str_nameDOTname, sys_version_infoTarget
-from toolFactory.astFactory_annex import handmadeMethodsGrab, handmadeTypeAlias_astTypes, MakeAttributeFunctionDef, MakeImportFunctionDef
+from toolFactory.astFactory_annex import handmadeMethodsGrab, handmadeTypeAlias_astTypes, listPylanceErrors, MakeAttributeFunctionDef, MakeImportFunctionDef
 from toolFactory.docstrings import docstringWarning, ClassDefDocstringBe, ClassDefDocstringDOT, ClassDefDocstringGrab, ClassDefDocstringMake
 from typing import cast, TypedDict
 from Z0Z_tools import writeStringToHere
@@ -73,6 +73,18 @@ def makeTools(astStubFile: ast.AST) -> None:
 		ast.fix_missing_locations(astModule)
 		pythonSource: str = ast.unparse(astModule)
 		if 'Grab' in moduleIdentifier or 'DOT' in moduleIdentifier:
+			pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
+		if 'Grab' in moduleIdentifier:
+			listTypeIgnore: list[ast.TypeIgnore] = []
+			tag = '[reportAttributeAccessIssue]'
+			for attribute in listPylanceErrors:
+				for lineno, line in enumerate(pythonSource.splitlines()):
+					if 'node.'+attribute in line:
+						listTypeIgnore.append(ast.TypeIgnore(lineno+1, tag))
+						break
+			astModule = ast.parse(pythonSource)
+			astModule.type_ignores.extend(listTypeIgnore)
+			pythonSource: str = ast.unparse(astModule)
 			pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
 		pathFilenameModule = PurePosixPath(pathPackage, moduleIdentifier + fileExtension)
 		writeStringToHere(pythonSource, pathFilenameModule)
