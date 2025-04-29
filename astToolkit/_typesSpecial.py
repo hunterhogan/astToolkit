@@ -1,5 +1,5 @@
-import sys
 from typing import Any, TypeAlias
+import sys
 
 yourPythonIsOld: TypeAlias = Any
 

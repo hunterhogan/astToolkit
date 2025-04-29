@@ -5,10 +5,10 @@ build-backend = "setuptools.build_meta"
 [project]
 authors = [{ name = "Hunter Hogan", email = "HunterHogan@pm.me" }]
 classifiers = [
-	"Development Status :: 5 - Production/Stable",
+	"Development Status :: 4 - Beta",
 	"Environment :: Console",
-	"Intended Audience :: End Users/Desktop",
-	"Intended Audience :: Other Audience",
+	"Intended Audience :: Developers",
+	"Intended Audience :: Science/Research",
 	"Natural Language :: English",
 	"Operating System :: OS Independent",
 	"Programming Language :: Python",
@@ -17,7 +17,10 @@ classifiers = [
 	"Programming Language :: Python :: 3.11",
 	"Programming Language :: Python :: 3.12",
 	"Programming Language :: Python :: 3.13",
-	"Typing :: Typed",]
+	"Typing :: Typed",
+	"Topic :: Software Development :: Code Generators",
+	"Topic :: Software Development :: Libraries :: Python Modules",
+	"Topic :: Scientific/Engineering :: Information Analysis",]
 dependencies = ["autoflake", "python_minifier", "tomli", "Z0Z_tools"]
 description = "AST manipulation and transformation tools for Python code"
 keywords = ["ast", "abstract syntax tree", "code generation", "code transformation"]
@@ -28,11 +31,12 @@ optional-dependencies = { testing = [
 	"pytest",
 	"pytest-cov",
 	"pytest-xdist",
-	"pyupgrade",] }
+	"pyupgrade",
+	"trove_classifiers",] }
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.10"
 urls = { Donate = "https://www.patreon.com/integrated", Homepage = "https://github.com/hunterhogan/astToolkit", Issues = "https://github.com/hunterhogan/astToolkit/issues", Repository = "https://github.com/hunterhogan/astToolkit.git" }
-version = "0.1.2"
+version = "0.1.3"
 
 [tool.coverage]
 report = { exclude_lines = [

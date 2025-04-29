@@ -12,8 +12,8 @@ Together, these classes provide a complete system for manipulating AST nodes onc
 predicate functions from ifThis.
 """
 
-from collections.abc import Callable, Sequence
 from astToolkit import ast_Identifier, NodeORattribute
+from collections.abc import Callable, Sequence
 from typing import Any
 import ast
 

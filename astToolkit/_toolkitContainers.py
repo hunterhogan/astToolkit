@@ -199,10 +199,10 @@ class IngredientsModule:
 	imports: LedgerOfImports = dataclasses.field(default_factory=LedgerOfImports)
 	"""Modify this field using the methods in `LedgerOfImports`."""
 	prologue: ast.Module = Make.Module([])
-	"""Statements after the imports and before the functions in listIngredientsFunctions."""
+	"""Statements after the imports and before the functions in `listIngredientsFunctions`."""
 	listIngredientsFunctions: list[IngredientsFunction] = dataclasses.field(default_factory=lambda: list[IngredientsFunction]())
 	epilogue: ast.Module = Make.Module([])
-	"""Statements after the functions in listIngredientsFunctions and before `launcher`."""
+	"""Statements after the functions in `listIngredientsFunctions` and before `launcher`."""
 	launcher: ast.Module = Make.Module([])
 	"""`if __name__ == '__main__':`"""
 
@@ -217,7 +217,6 @@ class IngredientsModule:
 				self.appendIngredientsFunction(*ingredientsFunction)
 
 	def _append_astModule(self, self_astModule: ast.Module, astModule: ast.Module | None, statement: Sequence[ast.stmt] | ast.stmt | None, type_ignores: list[ast.TypeIgnore] | None) -> None:
-		"""Append one or more statements to `prologue`."""
 		list_body: list[ast.stmt] = []
 		listTypeIgnore: list[ast.TypeIgnore] = []
 		if astModule is not None and isinstance(astModule, ast.Module):
