@@ -11,138 +11,7 @@ astToolkit provides a powerfully composable system for manipulating Python Abstr
 
 Don't use it for simple text-based code manipulation—use regex or string operations instead.
 
-## Usage
-
-### Core Atomic Operations
-
-astToolkit provides four core classes that perform "atomic" operations on every AST class and attribute:
-
-```python
-from astToolkit import Be, DOT, Grab, Make
-import ast
-
-# Create an AST node
-node = Make.Name("example")
-
-print(f"{ast.dump(node) = }\n")
-
-# Access node properties safely with type checking
-myNameDOTidIs = DOT.id(node)
-
-print(f"{myNameDOTidIs = }\n")
-
-# Check node type with type guard functions
-CallNode = Make.Call(node)
-print(f"{ast.dump(CallNode) = }\n")
-
-print(f"{Be.Name(CallNode) = }")
-print(f"{Be.Name(node) = }")
-
-print(f"{Be.Call(CallNode) = }\n{Be.Name(DOT.func(CallNode)) = }\n")
-
-# Transform node attributes while preserving structure
-action = lambda idValue: f"modified_{idValue}"
-doThis = Grab.idAttribute(action)
-nodeAfterAction = doThis(node)
-print(f"{ast.dump(node) = }")
-```
-
-### AST Traversal and Transformation
-
-The real power lies in composable traversal and transformation using `NodeTourist` and `NodeChanger`:
-
-```python
-
-"""
-The AI assistant's example was stupid and wrong. I'm too sick right
-now to make a better one.
-"""
-
-```
-
-### Extending `IfThis` and `Then` Classes
-
-Extend these classes to create custom predicate and action functions:
-
-```python
-from astToolkit import ast_Identifier, Be, IfThis as astToolkit_IfThis
-from collections.abc import Callable
-from typing import Any, TypeGuard
-import ast
-
-class IfThis(astToolkit_IfThis):
-  @staticmethod
-  def isAttributeNamespace_IdentifierGreaterThan0(
-      namespace: ast_Identifier,
-      identifier: ast_Identifier
-      ) -> Callable[[ast.AST], TypeGuard[ast.Compare] | bool]:
-
-    return lambda node: (
-        Be.Compare(node)
-        and IfThis.isAttributeNamespace_Identifier(namespace, identifier)(node.left)
-        and Be.Gt(node.ops[0])
-        and IfThis.isConstant_value(0)(node.comparators[0]))
-
-  @staticmethod
-  def isIfAttributeNamespace_IdentifierGreaterThan0(
-      namespace: ast_Identifier,
-      identifier: ast_Identifier
-      ) -> Callable[[ast.AST], TypeGuard[ast.If] | bool]:
-
-    return lambda node: (
-        Be.If(node)
-        and IfThis.isAttributeNamespace_IdentifierGreaterThan0(namespace, identifier)(node.test))
-
-  @staticmethod
-  def isWhileAttributeNamespace_IdentifierGreaterThan0(
-      namespace: ast_Identifier,
-      identifier: ast_Identifier
-      ) -> Callable[[ast.AST], TypeGuard[ast.While] | bool]:
-
-    return lambda node: (
-        Be.While(node)
-        and IfThis.isAttributeNamespace_IdentifierGreaterThan0(namespace, identifier)(node.test))
-
-  # Or, make the comparison value a parameter
-  @staticmethod
-  def isAttributeNamespace_IdentifierGreaterThanThis(
-      namespace: ast_Identifier,
-      identifier: ast_Identifier,
-      value: Any
-      ) -> Callable[[ast.AST], TypeGuard[ast.Compare] | bool]:
-
-    return lambda node: (
-        Be.Compare(node)
-        and IfThis.isAttributeNamespace_Identifier(namespace, identifier)(node.left)
-        and Be.Gt(node.ops[0])
-        and IfThis.isConstant_value(value)(node.comparators[0]))
-```
-
-### Easy-to-use Tools for Annoying Tasks
-
-- extractClassDef
-- extractFunctionDef
-- parseLogicalPath2astModule
-- parsePathFilename2astModule
-
-### Easy-to-use Tools for More Complicated Tasks
-
-- removeUnusedParameters
-- write_astModule
-
-### The `toolFactory`
-
-Hypothetically, you could customize every aspect of the classes `Be`, `DOT`, `GRAB`, and `Make` and more than 100 `TypeAlias` in the toolFactory directory/package.
-
-## Installation
-
-```bash
-pip install astToolkit
-```
-
-## Technical Details
-
-### Architecture
+## Architecture
 
 astToolkit implements a layered architecture designed for composability and type safety:
 
@@ -169,6 +38,264 @@ astToolkit implements a layered architecture designed for composability and type
    - Custom type annotations for AST node attributes.
    - Union types that accurately model Python's AST structure.
    - Type guards that enable static type checkers to understand dynamic type narrowing.
+
+### Easy-to-use Tools for Annoying Tasks
+
+- extractClassDef
+- extractFunctionDef
+- parseLogicalPath2astModule
+- parsePathFilename2astModule
+
+### Easy-to-use Tools for More Complicated Tasks
+
+- removeUnusedParameters
+- write_astModule
+
+### The `toolFactory`
+
+Hypothetically, you could customize every aspect of the classes `Be`, `DOT`, `GRAB`, and `Make` and more than 100 `TypeAlias` in the toolFactory directory/package.
+
+## Usage
+
+astToolkit provides a comprehensive set of tools for AST manipulation, organized in a layered architecture for composability and type safety. The following examples demonstrate how to use these tools in real-world scenarios.
+
+### Core Pattern: Layered AST Manipulation
+
+The astToolkit approach follows a layered pattern:
+
+1. **Create/Access/Check** - Use `Make`, `DOT`, and `Be` to work with AST nodes
+2. **Locate** - Use `IfThis` predicates to identify nodes of interest
+3. **Transform** - Use `NodeChanger` and `Then` to modify nodes
+4. **Extract** - Use `NodeTourist` to collect information from the AST
+
+### Example 1: Extracting Information from AST
+
+This example shows how to extract information from a function's parameters:
+
+```python
+from astToolkit import Be, DOT, NodeTourist, Then
+import ast
+
+# Parse some Python code into an AST
+code = """
+def process_data(state: DataClass):
+    result = state.value * 2
+    return result
+"""
+tree = ast.parse(code)
+
+# Extract the parameter name from the function
+function_def = tree.body[0]
+param_name = NodeTourist(
+    Be.arg,                  # Look for function parameters
+    Then.extractIt(DOT.arg)  # Extract the parameter name
+).captureLastMatch(function_def)
+
+print(f"Function parameter name: {param_name}")  # Outputs: state
+
+# Extract the parameter's type annotation
+annotation = NodeTourist(
+    Be.arg,                       # Look for function parameters
+    Then.extractIt(DOT.annotation)  # Extract the type annotation
+).captureLastMatch(function_def)
+
+if annotation and Be.Name(annotation):
+    annotation_name = DOT.id(annotation)
+    print(f"Parameter type: {annotation_name}")  # Outputs: DataClass
+```
+
+### Example 2: Transforming AST Nodes
+
+This example demonstrates how to transform a specific node in the AST:
+
+```python
+from astToolkit import Be, IfThis, Make, NodeChanger, Then
+import ast
+
+# Parse some Python code into an AST
+code = """
+def double(x):
+    return x * 2
+"""
+tree = ast.parse(code)
+
+# Define a predicate to find the multiplication operation
+find_mult = Be.Mult
+
+# Define a transformation to change multiplication to addition
+change_to_add = Then.replaceWith(ast.Add())
+
+# Apply the transformation
+NodeChanger(find_mult, change_to_add).visit(tree)
+
+# Now the code is equivalent to:
+# def double(x):
+#     return x + x
+print(ast.unparse(tree))
+```
+
+### Example 3: Advanced AST Transformation with Custom Predicates
+
+This example shows a more complex transformation inspired by the mapFolding package:
+
+```python
+from astToolkit import ast_Identifier, Be, DOT, Grab, IfThis as astToolkit_IfThis, Make, NodeChanger, Then
+import ast
+
+# Define custom predicates by extending IfThis
+class IfThis(astToolkit_IfThis):
+  @staticmethod
+  def isAttributeNamespace_IdentifierGreaterThan0(
+      namespace: ast_Identifier,
+      identifier: ast_Identifier
+      ) -> Callable[[ast.AST], TypeGuard[ast.Compare] | bool]:
+
+    return lambda node: (
+        Be.Compare(node)
+        and IfThis.isAttributeNamespace_Identifier(namespace, identifier)(DOT.left(node))
+        and Be.Gt(node.ops[0])
+        and IfThis.isConstant_value(0)(node.comparators[0]))
+
+  @staticmethod
+  def isWhileAttributeNamespace_IdentifierGreaterThan0(
+      namespace: ast_Identifier,
+      identifier: ast_Identifier
+      ) -> Callable[[ast.AST], TypeGuard[ast.While] | bool]:
+
+    return lambda node: (
+        Be.While(node)
+        and IfThis.isAttributeNamespace_IdentifierGreaterThan0(namespace, identifier)(DOT.test(node)))
+
+# Parse some code
+code = """
+while claude.counter > 0:
+    result += counter
+    counter -= 1
+"""
+tree = ast.parse(code)
+
+# Find the while loop with our custom predicate
+find_while_loop = IfThis.isWhileAttributeNamespace_IdentifierGreaterThan0("claude", "counter")
+
+# Replace counter > 0 with counter > 1
+change_condition = Grab.testAttribute(
+    Grab.comparatorsAttribute(
+        Then.replaceWith([Make.Constant(1)])
+    )
+)
+
+# Apply the transformation
+NodeChanger(find_while_loop, change_condition).visit(tree)
+
+print(ast.unparse(tree))
+# Now outputs:
+# while counter > 1:
+#     result += counter
+#     counter -= 1
+```
+
+### Example 4: Building Code Generation Systems
+
+The following example shows how to set up a foundation for code generation and transformation systems:
+
+```python
+from astToolkit import (
+    Be, DOT, IngredientsFunction, IngredientsModule, LedgerOfImports,
+    Make, NodeTourist, Then, parseLogicalPath2astModule, write_astModule
+)
+import ast
+
+# Parse a module to extract a function
+module_ast = parseLogicalPath2astModule("my_package.source_module")
+
+# Extract a function and track its imports
+function_name = "target_function"
+function_def = NodeTourist(
+    IfThis.isFunctionDef_Identifier(function_name),
+    Then.extractIt
+).captureLastMatch(module_ast)
+
+if function_def:
+    # Create a self-contained function with tracked imports
+    ingredients = IngredientsFunction(
+        function_def,
+        LedgerOfImports(module_ast)
+    )
+
+    # Rename the function
+    ingredients.astFunctionDef.name = "optimized_" + function_name
+
+    # Add a decorator
+    decorator = Make.Call(
+        Make.Name("jit"),
+        [],
+        [Make.keyword("cache", Make.Constant(True))]
+    )
+    ingredients.astFunctionDef.decorator_list.append(decorator)
+
+    # Add required import
+    ingredients.imports.addImportFrom_asStr("numba", "jit")
+
+    # Create a module and write it to disk
+    module = IngredientsModule(ingredients)
+    write_astModule(module, "path/to/generated_code.py", "my_package")
+```
+
+### Example 5: Extending Core Classes
+
+To create specialized patterns for your codebase, extend the core classes:
+
+```python
+from astToolkit import ast_Identifier, Be, IfThis as astToolkit_IfThis
+from collections.abc import Callable
+from typing import TypeGuard
+import ast
+
+class IfThis(astToolkit_IfThis):
+    @staticmethod
+    def isAttributeNamespace_IdentifierGreaterThan0(
+        namespace: ast_Identifier,
+        identifier: ast_Identifier
+    ) -> Callable[[ast.AST], TypeGuard[ast.Compare] | bool]:
+        """Find comparisons like 'state.counter > 0'"""
+        return lambda node: (
+            Be.Compare(node)
+            and IfThis.isAttributeNamespace_Identifier(namespace, identifier)(node.left)
+            and Be.Gt(node.ops[0])
+            and IfThis.isConstant_value(0)(node.comparators[0])
+        )
+
+    @staticmethod
+    def isWhileAttributeNamespace_IdentifierGreaterThan0(
+        namespace: ast_Identifier,
+        identifier: ast_Identifier
+    ) -> Callable[[ast.AST], TypeGuard[ast.While] | bool]:
+        """Find while loops like 'while state.counter > 0:'"""
+        return lambda node: (
+            Be.While(node)
+            and IfThis.isAttributeNamespace_IdentifierGreaterThan0(namespace, identifier)(node.test)
+        )
+```
+
+### Real-world Application: Code Transformation Assembly-line
+
+In the [mapFolding](https://github.com/hunterhogan/mapFolding) project, astToolkit is used to build a complete transformation assembly-line that:
+
+1. Extracts algorithms from source modules
+2. Transforms them into optimized variants
+3. Applies numerical computing decorators
+4. Handles dataclass management and type systems
+5. Generates complete modules with proper imports
+
+This pattern enables the separation of readable algorithm implementations from their high-performance variants while ensuring they remain functionally equivalent.
+
+For deeper examples, see the [mapFolding/someAssemblyRequired](https://github.com/hunterhogan/mapFolding/tree/main/mapFolding/someAssemblyRequired/) directory.
+
+## Installation
+
+```bash
+pip install astToolkit
+```
 
 ## My Recovery
 
