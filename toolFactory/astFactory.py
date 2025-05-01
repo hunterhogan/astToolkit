@@ -1,7 +1,14 @@
 from pathlib import PurePosixPath
 from string import ascii_letters
 from toolFactory import ast_Identifier, fileExtension, list_astDOTnew, listASTSubclasses, pathPackage, str_nameDOTname, sys_version_infoTarget
-from toolFactory.astFactory_annex import handmadeMethodsGrab, listHandmadeTypeAlias_astTypes, listPylanceErrors, MakeAttributeFunctionDef, MakeImportFunctionDef
+from toolFactory.astFactory_annex import (
+	astImportFromClassNewInPythonVersion,
+	handmadeMethodsGrab,
+	listHandmadeTypeAlias_astTypes,
+	listPylanceErrors,
+	MakeAttributeFunctionDef,
+	MakeImportFunctionDef,
+)
 from toolFactory.docstrings import docstringWarning, ClassDefDocstringBe, ClassDefDocstringDOT, ClassDefDocstringGrab, ClassDefDocstringMake
 from typing import cast, TypedDict
 from Z0Z_tools import writeStringToHere
@@ -10,8 +17,6 @@ import ast
 class AnnotationsAndDefs(TypedDict):
 	astAnnotation: ast.expr
 	listClassDefIdentifier: list[ast_Identifier | str_nameDOTname]
-
-astImportFromClassNewInPythonVersion = ast.ImportFrom('astToolkit', [ast.alias(post310class) for post310class in list_astDOTnew], 0)
 
 keywordArgumentsIdentifier: ast_Identifier = 'keywordArguments'
 moduleIdentifierPrefix: str = '_tool'

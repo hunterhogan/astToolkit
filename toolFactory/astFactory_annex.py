@@ -3,6 +3,7 @@ import ast
 
 format_asNameAttribute: str = "astDOT{nameAttribute}"
 listHandmadeTypeAlias_astTypes: list[ast.AnnAssign | ast.If] = []
+astImportFromClassNewInPythonVersion: ast.ImportFrom = ast.ImportFrom('astToolkit', [], 0)
 
 listStrRepresentationsOfTypeAlias: list[str] = [
 	(astTypes_intORstr := "intORstr: typing_TypeAlias = Any"),
@@ -38,6 +39,7 @@ for tupleOfClassData in listPythonVersionNewClass:
 		asNameAttribute = format_asNameAttribute.format(nameAttribute=nameAttribute)
 		cast(ast.ImportFrom, conditionalTypeAlias.body[0]).names.append(ast.alias(name=nameAttribute, asname=asNameAttribute))
 		conditionalTypeAlias.orelse.append(ast.AnnAssign(target=ast.Name(asNameAttribute, ast.Store()), annotation=ast.Name('typing_TypeAlias', ast.Load()), value=ast.Name('yourPythonIsOld', ast.Load()), simple=1))
+		astImportFromClassNewInPythonVersion.names.append(ast.alias(name=asNameAttribute))
 
 	listHandmadeTypeAlias_astTypes.append(conditionalTypeAlias)
 
