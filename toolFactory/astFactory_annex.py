@@ -59,7 +59,7 @@ for string in [Grab_andDoAllOf]:
 		if isinstance(node, ast.FunctionDef):
 			handmadeMethodsGrab.append(node)
 
-MakeAttributeFunctionDef: ast.FunctionDef = ast.FunctionDef(
+FunctionDefMake_Attribute: ast.FunctionDef = ast.FunctionDef(
 	name='Attribute',
 	args=ast.arguments(args=[ast.arg(arg='value', annotation=ast.Attribute(value=ast.Name('ast', ast.Load()), attr='expr', ctx=ast.Load()))], vararg=ast.arg(arg='attribute', annotation=ast.Name('ast_Identifier', ast.Load())), kwonlyargs=[ast.arg(arg='context', annotation=ast.Attribute(value=ast.Name('ast', ast.Load()), attr='expr_context', ctx=ast.Load()))], kw_defaults=[ast.Call(ast.Attribute(value=ast.Name('ast', ast.Load()), attr='Load', ctx=ast.Load()))], kwarg=ast.arg(arg='keywordArguments', annotation=ast.Name('int', ast.Load()))),
 	body=[

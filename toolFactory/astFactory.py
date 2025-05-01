@@ -6,7 +6,7 @@ from toolFactory.astFactory_annex import (
 	handmadeMethodsGrab,
 	listHandmadeTypeAlias_astTypes,
 	listPylanceErrors,
-	MakeAttributeFunctionDef,
+	FunctionDefMake_Attribute,
 	MakeImportFunctionDef,
 )
 from toolFactory.docstrings import docstringWarning, ClassDefDocstringBe, ClassDefDocstringDOT, ClassDefDocstringGrab, ClassDefDocstringMake
@@ -98,23 +98,6 @@ def makeTools(astStubFile: ast.AST) -> None:
 	# fewer identifiers == fewer bugs
 	ClassDefBe = ast.ClassDef(name='Be', bases=[], keywords=[], body=[], decorator_list=[])
 	ClassDefClassIsAndAttribute = ast.ClassDef(name='ClassIsAndAttribute', bases=[], keywords=[], body=[], decorator_list=[])
-	"""Examples
-	@staticmethod
-	@overload
-	def annotationIs(astClass: type[hasDOTannotation_expr], valuePredicate: Callable[[ast.AST], TypeGuard[Ima_ast_expr] | bool]) -> Callable[[ast.AST], TypeGuard[hasDOTannotation_expr] | bool]:...
-	@staticmethod
-	@overload
-	def annotationIs(astClass: type[hasDOTannotation_exprOrNone], valuePredicate: Callable[[ast.AST], TypeGuard[Ima_ast_expr] | bool]) -> Callable[[ast.AST], TypeGuard[hasDOTannotation_exprOrNone] | bool]:...
-	@staticmethod
-	def annotationIs(astClass: type[hasDOTannotation], valuePredicate: Callable[[ast.AST], TypeGuard[Ima_ast_expr] | bool]) -> Callable[[ast.AST], TypeGuard[hasDOTannotation] | bool]:
-		return lambda node: isinstance(node, astClass) and DOT.annotation(node) is not None and valuePredicate(DOT.annotation(node))
-
-	@staticmethod
-	def leftIs(astClass: type[hasDOTleft], valuePredicate: Callable[[ast.AST], TypeGuard[Ima_ast_expr] | bool]) -> Callable[[ast.AST], TypeGuard[hasDOTleft] | bool]:
-		return lambda node: isinstance(node, astClass) and valuePredicate(DOT.left(node))
-
-	In general, I think the flow will piggyback `DOT`.
-	"""
 	ClassDefDOT = ast.ClassDef(name='DOT', bases=[], keywords=[], body=[], decorator_list=[])
 	ClassDefMake = ast.ClassDef(name='Make', bases=[], keywords=[], body=[], decorator_list=[])
 	ClassDefGrab = ast.ClassDef(name='Grab', bases=[], keywords=[], body=[], decorator_list=[])
@@ -233,7 +216,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 						case 'Attribute':
 							if cast(ast.FunctionDef, ClassDefMake.body[-1]).name == ClassDefIdentifier:
 								ClassDefMake.body.pop(-1)
-							ClassDefMake.body.append(MakeAttributeFunctionDef)
+							ClassDefMake.body.append(FunctionDefMake_Attribute)
 							continue
 						case 'Import':
 							if cast(ast.FunctionDef, ClassDefMake.body[-1]).name == ClassDefIdentifier:
@@ -402,19 +385,41 @@ def makeTools(astStubFile: ast.AST) -> None:
 			else:
 				list_hasDOTNameTypeAliasAnnotations.append(ast.Name(hasDOTIdentifier + '_' + attributeAnnotationAsStr4TypeAliasIdentifier.replace('list', 'list_'), ast.Store()))
 				astTypesModule.body.append(ast.AnnAssign(list_hasDOTNameTypeAliasAnnotations[-1], typing_TypeAliasName, astAnnAssignValue, 1))
+				# overload definitions for `DOT` class
 				ClassDefDOT.body.append(ast.FunctionDef(name=attributeIdentifier
 					, args=ast.arguments(posonlyargs=[], args=[ast.arg(arg='node', annotation=ast.Name(list_hasDOTNameTypeAliasAnnotations[-1].id, ast.Load()))], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
 					, body=[ast.Expr(value=ast.Constant(value=Ellipsis))]
 					, decorator_list=[staticmethodName, overloadName]
 					, returns=attributeAnnotationAsAST
 				))
+		"""Examples
+		@staticmethod
+		@overload
+		def annotationIs(astClass: type[hasDOTannotation_expr], valuePredicate: Callable[[ast.AST], TypeGuard[Ima_ast_expr] | bool]) -> Callable[[ast.AST], TypeGuard[hasDOTannotation_expr] | bool]:...
+		@staticmethod
+		@overload
+		def annotationIs(astClass: type[hasDOTannotation_exprOrNone], valuePredicate: Callable[[ast.AST], TypeGuard[Ima_ast_expr] | bool]) -> Callable[[ast.AST], TypeGuard[hasDOTannotation_exprOrNone] | bool]:...
+		@staticmethod
+		def annotationIs(astClass: type[hasDOTannotation], valuePredicate: Callable[[ast.AST], TypeGuard[Ima_ast_expr] | bool]) -> Callable[[ast.AST], TypeGuard[hasDOTannotation] | bool]:
+			return lambda node: isinstance(node, astClass) and DOT.annotation(node) is not None and valuePredicate(DOT.annotation(node))
 
-		# `astTypesModule`: When one attribute has multiple return types
-		if list_hasDOTNameTypeAliasAnnotations:
-			astAnnAssignValue = list_hasDOTNameTypeAliasAnnotations[0]
-			for index in range(1, len(list_hasDOTNameTypeAliasAnnotations)):
-				astAnnAssignValue = ast.BinOp(left=astAnnAssignValue, op=ast.BitOr(), right=list_hasDOTNameTypeAliasAnnotations[index])
-			astTypesModule.body.append(ast.AnnAssign(hasDOTName_Store, typing_TypeAliasName, astAnnAssignValue, 1))
+
+		In general, I think the flow will piggyback `DOT`.
+		@staticmethod
+		def leftIs(astClass: type[hasDOTleft], valuePredicate: Callable[[ast.AST], TypeGuard[Ima_ast_expr] | bool]) -> Callable[[ast.AST], TypeGuard[hasDOTleft] | bool]:
+			return lambda node: isinstance(node, astClass) and valuePredicate(DOT.left(node))
+
+		ClassDefClassIsAndAttribute.body.append(
+			ast.FunctionDef(name=attributeIdentifier + 'Is'
+				, args=ast.arguments(posonlyargs=[], args=[
+					ast.arg('astClass', annotation = ast.Subscript(value=ast.Name('type', ), slice=, ctx=ast.Load()))
+					], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
+				, body=[ast.Return(value=ast.Attribute(value=ast.Name('node', ast.Load()), attr=attributeIdentifier, ctx=ast.Load()))]
+				, decorator_list=[staticmethodName]
+				, returns=attributeAnnotationUnifiedAsAST
+			)
+		)
+		"""
 
 		ClassDefDOT.body.append(ast.FunctionDef(name=attributeIdentifier
 				, args=ast.arguments(posonlyargs=[], args=[ast.arg(arg='node', annotation=hasDOTName_Load)], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
@@ -423,6 +428,12 @@ def makeTools(astStubFile: ast.AST) -> None:
 				, returns=attributeAnnotationUnifiedAsAST
 			))
 
+		# `astTypesModule`: When one attribute has multiple return types
+		if list_hasDOTNameTypeAliasAnnotations:
+			astAnnAssignValue = list_hasDOTNameTypeAliasAnnotations[0]
+			for index in range(1, len(list_hasDOTNameTypeAliasAnnotations)):
+				astAnnAssignValue = ast.BinOp(left=astAnnAssignValue, op=ast.BitOr(), right=list_hasDOTNameTypeAliasAnnotations[index])
+			astTypesModule.body.append(ast.AnnAssign(hasDOTName_Store, typing_TypeAliasName, astAnnAssignValue, 1))
 		astAssignValue = ast.Call(ast.Name('action', ast.Load()), args=[ast.Attribute(ast.Name('node', ast.Load()), attr=attributeIdentifier, ctx=ast.Load())])
 		if (isinstance(attributeAnnotationUnifiedAsAST, ast.Subscript) and isinstance(attributeAnnotationUnifiedAsAST.value, ast.Name) and attributeAnnotationUnifiedAsAST.value.id == 'Sequence'
 		or isinstance(attributeAnnotationUnifiedAsAST, ast.BinOp) and isinstance(attributeAnnotationUnifiedAsAST.right, ast.Subscript) and isinstance(attributeAnnotationUnifiedAsAST.right.value, ast.Name) and attributeAnnotationUnifiedAsAST.right.value.id == 'Sequence'):
