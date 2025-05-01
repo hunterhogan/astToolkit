@@ -1,6 +1,7 @@
 from toolFactory.Z0Z_hardcoded import (
 	ast_Identifier as ast_Identifier,
 	fileExtension as fileExtension,
+	listASTSubclasses as listASTSubclasses,
 	FREAKOUT as FREAKOUT,
 	packageName as packageName,
 	pathPackage as pathPackage,
@@ -11,3 +12,5 @@ from toolFactory.Z0Z_hardcoded import (
 	)
 
 from toolFactory.startHere import list_astDOTnew as list_astDOTnew, Z0Z_typesSpecial as Z0Z_typesSpecial
+
+from toolFactory.astFactory import makeTools as makeTools

@@ -360,14 +360,6 @@ class Be:
         return isinstance(node, ast.NamedExpr)
 
     @staticmethod
-    def NodeTransformer(node: ast.AST) -> TypeGuard[ast.NodeTransformer]:
-        return isinstance(node, ast.NodeTransformer)
-
-    @staticmethod
-    def NodeVisitor(node: ast.AST) -> TypeGuard[ast.NodeVisitor]:
-        return isinstance(node, ast.NodeVisitor)
-
-    @staticmethod
     def Nonlocal(node: ast.AST) -> TypeGuard[ast.Nonlocal]:
         return isinstance(node, ast.Nonlocal)
 

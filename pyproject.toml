@@ -53,7 +53,7 @@ xml = { output = "tests/coverage/coverage.xml" }
 
 [tool.pytest.ini_options]
 log_auto_indent = true
-addopts = ["--color=yes"]
+addopts = ["--color=auto"]
 testpaths = ["tests"]
 
 [tool.setuptools]

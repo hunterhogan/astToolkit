@@ -1,13 +1,9 @@
 from astToolkit._typesSpecial import (
-	astDOTParamSpec as astDOTParamSpec,
-	astDOTTryStar as astDOTTryStar,
-	astDOTtype_param as astDOTtype_param,
-	astDOTTypeAlias as astDOTTypeAlias,
-	astDOTTypeVar as astDOTTypeVar,
-	astDOTTypeVarTuple as astDOTTypeVarTuple,
 	NotRequired as NotRequired,
 	TypedDict as TypedDict,
 )
+
+from astToolkit._astTypes import *  # noqa: F403
 
 from astToolkit.theSSOT import FREAKOUT as FREAKOUT, The as The
 
@@ -18,8 +14,6 @@ from astToolkit._types import (
 	str_nameDOTname as str_nameDOTname,
 	个 as 个,
 )
-
-from astToolkit._astTypes import *  # noqa: F403
 
 from astToolkit._toolkitNodeVisitor import (
 	NodeChanger as NodeChanger,

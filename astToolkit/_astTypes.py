@@ -1,10 +1,23 @@
 """This file is generated automatically, so changes to this file will be lost."""
-from astToolkit import astDOTParamSpec, astDOTTryStar, astDOTTypeAlias, astDOTTypeVar, astDOTTypeVarTuple, astDOTtype_param
 from typing import Any, TypeAlias as typing_TypeAlias
 import ast
+import sys
 intORstr: typing_TypeAlias = Any
 intORstrORtype_params: typing_TypeAlias = Any
 intORtype_params: typing_TypeAlias = Any
+yourPythonIsOld: typing_TypeAlias = Any
+if sys.version_info >= (3, 11):
+    from ast import TryStar as astDOTTryStar
+else:
+    astDOTTryStar: typing_TypeAlias = yourPythonIsOld
+if sys.version_info >= (3, 12):
+    from ast import ParamSpec as astDOTParamSpec, type_param as astDOTtype_param, TypeAlias as astDOTTypeAlias, TypeVar as astDOTTypeVar, TypeVarTuple as astDOTTypeVarTuple
+else:
+    astDOTParamSpec: typing_TypeAlias = yourPythonIsOld
+    astDOTtype_param: typing_TypeAlias = yourPythonIsOld
+    astDOTTypeAlias: typing_TypeAlias = yourPythonIsOld
+    astDOTTypeVar: typing_TypeAlias = yourPythonIsOld
+    astDOTTypeVarTuple: typing_TypeAlias = yourPythonIsOld
 hasDOTannotation_expr: typing_TypeAlias = ast.AnnAssign
 hasDOTannotation_exprOrNone: typing_TypeAlias = ast.arg
 hasDOTannotation: typing_TypeAlias = hasDOTannotation_expr | hasDOTannotation_exprOrNone

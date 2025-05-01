@@ -6,6 +6,7 @@ build-backend = "setuptools.build_meta"
 authors = [{ name = "Hunter Hogan", email = "HunterHogan@pm.me" }]
 classifiers = []
 dependencies = [
+	"astToolkit",
 	"mypy",
 	"PyGitHub",
 	"pytest",
@@ -22,7 +23,7 @@ name = "toolFactory"
 optional-dependencies = {}
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.12"
-urls = { Donate = "https://www.patreon.com/integrated", Homepage = "https://github.com/hunterhogan/", Repository = "https://github.com/hunterhogan/" }
+urls = { Donate = "https://www.patreon.com/integrated", Homepage = "https://github.com/hunterhogan/astToolkit", Repository = "https://github.com/hunterhogan/astToolkit.git" }
 version = "0.0.1"
 
 [tool.coverage]
@@ -40,13 +41,9 @@ xml = { output = "tests/coverage/coverage.xml" }
 
 [tool.pytest.ini_options]
 log_auto_indent = true
-addopts = ["--color=yes"]
+addopts = ["--color=auto"]
 testpaths = ["tests"]
 
 [tool.setuptools]
 package-data = { "*" = ["py.typed"] }
 packages = { find = {} }
-
-[tool.updateCitation]
-filenameCitationDOTcff = 'CITATION.cff'
-pathFilenameCitationSSOT = "citations/CITATION.cff"

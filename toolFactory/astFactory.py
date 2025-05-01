@@ -1,7 +1,7 @@
 from pathlib import PurePosixPath
 from string import ascii_letters
-from toolFactory import ast_Identifier, fileExtension, list_astDOTnew, pathPackage, str_nameDOTname, sys_version_infoTarget
-from toolFactory.astFactory_annex import handmadeMethodsGrab, handmadeTypeAlias_astTypes, listPylanceErrors, MakeAttributeFunctionDef, MakeImportFunctionDef
+from toolFactory import ast_Identifier, fileExtension, list_astDOTnew, listASTSubclasses, pathPackage, str_nameDOTname, sys_version_infoTarget
+from toolFactory.astFactory_annex import handmadeMethodsGrab, listHandmadeTypeAlias_astTypes, listPylanceErrors, MakeAttributeFunctionDef, MakeImportFunctionDef
 from toolFactory.docstrings import docstringWarning, ClassDefDocstringBe, ClassDefDocstringDOT, ClassDefDocstringGrab, ClassDefDocstringMake
 from typing import cast, TypedDict
 from Z0Z_tools import writeStringToHere
@@ -89,9 +89,27 @@ def makeTools(astStubFile: ast.AST) -> None:
 		pathFilenameModule = PurePosixPath(pathPackage, moduleIdentifier + fileExtension)
 		writeStringToHere(pythonSource, pathFilenameModule)
 
-	# Create each ClassDef and add directly to it instead of creating unnecessary intermediate structures.
+	# Create each ClassDef and add directly to it instead of creating unnecessary intermediate structures, which requires more identifiers.
 	# fewer identifiers == fewer bugs
 	ClassDefBe = ast.ClassDef(name='Be', bases=[], keywords=[], body=[], decorator_list=[])
+	ClassDefClassIsAndAttribute = ast.ClassDef(name='ClassIsAndAttribute', bases=[], keywords=[], body=[], decorator_list=[])
+	"""Examples
+	@staticmethod
+	@overload
+	def annotationIs(astClass: type[hasDOTannotation_expr], valuePredicate: Callable[[ast.AST], TypeGuard[Ima_ast_expr] | bool]) -> Callable[[ast.AST], TypeGuard[hasDOTannotation_expr] | bool]:...
+	@staticmethod
+	@overload
+	def annotationIs(astClass: type[hasDOTannotation_exprOrNone], valuePredicate: Callable[[ast.AST], TypeGuard[Ima_ast_expr] | bool]) -> Callable[[ast.AST], TypeGuard[hasDOTannotation_exprOrNone] | bool]:...
+	@staticmethod
+	def annotationIs(astClass: type[hasDOTannotation], valuePredicate: Callable[[ast.AST], TypeGuard[Ima_ast_expr] | bool]) -> Callable[[ast.AST], TypeGuard[hasDOTannotation] | bool]:
+		return lambda node: isinstance(node, astClass) and DOT.annotation(node) is not None and valuePredicate(DOT.annotation(node))
+
+	@staticmethod
+	def leftIs(astClass: type[hasDOTleft], valuePredicate: Callable[[ast.AST], TypeGuard[Ima_ast_expr] | bool]) -> Callable[[ast.AST], TypeGuard[hasDOTleft] | bool]:
+		return lambda node: isinstance(node, astClass) and valuePredicate(DOT.left(node))
+
+	In general, I think the flow will piggyback `DOT`.
+	"""
 	ClassDefDOT = ast.ClassDef(name='DOT', bases=[], keywords=[], body=[], decorator_list=[])
 	ClassDefMake = ast.ClassDef(name='Make', bases=[], keywords=[], body=[], decorator_list=[])
 	ClassDefGrab = ast.ClassDef(name='Grab', bases=[], keywords=[], body=[], decorator_list=[])
@@ -108,6 +126,8 @@ def makeTools(astStubFile: ast.AST) -> None:
 		if any(isinstance(decorator, ast.Call) and isinstance(decorator.func, ast.Name) and decorator.func.id == 'deprecated' for decorator in node.decorator_list):
 			continue
 		if node.name.startswith('_'):
+			continue
+		if not (node.name == 'AST' or (node.bases and isinstance(node.bases[0], ast.Name) and node.bases[0].id in listASTSubclasses)):
 			continue
 
 		# Change the identifier solely for the benefit of clarity as you read this code.
@@ -337,10 +357,10 @@ def makeTools(astStubFile: ast.AST) -> None:
 
 	astTypesModule = ast.Module(
 		body=[ast.Expr(ast.Constant(docstringWarning))
-			, astImportFromClassNewInPythonVersion
 			, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('TypeAlias', 'typing_TypeAlias')], 0)
 			, ast.Import([ast.alias('ast')])
-			, *handmadeTypeAlias_astTypes
+			, ast.Import([ast.alias('sys')])
+			, *listHandmadeTypeAlias_astTypes
 			]
 		, type_ignores=[]
 		)
