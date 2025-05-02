@@ -45,12 +45,6 @@ class IfThis:
 		return lambda node: Be.keyword(node) and IfThis.isIdentifier(identifier)(DOT.arg(node))
 
 	@staticmethod
-	def isAnnAssign_targetIs(targetPredicate: Callable[[ast.expr], TypeGuard[ast.expr] | bool]) -> Callable[[ast.AST], TypeGuard[ast.AnnAssign] | bool]:
-		def workhorse(node: ast.AST) -> TypeGuard[ast.AnnAssign] | bool:
-			return Be.AnnAssign(node) and targetPredicate(DOT.target(node))
-		return workhorse
-
-	@staticmethod
 	def isArgument_Identifier(identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.arg | ast.keyword] | bool]:
 		return lambda node: (Be.arg(node) or Be.keyword(node)) and IfThis.isIdentifier(identifier)(DOT.arg(node))
 
@@ -58,10 +52,6 @@ class IfThis:
 	def isAssignAndTargets0Is(targets0Predicate: Callable[[ast.AST], bool]) -> Callable[[ast.AST], TypeGuard[ast.AnnAssign] | bool]:
 		""" `node` is `ast.Assign` and `node.targets[0]` matches `targets0Predicate`."""
 		return lambda node: Be.Assign(node) and targets0Predicate(node.targets[0])
-	@staticmethod
-	def isAssignAndValueIs(valuePredicate: Callable[[ast.AST], bool]) -> Callable[[ast.AST], TypeGuard[ast.Assign] | bool]:
-		""" `node` is `ast.Assign` and `node.value` matches `valuePredicate`. """
-		return lambda node: Be.Assign(node) and valuePredicate(DOT.value(node))
 
 	@staticmethod
 	def isAttribute_Identifier(identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.Attribute] | bool]:
@@ -81,12 +71,6 @@ class IfThis:
 	@staticmethod
 	def isAttributeNamespace_Identifier(namespace: ast_Identifier, identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.Attribute] | bool]:
 		return lambda node: IfThis.isAttributeName(node) and IfThis.isName_Identifier(namespace)(DOT.value(node)) and IfThis.isIdentifier(identifier)(DOT.attr(node))
-
-	@staticmethod
-	def isAugAssignAndTargetIs(targetPredicate: Callable[[ast.expr], TypeGuard[ast.expr] | bool]) -> Callable[[ast.AST], TypeGuard[ast.AugAssign] | bool]:
-		def workhorse(node: ast.AST) -> TypeGuard[ast.AugAssign] | bool:
-			return Be.AugAssign(node) and targetPredicate(DOT.target(node))
-		return workhorse
 
 	@staticmethod
 	def isCall_Identifier(identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.Call] | bool]:
