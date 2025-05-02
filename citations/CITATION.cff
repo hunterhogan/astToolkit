@@ -6,23 +6,39 @@ authors:
   family-names: Hogan
   email: HunterHogan@pm.me
 cff-version: 1.2.0
-commit: 99c0267e9442545c527f9247e6ff18d5575945b0
-date-released: '2025-04-29'
+commit: 6b7808d3a0493524aa9ffd36fda2f07848528b0b
+date-released: '2025-05-02'
 identifiers:
 - type: url
-  value: https://github.com/hunterhogan/astToolkit/releases/tag/0.1.3
-  description: The URL for astToolkit 0.1.3.
+  value: https://github.com/hunterhogan/astToolkit/releases/tag/0.1.4
+  description: The URL for astToolkit 0.1.4.
 keywords:
 - ast
 - abstract syntax tree
 - code generation
 - code transformation
+- ast-analysis
+- ast-manipulation
+- ast-traversal
+- ast-visitor
+- code-analysis
+- code-refactoring
+- static-analysis
+- python-ast
+- metaprogramming
+- visitor-pattern
+- typed-ast
+- type-safe
+- composable-apis
+- function-inlining
+- source-code-generation
+- ast-predicate
 license: CC-BY-NC-4.0
 message: Cite this software with the metadata in this file.
 repository: https://github.com/hunterhogan/astToolkit.git
-repository-artifact: https://pypi.org/project/asttoolkit/0.1.3/
-repository-code: https://github.com/hunterhogan/astToolkit/releases/tag/0.1.3
+repository-artifact: https://pypi.org/project/asttoolkit/0.1.4/
+repository-code: https://github.com/hunterhogan/astToolkit/releases/tag/0.1.4
 title: astToolkit
 type: software
 url: https://github.com/hunterhogan/astToolkit
-version: 0.1.3
+version: 0.1.4
