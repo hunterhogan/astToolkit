@@ -66,7 +66,8 @@ def inlineFunctionDef(identifierToInline: ast_Identifier, module: ast.Module) ->
 		raise ValueError(f"FunctionDefToInline not found in dictionaryIdentifier2FunctionDef: {identifierToInline = }") from ERRORmessage
 
 	listIdentifiersCalledFunctions: list[ast_Identifier] = []
-	findIdentifiersToInline = NodeTourist(findThis = IfThis.isCallToName, doThat = Grab.funcAttribute(cast(Callable[[ast.expr], ast.expr], Grab.idAttribute(cast(Callable[[ast_Identifier], ast_Identifier], Then.appendTo(listIdentifiersCalledFunctions))))))
+	findIdentifiersToInline = NodeTourist(findThis = IfThis.isCallToName
+							, doThat = Grab.funcAttribute(cast(Callable[[ast.expr], ast.expr], Grab.idAttribute(cast(Callable[[ast_Identifier], ast_Identifier], Then.appendTo(listIdentifiersCalledFunctions))))))
 	findIdentifiersToInline.visit(FunctionDefToInline)
 
 	dictionary4Inlining: dict[ast_Identifier, ast.FunctionDef] = {}

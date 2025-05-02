@@ -17,7 +17,8 @@ str_nameDOTname: typing_TypeAlias = str
 
 # Limited success with TypeVar.
 个 = typing_TypeVar('个', bound = ast.AST, covariant = True)
-NodeORattribute = typing_TypeVar('NodeORattribute', bound = ast.AST | ast_expr_Slice | ast_Identifier | str_nameDOTname | bool | Any | None, covariant = True)
+个return = typing_TypeVar('个return', covariant = True)
+NodeORattribute = typing_TypeVar('NodeORattribute', bound = ast.AST | ast_Identifier | str_nameDOTname | bool | Any | None, covariant = True)
 
 # For my reference, all ast classes by subgroup:
 Ima_ast_boolop: typing_TypeAlias = ast.boolop | ast.And | ast.Or

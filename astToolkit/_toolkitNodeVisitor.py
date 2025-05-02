@@ -15,12 +15,13 @@ structures, creating a complete workflow for code analysis and transformation.
 """
 
 from collections.abc import Callable
-from typing import Any
+from typing import Any, cast, Generic, TypeGuard, TypeVar
 import ast
+from astToolkit import NodeORattribute, 个, 个return
 
 # TODO Identify the logic that narrows the type and can help the user during static type checking.
 
-class NodeTourist(ast.NodeVisitor):
+class NodeTourist(ast.NodeVisitor, Generic[个, 个return]):
 	"""
 	Visit and extract information from AST nodes that match a predicate.
 
@@ -31,19 +32,18 @@ class NodeTourist(ast.NodeVisitor):
 	This class is particularly useful for analyzing AST structures, extracting specific nodes or node properties, and
 	gathering information about code patterns.
 	"""
-	def __init__(self, findThis: Callable[..., Any], doThat: Callable[..., Any]) -> None:
+	def __init__(self, findThis: Callable[[ast.AST], TypeGuard[个] | bool], doThat: Callable[[个], 个return]) -> None:
 		self.findThis = findThis
 		self.doThat = doThat
-		self.nodeCaptured: Any | None = None
+		self.nodeCaptured: 个return | None = None
 
 	def visit(self, node: ast.AST) -> None:
 		if self.findThis(node):
-			nodeActionReturn = self.doThat(node)
-			if nodeActionReturn is not None:
-				self.nodeCaptured = nodeActionReturn
+			node = cast(个, node)
+			self.nodeCaptured = self.doThat(node)
 		self.generic_visit(node)
 
-	def captureLastMatch(self, node: ast.AST) -> Any | None:
+	def captureLastMatch(self, node: ast.AST) -> 个return | None:
 		self.nodeCaptured = None
 		self.visit(node)
 		return self.nodeCaptured
