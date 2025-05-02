@@ -81,8 +81,7 @@ MakeImportFunctionDef: ast.FunctionDef = ast.FunctionDef(name='Import', args=ast
 listPylanceErrors: list[str] = ['annotation', 'arg', 'args', 'body', 'keys', 'name', 'names', 'op', 'orelse', 'pattern', 'returns', 'target', 'value',]
 
 # ww='''
-# def workhorse(node: ast.AST) -> TypeGuard[hasDOTleft] | bool:
-# 	return isinstance(node, astClass) and attributeCondition(DOT.left(node))
+# TypeGuard[ast.AnnAssign] | bool
 # '''
 
 # print(ast.dump(ast.parse(ww, type_comments=True), indent=4))

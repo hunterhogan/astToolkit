@@ -22,8 +22,8 @@ classifiers = [
 	"Topic :: Software Development :: Libraries :: Python Modules",
 	"Topic :: Scientific/Engineering :: Information Analysis",]
 dependencies = ["autoflake", "python_minifier", "tomli", "Z0Z_tools"]
-description = "AST manipulation and transformation tools for Python code"
-keywords = ["ast", "abstract syntax tree", "code generation", "code transformation"]
+description = "A powerfully composable, type-safe toolkit for Python abstract syntax tree (AST) manipulation, analysis, transformation, and code generation with a layered architecture designed for building sophisticated code processing assembly-lines."
+keywords = ["ast", "abstract syntax tree", "code generation", "code transformation", "ast-analysis", "ast-manipulation", "ast-traversal", "ast-visitor", "code-analysis", "code-refactoring", "static-analysis", "python-ast", "metaprogramming", "visitor-pattern", "typed-ast", "type-safe", "composable-apis", "function-inlining", "source-code-generation", "ast-predicate"]
 license = { 'text' = "CC-BY-NC-4.0" }
 name = "astToolkit"
 optional-dependencies = { testing = [
@@ -36,7 +36,7 @@ optional-dependencies = { testing = [
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.10"
 urls = { Donate = "https://www.patreon.com/integrated", Homepage = "https://github.com/hunterhogan/astToolkit", Issues = "https://github.com/hunterhogan/astToolkit/issues", Repository = "https://github.com/hunterhogan/astToolkit.git" }
-version = "0.1.3"
+version = "0.1.4"
 
 [tool.coverage]
 report = { exclude_lines = [

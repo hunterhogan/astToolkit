@@ -1,17 +1,16 @@
-from collections.abc import Callable
 from pathlib import PurePosixPath
 from string import ascii_letters
 from toolFactory import ast_Identifier, fileExtension, list_astDOTnew, listASTSubclasses, pathPackage, str_nameDOTname, sys_version_infoTarget
 from toolFactory.astFactory_annex import (
 	astImportFromClassNewInPythonVersion,
+	FunctionDefMake_Attribute,
 	handmadeMethodsGrab,
 	listHandmadeTypeAlias_astTypes,
 	listPylanceErrors,
-	FunctionDefMake_Attribute,
 	MakeImportFunctionDef,
 )
-from toolFactory.docstrings import docstringWarning, ClassDefDocstringBe, ClassDefDocstringDOT, ClassDefDocstringGrab, ClassDefDocstringMake
-from typing import TypeAlias, TypeGuard, cast, TypedDict
+from toolFactory.docstrings import ClassDefDocstringBe, ClassDefDocstringDOT, ClassDefDocstringGrab, ClassDefDocstringMake, docstringWarning
+from typing import cast, TypedDict
 from Z0Z_tools import writeStringToHere
 import ast
 
@@ -38,7 +37,7 @@ class MakeDictionaryOf_astClassAnnotations(ast.NodeVisitor):
 
 	def visit_ClassDef(self, node: ast.ClassDef) -> None:
 		if 'astDOT' + node.name in list_astDOTnew:
-			NameOrAttribute = ast.Name('astDOT' + node.name)
+			NameOrAttribute: ast.Attribute | ast.Name = ast.Name('astDOT' + node.name)
 		else:
 			NameOrAttribute = ast.Attribute(value=ast.Name('ast'), attr=node.name)
 		self.dictionarySubstitutions[node.name] = NameOrAttribute
@@ -80,17 +79,31 @@ def makeTools(astStubFile: ast.AST) -> None:
 		pythonSource: str = ast.unparse(astModule)
 		if 'Grab' in moduleIdentifier or 'DOT' in moduleIdentifier or 'ClassIsAndAttribute' in moduleIdentifier:
 			pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
+		if 'ClassIsAndAttribute' in moduleIdentifier:
+			listTypeIgnore: list[ast.TypeIgnore] = []
+			tag = '[reportInconsistentOverload]'
+			for attribute in listPylanceErrors:
+				lineno = 0
+				for splitlinesNumber, line in enumerate(pythonSource.splitlines()):
+					# Cycle through the overloads and definitions: effectively keeping the last one, which is the definition.
+					if f"def {attribute}Is" in line:
+						lineno = splitlinesNumber + 1
+				listTypeIgnore.append(ast.TypeIgnore(lineno, tag))
+			astModule = ast.parse(pythonSource)
+			astModule.type_ignores.extend(listTypeIgnore)
+			pythonSource = ast.unparse(astModule)
+			pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
 		if 'Grab' in moduleIdentifier:
 			listTypeIgnore: list[ast.TypeIgnore] = []
 			tag = '[reportAttributeAccessIssue]'
 			for attribute in listPylanceErrors:
-				for lineno, line in enumerate(pythonSource.splitlines()):
+				for splitlinesNumber, line in enumerate(pythonSource.splitlines()):
 					if 'node.'+attribute in line:
-						listTypeIgnore.append(ast.TypeIgnore(lineno+1, tag))
+						listTypeIgnore.append(ast.TypeIgnore(splitlinesNumber+1, tag))
 						break
 			astModule = ast.parse(pythonSource)
 			astModule.type_ignores.extend(listTypeIgnore)
-			pythonSource: str = ast.unparse(astModule)
+			pythonSource = ast.unparse(astModule)
 			pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
 		pathFilenameModule = PurePosixPath(pathPackage, moduleIdentifier + fileExtension)
 		writeStringToHere(pythonSource, pathFilenameModule)
@@ -212,7 +225,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 					else:
 						attributeIdentifier2Str4TypeAlias2astAnnotationAndListClassDefIdentifier[attributeIdentifier][attributeAnnotationAsStr4TypeAliasIdentifier]['listClassDefIdentifier'].append(ClassDefIdentifier)
 
-					append2args = None
+					append2args: ast.Call | ast.Name | None = None
 					match ClassDefIdentifier:
 						case 'Attribute':
 							if cast(ast.FunctionDef, ClassDefMake.body[-1]).name == ClassDefIdentifier:
@@ -377,7 +390,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 					right=attributeAnnotationAsAST
 				)
 
-			astAnnAssignValue = dictionaryOf_astDOTclass[listClassDefIdentifier[0]]
+			astAnnAssignValue: ast.Attribute | ast.BinOp | ast.Name = dictionaryOf_astDOTclass[listClassDefIdentifier[0]]
 			if len(listClassDefIdentifier) > 1:
 				for ClassDefIdentifier in listClassDefIdentifier[1:]:
 					astAnnAssignValue = ast.BinOp(left=astAnnAssignValue, op=ast.BitOr(), right=dictionaryOf_astDOTclass[ClassDefIdentifier])
@@ -386,6 +399,18 @@ def makeTools(astStubFile: ast.AST) -> None:
 			else:
 				list_hasDOTNameTypeAliasAnnotations.append(ast.Name(hasDOTIdentifier + '_' + attributeAnnotationAsStr4TypeAliasIdentifier.replace('list', 'list_'), ast.Store()))
 				astTypesModule.body.append(ast.AnnAssign(list_hasDOTNameTypeAliasAnnotations[-1], typing_TypeAliasName, astAnnAssignValue, 1))
+				# overload definitions for `ClassIsAndAttribute` class
+				potentiallySuperComplicatedAnnotationORbool = ast.Name('bool')
+				buffaloBuffalo_workhorse_returnsAnnotation = ast.BinOp(ast.Subscript(ast.Name('TypeGuard'), list_hasDOTNameTypeAliasAnnotations[-1]), ast.BitOr(), ast.Name('bool'))
+				ClassDefClassIsAndAttribute.body.append(ast.FunctionDef(name=attributeIdentifier + 'Is'
+					, args=ast.arguments(posonlyargs=[]
+						, args=[ast.arg('astClass', annotation = ast.Subscript(ast.Name('type'), list_hasDOTNameTypeAliasAnnotations[-1]))
+							, ast.arg('attributeCondition', annotation=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([attributeAnnotationAsAST]), potentiallySuperComplicatedAnnotationORbool])))
+						], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
+					, body=[ast.Expr(value=ast.Constant(value=Ellipsis))]
+					, decorator_list=[staticmethodName, overloadName]
+					, returns=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([ast.Attribute(ast.Name('ast'), attr='AST')]), buffaloBuffalo_workhorse_returnsAnnotation]))
+				))
 				# overload definitions for `DOT` class
 				ClassDefDOT.body.append(ast.FunctionDef(name=attributeIdentifier
 					, args=ast.arguments(posonlyargs=[], args=[ast.arg(arg='node', annotation=ast.Name(list_hasDOTNameTypeAliasAnnotations[-1].id))], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
@@ -393,46 +418,31 @@ def makeTools(astStubFile: ast.AST) -> None:
 					, decorator_list=[staticmethodName, overloadName]
 					, returns=attributeAnnotationAsAST
 				))
-		"""Examples
-		@staticmethod
-		@overload
-		def annotationIs(astClass: type[hasDOTannotation_expr], attributeCondition: Callable[[ast.AST], TypeGuard[Ima_ast_expr] | bool]) -> Callable[[ast.AST], TypeGuard[hasDOTannotation_expr] | bool]:...
-		@staticmethod
-		@overload
-		def annotationIs(astClass: type[hasDOTannotation_exprOrNone], attributeCondition: Callable[[ast.AST], TypeGuard[Ima_ast_expr] | bool]) -> Callable[[ast.AST], TypeGuard[hasDOTannotation_exprOrNone] | bool]:...
-		@staticmethod
-		def annotationIs(astClass: type[hasDOTannotation], attributeCondition: Callable[[ast.AST], TypeGuard[Ima_ast_expr] | bool]) -> Callable[[ast.AST], TypeGuard[hasDOTannotation] | bool]:
-			def workhorse(node: ast.AST) -> TypeGuard[hasDOTannotation] | bool:
-				return isinstance(node, astClass) and DOT.annotation(node) is not None and attributeCondition(DOT.annotation(node))
-			return workhorse
 
-		In general, I think the flow will piggyback `DOT`.
-
-		@staticmethod
-		def leftIs(astClass: type[hasDOTleft], attributeCondition: Callable[[ast.AST], TypeGuard[Ima_ast_expr] | bool]) -> Callable[[ast.AST], TypeGuard[hasDOTleft] | bool]: # type: ignore
-			def workhorse(node: ast.AST) -> TypeGuard[hasDOTleft] | bool:
-				return isinstance(node, astClass) and attributeCondition(DOT.left(node)) # type: ignore  # noqa: F821
-			return workhorse
-		"""
-
+		assert attributeAnnotationUnifiedAsAST is not None, 'Brinkmanship to appease the type checker!'
 		workhorseReturnValue: ast.BoolOp = ast.BoolOp(op=ast.And(), values=[ast.Call(ast.Name('isinstance'), args=[ast.Name('node'), ast.Name('astClass')], keywords=[])])
-		if 'typeIncludesNone' == True: # type: ignore
-			# if the return of `DOT.attributeIdentifier` includes None, I _think_ I want/need to add the condition `and DOT.attributeIdentifier(node) is not None`
-			pass
-		# the return of `DOT.attributeIdentifier` is the annotation for the input of Callable `attributeCondition`, currently marked as Z0Z_returnBuffaloBuffalo
-		# AND, because DOT is overloaded in the same way ClassIsAndAttribute is overloaded, the return/input relationship holds for the overloads as well.
+		for node in ast.walk(attributeAnnotationUnifiedAsAST):
+			if isinstance(node, ast.Subscript) and isinstance(node.value, ast.Name) and node.value.id == 'Sequence' and isinstance(node.slice, ast.BinOp) and isinstance(node.slice.right, ast.Constant) and node.slice.right.value is None:
+				workhorseReturnValue.values.append(ast.Compare(ast.Call(ast.Attribute(ast.Name('DOT'), attributeIdentifier), args=[ast.Name('node')])
+												, ops=[ast.NotEq()]
+												, comparators=[ast.List([ast.Constant(None)])]))
+				break
+			if isinstance(node, ast.Constant) and node.value is None:
+				workhorseReturnValue.values.append(ast.Compare(ast.Call(ast.Attribute(ast.Name('DOT'), attributeIdentifier), args=[ast.Name('node')])
+												, ops=[ast.IsNot()]
+												, comparators=[ast.Constant(None)]))
+				break
 		workhorseReturnValue.values.append(ast.Call(ast.Name('attributeCondition'), args=[ast.Call(ast.Attribute(ast.Name('DOT'), attr=attributeIdentifier), args=[ast.Name('node')])], keywords=[]))
 
-		buffaloBuffalo_workhorse_returnsAnnotation = ast.Name('Any')
-		potentiallySuperComplicatedAnnotationORbool = ast.Name('Any')
-		Z0Z_returnBuffaloBuffalo = ast.Name('Any')
+		buffaloBuffalo_workhorse_returnsAnnotation = ast.BinOp(ast.Subscript(ast.Name('TypeGuard'), hasDOTName_Load), ast.BitOr(), ast.Name('bool'))
+
+		potentiallySuperComplicatedAnnotationORbool = ast.Name('bool')
 
 		ClassDefClassIsAndAttribute.body.append(
 			ast.FunctionDef(name=attributeIdentifier + 'Is'
 				, args=ast.arguments(posonlyargs=[]
-					, args=[
-						ast.arg('astClass', annotation = ast.Subscript(ast.Name('type'), ast.Name('hasDOT' + attributeIdentifier)))
-						, ast.arg('attributeCondition', annotation=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([Z0Z_returnBuffaloBuffalo]), potentiallySuperComplicatedAnnotationORbool])))
+					, args=[ast.arg('astClass', annotation = ast.Subscript(ast.Name('type'), hasDOTName_Load))
+						, ast.arg('attributeCondition', annotation=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([attributeAnnotationUnifiedAsAST]), potentiallySuperComplicatedAnnotationORbool])))
 					], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
 				, body=[ast.FunctionDef(name='workhorse',
 							args=ast.arguments(args=[ast.arg('node', ast.Attribute(ast.Name('ast'), attr='AST'))])
@@ -441,8 +451,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 						, ast.Return(ast.Name('workhorse'))]
 				, decorator_list=[staticmethodName]
 				, returns=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([ast.Attribute(ast.Name('ast'), attr='AST')]), buffaloBuffalo_workhorse_returnsAnnotation]))
-			)
-		)
+			))
 
 		ClassDefDOT.body.append(ast.FunctionDef(name=attributeIdentifier
 				, args=ast.arguments(posonlyargs=[], args=[ast.arg(arg='node', annotation=hasDOTName_Load)], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
@@ -461,7 +470,6 @@ def makeTools(astStubFile: ast.AST) -> None:
 		if (isinstance(attributeAnnotationUnifiedAsAST, ast.Subscript) and isinstance(attributeAnnotationUnifiedAsAST.value, ast.Name) and attributeAnnotationUnifiedAsAST.value.id == 'Sequence'
 		or isinstance(attributeAnnotationUnifiedAsAST, ast.BinOp) and isinstance(attributeAnnotationUnifiedAsAST.right, ast.Subscript) and isinstance(attributeAnnotationUnifiedAsAST.right.value, ast.Name) and attributeAnnotationUnifiedAsAST.right.value.id == 'Sequence'):
 			astAssignValue = ast.Call(ast.Name('list'), args=[ast.Call(ast.Name('action'), args=[ast.Attribute(ast.Name('node'), attr=attributeIdentifier)])])
-		assert attributeAnnotationUnifiedAsAST is not None, 'Brinkmanship to appease the type checker!'
 		ClassDefGrab.body.append(ast.FunctionDef(name=attributeIdentifier + 'Attribute'
 			, args=ast.arguments(posonlyargs=[]
 				, args=[ast.arg('action'
@@ -508,10 +516,10 @@ def makeTools(astStubFile: ast.AST) -> None:
 	ClassDef = ClassDefClassIsAndAttribute
 	writeModule(ast.Module(
 		body=[ast.Expr(ast.Constant(docstringWarning))
+			, ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in ['ast_Identifier', 'ast_expr_Slice', 'astDOTtype_param', 'DOT']], 0)
 			, ast.ImportFrom('astToolkit._astTypes', [ast.alias('*')], 0)
 			, ast.ImportFrom('collections.abc', [ast.alias('Callable'), ast.alias('Sequence')], 0)
-			, ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in ['ast_Identifier', 'ast_expr_Slice', 'astDOTtype_param', 'DOT']], 0)
-			, ast.ImportFrom('typing', [ast.alias(identifier) for identifier in ['Any', 'Literal', 'overload']], 0)
+			, ast.ImportFrom('typing', [ast.alias(identifier) for identifier in ['Any', 'Literal', 'overload', 'TypeGuard']], 0)
 			, ast.Import([ast.alias('ast')])
 			, ClassDef
 			],
@@ -523,9 +531,9 @@ def makeTools(astStubFile: ast.AST) -> None:
 	ClassDef = ClassDefDOT
 	writeModule(ast.Module(
 		body=[ast.Expr(ast.Constant(docstringWarning))
+			, ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in ['ast_Identifier', 'ast_expr_Slice', 'astDOTtype_param']], 0)
 			, ast.ImportFrom('astToolkit._astTypes', [ast.alias('*')], 0)
 			, ast.ImportFrom('collections.abc', [ast.alias('Sequence')], 0)
-			, ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in ['ast_Identifier', 'ast_expr_Slice', 'astDOTtype_param']], 0)
 			, ast.ImportFrom('typing', [ast.alias(identifier) for identifier in ['Any', 'Literal', 'overload']], 0)
 			, ast.Import([ast.alias('ast')])
 			, ClassDef
@@ -538,9 +546,9 @@ def makeTools(astStubFile: ast.AST) -> None:
 	ClassDef = ClassDefGrab
 	writeModule(ast.Module(
 		body=[ast.Expr(ast.Constant(docstringWarning))
-			, ast.ImportFrom('astToolkit._astTypes', [ast.alias('*')], 0)
-			, astImportFromClassNewInPythonVersion
 			, ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in ['ast_Identifier', 'ast_expr_Slice', 'NodeORattribute']], 0)
+			, astImportFromClassNewInPythonVersion
+			, ast.ImportFrom('astToolkit._astTypes', [ast.alias('*')], 0)
 			, ast.ImportFrom('collections.abc', [ast.alias('Callable'), ast.alias('Sequence')], 0)
 			, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('Literal')], 0)
 			, ast.Import([ast.alias('ast')])
