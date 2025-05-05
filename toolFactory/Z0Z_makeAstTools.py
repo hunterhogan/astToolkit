@@ -1,6 +1,6 @@
 from collections.abc import Callable, Sequence
 import typeshed_client.finder
-from toolFactory import FREAKOUT, pathTypeshed, Z0Z_typesSpecial, makeTools
+from toolFactory import FREAKOUT, pathTypeshed, makeTools
 from pathlib import Path
 from typing import Any, TypeAlias as typing_TypeAlias, TypeVar as typing_TypeVar
 import ast

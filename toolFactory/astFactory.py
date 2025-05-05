@@ -1,6 +1,8 @@
 from pathlib import PurePosixPath
 from string import ascii_letters
-from toolFactory import ast_Identifier, fileExtension, list_astDOTnew, listASTSubclasses, pathPackage, str_nameDOTname, sys_version_infoTarget
+from toolFactory import ast_Identifier, fileExtension, listASTSubclassesHARDCODED, pathPackage, str_nameDOTname, sys_version_infoTarget
+from toolFactory.Z0Z_hardcoded import keywordArgumentsIdentifier, listASTClassesPostPythonVersionMinimum, moduleIdentifierPrefix
+from toolFactory._snippets import overloadName, staticmethodName, typing_TypeAliasName
 from toolFactory.astFactory_annex import (
 	astImportFromClassNewInPythonVersion,
 	FunctionDefMake_Attribute,
@@ -18,12 +20,6 @@ class AnnotationsAndDefs(TypedDict):
 	astAnnotation: ast.expr
 	listClassDefIdentifier: list[ast_Identifier | str_nameDOTname]
 
-keywordArgumentsIdentifier: ast_Identifier = 'keywordArguments'
-moduleIdentifierPrefix: str = '_tool'
-overloadName = ast.Name('overload')
-staticmethodName = ast.Name('staticmethod')
-typing_TypeAliasName: ast.expr = cast(ast.expr, ast.Name('typing_TypeAlias'))
-
 class MakeDictionaryOf_astClassAnnotations(ast.NodeVisitor):
 	def __init__(self, astAST: ast.AST) -> None:
 		super().__init__()
@@ -36,7 +32,7 @@ class MakeDictionaryOf_astClassAnnotations(ast.NodeVisitor):
 		}
 
 	def visit_ClassDef(self, node: ast.ClassDef) -> None:
-		if 'astDOT' + node.name in list_astDOTnew:
+		if 'astDOT' + node.name in listASTClassesPostPythonVersionMinimum:
 			NameOrAttribute: ast.Attribute | ast.Name = ast.Name('astDOT' + node.name)
 		else:
 			NameOrAttribute = ast.Attribute(value=ast.Name('ast'), attr=node.name)
@@ -129,7 +125,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 			continue
 		if node.name.startswith('_'):
 			continue
-		if not (node.name == 'AST' or (node.bases and isinstance(node.bases[0], ast.Name) and node.bases[0].id in listASTSubclasses)):
+		if not (node.name == 'AST' or (node.bases and isinstance(node.bases[0], ast.Name) and node.bases[0].id in listASTSubclassesHARDCODED)):
 			continue
 
 		# Change the identifier solely for the benefit of clarity as you read this code.

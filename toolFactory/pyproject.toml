@@ -8,6 +8,7 @@ classifiers = []
 dependencies = [
 	"astToolkit",
 	"mypy",
+	"pandas",
 	"PyGitHub",
 	"pytest",
 	"pytest-cov",
@@ -22,7 +23,7 @@ license = { 'text' = "CC-BY-NC-4.0" }
 name = "toolFactory"
 optional-dependencies = {}
 readme = { file = "README.md", content-type = "text/markdown" }
-requires-python = ">=3.12"
+requires-python = ">=3.10"
 urls = { Donate = "https://www.patreon.com/integrated", Homepage = "https://github.com/hunterhogan/astToolkit", Repository = "https://github.com/hunterhogan/astToolkit.git" }
 version = "0.0.1"
 

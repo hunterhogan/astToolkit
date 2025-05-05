@@ -4,12 +4,6 @@ import ast
 
 # TODO understand typing.
 
-# NOTE Prototype of an idea to subclass composable methods so that typing information
-# can extend beyond the top level of the ast node.
-# To cover all cases, quantity of necessary classes = sum of (for each class: for each attribute: attribute * number of valid types). If an attribute has type ast.expr, for example, then there are 27 valid types just for that attribute. There would be thousands of subclasses like ImaCallToName.
-# class ImaCallToName(ast.Call):
-# 	func: ast.Name 	# pyright: ignore[reportIncompatibleVariableOverride]
-
 # Type hints through TypeAlias or type "hints" through the identifier name.
 ast_expr_Slice: typing_TypeAlias = ast.expr
 ast_Identifier: typing_TypeAlias = str
@@ -35,3 +29,9 @@ Ima_ast_type_param: typing_TypeAlias = astDOTtype_param | astDOTParamSpec | astD
 Ima_ast_unaryop: typing_TypeAlias = ast.unaryop | ast.Invert | ast.Not | ast.UAdd | ast.USub
 
 Ima_ast_orphan = ast.alias | ast.arg | ast.arguments | ast.comprehension | ast.keyword | ast.match_case | ast.withitem
+
+# NOTE Prototype of an old idea to subclass composable methods so that typing information
+# can extend beyond the top level of the ast node.
+# To cover all cases, quantity of necessary classes = sum of (for each class: for each attribute: attribute * number of valid types). If an attribute has type ast.expr, for example, then there are 27 valid types just for that attribute. There would be thousands of subclasses like ImaCallToName.
+# class ImaCallToName(ast.Call):
+# 	func: ast.Name 	# pyright: ignore[reportIncompatibleVariableOverride]

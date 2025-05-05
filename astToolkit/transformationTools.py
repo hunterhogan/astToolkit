@@ -19,7 +19,7 @@ from collections.abc import Callable, Mapping
 from copy import deepcopy
 from os import PathLike
 from pathlib import PurePath
-from typing import Any, cast
+from typing import Any, cast, overload
 from Z0Z_tools import writeStringToHere
 import ast
 
@@ -191,6 +191,10 @@ def unparseFindReplace(astTree: 个, mappingFindReplaceNodes: Mapping[ast.AST, a
 			astTree = deepcopy(newTree)
 	return newTree
 
+# @overload
+# def write_astModule(astModule: ast.AST, pathFilename: PathLike[Any] | PurePath, packageName: ast_Identifier | None = None) -> None:...
+# @overload
+# def write_astModule(ingredients: IngredientsModule, pathFilename: PathLike[Any] | PurePath, packageName: ast_Identifier | None = None) -> None:...
 def write_astModule(ingredients: IngredientsModule, pathFilename: PathLike[Any] | PurePath, packageName: ast_Identifier | None = None) -> None:
 	"""
 	Convert an IngredientsModule to Python source code and write it to a file.
@@ -217,6 +221,8 @@ def write_astModule(ingredients: IngredientsModule, pathFilename: PathLike[Any] 
 	Raises:
 		FREAKOUT: If the generated source code is empty.
 	"""
+	# if ingredients:
+	# 	astModule = Make.Module(ingredients.body, ingredients.type_ignores)
 	astModule = Make.Module(ingredients.body, ingredients.type_ignores)
 	ast.fix_missing_locations(astModule)
 	pythonSource: str = ast.unparse(astModule)
