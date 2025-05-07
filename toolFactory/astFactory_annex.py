@@ -81,7 +81,8 @@ MakeImportFunctionDef: ast.FunctionDef = ast.FunctionDef(name='Import', args=ast
 listPylanceErrors: list[str] = ['annotation', 'arg', 'args', 'body', 'keys', 'name', 'names', 'op', 'orelse', 'pattern', 'returns', 'target', 'value',]
 
 # ww='''
-# TypeGuard[ast.AnnAssign] | bool
+# if sys.version_info >= (3, 12):
+# 	"ImaBody"
 # '''
 
 # print(ast.dump(ast.parse(ww, type_comments=True), indent=4))

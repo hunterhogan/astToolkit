@@ -2,7 +2,7 @@ from pathlib import PurePosixPath
 from string import ascii_letters
 from toolFactory import ast_Identifier, fileExtension, listASTSubclassesHARDCODED, pathPackage, str_nameDOTname, sys_version_infoTarget
 from toolFactory.Z0Z_hardcoded import keywordArgumentsIdentifier, listASTClassesPostPythonVersionMinimum, moduleIdentifierPrefix
-from toolFactory._snippets import overloadName, staticmethodName, typing_TypeAliasName
+from toolFactory._snippets import astName_overload, astName_staticmethod, astName_typing_TypeAlias
 from toolFactory.astFactory_annex import (
 	astImportFromClassNewInPythonVersion,
 	FunctionDefMake_Attribute,
@@ -152,7 +152,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 		ClassDefBe.body.append(ast.FunctionDef(name=ClassDefIdentifier
 			, args=ast.arguments(posonlyargs=[], args=[ast.arg(arg='node', annotation=ast.Name('ast.AST'))], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
 			, body=[ast.Return(value=ast.Call(func=ast.Name('isinstance'), args=[ast.Name('node'), ClassDef_astNameOrAttribute], keywords=[]))]
-			, decorator_list=[staticmethodName]
+			, decorator_list=[astName_staticmethod]
 			, returns=ast.Subscript(value=ast.Name('TypeGuard'), slice=ClassDef_astNameOrAttribute)))
 
 		# Start: cope with different arguments for Python versions. ==============================================================
@@ -210,7 +210,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 		ClassDefMake.body.append(ast.FunctionDef(name=ClassDefIdentifier
 			, args=ast.arguments(posonlyargs=[], args=[], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=keywordArguments_ast_arg, defaults=[])
 			, body=[ast.Return(value=ast.Call(ClassDef_astNameOrAttribute, args=[], keywords=[keywordArguments_ast_keyword] if keywordArguments_ast_keyword else []))]
-			, decorator_list=[staticmethodName]
+			, decorator_list=[astName_staticmethod]
 			, returns=ClassDef_astNameOrAttribute))
 
 		for attributeIdentifier in list_astDOTClassDefAttributeIdentifier:
@@ -401,10 +401,10 @@ def makeTools(astStubFile: ast.AST) -> None:
 				for ClassDefIdentifier in listClassDefIdentifier[1:]:
 					astAnnAssignValue = ast.BinOp(left=astAnnAssignValue, op=ast.BitOr(), right=dictionaryOf_astDOTclass[ClassDefIdentifier])
 			if len(attributeIdentifier2Str4TypeAlias2astAnnotationAndListClassDefIdentifier[attributeIdentifier]) == 1:
-				astTypesModule.body.append(ast.AnnAssign(hasDOTName_Store, typing_TypeAliasName, astAnnAssignValue, 1))
+				astTypesModule.body.append(ast.AnnAssign(hasDOTName_Store, astName_typing_TypeAlias, astAnnAssignValue, 1))
 			else:
 				list_hasDOTNameTypeAliasAnnotations.append(ast.Name(hasDOTIdentifier + '_' + attributeAnnotationAsStr4TypeAliasIdentifier.replace('list', 'list_'), ast.Store()))
-				astTypesModule.body.append(ast.AnnAssign(list_hasDOTNameTypeAliasAnnotations[-1], typing_TypeAliasName, astAnnAssignValue, 1))
+				astTypesModule.body.append(ast.AnnAssign(list_hasDOTNameTypeAliasAnnotations[-1], astName_typing_TypeAlias, astAnnAssignValue, 1))
 				# overload definitions for `ClassIsAndAttribute` class
 				potentiallySuperComplicatedAnnotationORbool = ast.Name('bool')
 				buffaloBuffalo_workhorse_returnsAnnotation = ast.BinOp(ast.Subscript(ast.Name('TypeGuard'), list_hasDOTNameTypeAliasAnnotations[-1]), ast.BitOr(), ast.Name('bool'))
@@ -414,14 +414,14 @@ def makeTools(astStubFile: ast.AST) -> None:
 							, ast.arg('attributeCondition', annotation=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([attributeAnnotationAsAST]), potentiallySuperComplicatedAnnotationORbool])))
 						], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
 					, body=[ast.Expr(value=ast.Constant(value=Ellipsis))]
-					, decorator_list=[staticmethodName, overloadName]
+					, decorator_list=[astName_staticmethod, astName_overload]
 					, returns=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([ast.Attribute(ast.Name('ast'), attr='AST')]), buffaloBuffalo_workhorse_returnsAnnotation]))
 				))
 				# overload definitions for `DOT` class
 				ClassDefDOT.body.append(ast.FunctionDef(name=attributeIdentifier
 					, args=ast.arguments(posonlyargs=[], args=[ast.arg(arg='node', annotation=ast.Name(list_hasDOTNameTypeAliasAnnotations[-1].id))], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
 					, body=[ast.Expr(value=ast.Constant(value=Ellipsis))]
-					, decorator_list=[staticmethodName, overloadName]
+					, decorator_list=[astName_staticmethod, astName_overload]
 					, returns=attributeAnnotationAsAST
 				))
 
@@ -455,14 +455,14 @@ def makeTools(astStubFile: ast.AST) -> None:
 							, body=[ast.Return(workhorseReturnValue)]
 							, returns=buffaloBuffalo_workhorse_returnsAnnotation)
 						, ast.Return(ast.Name('workhorse'))]
-				, decorator_list=[staticmethodName]
+				, decorator_list=[astName_staticmethod]
 				, returns=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([ast.Attribute(ast.Name('ast'), attr='AST')]), buffaloBuffalo_workhorse_returnsAnnotation]))
 			))
 
 		ClassDefDOT.body.append(ast.FunctionDef(name=attributeIdentifier
 				, args=ast.arguments(posonlyargs=[], args=[ast.arg(arg='node', annotation=hasDOTName_Load)], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
 				, body=[ast.Return(value=ast.Attribute(value=ast.Name('node'), attr=attributeIdentifier))]
-				, decorator_list=[staticmethodName]
+				, decorator_list=[astName_staticmethod]
 				, returns=attributeAnnotationUnifiedAsAST
 			))
 
@@ -471,7 +471,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 			astAnnAssignValue = list_hasDOTNameTypeAliasAnnotations[0]
 			for index in range(1, len(list_hasDOTNameTypeAliasAnnotations)):
 				astAnnAssignValue = ast.BinOp(left=astAnnAssignValue, op=ast.BitOr(), right=list_hasDOTNameTypeAliasAnnotations[index])
-			astTypesModule.body.append(ast.AnnAssign(hasDOTName_Store, typing_TypeAliasName, astAnnAssignValue, 1))
+			astTypesModule.body.append(ast.AnnAssign(hasDOTName_Store, astName_typing_TypeAlias, astAnnAssignValue, 1))
 		astAssignValue = ast.Call(ast.Name('action'), args=[ast.Attribute(ast.Name('node'), attr=attributeIdentifier)])
 		if (isinstance(attributeAnnotationUnifiedAsAST, ast.Subscript) and isinstance(attributeAnnotationUnifiedAsAST.value, ast.Name) and attributeAnnotationUnifiedAsAST.value.id == 'Sequence'
 		or isinstance(attributeAnnotationUnifiedAsAST, ast.BinOp) and isinstance(attributeAnnotationUnifiedAsAST.right, ast.Subscript) and isinstance(attributeAnnotationUnifiedAsAST.right.value, ast.Name) and attributeAnnotationUnifiedAsAST.right.value.id == 'Sequence'):
@@ -492,7 +492,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 						, ast.Return(ast.Name('node'))],
 						returns=hasDOTName_Load),
 			ast.Return(ast.Name('workhorse'))]
-			, decorator_list=[staticmethodName], type_comment=None
+			, decorator_list=[astName_staticmethod], type_comment=None
 			, returns=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([hasDOTName_Load]), hasDOTName_Load]))))
 
 		del attributeAnnotationUnifiedAsAST

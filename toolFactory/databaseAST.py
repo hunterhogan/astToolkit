@@ -2,24 +2,6 @@ import pandas
 from toolFactory import pathFilenameDatabaseAST
 
 """
-rename 'astClass' to 'ClassDefIdentifier'
-
-new column
-classAs_astAttribute
-value
-ast.Attribute(ast.Name('ast'), ClassDefIdentifier)
-put the actual ClassDefIdentifier in the string in the column.
-
-new column
-classVersionMinorMinimum
-for each ClassDefIdentifier,
-get unique values of 'versionMinor' and sort them,
-validate the data: if the values are not contiguous from smallest to largest, give an error,
-validate the data: if the largest value is not 13, give an error,
-validate the data: if the smallest value is less than 9, give an error,
-if the smallest value is 9, record -1 in the column,
-else, record the smallest value in the column.
-
 new column
 fieldVersionMinorMinimum
 for each ClassDefIdentifier,
@@ -35,7 +17,9 @@ else, record the smallest value in the column.
 """
 
 cc=[
-'astClass',
+'ClassDefIdentifier',
+'classVersionMinorMinimum',
+'classAs_astAttribute',
 'versionMajor',
 'versionMinor',
 'versionMicro',

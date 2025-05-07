@@ -1,7 +1,6 @@
-import ast
 from typing import cast
+import ast
 
-
-overloadName = ast.Name('overload')
-staticmethodName = ast.Name('staticmethod')
-typing_TypeAliasName: ast.expr = cast(ast.expr, ast.Name('typing_TypeAlias'))
+astName_overload = ast.Name('overload')
+astName_staticmethod = ast.Name('staticmethod')
+astName_typing_TypeAlias: ast.expr = cast(ast.expr, ast.Name('typing_TypeAlias'))
