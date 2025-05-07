@@ -1,8 +1,7 @@
-from string import ascii_letters
 from toolFactory import (
 	ast_Identifier,
+	getElementsBe,
 	str_nameDOTname,
-	sys_version_infoTarget,
 	pythonVersionMinorMinimum,
 	keywordArgumentsIdentifier,
 	astName_overload,
@@ -10,9 +9,7 @@ from toolFactory import (
 	astName_typing_TypeAlias,
 	)
 from toolFactory.astFactory_annex import (
-	FunctionDefMake_Attribute,
 	listHandmadeTypeAlias_astTypes,
-	MakeImportFunctionDef,
 )
 from toolFactory.docstrings import docstringWarning
 from typing import cast, TypedDict
@@ -27,21 +24,15 @@ TODO protect against AttributeError (I guess) in DOT, Grab, and ClassIsAndAttrib
 	add docstrings to warn of problem, including in Make
 
 """
-def makeBe():
+def makeToolBe():
 	list4body: list[ast.stmt] = []
 
-	# listClassElements = getClassElements()
-	"""
-	put database-related functions in databaseAST
-	sort the list case-insensitive by ClassDefIdentifier
-	exclude deprecated
-	"""
-	listClassElements = [(
-	ClassDefIdentifier := '',
-	classAs_astAttribute := ast.Attribute(ast.Name('ast'), 'And'),
-	classVersionMinorMinimum := -99)]
+	listDictionaryToolElements = getElementsBe(sortOn='ClassDefIdentifier')
 
-	for ClassDefIdentifier, classAs_astAttribute, classVersionMinorMinimum in listClassElements:
+	for dictionaryToolElements in listDictionaryToolElements:
+		ClassDefIdentifier = cast(ast_Identifier, dictionaryToolElements['ClassDefIdentifier'])
+		classAs_astAttribute = cast(ast.Attribute, dictionaryToolElements['classAs_astAttribute'])
+		classVersionMinorMinimum: int = dictionaryToolElements['classVersionMinorMinimum']
 
 		ast_stmt = ast.FunctionDef(name=ClassDefIdentifier
 			, args=ast.arguments(posonlyargs=[], args=[ast.arg(arg='node', annotation=ast.Name('ast.AST'))], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
@@ -59,6 +50,8 @@ def makeBe():
 		list4body.append(ast_stmt)
 
 	ClassDefBe = ast.ClassDef(name='Be', bases=[], keywords=[], body=list4body, decorator_list=[])
+
+# scrap parts
 
 class AnnotationsAndDefs(TypedDict):
 	astAnnotation: ast.expr
