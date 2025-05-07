@@ -1,6 +1,6 @@
 import pandas
 from toolFactory import pathFilenameDatabaseAST
-from typing import cast
+from typing import Any, cast
 
 """
 new column
@@ -80,7 +80,7 @@ def Z0Z_getToolElements(elementIndex: str, *elements: str, sortOn: str | None = 
 	"""
 	pass
 
-def getElementsBe(sortOn: str | None = None, deprecated: bool = False, versionMinorMaximum: int | None = None):
+def getElementsBe(sortOn: str | None = None, deprecated: bool = False, versionMinorMaximum: int | None = None) -> list[dict[str, Any]]:
 	"""Get elements of class `AST` and its subclasses for tool manufacturing.
 
 	Parameters
@@ -101,30 +101,31 @@ def getElementsBe(sortOn: str | None = None, deprecated: bool = False, versionMi
 	listElementsHARDCODED = ['ClassDefIdentifier', 'classAs_astAttribute', 'classVersionMinorMinimum']
 	listElements = listElementsHARDCODED
 
-	# Get the dataframe
 	dataframe = getDataframe()
 
 	# Reset index to make the index columns regular columns
 	dataframe = dataframe.reset_index()
 
-	# Filter out deprecated classes if not requested
 	if not deprecated:
 		dataframe = cast(pandas.DataFrame, dataframe[~dataframe['deprecated']])
 
-	# Filter by maximum version minor if specified
+	# Remove versions above maximum version
 	if versionMinorMaximum is not None:
 		dataframe = cast(pandas.DataFrame, dataframe[dataframe['versionMinor'] <= versionMinorMaximum])
 
-	# Only include unique ClassDefIdentifier (remove duplicates)
-	# Keep the row with the highest versionMinor for each ClassDefIdentifier
-	dataframe = dataframe.sort_values(by=['ClassDefIdentifier', 'versionMinor'], ascending=[True, False])
-	dataframe = dataframe.drop_duplicates(subset=['ClassDefIdentifier'], keep='first')
+	# Remove duplicate ClassDefIdentifier
+	# TODO think about how the function knows to remove _these_ duplicates
+	dataframe = dataframe.sort_values('versionMinor', ascending=False).drop_duplicates('ClassDefIdentifier')
 
-	# Sort the data if requested
 	if sortOn is not None:
-		dataframe = dataframe.sort_values(by=sortOn)
+		# TODO after changing the dataframe storage from csv to something smart, make this check smarter
+		match str(dataframe[sortOn].dtype):
+			case 'object':
+				dataframe = dataframe.iloc[dataframe[sortOn].str.lower().argsort()]
+			case _:
+				dataframe = dataframe.sort_values(by=sortOn)
 
-	# Select only the requested columns in the specified order
-	dataframe = cast(pandas.DataFrame,dataframe[listElements])
+	# Select the requested columns, in the specified order
+	dataframe = cast(pandas.DataFrame, dataframe[listElements])
 
 	return dataframe.to_dict(orient='records')

@@ -1,9 +1,9 @@
 from pathlib import PurePosixPath
 from string import ascii_letters
-from toolFactory import ast_Identifier, fileExtension, listASTSubclassesHARDCODED, pathPackage, str_nameDOTname, sys_version_infoTarget
-from toolFactory.Z0Z_hardcoded import keywordArgumentsIdentifier, listASTClassesPostPythonVersionMinimum, moduleIdentifierPrefix
+from toolFactory import ast_Identifier, fileExtension, pathPackage, str_nameDOTname, sys_version_infoTarget
+from toolFactory.Z0Z_hardcoded import keywordArgumentsIdentifier, moduleIdentifierPrefix
 from toolFactory._snippets import astName_overload, astName_staticmethod, astName_typing_TypeAlias
-from toolFactory.astFactory_annex import (
+from toolFactory.factory_annex import (
 	astImportFromClassNewInPythonVersion,
 	FunctionDefMake_Attribute,
 	handmadeMethodsGrab,
@@ -42,10 +42,7 @@ class MakeDictionaryOf_astClassAnnotations(ast.NodeVisitor):
 		}
 
 	def visit_ClassDef(self, node: ast.ClassDef) -> None:
-		if 'astDOT' + node.name in listASTClassesPostPythonVersionMinimum:
-			NameOrAttribute: ast.Attribute | ast.Name = ast.Name('astDOT' + node.name)
-		else:
-			NameOrAttribute = ast.Attribute(value=ast.Name('ast'), attr=node.name)
+		NameOrAttribute = ast.Attribute(value=ast.Name('ast'), attr=node.name)
 		self.dictionarySubstitutions[node.name] = NameOrAttribute
 
 	def getDictionary(self) -> dict[ast_Identifier, ast.Attribute | ast.Name]:
@@ -116,7 +113,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 
 	# Create each ClassDef and add directly to it instead of creating unnecessary intermediate structures, which requires more identifiers.
 	# fewer identifiers == fewer bugs
-	ClassDefBe = ast.ClassDef(name='Be', bases=[], keywords=[], body=[], decorator_list=[])
+	# ClassDefBe = ast.ClassDef(name='Be', bases=[], keywords=[], body=[], decorator_list=[])
 	ClassDefClassIsAndAttribute = ast.ClassDef(name='ClassIsAndAttribute', bases=[], keywords=[], body=[], decorator_list=[])
 	ClassDefDOT = ast.ClassDef(name='DOT', bases=[], keywords=[], body=[], decorator_list=[])
 	ClassDefMake = ast.ClassDef(name='Make', bases=[], keywords=[], body=[], decorator_list=[])
@@ -135,8 +132,6 @@ def makeTools(astStubFile: ast.AST) -> None:
 			continue
 		if node.name.startswith('_'):
 			continue
-		if not (node.name == 'AST' or (node.bases and isinstance(node.bases[0], ast.Name) and node.bases[0].id in listASTSubclassesHARDCODED)):
-			continue
 
 		# Change the identifier solely for the benefit of clarity as you read this code.
 		astDOTClassDef = node
@@ -149,11 +144,11 @@ def makeTools(astStubFile: ast.AST) -> None:
 		keywordArguments_ast_arg: ast.arg | None = ast.arg(keywordArgumentsIdentifier, ast.Name('int'))
 		keywordArguments_ast_keyword: ast.keyword | None = ast.keyword(None, ast.Name(keywordArgumentsIdentifier))
 
-		ClassDefBe.body.append(ast.FunctionDef(name=ClassDefIdentifier
-			, args=ast.arguments(posonlyargs=[], args=[ast.arg(arg='node', annotation=ast.Name('ast.AST'))], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
-			, body=[ast.Return(value=ast.Call(func=ast.Name('isinstance'), args=[ast.Name('node'), ClassDef_astNameOrAttribute], keywords=[]))]
-			, decorator_list=[astName_staticmethod]
-			, returns=ast.Subscript(value=ast.Name('TypeGuard'), slice=ClassDef_astNameOrAttribute)))
+		# ClassDefBe.body.append(ast.FunctionDef(name=ClassDefIdentifier
+		# 	, args=ast.arguments(posonlyargs=[], args=[ast.arg(arg='node', annotation=ast.Name('ast.AST'))], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
+		# 	, body=[ast.Return(value=ast.Call(func=ast.Name('isinstance'), args=[ast.Name('node'), ClassDef_astNameOrAttribute], keywords=[]))]
+		# 	, decorator_list=[astName_staticmethod]
+		# 	, returns=ast.Subscript(value=ast.Name('TypeGuard'), slice=ClassDef_astNameOrAttribute)))
 
 		# Start: cope with different arguments for Python versions. ==============================================================
 		# NOTE: I would love suggestions to improve this section.
@@ -170,7 +165,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 				sys_version_info: tuple[int, int] = ast.literal_eval(subnode.test.comparators[0])
 				if sys_version_info > sys_version_infoTarget:
 					continue
-				if any(sys_version_info < key for key in dictAttributes.keys()): # pyright: ignore[reportOperatorIssue]
+				if any(sys_version_info < key for key in dictAttributes.keys()):
 					continue
 				dictAttributes[sys_version_info] = []
 				for astAST in subnode.body[0].value.elts:
@@ -360,7 +355,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 					cast(ast.FunctionDef, ClassDefMake.body[-1]).args.args.append(ast.arg(arg=attributeIdentifier, annotation=attributeAnnotation_ast_expr))
 					cast(ast.Call, cast(ast.Return, cast(ast.FunctionDef, ClassDefMake.body[-1]).body[0]).value).args.append(append2args)
 
-	ClassDefBe.body.sort(key=lambda astFunctionDef: cast(ast.FunctionDef, astFunctionDef).name.lower())
+	# ClassDefBe.body.sort(key=lambda astFunctionDef: cast(ast.FunctionDef, astFunctionDef).name.lower())
 	ClassDefMake.body.sort(key=lambda astFunctionDef: cast(ast.FunctionDef, astFunctionDef).name.lower())
 
 	astTypesModule = ast.Module(
@@ -499,25 +494,25 @@ def makeTools(astStubFile: ast.AST) -> None:
 
 	writeModule(astTypesModule, '_astTypes')
 
-	ClassDefBe.body.insert(0, ast.Expr(value=ast.Constant(value=ClassDefDocstringBe)))
+	# ClassDefBe.body.insert(0, ast.Expr(value=ast.Constant(value=ClassDefDocstringBe)))
 	ClassDefDOT.body.insert(0, ast.Expr(value=ast.Constant(value=ClassDefDocstringDOT)))
 	ClassDefGrab.body.insert(0, ast.Expr(value=ast.Constant(value=ClassDefDocstringGrab)))
 	ClassDefMake.body.insert(0, ast.Expr(value=ast.Constant(value=ClassDefDocstringMake)))
 
 	ClassDefGrab.body.extend(handmadeMethodsGrab)
 
-	ClassDef = ClassDefBe
-	writeModule(ast.Module(
-		body=[ast.Expr(ast.Constant(docstringWarning))
-			, astImportFromClassNewInPythonVersion
-			, ast.ImportFrom('typing', [ast.alias('TypeGuard')], 0)
-			, ast.Import([ast.alias('ast')])
-			, ClassDef
-			],
-		type_ignores=[]
-		)
-		, moduleIdentifierPrefix + ClassDef.name)
-	del ClassDef
+	# ClassDef = ClassDefBe
+	# writeModule(ast.Module(
+	# 	body=[ast.Expr(ast.Constant(docstringWarning))
+	# 		, astImportFromClassNewInPythonVersion
+	# 		, ast.ImportFrom('typing', [ast.alias('TypeGuard')], 0)
+	# 		, ast.Import([ast.alias('ast')])
+	# 		, ClassDef
+	# 		],
+	# 	type_ignores=[]
+	# 	)
+	# 	, moduleIdentifierPrefix + ClassDef.name)
+	# del ClassDef
 
 	ClassDef = ClassDefClassIsAndAttribute
 	writeModule(ast.Module(

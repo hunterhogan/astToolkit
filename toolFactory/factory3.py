@@ -1,18 +1,24 @@
+from pathlib import PurePosixPath
 from toolFactory import (
 	ast_Identifier,
+	pathPackage,
 	getElementsBe,
+	fileExtension,
 	str_nameDOTname,
 	pythonVersionMinorMinimum,
+	moduleIdentifierPrefix,
 	keywordArgumentsIdentifier,
 	astName_overload,
 	astName_staticmethod,
 	astName_typing_TypeAlias,
 	)
-from toolFactory.astFactory_annex import (
+from toolFactory.factory_annex import (
 	listHandmadeTypeAlias_astTypes,
+	listPylanceErrors,
 )
-from toolFactory.docstrings import docstringWarning
+from toolFactory.docstrings import ClassDefDocstringBe, docstringWarning
 from typing import cast, TypedDict
+from Z0Z_tools import writeStringToHere
 import ast
 
 """
@@ -24,14 +30,49 @@ TODO protect against AttributeError (I guess) in DOT, Grab, and ClassIsAndAttrib
 	add docstrings to warn of problem, including in Make
 
 """
+def writeModule(astModule: ast.Module, moduleIdentifier: ast_Identifier) -> None:
+	ast.fix_missing_locations(astModule)
+	pythonSource: str = ast.unparse(astModule)
+	# if moduleIdentifier in {'ClassIsAndAttribute', 'DOT', 'Grab'}:
+	# 	pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
+	# if 'ClassIsAndAttribute' in moduleIdentifier:
+	# 	listTypeIgnore: list[ast.TypeIgnore] = []
+	# 	tag = '[reportInconsistentOverload]'
+	# 	for attribute in listPylanceErrors:
+	# 		lineno = 0
+	# 		for splitlinesNumber, line in enumerate(pythonSource.splitlines()):
+	# 			# Cycle through the overloads and definitions: effectively keeping the last one, which is the definition.
+	# 			if f"def {attribute}Is" in line:
+	# 				lineno = splitlinesNumber + 1
+	# 		listTypeIgnore.append(ast.TypeIgnore(lineno, tag))
+	# 	astModule = ast.parse(pythonSource)
+	# 	astModule.type_ignores.extend(listTypeIgnore)
+	# 	pythonSource = ast.unparse(astModule)
+	# 	pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
+	# if 'Grab' in moduleIdentifier:
+	# 	listTypeIgnore: list[ast.TypeIgnore] = []
+	# 	tag = '[reportAttributeAccessIssue]'
+	# 	for attribute in listPylanceErrors:
+	# 		for splitlinesNumber, line in enumerate(pythonSource.splitlines()):
+	# 			if 'node.'+attribute in line:
+	# 				listTypeIgnore.append(ast.TypeIgnore(splitlinesNumber+1, tag))
+	# 				break
+	# 	astModule = ast.parse(pythonSource)
+	# 	astModule.type_ignores.extend(listTypeIgnore)
+	# 	pythonSource = ast.unparse(astModule)
+	# 	pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
+	pathFilenameModule = PurePosixPath(pathPackage, moduleIdentifier + fileExtension)
+	writeStringToHere(pythonSource, pathFilenameModule)
+
 def makeToolBe():
-	list4body: list[ast.stmt] = []
+	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringBe]
 
 	listDictionaryToolElements = getElementsBe(sortOn='ClassDefIdentifier')
 
 	for dictionaryToolElements in listDictionaryToolElements:
 		ClassDefIdentifier = cast(ast_Identifier, dictionaryToolElements['ClassDefIdentifier'])
-		classAs_astAttribute = cast(ast.Attribute, dictionaryToolElements['classAs_astAttribute'])
+		classAs_astAttribute = cast(ast.Attribute, eval(dictionaryToolElements['classAs_astAttribute']))
+		# print(classAs_astAttribute)
 		classVersionMinorMinimum: int = dictionaryToolElements['classVersionMinorMinimum']
 
 		ast_stmt = ast.FunctionDef(name=ClassDefIdentifier
@@ -47,9 +88,22 @@ def makeToolBe():
 							ast.Constant(classVersionMinorMinimum)])]),
 				body=[ast_stmt])
 
-		list4body.append(ast_stmt)
+		list4ClassDefBody.append(ast_stmt)
 
-	ClassDefBe = ast.ClassDef(name='Be', bases=[], keywords=[], body=list4body, decorator_list=[])
+	ClassDefBe = ast.ClassDef(name='Be', bases=[], keywords=[], body=list4ClassDefBody, decorator_list=[])
+
+	ClassDef = ClassDefBe
+	writeModule(ast.Module(
+		body=[docstringWarning
+			, ast.ImportFrom('typing', [ast.alias('TypeGuard')], 0)
+			, ast.Import([ast.alias('ast')])
+			, ast.Import([ast.alias('sys')])
+			, ClassDef
+			],
+		type_ignores=[]
+		)
+		, moduleIdentifierPrefix + ClassDef.name)
+	del ClassDef
 
 # scrap parts
 
@@ -128,7 +182,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 			, returns=classAs_astAttribute))
 
 	astTypesModule = ast.Module(
-		body=[ast.Expr(ast.Constant(docstringWarning))
+		body=[docstringWarning
 			, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('TypeAlias', 'typing_TypeAlias')], 0)
 			, ast.Import([ast.alias('ast')])
 			, ast.Import([ast.alias('sys')])
@@ -260,3 +314,6 @@ def makeTools(astStubFile: ast.AST) -> None:
 			, returns=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([hasDOTName_Load]), hasDOTName_Load]))))
 
 		del attributeAnnotationUnifiedAsAST
+
+if __name__ == "__main__":
+	makeToolBe()

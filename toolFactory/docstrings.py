@@ -1,6 +1,10 @@
-docstringWarning: str = """This file is generated automatically, so changes to this file will be lost."""
+import ast
 
-ClassDefDocstringBe: str = (
+docstring: str = """This file is generated automatically, so changes to this file will be lost."""
+docstringWarning = ast.Expr(ast.Constant(docstring))
+del docstring
+
+docstring: str = (
 	"""
 	Provide type-guard functions for safely verifying AST node types during manipulation.
 
@@ -17,7 +21,10 @@ ClassDefDocstringBe: str = (
 	"""
 	)
 
-ClassDefDocstringDOT: str = (
+ClassDefDocstringBe = ast.Expr(ast.Constant(docstring))
+del docstring
+
+docstring: str = (
 	"""
 	Access attributes and sub-nodes of AST elements via consistent accessor methods.
 
@@ -29,21 +36,25 @@ ClassDefDocstringDOT: str = (
 	node attributes.
 	"""
 )
+ClassDefDocstringDOT = ast.Expr(ast.Constant(docstring))
+del docstring
 
-ClassDefDocstringGrab: str = (
+docstring: str = (
 	"""
 	Modify specific attributes of AST nodes while preserving the node structure.
 
-	The grab class provides static methods that create transformation functions to modify specific attributes of AST
-	nodes. Unlike DOT which provides read-only access, grab allows for targeted modifications of node attributes without
+	The Grab class provides static methods that create transformation functions to modify specific attributes of AST
+	nodes. Unlike DOT which provides read-only access, Grab allows for targeted modifications of node attributes without
 	replacing the entire node.
 
 	Each method returns a function that takes a node, applies a transformation to a specific attribute of that node, and
 	returns the modified node. This enables fine-grained control when transforming AST structures.
 	"""
 )
+ClassDefDocstringGrab = ast.Expr(ast.Constant(docstring))
+del docstring
 
-ClassDefDocstringMake: str = (
+docstring: str = (
 	"""
 	Almost all parameters described here are only accessible through a method's `**keywordArguments` parameter.
 
@@ -61,3 +72,5 @@ ClassDefDocstringMake: str = (
 	The `ast._Attributes`, lineno, col_offset, end_lineno, and end_col_offset, hold position information; however, they are, importantly, _not_ `ast._fields`.
 	"""
 	)
+ClassDefDocstringMake = ast.Expr(ast.Constant(docstring))
+del docstring
