@@ -53,23 +53,6 @@ class MakeDictionaryOf_astClassAnnotations(ast.NodeVisitor):
 		return self.dictionarySubstitutions
 
 class Prepend_ast2astClasses(ast.NodeTransformer):
-	"""The _effect_ of this `NodeTransformer` is to replace a naked `Jabberwocky` identifier with the specific
-	`ast.Jabberwocky` identifier.
-
-	The explanation, however, sounds like "Buffalo buffalo Buffalo buffalo buffalo buffalo Buffalo buffalo."
-
-	Initialize `ast.NodeTransformer` with mapping from subclass `ast._Identifier` of class `AST`, which is implemented
-	in C, imported from module `_ast`, and defined in stub `ast.pyi`, to subclass `ast.Attribute`, rendered as
-	"ast._Identifier" or subclass `ast.Name` for `AST` subclasses implemented later than Python version 3.10, rendered
-	as "astDOT_Identifier" and defined as `typing.TypeAlias` or `typing.Any` depending on the runtime Python version in
-	"__init__".
-
-	Call method `visit` of `ast.NodeTransformer` with class `AST` or `AST` subclass parameter. `ast.NodeTransformer`
-	will call `visit_Name` to visit each node descendant class `AST` or `AST` subclass parameter of class `ast.Name`.
-	The class `ast.Name` descendant node identifier is `node`. If method `visit_Name` matches subclass `ast._Identifier`
-	`node.id` to a mapping key, it returns the subclass `ast.Attribute` or subclass `ast.Name` mapping value. Otherwise,
-	`visit_Name` returns subclass `ast.Name` `node`.
-	"""
 	def __init__(self, dictionarySubstitutions: dict[ast_Identifier, ast.Attribute | ast.Name]) -> None:
 		super().__init__()
 		self.dictionarySubstitutions = dictionarySubstitutions
@@ -80,42 +63,6 @@ class Prepend_ast2astClasses(ast.NodeTransformer):
 		return node
 
 def makeTools(astStubFile: ast.AST) -> None:
-	def writeModule(astModule: ast.Module, moduleIdentifier: ast_Identifier) -> None:
-		ast.fix_missing_locations(astModule)
-		pythonSource: str = ast.unparse(astModule)
-		if 'Grab' in moduleIdentifier or 'DOT' in moduleIdentifier or 'ClassIsAndAttribute' in moduleIdentifier:
-			pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
-		if 'ClassIsAndAttribute' in moduleIdentifier:
-			listTypeIgnore: list[ast.TypeIgnore] = []
-			tag = '[reportInconsistentOverload]'
-			for attribute in listPylanceErrors:
-				lineno = 0
-				for splitlinesNumber, line in enumerate(pythonSource.splitlines()):
-					# Cycle through the overloads and definitions: effectively keeping the last one, which is the definition.
-					if f"def {attribute}Is" in line:
-						lineno = splitlinesNumber + 1
-				listTypeIgnore.append(ast.TypeIgnore(lineno, tag))
-			astModule = ast.parse(pythonSource)
-			astModule.type_ignores.extend(listTypeIgnore)
-			pythonSource = ast.unparse(astModule)
-			pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
-		if 'Grab' in moduleIdentifier:
-			listTypeIgnore: list[ast.TypeIgnore] = []
-			tag = '[reportAttributeAccessIssue]'
-			for attribute in listPylanceErrors:
-				for splitlinesNumber, line in enumerate(pythonSource.splitlines()):
-					if 'node.'+attribute in line:
-						listTypeIgnore.append(ast.TypeIgnore(splitlinesNumber+1, tag))
-						break
-			astModule = ast.parse(pythonSource)
-			astModule.type_ignores.extend(listTypeIgnore)
-			pythonSource = ast.unparse(astModule)
-			pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
-		pathFilenameModule = PurePosixPath(pathPackage, moduleIdentifier + fileExtension)
-		writeStringToHere(pythonSource, pathFilenameModule)
-
-	# Create each ClassDef and add directly to it instead of creating unnecessary intermediate structures, which requires more identifiers.
-	# fewer identifiers == fewer bugs
 	ClassDefBe = ast.ClassDef(name='Be', bases=[], keywords=[], body=[], decorator_list=[])
 	ClassDefClassIsAndAttribute = ast.ClassDef(name='ClassIsAndAttribute', bases=[], keywords=[], body=[], decorator_list=[])
 	ClassDefDOT = ast.ClassDef(name='DOT', bases=[], keywords=[], body=[], decorator_list=[])
@@ -128,32 +75,31 @@ def makeTools(astStubFile: ast.AST) -> None:
 
 	# NOTE Convert each ast.ClassDef into `TypeAlias` and methods in `Be`, `DOT`, `Grab`, and `Make`.
 	for node in ast.walk(astStubFile):
-		# Filter out undesired nodes.
 		if not isinstance(node, ast.ClassDef):
-			continue
-		if any(isinstance(decorator, ast.Call) and isinstance(decorator.func, ast.Name) and decorator.func.id == 'deprecated' for decorator in node.decorator_list):
-			continue
-		if node.name.startswith('_'):
 			continue
 		if not (node.name == 'AST' or (node.bases and isinstance(node.bases[0], ast.Name) and node.bases[0].id in listASTSubclassesHARDCODED)):
 			continue
 
 		# Change the identifier solely for the benefit of clarity as you read this code.
 		astDOTClassDef = node
-		del node # NOTE this is necessary because AI assistants don't always follow instructions.
 
 		# Create ast "fragments" before you need them.
 		ClassDefIdentifier: ast_Identifier = astDOTClassDef.name
-		ClassDef_astNameOrAttribute: ast.Attribute | ast.Name = dictionaryOf_astDOTclass[ClassDefIdentifier]
+		ClassDef_astAttribute: ast.Attribute | ast.Name = dictionaryOf_astDOTclass[ClassDefIdentifier]
 		# Reset these identifiers in case they were changed
 		keywordArguments_ast_arg: ast.arg | None = ast.arg(keywordArgumentsIdentifier, ast.Name('int'))
 		keywordArguments_ast_keyword: ast.keyword | None = ast.keyword(None, ast.Name(keywordArgumentsIdentifier))
 
-		ClassDefBe.body.append(ast.FunctionDef(name=ClassDefIdentifier
+		"""
+		astClass = ClassDefIdentifier
+		ClassDef_astAttribute = ast.Attribute(ast.Name('ast'), astClass)
+		"""
+		ClassDefBe.body.append(
+			ast.FunctionDef(name=ClassDefIdentifier
 			, args=ast.arguments(posonlyargs=[], args=[ast.arg(arg='node', annotation=ast.Name('ast.AST'))], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
-			, body=[ast.Return(value=ast.Call(func=ast.Name('isinstance'), args=[ast.Name('node'), ClassDef_astNameOrAttribute], keywords=[]))]
+			, body=[ast.Return(value=ast.Call(func=ast.Name('isinstance'), args=[ast.Name('node'), ClassDef_astAttribute], keywords=[]))]
 			, decorator_list=[staticmethodName]
-			, returns=ast.Subscript(value=ast.Name('TypeGuard'), slice=ClassDef_astNameOrAttribute)))
+			, returns=ast.Subscript(value=ast.Name('TypeGuard'), slice=ClassDef_astAttribute)))
 
 		# Start: cope with different arguments for Python versions. ==============================================================
 		# NOTE: I would love suggestions to improve this section.
@@ -209,9 +155,9 @@ def makeTools(astStubFile: ast.AST) -> None:
 
 		ClassDefMake.body.append(ast.FunctionDef(name=ClassDefIdentifier
 			, args=ast.arguments(posonlyargs=[], args=[], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=keywordArguments_ast_arg, defaults=[])
-			, body=[ast.Return(value=ast.Call(ClassDef_astNameOrAttribute, args=[], keywords=[keywordArguments_ast_keyword] if keywordArguments_ast_keyword else []))]
+			, body=[ast.Return(value=ast.Call(ClassDef_astAttribute, args=[], keywords=[keywordArguments_ast_keyword] if keywordArguments_ast_keyword else []))]
 			, decorator_list=[staticmethodName]
-			, returns=ClassDef_astNameOrAttribute))
+			, returns=ClassDef_astAttribute))
 
 		for attributeIdentifier in list_astDOTClassDefAttributeIdentifier:
 			for subnode in ast.walk(astDOTClassDef):
@@ -496,86 +442,3 @@ def makeTools(astStubFile: ast.AST) -> None:
 			, returns=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([hasDOTName_Load]), hasDOTName_Load]))))
 
 		del attributeAnnotationUnifiedAsAST
-
-	writeModule(astTypesModule, '_astTypes')
-
-	ClassDefBe.body.insert(0, ast.Expr(value=ast.Constant(value=ClassDefDocstringBe)))
-	ClassDefDOT.body.insert(0, ast.Expr(value=ast.Constant(value=ClassDefDocstringDOT)))
-	ClassDefGrab.body.insert(0, ast.Expr(value=ast.Constant(value=ClassDefDocstringGrab)))
-	ClassDefMake.body.insert(0, ast.Expr(value=ast.Constant(value=ClassDefDocstringMake)))
-
-	ClassDefGrab.body.extend(handmadeMethodsGrab)
-
-	ClassDef = ClassDefBe
-	writeModule(ast.Module(
-		body=[ast.Expr(ast.Constant(docstringWarning))
-			, astImportFromClassNewInPythonVersion
-			, ast.ImportFrom('typing', [ast.alias('TypeGuard')], 0)
-			, ast.Import([ast.alias('ast')])
-			, ClassDef
-			],
-		type_ignores=[]
-		)
-		, moduleIdentifierPrefix + ClassDef.name)
-	del ClassDef
-
-	ClassDef = ClassDefClassIsAndAttribute
-	writeModule(ast.Module(
-		body=[ast.Expr(ast.Constant(docstringWarning))
-			, ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in ['ast_Identifier', 'ast_expr_Slice', 'astDOTtype_param', 'DOT']], 0)
-			, ast.ImportFrom('astToolkit._astTypes', [ast.alias('*')], 0)
-			, ast.ImportFrom('collections.abc', [ast.alias('Callable'), ast.alias('Sequence')], 0)
-			, ast.ImportFrom('typing', [ast.alias(identifier) for identifier in ['Any', 'Literal', 'overload', 'TypeGuard']], 0)
-			, ast.Import([ast.alias('ast')])
-			, ClassDef
-			],
-		type_ignores=[]
-		)
-		, moduleIdentifierPrefix + ClassDef.name)
-	del ClassDef
-
-	ClassDef = ClassDefDOT
-	writeModule(ast.Module(
-		body=[ast.Expr(ast.Constant(docstringWarning))
-			, ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in ['ast_Identifier', 'ast_expr_Slice', 'astDOTtype_param']], 0)
-			, ast.ImportFrom('astToolkit._astTypes', [ast.alias('*')], 0)
-			, ast.ImportFrom('collections.abc', [ast.alias('Sequence')], 0)
-			, ast.ImportFrom('typing', [ast.alias(identifier) for identifier in ['Any', 'Literal', 'overload']], 0)
-			, ast.Import([ast.alias('ast')])
-			, ClassDef
-			],
-		type_ignores=[]
-		)
-		, moduleIdentifierPrefix + ClassDef.name)
-	del ClassDef
-
-	ClassDef = ClassDefGrab
-	writeModule(ast.Module(
-		body=[ast.Expr(ast.Constant(docstringWarning))
-			, ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in ['ast_Identifier', 'ast_expr_Slice', 'NodeORattribute']], 0)
-			, astImportFromClassNewInPythonVersion
-			, ast.ImportFrom('astToolkit._astTypes', [ast.alias('*')], 0)
-			, ast.ImportFrom('collections.abc', [ast.alias('Callable'), ast.alias('Sequence')], 0)
-			, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('Literal')], 0)
-			, ast.Import([ast.alias('ast')])
-			, ClassDef
-			],
-		type_ignores=[]
-		)
-		, moduleIdentifierPrefix + ClassDef.name)
-	del ClassDef
-
-	ClassDef = ClassDefMake
-	writeModule(ast.Module(
-		body=[ast.Expr(ast.Constant(docstringWarning))
-			, astImportFromClassNewInPythonVersion
-			, ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in ['ast_Identifier', 'ast_expr_Slice', 'intORstr', 'intORstrORtype_params', 'intORtype_params', 'str_nameDOTname']], 0)
-			, ast.ImportFrom('collections.abc', [ast.alias('Sequence')], 0)
-			, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('Literal')], 0)
-			, ast.Import([ast.alias('ast')])
-			, ClassDef
-			],
-		type_ignores=[]
-		)
-		, moduleIdentifierPrefix + ClassDef.name)
-	del ClassDef
