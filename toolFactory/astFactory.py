@@ -494,25 +494,11 @@ def makeTools(astStubFile: ast.AST) -> None:
 
 	writeModule(astTypesModule, '_astTypes')
 
-	# ClassDefBe.body.insert(0, ast.Expr(value=ast.Constant(value=ClassDefDocstringBe)))
 	ClassDefDOT.body.insert(0, ast.Expr(value=ast.Constant(value=ClassDefDocstringDOT)))
 	ClassDefGrab.body.insert(0, ast.Expr(value=ast.Constant(value=ClassDefDocstringGrab)))
 	ClassDefMake.body.insert(0, ast.Expr(value=ast.Constant(value=ClassDefDocstringMake)))
 
 	ClassDefGrab.body.extend(handmadeMethodsGrab)
-
-	# ClassDef = ClassDefBe
-	# writeModule(ast.Module(
-	# 	body=[ast.Expr(ast.Constant(docstringWarning))
-	# 		, astImportFromClassNewInPythonVersion
-	# 		, ast.ImportFrom('typing', [ast.alias('TypeGuard')], 0)
-	# 		, ast.Import([ast.alias('ast')])
-	# 		, ClassDef
-	# 		],
-	# 	type_ignores=[]
-	# 	)
-	# 	, moduleIdentifierPrefix + ClassDef.name)
-	# del ClassDef
 
 	ClassDef = ClassDefClassIsAndAttribute
 	writeModule(ast.Module(

@@ -71,8 +71,8 @@ def makeToolBe():
 
 	for dictionaryToolElements in listDictionaryToolElements:
 		ClassDefIdentifier = cast(ast_Identifier, dictionaryToolElements['ClassDefIdentifier'])
+		# TODO is there an alternative to `eval()`?
 		classAs_astAttribute = cast(ast.Attribute, eval(dictionaryToolElements['classAs_astAttribute']))
-		# print(classAs_astAttribute)
 		classVersionMinorMinimum: int = dictionaryToolElements['classVersionMinorMinimum']
 
 		ast_stmt = ast.FunctionDef(name=ClassDefIdentifier

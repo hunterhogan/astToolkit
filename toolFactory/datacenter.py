@@ -3,16 +3,8 @@ from toolFactory import pathFilenameDatabaseAST
 from typing import Any, cast
 
 """
-new column
-fieldVersionMinorMinimum
-for each ClassDefIdentifier,
-for each field of the ClassDefIdentifier,
-get unique values of 'versionMinor' and sort them,
-validate the data: if the values are not contiguous from smallest to largest, give an error,
-validate the data: if the largest value is not 13, give an error,
-validate the data: if the smallest value is less than 9, give an error,
-if the smallest value is 9, record -1 in the column,
-else, record the smallest value in the column.
+
+
 
 """
 
