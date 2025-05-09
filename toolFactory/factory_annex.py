@@ -3,7 +3,6 @@ import ast
 
 format_asNameAttribute: str = "astDOT{nameAttribute}"
 listHandmadeTypeAlias_astTypes: list[ast.AnnAssign | ast.If] = []
-astImportFromClassNewInPythonVersion: ast.ImportFrom = ast.ImportFrom('astToolkit', [], 0)
 
 listStrRepresentationsOfTypeAlias: list[str] = [
 	(astTypes_intORstr := "intORstr: typing_TypeAlias = Any"),
@@ -12,16 +11,17 @@ listStrRepresentationsOfTypeAlias: list[str] = [
 	(astTypes_yourPythonIsOld := "yourPythonIsOld: typing_TypeAlias = Any"),
 ]
 
-listPythonVersionNewClass = [(11, ['TryStar']),
-	(12, ['ParamSpec', 'type_param', 'TypeAlias', 'TypeVar', 'TypeVarTuple'])
-]
-
 for string in listStrRepresentationsOfTypeAlias:
 	# The string representation of the type alias is parsed into an AST module.
 	astModule = ast.parse(string)
 	for node in ast.iter_child_nodes(astModule):
 		if isinstance(node, ast.AnnAssign):
 			listHandmadeTypeAlias_astTypes.append(node)
+
+astImportFromClassNewInPythonVersion: ast.ImportFrom = ast.ImportFrom('astToolkit', [], 0)
+listPythonVersionNewClass = [(11, ['TryStar']),
+	(12, ['ParamSpec', 'type_param', 'TypeAlias', 'TypeVar', 'TypeVarTuple'])
+]
 
 for tupleOfClassData in listPythonVersionNewClass:
 	pythonVersionMinor: int = tupleOfClassData[0]

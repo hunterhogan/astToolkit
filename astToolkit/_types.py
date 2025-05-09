@@ -34,4 +34,4 @@ Ima_ast_orphan = ast.alias | ast.arg | ast.arguments | ast.comprehension | ast.k
 # can extend beyond the top level of the ast node.
 # To cover all cases, quantity of necessary classes = sum of (for each class: for each attribute: attribute * number of valid types). If an attribute has type ast.expr, for example, then there are 27 valid types just for that attribute. There would be thousands of subclasses like ImaCallToName.
 # class ImaCallToName(ast.Call):
-# 	func: ast.Name 	# pyright: ignore[reportIncompatibleVariableOverride]
+# 	func: ast.Name

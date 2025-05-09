@@ -1,20 +1,20 @@
 from pathlib import PurePosixPath
 from toolFactory import (
 	ast_Identifier,
-	pathPackage,
-	getElementsBe,
-	fileExtension,
-	str_nameDOTname,
-	pythonVersionMinorMinimum,
-	moduleIdentifierPrefix,
-	keywordArgumentsIdentifier,
 	astName_overload,
 	astName_staticmethod,
 	astName_typing_TypeAlias,
+	fileExtension,
+	getElementsBe,
+	getElementsTypeAlias,
+	keywordArgumentsIdentifier,
+	moduleIdentifierPrefix,
+	pathPackage,
+	pythonVersionMinorMinimum,
+	str_nameDOTname,
 	)
 from toolFactory.factory_annex import (
 	listHandmadeTypeAlias_astTypes,
-	listPylanceErrors,
 )
 from toolFactory.docstrings import ClassDefDocstringBe, docstringWarning
 from typing import cast, TypedDict
@@ -24,7 +24,7 @@ import ast
 """
 class Name(expr):
 ...
-    ctx: expr_context  # Not present in Python < 3.13 if not passed to `__init__`
+	ctx: expr_context  # Not present in Python < 3.13 if not passed to `__init__`
 
 TODO protect against AttributeError (I guess) in DOT, Grab, and ClassIsAndAttribute
 	add docstrings to warn of problem, including in Make
@@ -63,6 +63,115 @@ def writeModule(astModule: ast.Module, moduleIdentifier: ast_Identifier) -> None
 	# 	pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
 	pathFilenameModule = PurePosixPath(pathPackage, moduleIdentifier + fileExtension)
 	writeStringToHere(pythonSource, pathFilenameModule)
+
+def makeTypeAlias():
+	"""
+	TypeAlias
+	not deprecated
+	attributeKind == _field
+	for each attribute, how many unique values of
+		1. TypeAliasSubcategory?
+		2. classVersionMinorMinimum?
+		3. attributeVersionMinorMinimum?
+		If each of those is 1, then you can use the same TypeAlias for all of them.
+
+	"""
+	astTypesModule = ast.Module(
+		body=[docstringWarning
+			, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('TypeAlias', 'typing_TypeAlias')], 0)
+			, ast.Import([ast.alias('ast')])
+			, ast.Import([ast.alias('sys')])
+			, *listHandmadeTypeAlias_astTypes
+			]
+		, type_ignores=[]
+		)
+
+	typeAliasData = getElementsTypeAlias()
+
+	# Process each attribute and its associated data
+	for attribute, versionData in typeAliasData.items():
+		# Track TypeAlias variants for each attribute
+		dictionaryTypeAliasVariants = {}
+
+		# Process each attribute version
+		for attributeVersionMinorMinimum, subcategoryData in versionData.items():
+			# Process each subcategory within this version
+			for typeAliasSubcategory, listClassAsAstAttribute in subcategoryData.items():
+				# Create TypeAlias identifier with subcategory suffix
+				typeAliasVariantKey = f"{attribute}_{typeAliasSubcategory}"
+
+				if typeAliasVariantKey not in dictionaryTypeAliasVariants:
+					dictionaryTypeAliasVariants[typeAliasVariantKey] = []
+
+				# Add all class attributes for this subcategory
+				for classAsAstAttributeStr in listClassAsAstAttribute:
+					# Use eval to convert string representation to ast.Attribute
+					# TODO: Replace eval with a safer mechanism
+					classAsAstAttribute = cast(ast.Attribute, eval(classAsAstAttributeStr))
+					dictionaryTypeAliasVariants[typeAliasVariantKey].append(classAsAstAttribute)
+
+		# Now create TypeAliases for each attribute variant
+		listTypeAliasNames = []
+
+		for typeAliasVariantKey, listClassAsAstAttribute in dictionaryTypeAliasVariants.items():
+			if not listClassAsAstAttribute:
+				continue
+
+			# Create the TypeAlias identifier and AST nodes
+			hasDOTTypeAliasIdentifier = 'hasDOT' + typeAliasVariantKey
+			hasDOTTypeAliasName_Store = ast.Name(hasDOTTypeAliasIdentifier, ast.Store())
+			hasDOTTypeAliasName_Load = ast.Name(hasDOTTypeAliasIdentifier)
+			listTypeAliasNames.append(hasDOTTypeAliasName_Load)
+
+			# Build union type expression using BitOr operations
+			hasDOTTypeAliasClassesBinOp = listClassAsAstAttribute[0]
+			for classAsAstAttribute in listClassAsAstAttribute[1:]:
+				hasDOTTypeAliasClassesBinOp = ast.BinOp(
+					left=hasDOTTypeAliasClassesBinOp,
+					op=ast.BitOr(),
+					right=classAsAstAttribute
+				)
+
+			# Add TypeAlias assignment to the module
+			astTypesModule.body.append(ast.AnnAssign(
+				hasDOTTypeAliasName_Store,
+				astName_typing_TypeAlias,
+				hasDOTTypeAliasClassesBinOp,
+				1
+			))
+
+		# Create the main TypeAlias for the attribute if there are variants
+		if listTypeAliasNames:
+			hasDOTTypeAliasIdentifier = 'hasDOT' + attribute
+			hasDOTTypeAliasName_Store = ast.Name(hasDOTTypeAliasIdentifier, ast.Store())
+
+			# If multiple variants exist, create union of all variants
+			if len(listTypeAliasNames) > 1:
+				hasDOTTypeAliasTypeAliasesBinOp = listTypeAliasNames[0]
+				for typeAliasName in listTypeAliasNames[1:]:
+					hasDOTTypeAliasTypeAliasesBinOp = ast.BinOp(
+						left=hasDOTTypeAliasTypeAliasesBinOp,
+						op=ast.BitOr(),
+						right=typeAliasName
+					)
+
+				astTypesModule.body.append(ast.AnnAssign(
+					hasDOTTypeAliasName_Store,
+					astName_typing_TypeAlias,
+					hasDOTTypeAliasTypeAliasesBinOp,
+					1
+				))
+			else:
+				# If only one variant, create alias to it
+				astTypesModule.body.append(ast.AnnAssign(
+					hasDOTTypeAliasName_Store,
+					astName_typing_TypeAlias,
+					listTypeAliasNames[0],
+					1
+				))
+
+	# Write the completed module to file
+	# writeModule(astTypesModule, moduleIdentifierPrefix + 'Types')
 
 def makeToolBe():
 	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringBe]
@@ -115,18 +224,15 @@ class MakeDictionaryOf_astClassAnnotations(ast.NodeVisitor):
 	def __init__(self, astAST: ast.AST) -> None:
 		super().__init__()
 		self.astAST = astAST
-		self.dictionarySubstitutions: dict[ast_Identifier, ast.Attribute | ast.Name] = {
-			'_Identifier': ast.Name('ast_Identifier'),
+		self.dictionarySubstitutions: dict[ast_Identifier, ast.Attribute] = {
 			'_Pattern': ast.Attribute(value=ast.Name('ast'), attr='pattern'),
-			'_Slice': ast.Name('ast_expr_Slice'),
-			'str': ast.Name('ast_Identifier'),
 		}
 
 	def visit_ClassDef(self, node: ast.ClassDef) -> None:
 		NameOrAttribute = ast.Attribute(value=ast.Name('ast'), attr=node.name)
 		self.dictionarySubstitutions[node.name] = NameOrAttribute
 
-	def getDictionary(self) -> dict[ast_Identifier, ast.Attribute | ast.Name]:
+	def getDictionary(self) -> dict[ast_Identifier, ast.Attribute]:
 		self.visit(self.astAST)
 		return self.dictionarySubstitutions
 
@@ -147,7 +253,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 	ClassDefMake = ast.ClassDef(name='Make', bases=[], keywords=[], body=[], decorator_list=[])
 	ClassDefGrab = ast.ClassDef(name='Grab', bases=[], keywords=[], body=[], decorator_list=[])
 
-	dictionaryOf_astDOTclass: dict[ast_Identifier, ast.Attribute | ast.Name] = MakeDictionaryOf_astClassAnnotations(astStubFile).getDictionary()
+	dictionaryOf_astDOTclass: dict[ast_Identifier, ast.Attribute] = MakeDictionaryOf_astClassAnnotations(astStubFile).getDictionary()
 
 	attributeIdentifier2Str4TypeAlias2astAnnotationAndListClassDefIdentifier: dict[ast_Identifier, dict[str, AnnotationsAndDefs]] = {}
 
@@ -181,24 +287,24 @@ def makeTools(astStubFile: ast.AST) -> None:
 			, decorator_list=[astName_staticmethod]
 			, returns=classAs_astAttribute))
 
-	astTypesModule = ast.Module(
-		body=[docstringWarning
-			, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('TypeAlias', 'typing_TypeAlias')], 0)
-			, ast.Import([ast.alias('ast')])
-			, ast.Import([ast.alias('sys')])
-			, *listHandmadeTypeAlias_astTypes
-			]
-		, type_ignores=[]
-		)
+	# astTypesModule = ast.Module(
+	# 	body=[docstringWarning
+	# 		, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('TypeAlias', 'typing_TypeAlias')], 0)
+	# 		, ast.Import([ast.alias('ast')])
+	# 		, ast.Import([ast.alias('sys')])
+	# 		, *listHandmadeTypeAlias_astTypes
+	# 		]
+	# 	, type_ignores=[]
+	# 	)
 
 	listAttributeIdentifier: list[ast_Identifier] = list(attributeIdentifier2Str4TypeAlias2astAnnotationAndListClassDefIdentifier.keys())
 	listAttributeIdentifier.sort(key=lambda attributeIdentifier: attributeIdentifier.lower())
 
 	for attributeIdentifier in listAttributeIdentifier:
-		hasDOTIdentifier: ast_Identifier = 'hasDOT' + attributeIdentifier
-		hasDOTName_Store: ast.Name = ast.Name(hasDOTIdentifier, ast.Store())
-		hasDOTName_Load: ast.Name = ast.Name(hasDOTIdentifier)
-		list_hasDOTNameTypeAliasAnnotations: list[ast.Name] = []
+		hasDOTTypeAliasIdentifier: ast_Identifier = 'hasDOT' + attributeIdentifier
+		hasDOTTypeAliasName_Store: ast.Name = ast.Name(hasDOTTypeAliasIdentifier, ast.Store())
+		hasDOTTypeAliasName_Load: ast.Name = ast.Name(hasDOTTypeAliasIdentifier)
+		list_hasDOTTypeAliasAnnotations: list[ast.Name] = []
 
 		attributeAnnotationUnifiedAsAST = None
 
@@ -214,21 +320,22 @@ def makeTools(astStubFile: ast.AST) -> None:
 					right=attributeAnnotationAsAST
 				)
 
-			astAnnAssignValue: ast.Attribute | ast.BinOp | ast.Name = dictionaryOf_astDOTclass[listClassDefIdentifier[0]]
+			hasDOTTypeAliasClassesBinOp: ast.Attribute | ast.BinOp = dictionaryOf_astDOTclass[listClassDefIdentifier[0]]
 			if len(listClassDefIdentifier) > 1:
 				for ClassDefIdentifier in listClassDefIdentifier[1:]:
-					astAnnAssignValue = ast.BinOp(left=astAnnAssignValue, op=ast.BitOr(), right=dictionaryOf_astDOTclass[ClassDefIdentifier])
+					hasDOTTypeAliasClassesBinOp = ast.BinOp(left=hasDOTTypeAliasClassesBinOp, op=ast.BitOr(), right=dictionaryOf_astDOTclass[ClassDefIdentifier])
 			if len(attributeIdentifier2Str4TypeAlias2astAnnotationAndListClassDefIdentifier[attributeIdentifier]) == 1:
-				astTypesModule.body.append(ast.AnnAssign(hasDOTName_Store, astName_typing_TypeAlias, astAnnAssignValue, 1))
+				pass
+				# astTypesModule.body.append(ast.AnnAssign(hasDOTTypeAliasName_Store, astName_typing_TypeAlias, hasDOTTypeAliasClassesBinOp, 1))
 			else:
-				list_hasDOTNameTypeAliasAnnotations.append(ast.Name(hasDOTIdentifier + '_' + attributeAnnotationAsStr4TypeAliasIdentifier.replace('list', 'list_'), ast.Store()))
-				astTypesModule.body.append(ast.AnnAssign(list_hasDOTNameTypeAliasAnnotations[-1], astName_typing_TypeAlias, astAnnAssignValue, 1))
+				list_hasDOTTypeAliasAnnotations.append(ast.Name(hasDOTTypeAliasIdentifier + '_' + attributeAnnotationAsStr4TypeAliasIdentifier.replace('list', 'list_'), ast.Store()))
+				# astTypesModule.body.append(ast.AnnAssign(list_hasDOTTypeAliasAnnotations[-1], astName_typing_TypeAlias, hasDOTTypeAliasClassesBinOp, 1))
 				# overload definitions for `ClassIsAndAttribute` class
 				potentiallySuperComplicatedAnnotationORbool = ast.Name('bool')
-				buffaloBuffalo_workhorse_returnsAnnotation = ast.BinOp(ast.Subscript(ast.Name('TypeGuard'), list_hasDOTNameTypeAliasAnnotations[-1]), ast.BitOr(), ast.Name('bool'))
+				buffaloBuffalo_workhorse_returnsAnnotation = ast.BinOp(ast.Subscript(ast.Name('TypeGuard'), list_hasDOTTypeAliasAnnotations[-1]), ast.BitOr(), ast.Name('bool'))
 				ClassDefClassIsAndAttribute.body.append(ast.FunctionDef(name=attributeIdentifier + 'Is'
 					, args=ast.arguments(posonlyargs=[]
-						, args=[ast.arg('astClass', annotation = ast.Subscript(ast.Name('type'), list_hasDOTNameTypeAliasAnnotations[-1]))
+						, args=[ast.arg('astClass', annotation = ast.Subscript(ast.Name('type'), list_hasDOTTypeAliasAnnotations[-1]))
 							, ast.arg('attributeCondition', annotation=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([attributeAnnotationAsAST]), potentiallySuperComplicatedAnnotationORbool])))
 						], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
 					, body=[ast.Expr(value=ast.Constant(value=Ellipsis))]
@@ -237,7 +344,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 				))
 				# overload definitions for `DOT` class
 				ClassDefDOT.body.append(ast.FunctionDef(name=attributeIdentifier
-					, args=ast.arguments(posonlyargs=[], args=[ast.arg(arg='node', annotation=ast.Name(list_hasDOTNameTypeAliasAnnotations[-1].id))], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
+					, args=ast.arguments(posonlyargs=[], args=[ast.arg(arg='node', annotation=ast.Name(list_hasDOTTypeAliasAnnotations[-1].id))], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
 					, body=[ast.Expr(value=ast.Constant(value=Ellipsis))]
 					, decorator_list=[astName_staticmethod, astName_overload]
 					, returns=attributeAnnotationAsAST
@@ -258,14 +365,14 @@ def makeTools(astStubFile: ast.AST) -> None:
 				break
 		workhorseReturnValue.values.append(ast.Call(ast.Name('attributeCondition'), args=[ast.Call(ast.Attribute(ast.Name('DOT'), attr=attributeIdentifier), args=[ast.Name('node')])], keywords=[]))
 
-		buffaloBuffalo_workhorse_returnsAnnotation = ast.BinOp(ast.Subscript(ast.Name('TypeGuard'), hasDOTName_Load), ast.BitOr(), ast.Name('bool'))
+		buffaloBuffalo_workhorse_returnsAnnotation = ast.BinOp(ast.Subscript(ast.Name('TypeGuard'), hasDOTTypeAliasName_Load), ast.BitOr(), ast.Name('bool'))
 
 		potentiallySuperComplicatedAnnotationORbool = ast.Name('bool')
 
 		ClassDefClassIsAndAttribute.body.append(
 			ast.FunctionDef(name=attributeIdentifier + 'Is'
 				, args=ast.arguments(posonlyargs=[]
-					, args=[ast.arg('astClass', annotation = ast.Subscript(ast.Name('type'), hasDOTName_Load))
+					, args=[ast.arg('astClass', annotation = ast.Subscript(ast.Name('type'), hasDOTTypeAliasName_Load))
 						, ast.arg('attributeCondition', annotation=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([attributeAnnotationUnifiedAsAST]), potentiallySuperComplicatedAnnotationORbool])))
 					], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
 				, body=[ast.FunctionDef(name='workhorse',
@@ -278,18 +385,18 @@ def makeTools(astStubFile: ast.AST) -> None:
 			))
 
 		ClassDefDOT.body.append(ast.FunctionDef(name=attributeIdentifier
-				, args=ast.arguments(posonlyargs=[], args=[ast.arg(arg='node', annotation=hasDOTName_Load)], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
+				, args=ast.arguments(posonlyargs=[], args=[ast.arg(arg='node', annotation=hasDOTTypeAliasName_Load)], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
 				, body=[ast.Return(value=ast.Attribute(value=ast.Name('node'), attr=attributeIdentifier))]
 				, decorator_list=[astName_staticmethod]
 				, returns=attributeAnnotationUnifiedAsAST
 			))
 
 		# `astTypesModule`: When one attribute has multiple return types
-		if list_hasDOTNameTypeAliasAnnotations:
-			astAnnAssignValue = list_hasDOTNameTypeAliasAnnotations[0]
-			for index in range(1, len(list_hasDOTNameTypeAliasAnnotations)):
-				astAnnAssignValue = ast.BinOp(left=astAnnAssignValue, op=ast.BitOr(), right=list_hasDOTNameTypeAliasAnnotations[index])
-			astTypesModule.body.append(ast.AnnAssign(hasDOTName_Store, astName_typing_TypeAlias, astAnnAssignValue, 1))
+		# if list_hasDOTTypeAliasAnnotations:
+		# 	hasDOTTypeAliasClassesBinOp = list_hasDOTTypeAliasAnnotations[0] # pyright: ignore[reportAssignmentType]
+		# 	for index in range(1, len(list_hasDOTTypeAliasAnnotations)):
+		# 		hasDOTTypeAliasClassesBinOp = ast.BinOp(left=hasDOTTypeAliasClassesBinOp, op=ast.BitOr(), right=list_hasDOTTypeAliasAnnotations[index])
+		# 	astTypesModule.body.append(ast.AnnAssign(hasDOTTypeAliasName_Store, astName_typing_TypeAlias, hasDOTTypeAliasClassesBinOp, 1))
 		astAssignValue = ast.Call(ast.Name('action'), args=[ast.Attribute(ast.Name('node'), attr=attributeIdentifier)])
 		if (isinstance(attributeAnnotationUnifiedAsAST, ast.Subscript) and isinstance(attributeAnnotationUnifiedAsAST.value, ast.Name) and attributeAnnotationUnifiedAsAST.value.id == 'Sequence'
 		or isinstance(attributeAnnotationUnifiedAsAST, ast.BinOp) and isinstance(attributeAnnotationUnifiedAsAST.right, ast.Subscript) and isinstance(attributeAnnotationUnifiedAsAST.right.value, ast.Name) and attributeAnnotationUnifiedAsAST.right.value.id == 'Sequence'):
@@ -304,14 +411,14 @@ def makeTools(astStubFile: ast.AST) -> None:
 						)))]
 				, vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
 			, body=[ast.FunctionDef(name='workhorse',
-						args=ast.arguments(args=[ast.arg('node', hasDOTName_Load)]),
+						args=ast.arguments(args=[ast.arg('node', hasDOTTypeAliasName_Load)]),
 					body=[ast.Assign(targets=[ast.Attribute(ast.Name('node'), attr=attributeIdentifier, ctx=ast.Store())],
 						value = astAssignValue)
 						, ast.Return(ast.Name('node'))],
-						returns=hasDOTName_Load),
+						returns=hasDOTTypeAliasName_Load),
 			ast.Return(ast.Name('workhorse'))]
 			, decorator_list=[astName_staticmethod], type_comment=None
-			, returns=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([hasDOTName_Load]), hasDOTName_Load]))))
+			, returns=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([hasDOTTypeAliasName_Load]), hasDOTTypeAliasName_Load]))))
 
 		del attributeAnnotationUnifiedAsAST
 

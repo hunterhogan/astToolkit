@@ -1,10 +1,8 @@
 import pandas
-from toolFactory import pathFilenameDatabaseAST
+from toolFactory import pathFilenameDatabaseAST, pythonVersionMinorMinimum
 from typing import Any, cast
 
 """
-
-
 
 """
 
@@ -14,8 +12,6 @@ cc=[
 'versionMinor',
 'versionMicro',
 'base',
-'field',
-'_attribute',
 'deprecated',
 'base_typing_TypeAlias',
 'fieldRename',
@@ -31,6 +27,10 @@ cc=[
 'keywordArgumentsDefaultValue',
 'classAs_astAttribute',
 'classVersionMinorMinimum',
+'attribute',
+'attributeKind',
+'attributeVersionMinorMinimum',
+'TypeAliasSubcategory',
 ]
 
 def getDataframe() -> pandas.DataFrame:
@@ -72,6 +72,43 @@ def Z0Z_getToolElements(elementIndex: str, *elements: str, sortOn: str | None = 
 	"""
 	pass
 
+def getElementsTypeAlias(deprecated: bool = False, versionMinorMaximum: int | None = None):
+	listElementsHARDCODED = ['attribute', 'attributeVersionMinorMinimum', 'TypeAliasSubcategory', 'classAs_astAttribute']
+	listElements = listElementsHARDCODED
+
+	dataframe = getDataframe()
+	dataframe = dataframe.reset_index()
+
+	if not deprecated:
+		dataframe = dataframe[~dataframe['deprecated']]
+
+	if versionMinorMaximum is not None:
+		dataframe = dataframe[dataframe['versionMinor'] <= versionMinorMaximum]
+
+	# Filter for _fields
+	dataframe = dataframe[dataframe['attributeKind'] == '_field']
+
+	# Update attributeVersionMinorMinimum
+	dataframe['attributeVersionMinorMinimum'] = dataframe['attributeVersionMinorMinimum'].apply(
+		lambda version: -1 if version <= pythonVersionMinorMinimum else version
+	)
+
+	dataframe = dataframe.sort_values(
+		by=listElements,
+		ascending=[True, False, True, True],
+		key=lambda x: x.str.lower() if x.dtype == 'object' else x
+	)
+
+	dataframe = dataframe[listElements].drop_duplicates()
+
+	# Aggregate the last column ('classAs_astAttribute') into lists
+	dataframe = dataframe.groupby(listElements[0:-1])[listElements[-1]].apply(list).reset_index()
+
+	"""
+	attributeVersionMinorMinimum: {TypeAliasSubcategory: list['classAs_astAttribute] + list['classAs_astAttribute] of smaller attributeVersionMinorMinimum},
+	"""
+
+
 def getElementsBe(sortOn: str | None = None, deprecated: bool = False, versionMinorMaximum: int | None = None) -> list[dict[str, Any]]:
 	"""Get elements of class `AST` and its subclasses for tool manufacturing.
 
@@ -99,25 +136,24 @@ def getElementsBe(sortOn: str | None = None, deprecated: bool = False, versionMi
 	dataframe = dataframe.reset_index()
 
 	if not deprecated:
-		dataframe = cast(pandas.DataFrame, dataframe[~dataframe['deprecated']])
+		dataframe = dataframe[~dataframe['deprecated']]
+
+	dataframe['versionMinor'] = dataframe['versionMinor'].astype(int)
 
 	# Remove versions above maximum version
 	if versionMinorMaximum is not None:
-		dataframe = cast(pandas.DataFrame, dataframe[dataframe['versionMinor'] <= versionMinorMaximum])
+		dataframe = dataframe[dataframe['versionMinor'] <= versionMinorMaximum]
 
 	# Remove duplicate ClassDefIdentifier
 	# TODO think about how the function knows to remove _these_ duplicates
-	dataframe = dataframe.sort_values('versionMinor', ascending=False).drop_duplicates('ClassDefIdentifier')
+	dataframe = dataframe.sort_values(by='versionMinor', inplace=False, ascending=False).drop_duplicates('ClassDefIdentifier') # type: ignore
 
 	if sortOn is not None:
 		# TODO after changing the dataframe storage from csv to something smart, make this check smarter
-		match str(dataframe[sortOn].dtype):
-			case 'object':
-				dataframe = dataframe.iloc[dataframe[sortOn].str.lower().argsort()]
-			case _:
-				dataframe = dataframe.sort_values(by=sortOn)
+		# match str(dataframe[sortOn].dtype):
+		dataframe = dataframe.iloc[dataframe[sortOn].astype(str).str.lower().argsort()]
 
 	# Select the requested columns, in the specified order
-	dataframe = cast(pandas.DataFrame, dataframe[listElements])
+	dataframe = dataframe[listElements]
 
-	return dataframe.to_dict(orient='records')
+	return dataframe.to_dict(orient='records') # type: ignore

@@ -1,20 +1,46 @@
+from collections.abc import Iterable
 from pathlib import PurePosixPath
 from string import ascii_letters
 from toolFactory import ast_Identifier, fileExtension, pathPackage, str_nameDOTname, sys_version_infoTarget
-from toolFactory.Z0Z_hardcoded import keywordArgumentsIdentifier, moduleIdentifierPrefix
+from toolFactory.Z0Z_hardcoded import keywordArgumentsIdentifier, listASTClassesPostPythonVersionMinimum, moduleIdentifierPrefix
 from toolFactory._snippets import astName_overload, astName_staticmethod, astName_typing_TypeAlias
 from toolFactory.factory_annex import (
-	astImportFromClassNewInPythonVersion,
 	FunctionDefMake_Attribute,
 	handmadeMethodsGrab,
 	listHandmadeTypeAlias_astTypes,
 	listPylanceErrors,
 	MakeImportFunctionDef,
 )
-from toolFactory.docstrings import ClassDefDocstringBe, ClassDefDocstringDOT, ClassDefDocstringGrab, ClassDefDocstringMake, docstringWarning
+from toolFactory.docstrings import ClassDefDocstringDOT, ClassDefDocstringGrab, ClassDefDocstringMake, docstringWarning
 from typing import cast, TypedDict
 from Z0Z_tools import writeStringToHere
 import ast
+format_asNameAttribute: str = "astDOT{nameAttribute}"
+astImportFromClassNewInPythonVersion: ast.ImportFrom = ast.ImportFrom('astToolkit', [], 0)
+listPythonVersionNewClass = [(11, ['TryStar']),
+	(12, ['ParamSpec', 'type_param', 'TypeAlias', 'TypeVar', 'TypeVarTuple'])
+]
+
+for tupleOfClassData in listPythonVersionNewClass:
+	pythonVersionMinor: int = tupleOfClassData[0]
+
+	conditionalTypeAlias = ast.If(
+		test=ast.Compare(left=ast.Attribute(value=ast.Name('sys'), attr='version_info'),
+						ops=[ast.GtE()],
+						comparators=[ast.Tuple([ast.Constant(3), ast.Constant(pythonVersionMinor)])]),
+		body=[ast.ImportFrom(module='ast', names=[
+			], level=0)],
+		orelse=[
+				])
+
+	for nameAttribute in tupleOfClassData[1]:
+		asNameAttribute = format_asNameAttribute.format(nameAttribute=nameAttribute)
+		cast(ast.ImportFrom, conditionalTypeAlias.body[0]).names.append(ast.alias(name=nameAttribute, asname=asNameAttribute))
+		conditionalTypeAlias.orelse.append(ast.AnnAssign(target=ast.Name(asNameAttribute, ast.Store()), annotation=ast.Name('typing_TypeAlias'), value=ast.Name('yourPythonIsOld'), simple=1))
+		astImportFromClassNewInPythonVersion.names.append(ast.alias(name=asNameAttribute))
+
+	listHandmadeTypeAlias_astTypes.append(conditionalTypeAlias)
+
 
 """
 class Name(expr):
@@ -42,8 +68,11 @@ class MakeDictionaryOf_astClassAnnotations(ast.NodeVisitor):
 		}
 
 	def visit_ClassDef(self, node: ast.ClassDef) -> None:
-		NameOrAttribute = ast.Attribute(value=ast.Name('ast'), attr=node.name)
-		self.dictionarySubstitutions[node.name] = NameOrAttribute
+		if 'astDOT' + node.name in listASTClassesPostPythonVersionMinimum:
+			NameOrAttribute: ast.Attribute | ast.Name = ast.Name('astDOT' + node.name)
+		else:
+			NameOrAttribute = ast.Attribute(value=ast.Name('ast'), attr=node.name)
+			self.dictionarySubstitutions[node.name] = NameOrAttribute
 
 	def getDictionary(self) -> dict[ast_Identifier, ast.Attribute | ast.Name]:
 		self.visit(self.astAST)
@@ -82,32 +111,32 @@ def makeTools(astStubFile: ast.AST) -> None:
 		pythonSource: str = ast.unparse(astModule)
 		if 'Grab' in moduleIdentifier or 'DOT' in moduleIdentifier or 'ClassIsAndAttribute' in moduleIdentifier:
 			pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
-		if 'ClassIsAndAttribute' in moduleIdentifier:
-			listTypeIgnore: list[ast.TypeIgnore] = []
-			tag = '[reportInconsistentOverload]'
-			for attribute in listPylanceErrors:
-				lineno = 0
-				for splitlinesNumber, line in enumerate(pythonSource.splitlines()):
-					# Cycle through the overloads and definitions: effectively keeping the last one, which is the definition.
-					if f"def {attribute}Is" in line:
-						lineno = splitlinesNumber + 1
-				listTypeIgnore.append(ast.TypeIgnore(lineno, tag))
-			astModule = ast.parse(pythonSource)
-			astModule.type_ignores.extend(listTypeIgnore)
-			pythonSource = ast.unparse(astModule)
-			pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
-		if 'Grab' in moduleIdentifier:
-			listTypeIgnore: list[ast.TypeIgnore] = []
-			tag = '[reportAttributeAccessIssue]'
-			for attribute in listPylanceErrors:
-				for splitlinesNumber, line in enumerate(pythonSource.splitlines()):
-					if 'node.'+attribute in line:
-						listTypeIgnore.append(ast.TypeIgnore(splitlinesNumber+1, tag))
-						break
-			astModule = ast.parse(pythonSource)
-			astModule.type_ignores.extend(listTypeIgnore)
-			pythonSource = ast.unparse(astModule)
-			pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
+		# if 'ClassIsAndAttribute' in moduleIdentifier:
+		# 	listTypeIgnore: list[ast.TypeIgnore] = []
+		# 	tag = '[reportInconsistentOverload]'
+		# 	for attribute in listPylanceErrors:
+		# 		lineno = 0
+		# 		for splitlinesNumber, line in enumerate(pythonSource.splitlines()):
+		# 			# Cycle through the overloads and definitions: effectively keeping the last one, which is the definition.
+		# 			if f"def {attribute}Is" in line:
+		# 				lineno = splitlinesNumber + 1
+		# 		listTypeIgnore.append(ast.TypeIgnore(lineno, tag))
+		# 	astModule = ast.parse(pythonSource)
+		# 	astModule.type_ignores.extend(listTypeIgnore)
+		# 	pythonSource = ast.unparse(astModule)
+		# 	pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
+		# if 'Grab' in moduleIdentifier:
+		# 	listTypeIgnore: list[ast.TypeIgnore] = []
+		# 	tag = '[reportAttributeAccessIssue]'
+		# 	for attribute in listPylanceErrors:
+		# 		for splitlinesNumber, line in enumerate(pythonSource.splitlines()):
+		# 			if 'node.'+attribute in line:
+		# 				listTypeIgnore.append(ast.TypeIgnore(splitlinesNumber+1, tag))
+		# 				break
+		# 	astModule = ast.parse(pythonSource)
+		# 	astModule.type_ignores.extend(listTypeIgnore)
+		# 	pythonSource = ast.unparse(astModule)
+		# 	pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
 		pathFilenameModule = PurePosixPath(pathPackage, moduleIdentifier + fileExtension)
 		writeStringToHere(pythonSource, pathFilenameModule)
 
@@ -359,7 +388,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 	ClassDefMake.body.sort(key=lambda astFunctionDef: cast(ast.FunctionDef, astFunctionDef).name.lower())
 
 	astTypesModule = ast.Module(
-		body=[ast.Expr(ast.Constant(docstringWarning))
+		body=[docstringWarning
 			, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('TypeAlias', 'typing_TypeAlias')], 0)
 			, ast.Import([ast.alias('ast')])
 			, ast.Import([ast.alias('sys')])
@@ -494,15 +523,15 @@ def makeTools(astStubFile: ast.AST) -> None:
 
 	writeModule(astTypesModule, '_astTypes')
 
-	ClassDefDOT.body.insert(0, ast.Expr(value=ast.Constant(value=ClassDefDocstringDOT)))
-	ClassDefGrab.body.insert(0, ast.Expr(value=ast.Constant(value=ClassDefDocstringGrab)))
-	ClassDefMake.body.insert(0, ast.Expr(value=ast.Constant(value=ClassDefDocstringMake)))
+	ClassDefDOT.body.insert(0,ClassDefDocstringDOT)
+	ClassDefGrab.body.insert(0, ClassDefDocstringGrab)
+	ClassDefMake.body.insert(0, ClassDefDocstringMake)
 
 	ClassDefGrab.body.extend(handmadeMethodsGrab)
 
 	ClassDef = ClassDefClassIsAndAttribute
 	writeModule(ast.Module(
-		body=[ast.Expr(ast.Constant(docstringWarning))
+		body=[docstringWarning
 			, ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in ['ast_Identifier', 'ast_expr_Slice', 'astDOTtype_param', 'DOT']], 0)
 			, ast.ImportFrom('astToolkit._astTypes', [ast.alias('*')], 0)
 			, ast.ImportFrom('collections.abc', [ast.alias('Callable'), ast.alias('Sequence')], 0)
@@ -517,7 +546,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 
 	ClassDef = ClassDefDOT
 	writeModule(ast.Module(
-		body=[ast.Expr(ast.Constant(docstringWarning))
+		body=[docstringWarning
 			, ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in ['ast_Identifier', 'ast_expr_Slice', 'astDOTtype_param']], 0)
 			, ast.ImportFrom('astToolkit._astTypes', [ast.alias('*')], 0)
 			, ast.ImportFrom('collections.abc', [ast.alias('Sequence')], 0)
@@ -532,7 +561,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 
 	ClassDef = ClassDefGrab
 	writeModule(ast.Module(
-		body=[ast.Expr(ast.Constant(docstringWarning))
+		body=[docstringWarning
 			, ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in ['ast_Identifier', 'ast_expr_Slice', 'NodeORattribute']], 0)
 			, astImportFromClassNewInPythonVersion
 			, ast.ImportFrom('astToolkit._astTypes', [ast.alias('*')], 0)
@@ -548,7 +577,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 
 	ClassDef = ClassDefMake
 	writeModule(ast.Module(
-		body=[ast.Expr(ast.Constant(docstringWarning))
+		body=[docstringWarning
 			, astImportFromClassNewInPythonVersion
 			, ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in ['ast_Identifier', 'ast_expr_Slice', 'intORstr', 'intORstrORtype_params', 'intORtype_params', 'str_nameDOTname']], 0)
 			, ast.ImportFrom('collections.abc', [ast.alias('Sequence')], 0)
