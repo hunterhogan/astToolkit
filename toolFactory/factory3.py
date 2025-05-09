@@ -73,94 +73,37 @@ def makeTypeAlias():
 		, type_ignores=[]
 		)
 
-	typeAliasData = getElementsTypeAlias()
-	print(typeAliasData[0:1])
-	[{'attribute': 'annotation', 'TypeAliasSubcategory': 'expr', 'attributeVersionMinorMinimum': -1, 'classAs_astAttribute': "ast.Attribute(ast.Name('ast'), 'AnnAssign')"}]
+	typeAliasData: dict[str, dict[str, dict[int, list[str]]]] = getElementsTypeAlias()
 
-	# Process each attribute and its associated data
-	for attribute, versionData in typeAliasData.items():
-		# Track TypeAlias variants for each attribute
-		dictionaryTypeAliasVariants = {}
+	for attribute, dictionaryAttribute in typeAliasData.items():
+		hasDOTIdentifier: str = 'hasDOT' + attribute
+		hasDOTTypeAliasName_Load: ast.Name = ast.Name(hasDOTIdentifier)
+		hasDOTTypeAliasName_Store: ast.Name = ast.Name(hasDOTIdentifier, ast.Store())
 
-		# Process each attribute version
-		for attributeVersionMinorMinimum, subcategoryData in versionData.items():
-			# Process each subcategory within this version
-			for typeAliasSubcategory, listClassAsAstAttribute in subcategoryData.items():
-				# Create TypeAlias identifier with subcategory suffix
-				typeAliasVariantKey = f"{attribute}_{typeAliasSubcategory}"
-
-				if typeAliasVariantKey not in dictionaryTypeAliasVariants:
-					dictionaryTypeAliasVariants[typeAliasVariantKey] = []
-
-				# Add all class attributes for this subcategory
-				for classAsAstAttributeStr in listClassAsAstAttribute:
-					# Use eval to convert string representation to ast.Attribute
-					# TODO: Replace eval with a safer mechanism
-					classAsAstAttribute = cast(ast.Attribute, eval(classAsAstAttributeStr))
-					dictionaryTypeAliasVariants[typeAliasVariantKey].append(classAsAstAttribute)
-
-		# Now create TypeAliases for each attribute variant
-		listTypeAliasNames = []
-
-		for typeAliasVariantKey, listClassAsAstAttribute in dictionaryTypeAliasVariants.items():
-			if not listClassAsAstAttribute:
-				continue
-
-			# Create the TypeAlias identifier and AST nodes
-			hasDOTTypeAliasIdentifier = 'hasDOT' + typeAliasVariantKey
-			hasDOTTypeAliasName_Store = ast.Name(hasDOTTypeAliasIdentifier, ast.Store())
-			hasDOTTypeAliasName_Load = ast.Name(hasDOTTypeAliasIdentifier)
-			listTypeAliasNames.append(hasDOTTypeAliasName_Load)
-
-			# Build union type expression using BitOr operations
-			hasDOTTypeAliasClassesBinOp = listClassAsAstAttribute[0]
-			for classAsAstAttribute in listClassAsAstAttribute[1:]:
-				hasDOTTypeAliasClassesBinOp = ast.BinOp(
-					left=hasDOTTypeAliasClassesBinOp,
-					op=ast.BitOr(),
-					right=classAsAstAttribute
-				)
-
-			# Add TypeAlias assignment to the module
-			astTypesModule.body.append(ast.AnnAssign(
-				hasDOTTypeAliasName_Store,
-				astName_typing_TypeAlias,
-				hasDOTTypeAliasClassesBinOp,
-				1
-			))
-
-		# Create the main TypeAlias for the attribute if there are variants
-		if listTypeAliasNames:
-			hasDOTTypeAliasIdentifier = 'hasDOT' + attribute
-			hasDOTTypeAliasName_Store = ast.Name(hasDOTTypeAliasIdentifier, ast.Store())
-
-			# If multiple variants exist, create union of all variants
-			if len(listTypeAliasNames) > 1:
-				hasDOTTypeAliasTypeAliasesBinOp = listTypeAliasNames[0]
-				for typeAliasName in listTypeAliasNames[1:]:
-					hasDOTTypeAliasTypeAliasesBinOp = ast.BinOp(
-						left=hasDOTTypeAliasTypeAliasesBinOp,
-						op=ast.BitOr(),
-						right=typeAliasName
-					)
-
-				astTypesModule.body.append(ast.AnnAssign(
-					hasDOTTypeAliasName_Store,
-					astName_typing_TypeAlias,
-					hasDOTTypeAliasTypeAliasesBinOp,
-					1
-				))
-			else:
-				# If only one variant, create alias to it
-				astTypesModule.body.append(ast.AnnAssign(
-					hasDOTTypeAliasName_Store,
-					astName_typing_TypeAlias,
-					listTypeAliasNames[0],
-					1
-				))
-
-	# Write the completed module to file
-	# writeModule(astTypesModule, moduleIdentifierPrefix + 'Types')
+		if len(dictionaryAttribute) == 1:
+			for TypeAliasSubcategory, dictionaryVersions in dictionaryAttribute.items():
+				if len(dictionaryVersions) == 1:
+					for versionMinor, listClassAs_astAttribute in dictionaryVersions.items():
+						if versionMinor > pythonVersionMinorMinimum:
+							print(versionMinor, attribute, listClassAs_astAttribute, sep='\t')
+						else:
+							# This branch is the simplest case: one TypeAlias for the attribute for all Python versions
+							astTypesModule.body.append(ast.AnnAssign(hasDOTTypeAliasName_Store, astName_typing_TypeAlias, ast.BitOr.join(listClassAs_astAttribute), 1))
+							print(attribute, listClassAs_astAttribute, sep='\t')
+				else:
+					listVersionsMinor = sorted(dictionaryVersions.keys(), reverse=True)
+					for versionMinor in listVersionsMinor:
+						if versionMinor > pythonVersionMinorMinimum:
+							print(versionMinor, attribute, dictionaryVersions[versionMinor], sep='\t')
+						else:
+							print('else', attribute, dictionaryVersions[versionMinor], sep='\t')
+		if len(dictionaryAttribute) != 1:
+			continue
+			print(attribute)
+			for TypeAliasSubcategory, dictionaryVersions in dictionaryAttribute.items():
+				print('\t', TypeAliasSubcategory)
+				for versionMinor, listClassAs_astAttribute in dictionaryVersions.items():
+					print('\t\t', versionMinor, listClassAs_astAttribute, sep='\t')
 
 def makeToolBe():
 	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringBe]
