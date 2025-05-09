@@ -2,10 +2,6 @@ import pandas
 from toolFactory import pathFilenameDatabaseAST, pythonVersionMinorMinimum
 from typing import Any, cast
 
-"""
-
-"""
-
 cc=[
 'ClassDefIdentifier',
 'versionMajor',
@@ -72,8 +68,8 @@ def Z0Z_getToolElements(elementIndex: str, *elements: str, sortOn: str | None = 
 	"""
 	pass
 
-def getElementsTypeAlias(deprecated: bool = False, versionMinorMaximum: int | None = None):
-	listElementsHARDCODED = ['attribute', 'attributeVersionMinorMinimum', 'TypeAliasSubcategory', 'classAs_astAttribute']
+def getElementsTypeAlias(deprecated: bool = False, versionMinorMaximum: int | None = None) -> list[dict[str, Any]]:
+	listElementsHARDCODED = ['attribute', 'TypeAliasSubcategory', 'attributeVersionMinorMinimum', 'classAs_astAttribute']
 	listElements = listElementsHARDCODED
 
 	dataframe = getDataframe()
@@ -101,13 +97,40 @@ def getElementsTypeAlias(deprecated: bool = False, versionMinorMaximum: int | No
 
 	dataframe = dataframe[listElements].drop_duplicates()
 
-	# Aggregate the last column ('classAs_astAttribute') into lists
-	dataframe = dataframe.groupby(listElements[0:-1])[listElements[-1]].apply(list).reset_index()
+	grouped = dataframe.groupby(listElements[0:-1])['classAs_astAttribute'].apply(lambda x: ', '.join(map(str, x))).reset_index()
+	valid_groups = grouped[grouped['attributeVersionMinorMinimum'].notnull()]
+	dataframe = pandas.merge(dataframe, valid_groups, on=listElements[0:-1], how='outer', suffixes=('', '_updated'))
+	dataframe['classAs_astAttribute'] = dataframe['classAs_astAttribute_updated'].combine_first(dataframe['classAs_astAttribute'])
+	dataframe = dataframe.drop(columns=['classAs_astAttribute_updated'])
+	dataframe = dataframe.drop_duplicates(subset=listElements)
 
-	"""
-	attributeVersionMinorMinimum: {TypeAliasSubcategory: list['classAs_astAttribute] + list['classAs_astAttribute] of smaller attributeVersionMinorMinimum},
-	"""
+	listDataframeRows = []
+	for (_attribute, _TypeAliasSubcategory), subgroup in dataframe.groupby(['attribute', 'TypeAliasSubcategory']):
+		listUniqueVersionMinor = subgroup['attributeVersionMinorMinimum'].unique()
+		if len(listUniqueVersionMinor) == 1:
+			listDataframeRows.append(subgroup)
+		elif len(listUniqueVersionMinor) == 2:
+			dataframeSubgroupLesserVersion = subgroup[subgroup['attributeVersionMinorMinimum'] == listUniqueVersionMinor.min()]
+			dataframeSubgroupGreaterVersion = subgroup[subgroup['attributeVersionMinorMinimum'] == listUniqueVersionMinor.max()]
+			# Process the lesser subgroup
+			dataframeSubgroupLesserVersion = dataframeSubgroupLesserVersion.copy()
+			dataframeSubgroupLesserVersion['classAs_astAttribute'] = dataframeSubgroupLesserVersion['classAs_astAttribute'].apply(lambda x: [x])
+			# Process the greater subgroup
+			combined = pandas.concat([dataframeSubgroupLesserVersion, dataframeSubgroupGreaterVersion])
+			combined = combined.sort_values(by='classAs_astAttribute', key=lambda col: col.str.lower())
+			combined_list = combined['classAs_astAttribute'].tolist()
+			dataframeSubgroupGreaterVersion = dataframeSubgroupGreaterVersion.copy()
+			dataframeSubgroupGreaterVersion['classAs_astAttribute'] = [combined_list]
+			# Append processed subgroups
+			listDataframeRows.append(dataframeSubgroupLesserVersion)
+			listDataframeRows.append(dataframeSubgroupGreaterVersion)
+		else:
+			# Keep other groups unchanged
+			listDataframeRows.append(subgroup)
+	# Combine all processed groups and remove duplicates
+	dataframe = pandas.concat(listDataframeRows).reset_index(drop=True)
 
+	return dataframe.to_dict(orient='records') # type: ignore
 
 def getElementsBe(sortOn: str | None = None, deprecated: bool = False, versionMinorMaximum: int | None = None) -> list[dict[str, Any]]:
 	"""Get elements of class `AST` and its subclasses for tool manufacturing.

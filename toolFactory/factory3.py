@@ -1,6 +1,5 @@
 from pathlib import PurePosixPath
 from toolFactory import (
-	ast_Identifier,
 	astName_overload,
 	astName_staticmethod,
 	astName_typing_TypeAlias,
@@ -11,7 +10,6 @@ from toolFactory import (
 	moduleIdentifierPrefix,
 	pathPackage,
 	pythonVersionMinorMinimum,
-	str_nameDOTname,
 	)
 from toolFactory.factory_annex import (
 	listHandmadeTypeAlias_astTypes,
@@ -30,7 +28,7 @@ TODO protect against AttributeError (I guess) in DOT, Grab, and ClassIsAndAttrib
 	add docstrings to warn of problem, including in Make
 
 """
-def writeModule(astModule: ast.Module, moduleIdentifier: ast_Identifier) -> None:
+def writeModule(astModule: ast.Module, moduleIdentifier: str) -> None:
 	ast.fix_missing_locations(astModule)
 	pythonSource: str = ast.unparse(astModule)
 	# if moduleIdentifier in {'ClassIsAndAttribute', 'DOT', 'Grab'}:
@@ -65,17 +63,6 @@ def writeModule(astModule: ast.Module, moduleIdentifier: ast_Identifier) -> None
 	writeStringToHere(pythonSource, pathFilenameModule)
 
 def makeTypeAlias():
-	"""
-	TypeAlias
-	not deprecated
-	attributeKind == _field
-	for each attribute, how many unique values of
-		1. TypeAliasSubcategory?
-		2. classVersionMinorMinimum?
-		3. attributeVersionMinorMinimum?
-		If each of those is 1, then you can use the same TypeAlias for all of them.
-
-	"""
 	astTypesModule = ast.Module(
 		body=[docstringWarning
 			, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('TypeAlias', 'typing_TypeAlias')], 0)
@@ -87,6 +74,8 @@ def makeTypeAlias():
 		)
 
 	typeAliasData = getElementsTypeAlias()
+	print(typeAliasData[0:1])
+	[{'attribute': 'annotation', 'TypeAliasSubcategory': 'expr', 'attributeVersionMinorMinimum': -1, 'classAs_astAttribute': "ast.Attribute(ast.Name('ast'), 'AnnAssign')"}]
 
 	# Process each attribute and its associated data
 	for attribute, versionData in typeAliasData.items():
@@ -179,7 +168,7 @@ def makeToolBe():
 	listDictionaryToolElements = getElementsBe(sortOn='ClassDefIdentifier')
 
 	for dictionaryToolElements in listDictionaryToolElements:
-		ClassDefIdentifier = cast(ast_Identifier, dictionaryToolElements['ClassDefIdentifier'])
+		ClassDefIdentifier = cast(str, dictionaryToolElements['ClassDefIdentifier'])
 		# TODO is there an alternative to `eval()`?
 		classAs_astAttribute = cast(ast.Attribute, eval(dictionaryToolElements['classAs_astAttribute']))
 		classVersionMinorMinimum: int = dictionaryToolElements['classVersionMinorMinimum']
@@ -218,13 +207,13 @@ def makeToolBe():
 
 class AnnotationsAndDefs(TypedDict):
 	astAnnotation: ast.expr
-	listClassDefIdentifier: list[ast_Identifier | str_nameDOTname]
+	listClassDefIdentifier: list[str]
 
 class MakeDictionaryOf_astClassAnnotations(ast.NodeVisitor):
 	def __init__(self, astAST: ast.AST) -> None:
 		super().__init__()
 		self.astAST = astAST
-		self.dictionarySubstitutions: dict[ast_Identifier, ast.Attribute] = {
+		self.dictionarySubstitutions: dict[str, ast.Attribute] = {
 			'_Pattern': ast.Attribute(value=ast.Name('ast'), attr='pattern'),
 		}
 
@@ -232,12 +221,12 @@ class MakeDictionaryOf_astClassAnnotations(ast.NodeVisitor):
 		NameOrAttribute = ast.Attribute(value=ast.Name('ast'), attr=node.name)
 		self.dictionarySubstitutions[node.name] = NameOrAttribute
 
-	def getDictionary(self) -> dict[ast_Identifier, ast.Attribute]:
+	def getDictionary(self) -> dict[str, ast.Attribute]:
 		self.visit(self.astAST)
 		return self.dictionarySubstitutions
 
 class Prepend_ast2astClasses(ast.NodeTransformer):
-	def __init__(self, dictionarySubstitutions: dict[ast_Identifier, ast.Attribute | ast.Name]) -> None:
+	def __init__(self, dictionarySubstitutions: dict[str, ast.Attribute | ast.Name]) -> None:
 		super().__init__()
 		self.dictionarySubstitutions = dictionarySubstitutions
 
@@ -253,9 +242,9 @@ def makeTools(astStubFile: ast.AST) -> None:
 	ClassDefMake = ast.ClassDef(name='Make', bases=[], keywords=[], body=[], decorator_list=[])
 	ClassDefGrab = ast.ClassDef(name='Grab', bases=[], keywords=[], body=[], decorator_list=[])
 
-	dictionaryOf_astDOTclass: dict[ast_Identifier, ast.Attribute] = MakeDictionaryOf_astClassAnnotations(astStubFile).getDictionary()
+	dictionaryOf_astDOTclass: dict[str, ast.Attribute] = MakeDictionaryOf_astClassAnnotations(astStubFile).getDictionary()
 
-	attributeIdentifier2Str4TypeAlias2astAnnotationAndListClassDefIdentifier: dict[ast_Identifier, dict[str, AnnotationsAndDefs]] = {}
+	attributeIdentifier2Str4TypeAlias2astAnnotationAndListClassDefIdentifier: dict[str, dict[str, AnnotationsAndDefs]] = {}
 
 	# NOTE Convert each ast.ClassDef into `TypeAlias` and methods in `Be`, `DOT`, `Grab`, and `Make`.
 	for node in ast.walk(astStubFile):
@@ -268,7 +257,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 		astDOTClassDef = node
 
 		# Create ast "fragments" before you need them.
-		ClassDefIdentifier: ast_Identifier = astDOTClassDef.name
+		ClassDefIdentifier: str = astDOTClassDef.name
 		classAs_astAttribute: ast.Attribute | ast.Name = dictionaryOf_astDOTclass[ClassDefIdentifier]
 		# Reset these identifiers in case they were changed
 		keywordArguments_ast_arg: ast.arg | None = ast.arg(keywordArgumentsIdentifier, ast.Name('int'))
@@ -297,11 +286,11 @@ def makeTools(astStubFile: ast.AST) -> None:
 	# 	, type_ignores=[]
 	# 	)
 
-	listAttributeIdentifier: list[ast_Identifier] = list(attributeIdentifier2Str4TypeAlias2astAnnotationAndListClassDefIdentifier.keys())
+	listAttributeIdentifier: list[str] = list(attributeIdentifier2Str4TypeAlias2astAnnotationAndListClassDefIdentifier.keys())
 	listAttributeIdentifier.sort(key=lambda attributeIdentifier: attributeIdentifier.lower())
 
 	for attributeIdentifier in listAttributeIdentifier:
-		hasDOTTypeAliasIdentifier: ast_Identifier = 'hasDOT' + attributeIdentifier
+		hasDOTTypeAliasIdentifier: str = 'hasDOT' + attributeIdentifier
 		hasDOTTypeAliasName_Store: ast.Name = ast.Name(hasDOTTypeAliasIdentifier, ast.Store())
 		hasDOTTypeAliasName_Load: ast.Name = ast.Name(hasDOTTypeAliasIdentifier)
 		list_hasDOTTypeAliasAnnotations: list[ast.Name] = []
@@ -423,4 +412,5 @@ def makeTools(astStubFile: ast.AST) -> None:
 		del attributeAnnotationUnifiedAsAST
 
 if __name__ == "__main__":
+	makeTypeAlias()
 	makeToolBe()

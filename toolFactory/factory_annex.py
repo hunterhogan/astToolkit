@@ -18,30 +18,30 @@ for string in listStrRepresentationsOfTypeAlias:
 		if isinstance(node, ast.AnnAssign):
 			listHandmadeTypeAlias_astTypes.append(node)
 
-astImportFromClassNewInPythonVersion: ast.ImportFrom = ast.ImportFrom('astToolkit', [], 0)
-listPythonVersionNewClass = [(11, ['TryStar']),
-	(12, ['ParamSpec', 'type_param', 'TypeAlias', 'TypeVar', 'TypeVarTuple'])
-]
+# astImportFromClassNewInPythonVersion: ast.ImportFrom = ast.ImportFrom('astToolkit', [], 0)
+# listPythonVersionNewClass = [(11, ['TryStar']),
+# 	(12, ['ParamSpec', 'type_param', 'TypeAlias', 'TypeVar', 'TypeVarTuple'])
+# ]
 
-for tupleOfClassData in listPythonVersionNewClass:
-	pythonVersionMinor: int = tupleOfClassData[0]
+# for tupleOfClassData in listPythonVersionNewClass:
+# 	pythonVersionMinor: int = tupleOfClassData[0]
 
-	conditionalTypeAlias = ast.If(
-		test=ast.Compare(left=ast.Attribute(value=ast.Name('sys'), attr='version_info'),
-						ops=[ast.GtE()],
-						comparators=[ast.Tuple([ast.Constant(3), ast.Constant(pythonVersionMinor)])]),
-		body=[ast.ImportFrom(module='ast', names=[
-			], level=0)],
-		orelse=[
-				])
+# 	conditionalTypeAlias = ast.If(
+# 		test=ast.Compare(left=ast.Attribute(value=ast.Name('sys'), attr='version_info'),
+# 						ops=[ast.GtE()],
+# 						comparators=[ast.Tuple([ast.Constant(3), ast.Constant(pythonVersionMinor)])]),
+# 		body=[ast.ImportFrom(module='ast', names=[
+# 			], level=0)],
+# 		orelse=[
+# 				])
 
-	for nameAttribute in tupleOfClassData[1]:
-		asNameAttribute = format_asNameAttribute.format(nameAttribute=nameAttribute)
-		cast(ast.ImportFrom, conditionalTypeAlias.body[0]).names.append(ast.alias(name=nameAttribute, asname=asNameAttribute))
-		conditionalTypeAlias.orelse.append(ast.AnnAssign(target=ast.Name(asNameAttribute, ast.Store()), annotation=ast.Name('typing_TypeAlias'), value=ast.Name('yourPythonIsOld'), simple=1))
-		astImportFromClassNewInPythonVersion.names.append(ast.alias(name=asNameAttribute))
+# 	for nameAttribute in tupleOfClassData[1]:
+# 		asNameAttribute = format_asNameAttribute.format(nameAttribute=nameAttribute)
+# 		cast(ast.ImportFrom, conditionalTypeAlias.body[0]).names.append(ast.alias(name=nameAttribute, asname=asNameAttribute))
+# 		conditionalTypeAlias.orelse.append(ast.AnnAssign(target=ast.Name(asNameAttribute, ast.Store()), annotation=ast.Name('typing_TypeAlias'), value=ast.Name('yourPythonIsOld'), simple=1))
+# 		astImportFromClassNewInPythonVersion.names.append(ast.alias(name=asNameAttribute))
 
-	listHandmadeTypeAlias_astTypes.append(conditionalTypeAlias)
+# 	listHandmadeTypeAlias_astTypes.append(conditionalTypeAlias)
 
 Grab_andDoAllOf: str = """@staticmethod
 def andDoAllOf(listOfActions: list[Callable[[NodeORattribute], NodeORattribute]]) -> Callable[[NodeORattribute], NodeORattribute]:

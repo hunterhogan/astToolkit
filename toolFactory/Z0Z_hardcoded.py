@@ -10,7 +10,7 @@ pythonVersionMinorMinimum: int = 10
 sys_version_infoMinimum: tuple[int, int] = (3, 10)
 sys_version_infoTarget: tuple[int, int] = (3, 13)
 
-listASTClassesPostPythonVersionMinimumHARDCODED: list[ast_Identifier] = ['astDOTParamSpec', 'astDOTTryStar', 'astDOTTypeAlias', 'astDOTTypeVar', 'astDOTTypeVarTuple', 'astDOTtype_param']
+listASTClassesPostPythonVersionMinimumHARDCODED: list[str] = ['astDOTParamSpec', 'astDOTTryStar', 'astDOTTypeAlias', 'astDOTTypeVar', 'astDOTTypeVarTuple', 'astDOTtype_param']
 listASTClassesPostPythonVersionMinimum = listASTClassesPostPythonVersionMinimumHARDCODED
 
 listASTSubclassesHARDCODED: list[str] = ['_Slice', 'AST', 'binaryop', 'boolop', 'cmpop', 'excepthandler', 'expr_context', 'expr', 'mod', 'operator', 'pattern', 'stmt', 'type_ignore', 'type_param', 'unaryop',]
@@ -20,9 +20,9 @@ class FREAKOUT(Exception):
 	pass
 
 # filesystem and namespace ===============================================
-packageName: ast_Identifier = 'astToolkit'
+packageName: str = 'astToolkit'
 moduleIdentifierPrefix: str = '_tool'
-keywordArgumentsIdentifier: ast_Identifier = 'keywordArguments'
+keywordArgumentsIdentifier: str = 'keywordArguments'
 
 pathRoot = Path('/apps') / packageName
 pathPackage = pathRoot / packageName

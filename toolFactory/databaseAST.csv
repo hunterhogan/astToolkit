@@ -32,7 +32,7 @@ AsyncFor,3,13,3,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name
 AsyncFor,3,13,3,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFor')",-1,col_offset,_attribute,-1,No
 AsyncFor,3,13,3,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFor')",-1,end_lineno,_attribute,-1,No
 AsyncFor,3,13,3,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFor')",-1,end_col_offset,_attribute,-1,No
-AsyncFunctionDef,3,13,3,stmt,False,No,No,identifier,_Identifier,str,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,name,_field,-1,Identifier
+AsyncFunctionDef,3,13,3,stmt,False,No,No,identifier,str,str,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,name,_field,-1,str
 AsyncFunctionDef,3,13,3,stmt,False,No,No,arguments,arguments,arguments,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,args,_field,-1,arguments
 AsyncFunctionDef,3,13,3,stmt,False,No,No,list(stmt),list[stmt],list[ast.stmt],No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,body,_field,-1,list_stmt
 AsyncFunctionDef,3,13,3,stmt,False,No,No,list(expr),list[expr],list[ast.expr],No,True,,[],,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,decorator_list,_field,-1,list_expr
@@ -51,7 +51,7 @@ AsyncWith,3,13,3,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Nam
 AsyncWith,3,13,3,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncWith')",-1,end_lineno,_attribute,-1,No
 AsyncWith,3,13,3,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncWith')",-1,end_col_offset,_attribute,-1,No
 Attribute,3,13,3,expr,False,No,No,expr,expr,expr,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,value,_field,-1,expr
-Attribute,3,13,3,expr,False,No,No,identifier,_Identifier,str,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,attr,_field,-1,Identifier
+Attribute,3,13,3,expr,False,No,No,identifier,str,str,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,attr,_field,-1,str
 Attribute,3,13,3,expr,False,No,context,expr_context,expr_context,expr_context,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,ctx,_field,-1,expr_context
 Attribute,3,13,3,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,lineno,_attribute,-1,No
 Attribute,3,13,3,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,col_offset,_attribute,-1,No
@@ -103,7 +103,7 @@ Call,3,13,3,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('as
 Call,3,13,3,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Call')",-1,col_offset,_attribute,-1,No
 Call,3,13,3,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Call')",-1,end_lineno,_attribute,-1,No
 Call,3,13,3,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Call')",-1,end_col_offset,_attribute,-1,No
-ClassDef,3,13,3,stmt,False,No,No,identifier,_Identifier,str,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,name,_field,-1,Identifier
+ClassDef,3,13,3,stmt,False,No,No,identifier,str,str,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,name,_field,-1,str
 ClassDef,3,13,3,stmt,False,No,No,list(expr),list[expr],list[ast.expr],No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,bases,_field,-1,list_expr
 ClassDef,3,13,3,stmt,False,No,list_keyword,list(keyword),list[keyword],list[ast.keyword],No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,keywords,_field,-1,list_keyword
 ClassDef,3,13,3,stmt,False,No,No,list(stmt),list[stmt],list[ast.stmt],No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,body,_field,-1,list_stmt
@@ -156,7 +156,7 @@ Ellipsis,3,13,3,Constant,True,No,No,No,int | None,No,No,False,,,,,,"ast.Attribut
 Ellipsis,3,13,3,Constant,True,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Ellipsis')",-1,end_col_offset,_attribute,-1,No
 Eq,3,13,3,cmpop,False,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Eq')",-1,No,No,-1,No
 ExceptHandler,3,13,3,excepthandler,False,No,No,expr | None,expr | None,ast.expr | None,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,type,_field,-1,exprOrNone
-ExceptHandler,3,13,3,excepthandler,False,No,No,identifier | None,_Identifier | None,str | None,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,name,_field,-1,IdentifierOrNone
+ExceptHandler,3,13,3,excepthandler,False,No,No,identifier | None,str | None,str | None,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,name,_field,-1,strOrNone
 ExceptHandler,3,13,3,excepthandler,False,No,No,list(stmt),list[stmt],list[ast.stmt],No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,body,_field,-1,list_stmt
 ExceptHandler,3,13,3,excepthandler,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,lineno,_attribute,-1,No
 ExceptHandler,3,13,3,excepthandler,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,col_offset,_attribute,-1,No
@@ -186,7 +186,7 @@ FormattedValue,3,13,3,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(as
 FormattedValue,3,13,3,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FormattedValue')",-1,col_offset,_attribute,-1,No
 FormattedValue,3,13,3,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FormattedValue')",-1,end_lineno,_attribute,-1,No
 FormattedValue,3,13,3,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FormattedValue')",-1,end_col_offset,_attribute,-1,No
-FunctionDef,3,13,3,stmt,False,No,No,identifier,_Identifier,str,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,name,_field,-1,Identifier
+FunctionDef,3,13,3,stmt,False,No,No,identifier,str,str,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,name,_field,-1,str
 FunctionDef,3,13,3,stmt,False,No,No,arguments,arguments,arguments,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,args,_field,-1,arguments
 FunctionDef,3,13,3,stmt,False,No,No,list(stmt),list[stmt],list[ast.stmt],No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,body,_field,-1,list_stmt
 FunctionDef,3,13,3,stmt,False,No,No,list(expr),list[expr],list[ast.expr],No,True,,[],,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,decorator_list,_field,-1,list_expr
@@ -205,7 +205,7 @@ GeneratorExp,3,13,3,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.
 GeneratorExp,3,13,3,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'GeneratorExp')",-1,col_offset,_attribute,-1,No
 GeneratorExp,3,13,3,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'GeneratorExp')",-1,end_lineno,_attribute,-1,No
 GeneratorExp,3,13,3,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'GeneratorExp')",-1,end_col_offset,_attribute,-1,No
-Global,3,13,3,stmt,False,No,No,list(identifier),list[_Identifier],list[str],_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,names,_field,-1,list_Identifier
+Global,3,13,3,stmt,False,No,No,list(identifier),list[str],list[str],str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,names,_field,-1,list_str
 Global,3,13,3,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,lineno,_attribute,-1,No
 Global,3,13,3,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,col_offset,_attribute,-1,No
 Global,3,13,3,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,end_lineno,_attribute,-1,No
@@ -279,14 +279,14 @@ Match,3,13,3,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('a
 Match,3,13,3,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Match')",10,end_lineno,_attribute,10,No
 Match,3,13,3,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Match')",10,end_col_offset,_attribute,10,No
 MatchAs,3,13,3,pattern,False,No,No,pattern | None,_Pattern | None,ast.pattern | None,_Pattern,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,pattern,_field,10,patternOrNone
-MatchAs,3,13,3,pattern,False,No,No,identifier | None,_Identifier | None,str | None,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,name,_field,10,IdentifierOrNone
+MatchAs,3,13,3,pattern,False,No,No,identifier | None,str | None,str | None,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,name,_field,10,strOrNone
 MatchAs,3,13,3,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,lineno,_attribute,10,No
 MatchAs,3,13,3,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,col_offset,_attribute,10,No
 MatchAs,3,13,3,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,end_lineno,_attribute,10,No
 MatchAs,3,13,3,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,end_col_offset,_attribute,10,No
 MatchClass,3,13,3,pattern,False,No,No,expr,expr,expr,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,cls,_field,10,expr
 MatchClass,3,13,3,pattern,False,No,No,list(pattern),list[pattern],list[ast.pattern],No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,patterns,_field,10,list_pattern
-MatchClass,3,13,3,pattern,False,No,No,list(identifier),list[_Identifier],list[str],_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,kwd_attrs,_field,10,list_Identifier
+MatchClass,3,13,3,pattern,False,No,No,list(identifier),list[str],list[str],str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,kwd_attrs,_field,10,list_str
 MatchClass,3,13,3,pattern,False,No,No,list(pattern),list[pattern],list[ast.pattern],No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,kwd_patterns,_field,10,list_pattern
 MatchClass,3,13,3,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,lineno,_attribute,10,No
 MatchClass,3,13,3,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,col_offset,_attribute,10,No
@@ -294,7 +294,7 @@ MatchClass,3,13,3,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attrib
 MatchClass,3,13,3,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,end_col_offset,_attribute,10,No
 MatchMapping,3,13,3,pattern,False,No,No,list(expr),list[expr],list[ast.expr],No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,keys,_field,10,list_expr
 MatchMapping,3,13,3,pattern,False,No,No,list(pattern),list[pattern],list[ast.pattern],No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,patterns,_field,10,list_pattern
-MatchMapping,3,13,3,pattern,False,No,No,identifier | None,_Identifier | None,str | None,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,rest,_field,10,IdentifierOrNone
+MatchMapping,3,13,3,pattern,False,No,No,identifier | None,str | None,str | None,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,rest,_field,10,strOrNone
 MatchMapping,3,13,3,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,lineno,_attribute,10,No
 MatchMapping,3,13,3,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,col_offset,_attribute,10,No
 MatchMapping,3,13,3,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,end_lineno,_attribute,10,No
@@ -314,7 +314,7 @@ MatchSingleton,3,13,3,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute
 MatchSingleton,3,13,3,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchSingleton')",10,col_offset,_attribute,10,No
 MatchSingleton,3,13,3,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchSingleton')",10,end_lineno,_attribute,10,No
 MatchSingleton,3,13,3,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchSingleton')",10,end_col_offset,_attribute,10,No
-MatchStar,3,13,3,pattern,False,No,No,identifier | None,_Identifier | None,str | None,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchStar')",10,name,_field,10,IdentifierOrNone
+MatchStar,3,13,3,pattern,False,No,No,identifier | None,str | None,str | None,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchStar')",10,name,_field,10,strOrNone
 MatchStar,3,13,3,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchStar')",10,lineno,_attribute,10,No
 MatchStar,3,13,3,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchStar')",10,col_offset,_attribute,10,No
 MatchStar,3,13,3,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchStar')",10,end_lineno,_attribute,10,No
@@ -328,7 +328,7 @@ Mod,3,13,3,operator,False,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name('
 Module,3,13,3,mod,False,No,No,list(stmt),list[stmt],list[ast.stmt],No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'Module')",-1,body,_field,-1,list_stmt
 Module,3,13,3,mod,False,No,No,list(type_ignore),list[TypeIgnore],list[ast.type_ignore],No,False,,[],,,,"ast.Attribute(ast.Name('ast'), 'Module')",-1,type_ignores,_field,-1,list_TypeIgnore
 Mult,3,13,3,operator,False,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Mult')",-1,No,No,-1,No
-Name,3,13,3,expr,False,No,No,identifier,_Identifier,str,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,id,_field,-1,Identifier
+Name,3,13,3,expr,False,No,No,identifier,str,str,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,id,_field,-1,str
 Name,3,13,3,expr,False,No,context,expr_context,expr_context,expr_context,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,ctx,_field,-1,expr_context
 Name,3,13,3,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,lineno,_attribute,-1,No
 Name,3,13,3,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,col_offset,_attribute,-1,No
@@ -346,7 +346,7 @@ NamedExpr,3,13,3,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Nam
 NamedExpr,3,13,3,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'NamedExpr')",-1,col_offset,_attribute,-1,No
 NamedExpr,3,13,3,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'NamedExpr')",-1,end_lineno,_attribute,-1,No
 NamedExpr,3,13,3,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'NamedExpr')",-1,end_col_offset,_attribute,-1,No
-Nonlocal,3,13,3,stmt,False,No,No,list(identifier),list[_Identifier],list[str],_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,names,_field,-1,list_Identifier
+Nonlocal,3,13,3,stmt,False,No,No,list(identifier),list[str],list[str],str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,names,_field,-1,list_str
 Nonlocal,3,13,3,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,lineno,_attribute,-1,No
 Nonlocal,3,13,3,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,col_offset,_attribute,-1,No
 Nonlocal,3,13,3,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,end_lineno,_attribute,-1,No
@@ -361,7 +361,7 @@ Num,3,13,3,Constant,True,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast
 Num,3,13,3,Constant,True,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Num')",-1,end_col_offset,_attribute,-1,No
 Or,3,13,3,boolop,False,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Or')",-1,No,No,-1,No
 Param,3,13,3,expr_context,True,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Param')",-1,No,No,-1,No
-ParamSpec,3,13,3,type_param,False,No,No,identifier,_Identifier,str,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ParamSpec')",12,name,_field,12,Identifier
+ParamSpec,3,13,3,type_param,False,No,No,identifier,str,str,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ParamSpec')",12,name,_field,12,str
 ParamSpec,3,13,3,type_param,False,No,No,expr | None,expr | None,ast.expr | None,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ParamSpec')",12,default_value,_field,13,exprOrNone
 ParamSpec,3,13,3,type_param,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ParamSpec')",12,lineno,_attribute,12,No
 ParamSpec,3,13,3,type_param,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ParamSpec')",12,col_offset,_attribute,12,No
@@ -454,14 +454,14 @@ TypeAlias,3,13,3,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(
 TypeAlias,3,13,3,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeAlias')",12,end_col_offset,_attribute,12,No
 TypeIgnore,3,13,3,type_ignore,False,No,No,int,int,int,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeIgnore')",-1,lineno,_field,-1,int
 TypeIgnore,3,13,3,type_ignore,False,No,No,string,str,str,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeIgnore')",-1,tag,_field,-1,str
-TypeVar,3,13,3,type_param,False,No,No,identifier,_Identifier,str,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVar')",12,name,_field,12,Identifier
+TypeVar,3,13,3,type_param,False,No,No,identifier,str,str,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVar')",12,name,_field,12,str
 TypeVar,3,13,3,type_param,False,No,No,expr | None,expr | None,ast.expr | None,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVar')",12,bound,_field,12,exprOrNone
 TypeVar,3,13,3,type_param,False,No,No,expr | None,expr | None,ast.expr | None,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVar')",12,default_value,_field,13,exprOrNone
 TypeVar,3,13,3,type_param,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVar')",12,lineno,_attribute,12,No
 TypeVar,3,13,3,type_param,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVar')",12,col_offset,_attribute,12,No
 TypeVar,3,13,3,type_param,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVar')",12,end_lineno,_attribute,12,No
 TypeVar,3,13,3,type_param,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVar')",12,end_col_offset,_attribute,12,No
-TypeVarTuple,3,13,3,type_param,False,No,No,identifier,_Identifier,str,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVarTuple')",12,name,_field,12,Identifier
+TypeVarTuple,3,13,3,type_param,False,No,No,identifier,str,str,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVarTuple')",12,name,_field,12,str
 TypeVarTuple,3,13,3,type_param,False,No,No,expr | None,expr | None,ast.expr | None,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVarTuple')",12,default_value,_field,13,exprOrNone
 TypeVarTuple,3,13,3,type_param,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVarTuple')",12,lineno,_attribute,12,No
 TypeVarTuple,3,13,3,type_param,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVarTuple')",12,col_offset,_attribute,12,No
@@ -500,12 +500,12 @@ YieldFrom,3,13,3,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Nam
 YieldFrom,3,13,3,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'YieldFrom')",-1,end_lineno,_attribute,-1,No
 YieldFrom,3,13,3,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'YieldFrom')",-1,end_col_offset,_attribute,-1,No
 alias,3,13,3,AST,False,No,No,identifier,str,str,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,name,_field,-1,str
-alias,3,13,3,AST,False,No,asName,identifier | None,_Identifier | None,str | None,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,asname,_field,-1,IdentifierOrNone
+alias,3,13,3,AST,False,No,asName,identifier | None,str | None,str | None,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,asname,_field,-1,strOrNone
 alias,3,13,3,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,lineno,_attribute,10,No
 alias,3,13,3,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,col_offset,_attribute,10,No
 alias,3,13,3,AST,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,end_lineno,_attribute,10,No
 alias,3,13,3,AST,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,end_col_offset,_attribute,10,No
-arg,3,13,3,AST,False,No,No,identifier,_Identifier,str,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,arg,_field,-1,Identifier
+arg,3,13,3,AST,False,No,No,identifier,str,str,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,arg,_field,-1,str
 arg,3,13,3,AST,False,No,No,expr | None,expr | None,ast.expr | None,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,annotation,_field,-1,exprOrNone
 arg,3,13,3,AST,False,No,No,string | None,str | None,str | None,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,type_comment,_field,-1,strOrNone
 arg,3,13,3,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,lineno,_attribute,-1,No
@@ -534,7 +534,7 @@ expr,3,13,3,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast
 expr,3,13,3,AST,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'expr')",-1,end_lineno,_attribute,-1,No
 expr,3,13,3,AST,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'expr')",-1,end_col_offset,_attribute,-1,No
 expr_context,3,13,3,AST,False,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'expr_context')",-1,No,No,-1,No
-keyword,3,13,3,AST,False,No,No,identifier | None,_Identifier | None,str | None,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,arg,_field,-1,IdentifierOrNone
+keyword,3,13,3,AST,False,No,No,identifier | None,str | None,str | None,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,arg,_field,-1,strOrNone
 keyword,3,13,3,AST,False,No,No,expr,expr,expr,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,value,_field,-1,expr
 keyword,3,13,3,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,lineno,_attribute,-1,No
 keyword,3,13,3,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,col_offset,_attribute,-1,No
@@ -595,7 +595,7 @@ AsyncFor,3,9,13,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name
 AsyncFor,3,9,13,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFor')",-1,col_offset,_attribute,-1,No
 AsyncFor,3,9,13,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFor')",-1,end_lineno,_attribute,-1,No
 AsyncFor,3,9,13,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFor')",-1,end_col_offset,_attribute,-1,No
-AsyncFunctionDef,3,9,13,stmt,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,name,_field,-1,Identifier
+AsyncFunctionDef,3,9,13,stmt,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,name,_field,-1,str
 AsyncFunctionDef,3,9,13,stmt,False,No,No,arguments,arguments,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,args,_field,-1,arguments
 AsyncFunctionDef,3,9,13,stmt,False,No,No,list(stmt),list[stmt],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,body,_field,-1,list_stmt
 AsyncFunctionDef,3,9,13,stmt,False,No,No,list(expr),list[expr],No,No,True,,[],,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,decorator_list,_field,-1,list_expr
@@ -613,7 +613,7 @@ AsyncWith,3,9,13,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Nam
 AsyncWith,3,9,13,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncWith')",-1,end_lineno,_attribute,-1,No
 AsyncWith,3,9,13,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncWith')",-1,end_col_offset,_attribute,-1,No
 Attribute,3,9,13,expr,False,No,No,expr,expr,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,value,_field,-1,expr
-Attribute,3,9,13,expr,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,attr,_field,-1,Identifier
+Attribute,3,9,13,expr,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,attr,_field,-1,str
 Attribute,3,9,13,expr,False,No,context,expr_context,expr_context,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,ctx,_field,-1,expr_context
 Attribute,3,9,13,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,lineno,_attribute,-1,No
 Attribute,3,9,13,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,col_offset,_attribute,-1,No
@@ -665,7 +665,7 @@ Call,3,9,13,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('as
 Call,3,9,13,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Call')",-1,col_offset,_attribute,-1,No
 Call,3,9,13,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Call')",-1,end_lineno,_attribute,-1,No
 Call,3,9,13,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Call')",-1,end_col_offset,_attribute,-1,No
-ClassDef,3,9,13,stmt,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,name,_field,-1,Identifier
+ClassDef,3,9,13,stmt,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,name,_field,-1,str
 ClassDef,3,9,13,stmt,False,No,No,list(expr),list[expr],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,bases,_field,-1,list_expr
 ClassDef,3,9,13,stmt,False,No,list_keyword,list(keyword),list[keyword],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,keywords,_field,-1,list_keyword
 ClassDef,3,9,13,stmt,False,No,No,list(stmt),list[stmt],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,body,_field,-1,list_stmt
@@ -717,7 +717,7 @@ Ellipsis,3,9,13,Constant,True,No,No,No,int | None,No,No,False,,,,,,"ast.Attribut
 Ellipsis,3,9,13,Constant,True,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Ellipsis')",-1,end_col_offset,_attribute,-1,No
 Eq,3,9,13,cmpop,False,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Eq')",-1,No,No,-1,No
 ExceptHandler,3,9,13,excepthandler,False,No,No,expr | None,expr | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,type,_field,-1,exprOrNone
-ExceptHandler,3,9,13,excepthandler,False,No,No,identifier | None,_Identifier | None,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,name,_field,-1,IdentifierOrNone
+ExceptHandler,3,9,13,excepthandler,False,No,No,identifier | None,str | None,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,name,_field,-1,strOrNone
 ExceptHandler,3,9,13,excepthandler,False,No,No,list(stmt),list[stmt],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,body,_field,-1,list_stmt
 ExceptHandler,3,9,13,excepthandler,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,lineno,_attribute,-1,No
 ExceptHandler,3,9,13,excepthandler,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,col_offset,_attribute,-1,No
@@ -747,7 +747,7 @@ FormattedValue,3,9,13,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(as
 FormattedValue,3,9,13,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FormattedValue')",-1,col_offset,_attribute,-1,No
 FormattedValue,3,9,13,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FormattedValue')",-1,end_lineno,_attribute,-1,No
 FormattedValue,3,9,13,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FormattedValue')",-1,end_col_offset,_attribute,-1,No
-FunctionDef,3,9,13,stmt,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,name,_field,-1,Identifier
+FunctionDef,3,9,13,stmt,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,name,_field,-1,str
 FunctionDef,3,9,13,stmt,False,No,No,arguments,arguments,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,args,_field,-1,arguments
 FunctionDef,3,9,13,stmt,False,No,No,list(stmt),list[stmt],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,body,_field,-1,list_stmt
 FunctionDef,3,9,13,stmt,False,No,No,list(expr),list[expr],No,No,True,,[],,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,decorator_list,_field,-1,list_expr
@@ -765,7 +765,7 @@ GeneratorExp,3,9,13,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.
 GeneratorExp,3,9,13,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'GeneratorExp')",-1,col_offset,_attribute,-1,No
 GeneratorExp,3,9,13,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'GeneratorExp')",-1,end_lineno,_attribute,-1,No
 GeneratorExp,3,9,13,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'GeneratorExp')",-1,end_col_offset,_attribute,-1,No
-Global,3,9,13,stmt,False,No,No,list(identifier),list[_Identifier],No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,names,_field,-1,list_Identifier
+Global,3,9,13,stmt,False,No,No,list(identifier),list[str],No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,names,_field,-1,list_str
 Global,3,9,13,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,lineno,_attribute,-1,No
 Global,3,9,13,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,col_offset,_attribute,-1,No
 Global,3,9,13,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,end_lineno,_attribute,-1,No
@@ -836,7 +836,7 @@ Mod,3,9,13,operator,False,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name('
 Module,3,9,13,mod,False,No,No,list(stmt),list[stmt],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'Module')",-1,body,_field,-1,list_stmt
 Module,3,9,13,mod,False,No,No,list(type_ignore),list[TypeIgnore],No,No,False,,[],,,,"ast.Attribute(ast.Name('ast'), 'Module')",-1,type_ignores,_field,-1,list_TypeIgnore
 Mult,3,9,13,operator,False,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Mult')",-1,No,No,-1,No
-Name,3,9,13,expr,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,id,_field,-1,Identifier
+Name,3,9,13,expr,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,id,_field,-1,str
 Name,3,9,13,expr,False,No,context,expr_context,expr_context,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,ctx,_field,-1,expr_context
 Name,3,9,13,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,lineno,_attribute,-1,No
 Name,3,9,13,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,col_offset,_attribute,-1,No
@@ -854,7 +854,7 @@ NamedExpr,3,9,13,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Nam
 NamedExpr,3,9,13,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'NamedExpr')",-1,col_offset,_attribute,-1,No
 NamedExpr,3,9,13,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'NamedExpr')",-1,end_lineno,_attribute,-1,No
 NamedExpr,3,9,13,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'NamedExpr')",-1,end_col_offset,_attribute,-1,No
-Nonlocal,3,9,13,stmt,False,No,No,list(identifier),list[_Identifier],No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,names,_field,-1,list_Identifier
+Nonlocal,3,9,13,stmt,False,No,No,list(identifier),list[str],No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,names,_field,-1,list_str
 Nonlocal,3,9,13,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,lineno,_attribute,-1,No
 Nonlocal,3,9,13,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,col_offset,_attribute,-1,No
 Nonlocal,3,9,13,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,end_lineno,_attribute,-1,No
@@ -974,8 +974,8 @@ YieldFrom,3,9,13,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Nam
 YieldFrom,3,9,13,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'YieldFrom')",-1,end_lineno,_attribute,-1,No
 YieldFrom,3,9,13,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'YieldFrom')",-1,end_col_offset,_attribute,-1,No
 alias,3,9,13,AST,False,No,No,identifier,str,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,name,_field,-1,str
-alias,3,9,13,AST,False,No,asName,identifier | None,_Identifier | None,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,asname,_field,-1,IdentifierOrNone
-arg,3,9,13,AST,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,arg,_field,-1,Identifier
+alias,3,9,13,AST,False,No,asName,identifier | None,str | None,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,asname,_field,-1,strOrNone
+arg,3,9,13,AST,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,arg,_field,-1,str
 arg,3,9,13,AST,False,No,No,expr | None,expr | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,annotation,_field,-1,exprOrNone
 arg,3,9,13,AST,False,No,No,string | None,str | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,type_comment,_field,-1,strOrNone
 arg,3,9,13,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,lineno,_attribute,-1,No
@@ -1004,7 +1004,7 @@ expr,3,9,13,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast
 expr,3,9,13,AST,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'expr')",-1,end_lineno,_attribute,-1,No
 expr,3,9,13,AST,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'expr')",-1,end_col_offset,_attribute,-1,No
 expr_context,3,9,13,AST,False,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'expr_context')",-1,No,No,-1,No
-keyword,3,9,13,AST,False,No,No,identifier | None,_Identifier | None,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,arg,_field,-1,IdentifierOrNone
+keyword,3,9,13,AST,False,No,No,identifier | None,str | None,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,arg,_field,-1,strOrNone
 keyword,3,9,13,AST,False,No,No,expr,expr,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,value,_field,-1,expr
 keyword,3,9,13,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,lineno,_attribute,-1,No
 keyword,3,9,13,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,col_offset,_attribute,-1,No
@@ -1054,7 +1054,7 @@ AsyncFor,3,10,11,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Nam
 AsyncFor,3,10,11,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFor')",-1,col_offset,_attribute,-1,No
 AsyncFor,3,10,11,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFor')",-1,end_lineno,_attribute,-1,No
 AsyncFor,3,10,11,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFor')",-1,end_col_offset,_attribute,-1,No
-AsyncFunctionDef,3,10,11,stmt,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,name,_field,-1,Identifier
+AsyncFunctionDef,3,10,11,stmt,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,name,_field,-1,str
 AsyncFunctionDef,3,10,11,stmt,False,No,No,arguments,arguments,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,args,_field,-1,arguments
 AsyncFunctionDef,3,10,11,stmt,False,No,No,list(stmt),list[stmt],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,body,_field,-1,list_stmt
 AsyncFunctionDef,3,10,11,stmt,False,No,No,list(expr),list[expr],No,No,True,,[],,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,decorator_list,_field,-1,list_expr
@@ -1072,7 +1072,7 @@ AsyncWith,3,10,11,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Na
 AsyncWith,3,10,11,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncWith')",-1,end_lineno,_attribute,-1,No
 AsyncWith,3,10,11,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncWith')",-1,end_col_offset,_attribute,-1,No
 Attribute,3,10,11,expr,False,No,No,expr,expr,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,value,_field,-1,expr
-Attribute,3,10,11,expr,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,attr,_field,-1,Identifier
+Attribute,3,10,11,expr,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,attr,_field,-1,str
 Attribute,3,10,11,expr,False,No,context,expr_context,expr_context,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,ctx,_field,-1,expr_context
 Attribute,3,10,11,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,lineno,_attribute,-1,No
 Attribute,3,10,11,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,col_offset,_attribute,-1,No
@@ -1124,7 +1124,7 @@ Call,3,10,11,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('a
 Call,3,10,11,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Call')",-1,col_offset,_attribute,-1,No
 Call,3,10,11,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Call')",-1,end_lineno,_attribute,-1,No
 Call,3,10,11,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Call')",-1,end_col_offset,_attribute,-1,No
-ClassDef,3,10,11,stmt,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,name,_field,-1,Identifier
+ClassDef,3,10,11,stmt,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,name,_field,-1,str
 ClassDef,3,10,11,stmt,False,No,No,list(expr),list[expr],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,bases,_field,-1,list_expr
 ClassDef,3,10,11,stmt,False,No,list_keyword,list(keyword),list[keyword],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,keywords,_field,-1,list_keyword
 ClassDef,3,10,11,stmt,False,No,No,list(stmt),list[stmt],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,body,_field,-1,list_stmt
@@ -1176,7 +1176,7 @@ Ellipsis,3,10,11,Constant,True,No,No,No,int | None,No,No,False,,,,,,"ast.Attribu
 Ellipsis,3,10,11,Constant,True,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Ellipsis')",-1,end_col_offset,_attribute,-1,No
 Eq,3,10,11,cmpop,False,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Eq')",-1,No,No,-1,No
 ExceptHandler,3,10,11,excepthandler,False,No,No,expr | None,expr | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,type,_field,-1,exprOrNone
-ExceptHandler,3,10,11,excepthandler,False,No,No,identifier | None,_Identifier | None,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,name,_field,-1,IdentifierOrNone
+ExceptHandler,3,10,11,excepthandler,False,No,No,identifier | None,str | None,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,name,_field,-1,strOrNone
 ExceptHandler,3,10,11,excepthandler,False,No,No,list(stmt),list[stmt],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,body,_field,-1,list_stmt
 ExceptHandler,3,10,11,excepthandler,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,lineno,_attribute,-1,No
 ExceptHandler,3,10,11,excepthandler,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,col_offset,_attribute,-1,No
@@ -1206,7 +1206,7 @@ FormattedValue,3,10,11,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(a
 FormattedValue,3,10,11,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FormattedValue')",-1,col_offset,_attribute,-1,No
 FormattedValue,3,10,11,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FormattedValue')",-1,end_lineno,_attribute,-1,No
 FormattedValue,3,10,11,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FormattedValue')",-1,end_col_offset,_attribute,-1,No
-FunctionDef,3,10,11,stmt,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,name,_field,-1,Identifier
+FunctionDef,3,10,11,stmt,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,name,_field,-1,str
 FunctionDef,3,10,11,stmt,False,No,No,arguments,arguments,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,args,_field,-1,arguments
 FunctionDef,3,10,11,stmt,False,No,No,list(stmt),list[stmt],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,body,_field,-1,list_stmt
 FunctionDef,3,10,11,stmt,False,No,No,list(expr),list[expr],No,No,True,,[],,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,decorator_list,_field,-1,list_expr
@@ -1224,7 +1224,7 @@ GeneratorExp,3,10,11,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast
 GeneratorExp,3,10,11,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'GeneratorExp')",-1,col_offset,_attribute,-1,No
 GeneratorExp,3,10,11,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'GeneratorExp')",-1,end_lineno,_attribute,-1,No
 GeneratorExp,3,10,11,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'GeneratorExp')",-1,end_col_offset,_attribute,-1,No
-Global,3,10,11,stmt,False,No,No,list(identifier),list[_Identifier],No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,names,_field,-1,list_Identifier
+Global,3,10,11,stmt,False,No,No,list(identifier),list[str],No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,names,_field,-1,list_str
 Global,3,10,11,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,lineno,_attribute,-1,No
 Global,3,10,11,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,col_offset,_attribute,-1,No
 Global,3,10,11,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,end_lineno,_attribute,-1,No
@@ -1298,14 +1298,14 @@ Match,3,10,11,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('
 Match,3,10,11,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Match')",10,end_lineno,_attribute,10,No
 Match,3,10,11,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Match')",10,end_col_offset,_attribute,10,No
 MatchAs,3,10,11,pattern,False,No,No,pattern | None,_Pattern | None,No,_Pattern,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,pattern,_field,10,patternOrNone
-MatchAs,3,10,11,pattern,False,No,No,identifier | None,_Identifier | None,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,name,_field,10,IdentifierOrNone
+MatchAs,3,10,11,pattern,False,No,No,identifier | None,str | None,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,name,_field,10,strOrNone
 MatchAs,3,10,11,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,lineno,_attribute,10,No
 MatchAs,3,10,11,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,col_offset,_attribute,10,No
 MatchAs,3,10,11,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,end_lineno,_attribute,10,No
 MatchAs,3,10,11,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,end_col_offset,_attribute,10,No
 MatchClass,3,10,11,pattern,False,No,No,expr,expr,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,cls,_field,10,expr
 MatchClass,3,10,11,pattern,False,No,No,list(pattern),list[pattern],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,patterns,_field,10,list_pattern
-MatchClass,3,10,11,pattern,False,No,No,list(identifier),list[_Identifier],No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,kwd_attrs,_field,10,list_Identifier
+MatchClass,3,10,11,pattern,False,No,No,list(identifier),list[str],No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,kwd_attrs,_field,10,list_str
 MatchClass,3,10,11,pattern,False,No,No,list(pattern),list[pattern],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,kwd_patterns,_field,10,list_pattern
 MatchClass,3,10,11,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,lineno,_attribute,10,No
 MatchClass,3,10,11,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,col_offset,_attribute,10,No
@@ -1313,7 +1313,7 @@ MatchClass,3,10,11,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attri
 MatchClass,3,10,11,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,end_col_offset,_attribute,10,No
 MatchMapping,3,10,11,pattern,False,No,No,list(expr),list[expr],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,keys,_field,10,list_expr
 MatchMapping,3,10,11,pattern,False,No,No,list(pattern),list[pattern],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,patterns,_field,10,list_pattern
-MatchMapping,3,10,11,pattern,False,No,No,identifier | None,_Identifier | None,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,rest,_field,10,IdentifierOrNone
+MatchMapping,3,10,11,pattern,False,No,No,identifier | None,str | None,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,rest,_field,10,strOrNone
 MatchMapping,3,10,11,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,lineno,_attribute,10,No
 MatchMapping,3,10,11,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,col_offset,_attribute,10,No
 MatchMapping,3,10,11,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,end_lineno,_attribute,10,No
@@ -1333,7 +1333,7 @@ MatchSingleton,3,10,11,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribut
 MatchSingleton,3,10,11,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchSingleton')",10,col_offset,_attribute,10,No
 MatchSingleton,3,10,11,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchSingleton')",10,end_lineno,_attribute,10,No
 MatchSingleton,3,10,11,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchSingleton')",10,end_col_offset,_attribute,10,No
-MatchStar,3,10,11,pattern,False,No,No,identifier | None,_Identifier | None,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchStar')",10,name,_field,10,IdentifierOrNone
+MatchStar,3,10,11,pattern,False,No,No,identifier | None,str | None,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchStar')",10,name,_field,10,strOrNone
 MatchStar,3,10,11,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchStar')",10,lineno,_attribute,10,No
 MatchStar,3,10,11,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchStar')",10,col_offset,_attribute,10,No
 MatchStar,3,10,11,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchStar')",10,end_lineno,_attribute,10,No
@@ -1347,7 +1347,7 @@ Mod,3,10,11,operator,False,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name(
 Module,3,10,11,mod,False,No,No,list(stmt),list[stmt],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'Module')",-1,body,_field,-1,list_stmt
 Module,3,10,11,mod,False,No,No,list(type_ignore),list[TypeIgnore],No,No,False,,[],,,,"ast.Attribute(ast.Name('ast'), 'Module')",-1,type_ignores,_field,-1,list_TypeIgnore
 Mult,3,10,11,operator,False,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Mult')",-1,No,No,-1,No
-Name,3,10,11,expr,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,id,_field,-1,Identifier
+Name,3,10,11,expr,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,id,_field,-1,str
 Name,3,10,11,expr,False,No,context,expr_context,expr_context,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,ctx,_field,-1,expr_context
 Name,3,10,11,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,lineno,_attribute,-1,No
 Name,3,10,11,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,col_offset,_attribute,-1,No
@@ -1365,7 +1365,7 @@ NamedExpr,3,10,11,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Na
 NamedExpr,3,10,11,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'NamedExpr')",-1,col_offset,_attribute,-1,No
 NamedExpr,3,10,11,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'NamedExpr')",-1,end_lineno,_attribute,-1,No
 NamedExpr,3,10,11,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'NamedExpr')",-1,end_col_offset,_attribute,-1,No
-Nonlocal,3,10,11,stmt,False,No,No,list(identifier),list[_Identifier],No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,names,_field,-1,list_Identifier
+Nonlocal,3,10,11,stmt,False,No,No,list(identifier),list[str],No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,names,_field,-1,list_str
 Nonlocal,3,10,11,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,lineno,_attribute,-1,No
 Nonlocal,3,10,11,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,col_offset,_attribute,-1,No
 Nonlocal,3,10,11,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,end_lineno,_attribute,-1,No
@@ -1485,12 +1485,12 @@ YieldFrom,3,10,11,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Na
 YieldFrom,3,10,11,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'YieldFrom')",-1,end_lineno,_attribute,-1,No
 YieldFrom,3,10,11,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'YieldFrom')",-1,end_col_offset,_attribute,-1,No
 alias,3,10,11,AST,False,No,No,identifier,str,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,name,_field,-1,str
-alias,3,10,11,AST,False,No,asName,identifier | None,_Identifier | None,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,asname,_field,-1,IdentifierOrNone
+alias,3,10,11,AST,False,No,asName,identifier | None,str | None,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,asname,_field,-1,strOrNone
 alias,3,10,11,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,lineno,_attribute,10,No
 alias,3,10,11,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,col_offset,_attribute,10,No
 alias,3,10,11,AST,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,end_lineno,_attribute,10,No
 alias,3,10,11,AST,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,end_col_offset,_attribute,10,No
-arg,3,10,11,AST,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,arg,_field,-1,Identifier
+arg,3,10,11,AST,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,arg,_field,-1,str
 arg,3,10,11,AST,False,No,No,expr | None,expr | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,annotation,_field,-1,exprOrNone
 arg,3,10,11,AST,False,No,No,string | None,str | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,type_comment,_field,-1,strOrNone
 arg,3,10,11,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,lineno,_attribute,-1,No
@@ -1519,7 +1519,7 @@ expr,3,10,11,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('as
 expr,3,10,11,AST,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'expr')",-1,end_lineno,_attribute,-1,No
 expr,3,10,11,AST,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'expr')",-1,end_col_offset,_attribute,-1,No
 expr_context,3,10,11,AST,False,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'expr_context')",-1,No,No,-1,No
-keyword,3,10,11,AST,False,No,No,identifier | None,_Identifier | None,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,arg,_field,-1,IdentifierOrNone
+keyword,3,10,11,AST,False,No,No,identifier | None,str | None,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,arg,_field,-1,strOrNone
 keyword,3,10,11,AST,False,No,No,expr,expr,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,value,_field,-1,expr
 keyword,3,10,11,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,lineno,_attribute,-1,No
 keyword,3,10,11,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,col_offset,_attribute,-1,No
@@ -1576,7 +1576,7 @@ AsyncFor,3,11,9,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name
 AsyncFor,3,11,9,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFor')",-1,col_offset,_attribute,-1,No
 AsyncFor,3,11,9,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFor')",-1,end_lineno,_attribute,-1,No
 AsyncFor,3,11,9,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFor')",-1,end_col_offset,_attribute,-1,No
-AsyncFunctionDef,3,11,9,stmt,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,name,_field,-1,Identifier
+AsyncFunctionDef,3,11,9,stmt,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,name,_field,-1,str
 AsyncFunctionDef,3,11,9,stmt,False,No,No,arguments,arguments,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,args,_field,-1,arguments
 AsyncFunctionDef,3,11,9,stmt,False,No,No,list(stmt),list[stmt],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,body,_field,-1,list_stmt
 AsyncFunctionDef,3,11,9,stmt,False,No,No,list(expr),list[expr],No,No,True,,[],,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,decorator_list,_field,-1,list_expr
@@ -1594,7 +1594,7 @@ AsyncWith,3,11,9,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Nam
 AsyncWith,3,11,9,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncWith')",-1,end_lineno,_attribute,-1,No
 AsyncWith,3,11,9,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncWith')",-1,end_col_offset,_attribute,-1,No
 Attribute,3,11,9,expr,False,No,No,expr,expr,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,value,_field,-1,expr
-Attribute,3,11,9,expr,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,attr,_field,-1,Identifier
+Attribute,3,11,9,expr,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,attr,_field,-1,str
 Attribute,3,11,9,expr,False,No,context,expr_context,expr_context,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,ctx,_field,-1,expr_context
 Attribute,3,11,9,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,lineno,_attribute,-1,No
 Attribute,3,11,9,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,col_offset,_attribute,-1,No
@@ -1646,7 +1646,7 @@ Call,3,11,9,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('as
 Call,3,11,9,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Call')",-1,col_offset,_attribute,-1,No
 Call,3,11,9,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Call')",-1,end_lineno,_attribute,-1,No
 Call,3,11,9,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Call')",-1,end_col_offset,_attribute,-1,No
-ClassDef,3,11,9,stmt,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,name,_field,-1,Identifier
+ClassDef,3,11,9,stmt,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,name,_field,-1,str
 ClassDef,3,11,9,stmt,False,No,No,list(expr),list[expr],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,bases,_field,-1,list_expr
 ClassDef,3,11,9,stmt,False,No,list_keyword,list(keyword),list[keyword],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,keywords,_field,-1,list_keyword
 ClassDef,3,11,9,stmt,False,No,No,list(stmt),list[stmt],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,body,_field,-1,list_stmt
@@ -1698,7 +1698,7 @@ Ellipsis,3,11,9,Constant,True,No,No,No,int | None,No,No,False,,,,,,"ast.Attribut
 Ellipsis,3,11,9,Constant,True,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Ellipsis')",-1,end_col_offset,_attribute,-1,No
 Eq,3,11,9,cmpop,False,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Eq')",-1,No,No,-1,No
 ExceptHandler,3,11,9,excepthandler,False,No,No,expr | None,expr | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,type,_field,-1,exprOrNone
-ExceptHandler,3,11,9,excepthandler,False,No,No,identifier | None,_Identifier | None,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,name,_field,-1,IdentifierOrNone
+ExceptHandler,3,11,9,excepthandler,False,No,No,identifier | None,str | None,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,name,_field,-1,strOrNone
 ExceptHandler,3,11,9,excepthandler,False,No,No,list(stmt),list[stmt],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,body,_field,-1,list_stmt
 ExceptHandler,3,11,9,excepthandler,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,lineno,_attribute,-1,No
 ExceptHandler,3,11,9,excepthandler,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,col_offset,_attribute,-1,No
@@ -1728,7 +1728,7 @@ FormattedValue,3,11,9,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(as
 FormattedValue,3,11,9,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FormattedValue')",-1,col_offset,_attribute,-1,No
 FormattedValue,3,11,9,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FormattedValue')",-1,end_lineno,_attribute,-1,No
 FormattedValue,3,11,9,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FormattedValue')",-1,end_col_offset,_attribute,-1,No
-FunctionDef,3,11,9,stmt,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,name,_field,-1,Identifier
+FunctionDef,3,11,9,stmt,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,name,_field,-1,str
 FunctionDef,3,11,9,stmt,False,No,No,arguments,arguments,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,args,_field,-1,arguments
 FunctionDef,3,11,9,stmt,False,No,No,list(stmt),list[stmt],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,body,_field,-1,list_stmt
 FunctionDef,3,11,9,stmt,False,No,No,list(expr),list[expr],No,No,True,,[],,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,decorator_list,_field,-1,list_expr
@@ -1746,7 +1746,7 @@ GeneratorExp,3,11,9,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.
 GeneratorExp,3,11,9,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'GeneratorExp')",-1,col_offset,_attribute,-1,No
 GeneratorExp,3,11,9,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'GeneratorExp')",-1,end_lineno,_attribute,-1,No
 GeneratorExp,3,11,9,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'GeneratorExp')",-1,end_col_offset,_attribute,-1,No
-Global,3,11,9,stmt,False,No,No,list(identifier),list[_Identifier],No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,names,_field,-1,list_Identifier
+Global,3,11,9,stmt,False,No,No,list(identifier),list[str],No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,names,_field,-1,list_str
 Global,3,11,9,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,lineno,_attribute,-1,No
 Global,3,11,9,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,col_offset,_attribute,-1,No
 Global,3,11,9,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,end_lineno,_attribute,-1,No
@@ -1820,14 +1820,14 @@ Match,3,11,9,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('a
 Match,3,11,9,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Match')",10,end_lineno,_attribute,10,No
 Match,3,11,9,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Match')",10,end_col_offset,_attribute,10,No
 MatchAs,3,11,9,pattern,False,No,No,pattern | None,_Pattern | None,No,_Pattern,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,pattern,_field,10,patternOrNone
-MatchAs,3,11,9,pattern,False,No,No,identifier | None,_Identifier | None,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,name,_field,10,IdentifierOrNone
+MatchAs,3,11,9,pattern,False,No,No,identifier | None,str | None,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,name,_field,10,strOrNone
 MatchAs,3,11,9,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,lineno,_attribute,10,No
 MatchAs,3,11,9,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,col_offset,_attribute,10,No
 MatchAs,3,11,9,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,end_lineno,_attribute,10,No
 MatchAs,3,11,9,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,end_col_offset,_attribute,10,No
 MatchClass,3,11,9,pattern,False,No,No,expr,expr,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,cls,_field,10,expr
 MatchClass,3,11,9,pattern,False,No,No,list(pattern),list[pattern],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,patterns,_field,10,list_pattern
-MatchClass,3,11,9,pattern,False,No,No,list(identifier),list[_Identifier],No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,kwd_attrs,_field,10,list_Identifier
+MatchClass,3,11,9,pattern,False,No,No,list(identifier),list[str],No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,kwd_attrs,_field,10,list_str
 MatchClass,3,11,9,pattern,False,No,No,list(pattern),list[pattern],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,kwd_patterns,_field,10,list_pattern
 MatchClass,3,11,9,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,lineno,_attribute,10,No
 MatchClass,3,11,9,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,col_offset,_attribute,10,No
@@ -1835,7 +1835,7 @@ MatchClass,3,11,9,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attrib
 MatchClass,3,11,9,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,end_col_offset,_attribute,10,No
 MatchMapping,3,11,9,pattern,False,No,No,list(expr),list[expr],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,keys,_field,10,list_expr
 MatchMapping,3,11,9,pattern,False,No,No,list(pattern),list[pattern],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,patterns,_field,10,list_pattern
-MatchMapping,3,11,9,pattern,False,No,No,identifier | None,_Identifier | None,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,rest,_field,10,IdentifierOrNone
+MatchMapping,3,11,9,pattern,False,No,No,identifier | None,str | None,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,rest,_field,10,strOrNone
 MatchMapping,3,11,9,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,lineno,_attribute,10,No
 MatchMapping,3,11,9,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,col_offset,_attribute,10,No
 MatchMapping,3,11,9,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,end_lineno,_attribute,10,No
@@ -1855,7 +1855,7 @@ MatchSingleton,3,11,9,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute
 MatchSingleton,3,11,9,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchSingleton')",10,col_offset,_attribute,10,No
 MatchSingleton,3,11,9,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchSingleton')",10,end_lineno,_attribute,10,No
 MatchSingleton,3,11,9,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchSingleton')",10,end_col_offset,_attribute,10,No
-MatchStar,3,11,9,pattern,False,No,No,identifier | None,_Identifier | None,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchStar')",10,name,_field,10,IdentifierOrNone
+MatchStar,3,11,9,pattern,False,No,No,identifier | None,str | None,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchStar')",10,name,_field,10,strOrNone
 MatchStar,3,11,9,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchStar')",10,lineno,_attribute,10,No
 MatchStar,3,11,9,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchStar')",10,col_offset,_attribute,10,No
 MatchStar,3,11,9,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchStar')",10,end_lineno,_attribute,10,No
@@ -1869,7 +1869,7 @@ Mod,3,11,9,operator,False,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name('
 Module,3,11,9,mod,False,No,No,list(stmt),list[stmt],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'Module')",-1,body,_field,-1,list_stmt
 Module,3,11,9,mod,False,No,No,list(type_ignore),list[TypeIgnore],No,No,False,,[],,,,"ast.Attribute(ast.Name('ast'), 'Module')",-1,type_ignores,_field,-1,list_TypeIgnore
 Mult,3,11,9,operator,False,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Mult')",-1,No,No,-1,No
-Name,3,11,9,expr,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,id,_field,-1,Identifier
+Name,3,11,9,expr,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,id,_field,-1,str
 Name,3,11,9,expr,False,No,context,expr_context,expr_context,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,ctx,_field,-1,expr_context
 Name,3,11,9,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,lineno,_attribute,-1,No
 Name,3,11,9,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,col_offset,_attribute,-1,No
@@ -1887,7 +1887,7 @@ NamedExpr,3,11,9,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Nam
 NamedExpr,3,11,9,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'NamedExpr')",-1,col_offset,_attribute,-1,No
 NamedExpr,3,11,9,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'NamedExpr')",-1,end_lineno,_attribute,-1,No
 NamedExpr,3,11,9,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'NamedExpr')",-1,end_col_offset,_attribute,-1,No
-Nonlocal,3,11,9,stmt,False,No,No,list(identifier),list[_Identifier],No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,names,_field,-1,list_Identifier
+Nonlocal,3,11,9,stmt,False,No,No,list(identifier),list[str],No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,names,_field,-1,list_str
 Nonlocal,3,11,9,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,lineno,_attribute,-1,No
 Nonlocal,3,11,9,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,col_offset,_attribute,-1,No
 Nonlocal,3,11,9,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,end_lineno,_attribute,-1,No
@@ -2015,12 +2015,12 @@ YieldFrom,3,11,9,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Nam
 YieldFrom,3,11,9,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'YieldFrom')",-1,end_lineno,_attribute,-1,No
 YieldFrom,3,11,9,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'YieldFrom')",-1,end_col_offset,_attribute,-1,No
 alias,3,11,9,AST,False,No,No,identifier,str,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,name,_field,-1,str
-alias,3,11,9,AST,False,No,asName,identifier | None,_Identifier | None,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,asname,_field,-1,IdentifierOrNone
+alias,3,11,9,AST,False,No,asName,identifier | None,str | None,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,asname,_field,-1,strOrNone
 alias,3,11,9,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,lineno,_attribute,10,No
 alias,3,11,9,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,col_offset,_attribute,10,No
 alias,3,11,9,AST,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,end_lineno,_attribute,10,No
 alias,3,11,9,AST,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,end_col_offset,_attribute,10,No
-arg,3,11,9,AST,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,arg,_field,-1,Identifier
+arg,3,11,9,AST,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,arg,_field,-1,str
 arg,3,11,9,AST,False,No,No,expr | None,expr | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,annotation,_field,-1,exprOrNone
 arg,3,11,9,AST,False,No,No,string | None,str | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,type_comment,_field,-1,strOrNone
 arg,3,11,9,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,lineno,_attribute,-1,No
@@ -2049,7 +2049,7 @@ expr,3,11,9,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast
 expr,3,11,9,AST,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'expr')",-1,end_lineno,_attribute,-1,No
 expr,3,11,9,AST,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'expr')",-1,end_col_offset,_attribute,-1,No
 expr_context,3,11,9,AST,False,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'expr_context')",-1,No,No,-1,No
-keyword,3,11,9,AST,False,No,No,identifier | None,_Identifier | None,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,arg,_field,-1,IdentifierOrNone
+keyword,3,11,9,AST,False,No,No,identifier | None,str | None,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,arg,_field,-1,strOrNone
 keyword,3,11,9,AST,False,No,No,expr,expr,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,value,_field,-1,expr
 keyword,3,11,9,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,lineno,_attribute,-1,No
 keyword,3,11,9,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,col_offset,_attribute,-1,No
@@ -2106,7 +2106,7 @@ AsyncFor,3,12,10,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Nam
 AsyncFor,3,12,10,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFor')",-1,col_offset,_attribute,-1,No
 AsyncFor,3,12,10,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFor')",-1,end_lineno,_attribute,-1,No
 AsyncFor,3,12,10,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFor')",-1,end_col_offset,_attribute,-1,No
-AsyncFunctionDef,3,12,10,stmt,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,name,_field,-1,Identifier
+AsyncFunctionDef,3,12,10,stmt,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,name,_field,-1,str
 AsyncFunctionDef,3,12,10,stmt,False,No,No,arguments,arguments,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,args,_field,-1,arguments
 AsyncFunctionDef,3,12,10,stmt,False,No,No,list(stmt),list[stmt],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,body,_field,-1,list_stmt
 AsyncFunctionDef,3,12,10,stmt,False,No,No,list(expr),list[expr],No,No,True,,[],,,,"ast.Attribute(ast.Name('ast'), 'AsyncFunctionDef')",-1,decorator_list,_field,-1,list_expr
@@ -2125,7 +2125,7 @@ AsyncWith,3,12,10,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Na
 AsyncWith,3,12,10,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncWith')",-1,end_lineno,_attribute,-1,No
 AsyncWith,3,12,10,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'AsyncWith')",-1,end_col_offset,_attribute,-1,No
 Attribute,3,12,10,expr,False,No,No,expr,expr,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,value,_field,-1,expr
-Attribute,3,12,10,expr,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,attr,_field,-1,Identifier
+Attribute,3,12,10,expr,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,attr,_field,-1,str
 Attribute,3,12,10,expr,False,No,context,expr_context,expr_context,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,ctx,_field,-1,expr_context
 Attribute,3,12,10,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,lineno,_attribute,-1,No
 Attribute,3,12,10,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Attribute')",-1,col_offset,_attribute,-1,No
@@ -2177,7 +2177,7 @@ Call,3,12,10,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('a
 Call,3,12,10,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Call')",-1,col_offset,_attribute,-1,No
 Call,3,12,10,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Call')",-1,end_lineno,_attribute,-1,No
 Call,3,12,10,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Call')",-1,end_col_offset,_attribute,-1,No
-ClassDef,3,12,10,stmt,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,name,_field,-1,Identifier
+ClassDef,3,12,10,stmt,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,name,_field,-1,str
 ClassDef,3,12,10,stmt,False,No,No,list(expr),list[expr],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,bases,_field,-1,list_expr
 ClassDef,3,12,10,stmt,False,No,list_keyword,list(keyword),list[keyword],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,keywords,_field,-1,list_keyword
 ClassDef,3,12,10,stmt,False,No,No,list(stmt),list[stmt],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'ClassDef')",-1,body,_field,-1,list_stmt
@@ -2230,7 +2230,7 @@ Ellipsis,3,12,10,Constant,True,No,No,No,int | None,No,No,False,,,,,,"ast.Attribu
 Ellipsis,3,12,10,Constant,True,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Ellipsis')",-1,end_col_offset,_attribute,-1,No
 Eq,3,12,10,cmpop,False,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Eq')",-1,No,No,-1,No
 ExceptHandler,3,12,10,excepthandler,False,No,No,expr | None,expr | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,type,_field,-1,exprOrNone
-ExceptHandler,3,12,10,excepthandler,False,No,No,identifier | None,_Identifier | None,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,name,_field,-1,IdentifierOrNone
+ExceptHandler,3,12,10,excepthandler,False,No,No,identifier | None,str | None,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,name,_field,-1,strOrNone
 ExceptHandler,3,12,10,excepthandler,False,No,No,list(stmt),list[stmt],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,body,_field,-1,list_stmt
 ExceptHandler,3,12,10,excepthandler,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,lineno,_attribute,-1,No
 ExceptHandler,3,12,10,excepthandler,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ExceptHandler')",-1,col_offset,_attribute,-1,No
@@ -2260,7 +2260,7 @@ FormattedValue,3,12,10,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(a
 FormattedValue,3,12,10,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FormattedValue')",-1,col_offset,_attribute,-1,No
 FormattedValue,3,12,10,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FormattedValue')",-1,end_lineno,_attribute,-1,No
 FormattedValue,3,12,10,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FormattedValue')",-1,end_col_offset,_attribute,-1,No
-FunctionDef,3,12,10,stmt,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,name,_field,-1,Identifier
+FunctionDef,3,12,10,stmt,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,name,_field,-1,str
 FunctionDef,3,12,10,stmt,False,No,No,arguments,arguments,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,args,_field,-1,arguments
 FunctionDef,3,12,10,stmt,False,No,No,list(stmt),list[stmt],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,body,_field,-1,list_stmt
 FunctionDef,3,12,10,stmt,False,No,No,list(expr),list[expr],No,No,True,,[],,,,"ast.Attribute(ast.Name('ast'), 'FunctionDef')",-1,decorator_list,_field,-1,list_expr
@@ -2279,7 +2279,7 @@ GeneratorExp,3,12,10,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast
 GeneratorExp,3,12,10,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'GeneratorExp')",-1,col_offset,_attribute,-1,No
 GeneratorExp,3,12,10,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'GeneratorExp')",-1,end_lineno,_attribute,-1,No
 GeneratorExp,3,12,10,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'GeneratorExp')",-1,end_col_offset,_attribute,-1,No
-Global,3,12,10,stmt,False,No,No,list(identifier),list[_Identifier],No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,names,_field,-1,list_Identifier
+Global,3,12,10,stmt,False,No,No,list(identifier),list[str],No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,names,_field,-1,list_str
 Global,3,12,10,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,lineno,_attribute,-1,No
 Global,3,12,10,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,col_offset,_attribute,-1,No
 Global,3,12,10,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Global')",-1,end_lineno,_attribute,-1,No
@@ -2353,14 +2353,14 @@ Match,3,12,10,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('
 Match,3,12,10,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Match')",10,end_lineno,_attribute,10,No
 Match,3,12,10,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Match')",10,end_col_offset,_attribute,10,No
 MatchAs,3,12,10,pattern,False,No,No,pattern | None,_Pattern | None,No,_Pattern,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,pattern,_field,10,patternOrNone
-MatchAs,3,12,10,pattern,False,No,No,identifier | None,_Identifier | None,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,name,_field,10,IdentifierOrNone
+MatchAs,3,12,10,pattern,False,No,No,identifier | None,str | None,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,name,_field,10,strOrNone
 MatchAs,3,12,10,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,lineno,_attribute,10,No
 MatchAs,3,12,10,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,col_offset,_attribute,10,No
 MatchAs,3,12,10,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,end_lineno,_attribute,10,No
 MatchAs,3,12,10,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchAs')",10,end_col_offset,_attribute,10,No
 MatchClass,3,12,10,pattern,False,No,No,expr,expr,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,cls,_field,10,expr
 MatchClass,3,12,10,pattern,False,No,No,list(pattern),list[pattern],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,patterns,_field,10,list_pattern
-MatchClass,3,12,10,pattern,False,No,No,list(identifier),list[_Identifier],No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,kwd_attrs,_field,10,list_Identifier
+MatchClass,3,12,10,pattern,False,No,No,list(identifier),list[str],No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,kwd_attrs,_field,10,list_str
 MatchClass,3,12,10,pattern,False,No,No,list(pattern),list[pattern],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,kwd_patterns,_field,10,list_pattern
 MatchClass,3,12,10,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,lineno,_attribute,10,No
 MatchClass,3,12,10,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,col_offset,_attribute,10,No
@@ -2368,7 +2368,7 @@ MatchClass,3,12,10,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attri
 MatchClass,3,12,10,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchClass')",10,end_col_offset,_attribute,10,No
 MatchMapping,3,12,10,pattern,False,No,No,list(expr),list[expr],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,keys,_field,10,list_expr
 MatchMapping,3,12,10,pattern,False,No,No,list(pattern),list[pattern],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,patterns,_field,10,list_pattern
-MatchMapping,3,12,10,pattern,False,No,No,identifier | None,_Identifier | None,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,rest,_field,10,IdentifierOrNone
+MatchMapping,3,12,10,pattern,False,No,No,identifier | None,str | None,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,rest,_field,10,strOrNone
 MatchMapping,3,12,10,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,lineno,_attribute,10,No
 MatchMapping,3,12,10,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,col_offset,_attribute,10,No
 MatchMapping,3,12,10,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchMapping')",10,end_lineno,_attribute,10,No
@@ -2388,7 +2388,7 @@ MatchSingleton,3,12,10,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribut
 MatchSingleton,3,12,10,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchSingleton')",10,col_offset,_attribute,10,No
 MatchSingleton,3,12,10,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchSingleton')",10,end_lineno,_attribute,10,No
 MatchSingleton,3,12,10,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchSingleton')",10,end_col_offset,_attribute,10,No
-MatchStar,3,12,10,pattern,False,No,No,identifier | None,_Identifier | None,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchStar')",10,name,_field,10,IdentifierOrNone
+MatchStar,3,12,10,pattern,False,No,No,identifier | None,str | None,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchStar')",10,name,_field,10,strOrNone
 MatchStar,3,12,10,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchStar')",10,lineno,_attribute,10,No
 MatchStar,3,12,10,pattern,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchStar')",10,col_offset,_attribute,10,No
 MatchStar,3,12,10,pattern,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'MatchStar')",10,end_lineno,_attribute,10,No
@@ -2402,7 +2402,7 @@ Mod,3,12,10,operator,False,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name(
 Module,3,12,10,mod,False,No,No,list(stmt),list[stmt],No,No,True,,,,,,"ast.Attribute(ast.Name('ast'), 'Module')",-1,body,_field,-1,list_stmt
 Module,3,12,10,mod,False,No,No,list(type_ignore),list[TypeIgnore],No,No,False,,[],,,,"ast.Attribute(ast.Name('ast'), 'Module')",-1,type_ignores,_field,-1,list_TypeIgnore
 Mult,3,12,10,operator,False,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Mult')",-1,No,No,-1,No
-Name,3,12,10,expr,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,id,_field,-1,Identifier
+Name,3,12,10,expr,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,id,_field,-1,str
 Name,3,12,10,expr,False,No,context,expr_context,expr_context,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,ctx,_field,-1,expr_context
 Name,3,12,10,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,lineno,_attribute,-1,No
 Name,3,12,10,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Name')",-1,col_offset,_attribute,-1,No
@@ -2420,7 +2420,7 @@ NamedExpr,3,12,10,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Na
 NamedExpr,3,12,10,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'NamedExpr')",-1,col_offset,_attribute,-1,No
 NamedExpr,3,12,10,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'NamedExpr')",-1,end_lineno,_attribute,-1,No
 NamedExpr,3,12,10,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'NamedExpr')",-1,end_col_offset,_attribute,-1,No
-Nonlocal,3,12,10,stmt,False,No,No,list(identifier),list[_Identifier],No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,names,_field,-1,list_Identifier
+Nonlocal,3,12,10,stmt,False,No,No,list(identifier),list[str],No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,names,_field,-1,list_str
 Nonlocal,3,12,10,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,lineno,_attribute,-1,No
 Nonlocal,3,12,10,stmt,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,col_offset,_attribute,-1,No
 Nonlocal,3,12,10,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Nonlocal')",-1,end_lineno,_attribute,-1,No
@@ -2435,7 +2435,7 @@ Num,3,12,10,Constant,True,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(as
 Num,3,12,10,Constant,True,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Num')",-1,end_col_offset,_attribute,-1,No
 Or,3,12,10,boolop,False,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Or')",-1,No,No,-1,No
 Param,3,12,10,expr_context,True,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'Param')",-1,No,No,-1,No
-ParamSpec,3,12,10,type_param,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ParamSpec')",12,name,_field,12,Identifier
+ParamSpec,3,12,10,type_param,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ParamSpec')",12,name,_field,12,str
 ParamSpec,3,12,10,type_param,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ParamSpec')",12,lineno,_attribute,12,No
 ParamSpec,3,12,10,type_param,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ParamSpec')",12,col_offset,_attribute,12,No
 ParamSpec,3,12,10,type_param,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'ParamSpec')",12,end_lineno,_attribute,12,No
@@ -2527,13 +2527,13 @@ TypeAlias,3,12,10,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute
 TypeAlias,3,12,10,stmt,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeAlias')",12,end_col_offset,_attribute,12,No
 TypeIgnore,3,12,10,type_ignore,False,No,No,int,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeIgnore')",-1,lineno,_field,-1,int
 TypeIgnore,3,12,10,type_ignore,False,No,No,string,str,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeIgnore')",-1,tag,_field,-1,str
-TypeVar,3,12,10,type_param,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVar')",12,name,_field,12,Identifier
+TypeVar,3,12,10,type_param,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVar')",12,name,_field,12,str
 TypeVar,3,12,10,type_param,False,No,No,expr | None,expr | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVar')",12,bound,_field,12,exprOrNone
 TypeVar,3,12,10,type_param,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVar')",12,lineno,_attribute,12,No
 TypeVar,3,12,10,type_param,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVar')",12,col_offset,_attribute,12,No
 TypeVar,3,12,10,type_param,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVar')",12,end_lineno,_attribute,12,No
 TypeVar,3,12,10,type_param,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVar')",12,end_col_offset,_attribute,12,No
-TypeVarTuple,3,12,10,type_param,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVarTuple')",12,name,_field,12,Identifier
+TypeVarTuple,3,12,10,type_param,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVarTuple')",12,name,_field,12,str
 TypeVarTuple,3,12,10,type_param,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVarTuple')",12,lineno,_attribute,12,No
 TypeVarTuple,3,12,10,type_param,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVarTuple')",12,col_offset,_attribute,12,No
 TypeVarTuple,3,12,10,type_param,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'TypeVarTuple')",12,end_lineno,_attribute,12,No
@@ -2571,12 +2571,12 @@ YieldFrom,3,12,10,expr,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Na
 YieldFrom,3,12,10,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'YieldFrom')",-1,end_lineno,_attribute,-1,No
 YieldFrom,3,12,10,expr,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'YieldFrom')",-1,end_col_offset,_attribute,-1,No
 alias,3,12,10,AST,False,No,No,identifier,str,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,name,_field,-1,str
-alias,3,12,10,AST,False,No,asName,identifier | None,_Identifier | None,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,asname,_field,-1,IdentifierOrNone
+alias,3,12,10,AST,False,No,asName,identifier | None,str | None,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,asname,_field,-1,strOrNone
 alias,3,12,10,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,lineno,_attribute,10,No
 alias,3,12,10,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,col_offset,_attribute,10,No
 alias,3,12,10,AST,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,end_lineno,_attribute,10,No
 alias,3,12,10,AST,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'alias')",-1,end_col_offset,_attribute,10,No
-arg,3,12,10,AST,False,No,No,identifier,_Identifier,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,arg,_field,-1,Identifier
+arg,3,12,10,AST,False,No,No,identifier,str,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,arg,_field,-1,str
 arg,3,12,10,AST,False,No,No,expr | None,expr | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,annotation,_field,-1,exprOrNone
 arg,3,12,10,AST,False,No,No,string | None,str | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,type_comment,_field,-1,strOrNone
 arg,3,12,10,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'arg')",-1,lineno,_attribute,-1,No
@@ -2605,7 +2605,7 @@ expr,3,12,10,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('as
 expr,3,12,10,AST,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'expr')",-1,end_lineno,_attribute,-1,No
 expr,3,12,10,AST,False,No,No,No,int | None,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'expr')",-1,end_col_offset,_attribute,-1,No
 expr_context,3,12,10,AST,False,No,No,No,No,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'expr_context')",-1,No,No,-1,No
-keyword,3,12,10,AST,False,No,No,identifier | None,_Identifier | None,No,_Identifier,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,arg,_field,-1,IdentifierOrNone
+keyword,3,12,10,AST,False,No,No,identifier | None,str | None,No,str,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,arg,_field,-1,strOrNone
 keyword,3,12,10,AST,False,No,No,expr,expr,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,value,_field,-1,expr
 keyword,3,12,10,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,lineno,_attribute,-1,No
 keyword,3,12,10,AST,False,No,No,No,int,No,No,False,,,,,,"ast.Attribute(ast.Name('ast'), 'keyword')",-1,col_offset,_attribute,-1,No
