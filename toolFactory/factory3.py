@@ -1,3 +1,4 @@
+from itertools import chain
 from pathlib import PurePosixPath
 from toolFactory import (
 	astName_overload,
@@ -19,7 +20,7 @@ from toolFactory.factory_annex import (
 )
 from toolFactory.docstrings import ClassDefDocstringBe, ClassDefDocstringMake, docstringWarning
 from typing import cast, TypedDict
-from Z0Z_tools import writeStringToHere
+from Z0Z_tools import updateExtendPolishDictionaryLists, writeStringToHere
 import ast
 
 """
@@ -94,29 +95,22 @@ def makeTypeAlias():
 										, comparators=[ast.Tuple([ast.Constant(3),
 												ast.Constant(versionMinor)])])
 										, body=[ast_stmt])
-							# print(versionMinor, attribute, listClassAs_astAttribute, sep='\t')
 						# This branch is the simplest case: one TypeAlias for the attribute for all Python versions
 						astTypesModule.body.append(ast_stmt)
-						# print(attribute, listClassAs_astAttribute, sep='\t')
 				else:
+					# There is a smart way to do the following, but I don't see it right now. NOTE datacenter has the responsibility to aggregate all values <= pythonVersionMinorMinimum.
 					listVersionsMinor = sorted(dictionaryVersions.keys(), reverse=False)
-					versionMinorMinimum = -1
-					ast_stmtGreater = None
-					ast_stmtLesser = None
-					for versionMinor in listVersionsMinor:
-						versionMinorMinimum = max(versionMinorMinimum, versionMinor)
-						if versionMinor > pythonVersionMinorMinimum:
-							ast_stmtGreater = ast.AnnAssign(hasDOTTypeAliasName_Store, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in sorted(iter(*dictionaryVersions.values()), key=lambda classAs_astAttribute: classAs_astAttribute.lower())]), 1)
-							# print(versionMinor, attribute, dictionaryVersions[versionMinor], sep='\t')
-						else:
-							ast_stmtLesser = ast.AnnAssign(hasDOTTypeAliasName_Store, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in dictionaryVersions[versionMinor]]), 1)
-							# print('else', attribute, dictionaryVersions[versionMinor], sep='\t')
+					if len(listVersionsMinor) > 2:
+						raise NotImplementedError("Hunter's code can't handle this.")
+					ast_stmtAtPythonMinimum = ast.AnnAssign(hasDOTTypeAliasName_Store, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in dictionaryVersions[min(listVersionsMinor)]]), 1)
+					ast_stmtAbovePythonMinimum = ast.AnnAssign(hasDOTTypeAliasName_Store, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in sorted(chain(*dictionaryVersions.values()), key=str.lower)]), 1)
+
 					ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
 								, ops=[ast.GtE()]
 								, comparators=[ast.Tuple([ast.Constant(3),
-										ast.Constant(versionMinorMinimum)])])
-								, body=[ast_stmtGreater]
-								, orelse=[ast_stmtLesser])
+										ast.Constant(max(listVersionsMinor))])])
+								, body=[ast_stmtAbovePythonMinimum]
+								, orelse=[ast_stmtAtPythonMinimum])
 					astTypesModule.body.append(ast_stmt)
 		if len(dictionaryAttribute) != 1:
 			continue
@@ -291,7 +285,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 	# 	)
 
 	listAttributeIdentifier: list[str] = list(attributeIdentifier2Str4TypeAlias2astAnnotationAndListClassDefIdentifier.keys())
-	listAttributeIdentifier.sort(key=lambda attributeIdentifier: attributeIdentifier.lower())
+	listAttributeIdentifier.sort(key=str.lower)
 
 	for attributeIdentifier in listAttributeIdentifier:
 		hasDOTTypeAliasIdentifier: str = 'hasDOT' + attributeIdentifier
