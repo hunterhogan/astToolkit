@@ -1,3 +1,4 @@
+from collections import defaultdict
 from itertools import chain
 from pathlib import PurePosixPath
 from toolFactory import (
@@ -22,6 +23,7 @@ from toolFactory.docstrings import ClassDefDocstringBe, ClassDefDocstringMake, d
 from typing import cast, TypedDict
 from Z0Z_tools import updateExtendPolishDictionaryLists, writeStringToHere
 import ast
+from ast import Name, Store
 
 """
 class Name(expr):
@@ -67,6 +69,34 @@ def writeModule(astModule: ast.Module, moduleIdentifier: str) -> None:
 	writeStringToHere(pythonSource, pathFilenameModule)
 
 def makeTypeAlias():
+	def Z0Z_getTypeAliasSubcategory():
+		if len(dictionaryVersions) == 1:
+			for versionMinor, listClassAs_astAttribute in dictionaryVersions.items():
+				ast_stmt = ast.AnnAssign(astNameTypeAlias, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in listClassAs_astAttribute]), 1)
+				if versionMinor > pythonVersionMinorMinimum:
+					ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
+								, ops=[ast.GtE()]
+								, comparators=[ast.Tuple([ast.Constant(3),
+										ast.Constant(versionMinor)])])
+								, body=[ast_stmt])
+				# This branch is the simplest case: one TypeAlias for the attribute for all Python versions
+				astTypesModule.body.append(ast_stmt)
+		else:
+			# There is a smart way to do the following, but I don't see it right now. NOTE datacenter has the responsibility to aggregate all values <= pythonVersionMinorMinimum.
+			listVersionsMinor = sorted(dictionaryVersions.keys(), reverse=False)
+			if len(listVersionsMinor) > 2:
+				raise NotImplementedError("Hunter's code can't handle this.")
+			ast_stmtAtPythonMinimum = ast.AnnAssign(astNameTypeAlias, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in dictionaryVersions[min(listVersionsMinor)]]), 1)
+			ast_stmtAbovePythonMinimum = ast.AnnAssign(astNameTypeAlias, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in sorted(chain(*dictionaryVersions.values()), key=str.lower)]), 1)
+
+			ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
+						, ops=[ast.GtE()]
+						, comparators=[ast.Tuple([ast.Constant(3),
+								ast.Constant(max(listVersionsMinor))])])
+						, body=[ast_stmtAbovePythonMinimum]
+						, orelse=[ast_stmtAtPythonMinimum])
+			astTypesModule.body.append(ast_stmt)
+
 	astTypesModule = ast.Module(
 		body=[docstringWarning
 			, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('TypeAlias', 'typing_TypeAlias')], 0)
@@ -85,40 +115,24 @@ def makeTypeAlias():
 		hasDOTTypeAliasName_Store: ast.Name = ast.Name(hasDOTIdentifier, ast.Store())
 
 		if len(dictionaryAttribute) == 1:
+			astNameTypeAlias = hasDOTTypeAliasName_Store
 			for TypeAliasSubcategory, dictionaryVersions in dictionaryAttribute.items():
-				if len(dictionaryVersions) == 1:
-					for versionMinor, listClassAs_astAttribute in dictionaryVersions.items():
-						ast_stmt = ast.AnnAssign(hasDOTTypeAliasName_Store, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in listClassAs_astAttribute]), 1)
-						if versionMinor > pythonVersionMinorMinimum:
-							ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
-										, ops=[ast.GtE()]
-										, comparators=[ast.Tuple([ast.Constant(3),
-												ast.Constant(versionMinor)])])
-										, body=[ast_stmt])
-						# This branch is the simplest case: one TypeAlias for the attribute for all Python versions
-						astTypesModule.body.append(ast_stmt)
+				Z0Z_getTypeAliasSubcategory()
+		else:
+			# See?! Sometimes, I can see a smart way to do things. This defaultdict builds a dictionary to mimic the
+			# process I'm already using to build the TypeAlias.
+			attributeDictionaryVersions: dict[int, list[str]] = defaultdict(list)
+			for TypeAliasSubcategory, dictionaryVersions in dictionaryAttribute.items():
+				astNameTypeAlias: ast.Name = ast.Name(hasDOTIdentifier + '_' + TypeAliasSubcategory, ast.Store())
+				if any(dictionaryVersions.keys()) <= pythonVersionMinorMinimum:
+					attributeDictionaryVersions[min(dictionaryVersions.keys())].append(ast.dump(astNameTypeAlias))
 				else:
-					# There is a smart way to do the following, but I don't see it right now. NOTE datacenter has the responsibility to aggregate all values <= pythonVersionMinorMinimum.
-					listVersionsMinor = sorted(dictionaryVersions.keys(), reverse=False)
-					if len(listVersionsMinor) > 2:
-						raise NotImplementedError("Hunter's code can't handle this.")
-					ast_stmtAtPythonMinimum = ast.AnnAssign(hasDOTTypeAliasName_Store, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in dictionaryVersions[min(listVersionsMinor)]]), 1)
-					ast_stmtAbovePythonMinimum = ast.AnnAssign(hasDOTTypeAliasName_Store, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in sorted(chain(*dictionaryVersions.values()), key=str.lower)]), 1)
-
-					ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
-								, ops=[ast.GtE()]
-								, comparators=[ast.Tuple([ast.Constant(3),
-										ast.Constant(max(listVersionsMinor))])])
-								, body=[ast_stmtAbovePythonMinimum]
-								, orelse=[ast_stmtAtPythonMinimum])
-					astTypesModule.body.append(ast_stmt)
-		if len(dictionaryAttribute) != 1:
-			continue
-			print(attribute)
-			for TypeAliasSubcategory, dictionaryVersions in dictionaryAttribute.items():
-				print('\t', TypeAliasSubcategory)
-				for versionMinor, listClassAs_astAttribute in dictionaryVersions.items():
-					print('\t\t', versionMinor, listClassAs_astAttribute, sep='\t')
+					attributeDictionaryVersions[min(dictionaryVersions.keys())].append(ast.dump(astNameTypeAlias))
+					attributeDictionaryVersions[max(dictionaryVersions.keys())].append(ast.dump(astNameTypeAlias))
+				Z0Z_getTypeAliasSubcategory()
+			astNameTypeAlias = hasDOTTypeAliasName_Store
+			dictionaryVersions: dict[int, list[str]] = attributeDictionaryVersions
+			Z0Z_getTypeAliasSubcategory()
 
 	writeModule(astTypesModule, '_astTypes')
 
