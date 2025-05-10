@@ -10,11 +10,14 @@ from toolFactory import (
 	moduleIdentifierPrefix,
 	pathPackage,
 	pythonVersionMinorMinimum,
+	getElementsMake,
 	)
 from toolFactory.factory_annex import (
+	FunctionDefMake_Attribute,
+	FunctionDefMake_Import,
 	listHandmadeTypeAlias_astTypes,
 )
-from toolFactory.docstrings import ClassDefDocstringBe, docstringWarning
+from toolFactory.docstrings import ClassDefDocstringBe, ClassDefDocstringMake, docstringWarning
 from typing import cast, TypedDict
 from Z0Z_tools import writeStringToHere
 import ast
@@ -84,19 +87,37 @@ def makeTypeAlias():
 			for TypeAliasSubcategory, dictionaryVersions in dictionaryAttribute.items():
 				if len(dictionaryVersions) == 1:
 					for versionMinor, listClassAs_astAttribute in dictionaryVersions.items():
+						ast_stmt = ast.AnnAssign(hasDOTTypeAliasName_Store, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in listClassAs_astAttribute]), 1)
 						if versionMinor > pythonVersionMinorMinimum:
-							print(versionMinor, attribute, listClassAs_astAttribute, sep='\t')
-						else:
-							# This branch is the simplest case: one TypeAlias for the attribute for all Python versions
-							astTypesModule.body.append(ast.AnnAssign(hasDOTTypeAliasName_Store, astName_typing_TypeAlias, ast.BitOr.join(listClassAs_astAttribute), 1))
-							print(attribute, listClassAs_astAttribute, sep='\t')
+							ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
+										, ops=[ast.GtE()]
+										, comparators=[ast.Tuple([ast.Constant(3),
+												ast.Constant(versionMinor)])])
+										, body=[ast_stmt])
+							# print(versionMinor, attribute, listClassAs_astAttribute, sep='\t')
+						# This branch is the simplest case: one TypeAlias for the attribute for all Python versions
+						astTypesModule.body.append(ast_stmt)
+						# print(attribute, listClassAs_astAttribute, sep='\t')
 				else:
-					listVersionsMinor = sorted(dictionaryVersions.keys(), reverse=True)
+					listVersionsMinor = sorted(dictionaryVersions.keys(), reverse=False)
+					versionMinorMinimum = -1
+					ast_stmtGreater = None
+					ast_stmtLesser = None
 					for versionMinor in listVersionsMinor:
+						versionMinorMinimum = max(versionMinorMinimum, versionMinor)
 						if versionMinor > pythonVersionMinorMinimum:
-							print(versionMinor, attribute, dictionaryVersions[versionMinor], sep='\t')
+							ast_stmtGreater = ast.AnnAssign(hasDOTTypeAliasName_Store, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in sorted(iter(*dictionaryVersions.values()), key=lambda classAs_astAttribute: classAs_astAttribute.lower())]), 1)
+							# print(versionMinor, attribute, dictionaryVersions[versionMinor], sep='\t')
 						else:
-							print('else', attribute, dictionaryVersions[versionMinor], sep='\t')
+							ast_stmtLesser = ast.AnnAssign(hasDOTTypeAliasName_Store, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in dictionaryVersions[versionMinor]]), 1)
+							# print('else', attribute, dictionaryVersions[versionMinor], sep='\t')
+					ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
+								, ops=[ast.GtE()]
+								, comparators=[ast.Tuple([ast.Constant(3),
+										ast.Constant(versionMinorMinimum)])])
+								, body=[ast_stmtGreater]
+								, orelse=[ast_stmtLesser])
+					astTypesModule.body.append(ast_stmt)
 		if len(dictionaryAttribute) != 1:
 			continue
 			print(attribute)
@@ -105,6 +126,8 @@ def makeTypeAlias():
 				for versionMinor, listClassAs_astAttribute in dictionaryVersions.items():
 					print('\t\t', versionMinor, listClassAs_astAttribute, sep='\t')
 
+	writeModule(astTypesModule, '_astTypes')
+
 def makeToolBe():
 	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringBe]
 
@@ -112,11 +135,11 @@ def makeToolBe():
 
 	for dictionaryToolElements in listDictionaryToolElements:
 		ClassDefIdentifier = cast(str, dictionaryToolElements['ClassDefIdentifier'])
-		# TODO is there an alternative to `eval()`?
 		classAs_astAttribute = cast(ast.Attribute, eval(dictionaryToolElements['classAs_astAttribute']))
 		classVersionMinorMinimum: int = dictionaryToolElements['classVersionMinorMinimum']
 
-		ast_stmt = ast.FunctionDef(name=ClassDefIdentifier
+		ast_stmt = ast.FunctionDef(
+			name=ClassDefIdentifier
 			, args=ast.arguments(posonlyargs=[], args=[ast.arg(arg='node', annotation=ast.Name('ast.AST'))], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
 			, body=[ast.Return(value=ast.Call(func=ast.Name('isinstance'), args=[ast.Name('node'), classAs_astAttribute], keywords=[]))]
 			, decorator_list=[astName_staticmethod]
@@ -134,6 +157,51 @@ def makeToolBe():
 	ClassDefBe = ast.ClassDef(name='Be', bases=[], keywords=[], body=list4ClassDefBody, decorator_list=[])
 
 	ClassDef = ClassDefBe
+	writeModule(ast.Module(
+		body=[docstringWarning
+			, ast.ImportFrom('typing', [ast.alias('TypeGuard')], 0)
+			, ast.Import([ast.alias('ast')])
+			, ast.Import([ast.alias('sys')])
+			, ClassDef
+			],
+		type_ignores=[]
+		)
+		, moduleIdentifierPrefix + ClassDef.name)
+	del ClassDef
+
+def makeToolMake():
+	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringMake]
+
+	listDictionaryToolElements = getElementsMake(sortOn='ClassDefIdentifier')
+
+	for dictionaryToolElements in listDictionaryToolElements:
+		ClassDefIdentifier = cast(str, dictionaryToolElements['ClassDefIdentifier'])
+		classAs_astAttribute = cast(ast.Attribute, eval(dictionaryToolElements['classAs_astAttribute']))
+		classVersionMinorMinimum: int = dictionaryToolElements['classVersionMinorMinimum']
+
+		list4FunctionDef_args_args: list[ast.arg] = []
+		keywordArguments_ast_arg=[]
+		keywordArguments_ast_keyword = None
+
+		ast_stmt = ast.FunctionDef(
+			name=ClassDefIdentifier
+			, args=ast.arguments(posonlyargs=[], args=list4FunctionDef_args_args, vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=keywordArguments_ast_arg, defaults=[])
+			, body=[ast.Return(value=ast.Call(classAs_astAttribute, args=[], keywords=[keywordArguments_ast_keyword] if keywordArguments_ast_keyword else []))]
+			, decorator_list=[astName_staticmethod]
+			, returns=classAs_astAttribute)
+
+		if classVersionMinorMinimum > pythonVersionMinorMinimum:
+			ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info'),
+				ops=[ast.GtE()],
+				comparators=[ast.Tuple([ast.Constant(3),
+							ast.Constant(classVersionMinorMinimum)])]),
+				body=[ast_stmt])
+
+		list4ClassDefBody.append(ast_stmt)
+
+	ClassDefMake = ast.ClassDef(name='Make', bases=[], keywords=[], body=list4ClassDefBody, decorator_list=[])
+
+	ClassDef = ClassDefMake
 	writeModule(ast.Module(
 		body=[docstringWarning
 			, ast.ImportFrom('typing', [ast.alias('TypeGuard')], 0)
@@ -182,7 +250,6 @@ def makeTools(astStubFile: ast.AST) -> None:
 
 	ClassDefClassIsAndAttribute = ast.ClassDef(name='ClassIsAndAttribute', bases=[], keywords=[], body=[], decorator_list=[])
 	ClassDefDOT = ast.ClassDef(name='DOT', bases=[], keywords=[], body=[], decorator_list=[])
-	ClassDefMake = ast.ClassDef(name='Make', bases=[], keywords=[], body=[], decorator_list=[])
 	ClassDefGrab = ast.ClassDef(name='Grab', bases=[], keywords=[], body=[], decorator_list=[])
 
 	dictionaryOf_astDOTclass: dict[str, ast.Attribute] = MakeDictionaryOf_astClassAnnotations(astStubFile).getDictionary()
@@ -212,12 +279,6 @@ def makeTools(astStubFile: ast.AST) -> None:
 				keywordArguments_ast_keyword = None
 			case _:
 				pass
-
-		ClassDefMake.body.append(ast.FunctionDef(name=ClassDefIdentifier
-			, args=ast.arguments(posonlyargs=[], args=[], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=keywordArguments_ast_arg, defaults=[])
-			, body=[ast.Return(value=ast.Call(classAs_astAttribute, args=[], keywords=[keywordArguments_ast_keyword] if keywordArguments_ast_keyword else []))]
-			, decorator_list=[astName_staticmethod]
-			, returns=classAs_astAttribute))
 
 	# astTypesModule = ast.Module(
 	# 	body=[docstringWarning

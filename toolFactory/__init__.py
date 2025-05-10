@@ -22,7 +22,6 @@ from toolFactory._snippets import (
 
 from toolFactory.datacenter import (
 	getElementsBe as getElementsBe,
+	getElementsMake as getElementsMake,
 	getElementsTypeAlias as getElementsTypeAlias,
 	)
-
-from toolFactory.astFactory import makeTools as makeTools

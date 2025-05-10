@@ -1,15 +1,13 @@
-from collections.abc import Iterable
 from pathlib import PurePosixPath
 from string import ascii_letters
-from toolFactory import ast_Identifier, fileExtension, pathPackage, str_nameDOTname, sys_version_infoTarget
+from toolFactory import fileExtension, pathPackage, str_nameDOTname, sys_version_infoTarget
 from toolFactory.Z0Z_hardcoded import keywordArgumentsIdentifier, listASTClassesPostPythonVersionMinimum, moduleIdentifierPrefix
 from toolFactory._snippets import astName_overload, astName_staticmethod, astName_typing_TypeAlias
 from toolFactory.factory_annex import (
 	FunctionDefMake_Attribute,
 	handmadeMethodsGrab,
 	listHandmadeTypeAlias_astTypes,
-	listPylanceErrors,
-	MakeImportFunctionDef,
+	FunctionDefMake_Import,
 )
 from toolFactory.docstrings import ClassDefDocstringDOT, ClassDefDocstringGrab, ClassDefDocstringMake, docstringWarning
 from typing import cast, TypedDict
@@ -54,13 +52,13 @@ TODO protect against AttributeError (I guess) in DOT, Grab, and ClassIsAndAttrib
 
 class AnnotationsAndDefs(TypedDict):
 	astAnnotation: ast.expr
-	listClassDefIdentifier: list[ast_Identifier | str_nameDOTname]
+	listClassDefIdentifier: list[str | str_nameDOTname]
 
 class MakeDictionaryOf_astClassAnnotations(ast.NodeVisitor):
 	def __init__(self, astAST: ast.AST) -> None:
 		super().__init__()
 		self.astAST = astAST
-		self.dictionarySubstitutions: dict[ast_Identifier, ast.Attribute | ast.Name] = {
+		self.dictionarySubstitutions: dict[str, ast.Attribute | ast.Name] = {
 			'_Identifier': ast.Name('ast_Identifier'),
 			'_Pattern': ast.Attribute(value=ast.Name('ast'), attr='pattern'),
 			'_Slice': ast.Name('ast_expr_Slice'),
@@ -74,29 +72,12 @@ class MakeDictionaryOf_astClassAnnotations(ast.NodeVisitor):
 			NameOrAttribute = ast.Attribute(value=ast.Name('ast'), attr=node.name)
 			self.dictionarySubstitutions[node.name] = NameOrAttribute
 
-	def getDictionary(self) -> dict[ast_Identifier, ast.Attribute | ast.Name]:
+	def getDictionary(self) -> dict[str, ast.Attribute | ast.Name]:
 		self.visit(self.astAST)
 		return self.dictionarySubstitutions
 
 class Prepend_ast2astClasses(ast.NodeTransformer):
-	"""The _effect_ of this `NodeTransformer` is to replace a naked `Jabberwocky` identifier with the specific
-	`ast.Jabberwocky` identifier.
-
-	The explanation, however, sounds like "Buffalo buffalo Buffalo buffalo buffalo buffalo Buffalo buffalo."
-
-	Initialize `ast.NodeTransformer` with mapping from subclass `ast._Identifier` of class `AST`, which is implemented
-	in C, imported from module `_ast`, and defined in stub `ast.pyi`, to subclass `ast.Attribute`, rendered as
-	"ast._Identifier" or subclass `ast.Name` for `AST` subclasses implemented later than Python version 3.10, rendered
-	as "astDOT_Identifier" and defined as `typing.TypeAlias` or `typing.Any` depending on the runtime Python version in
-	"__init__".
-
-	Call method `visit` of `ast.NodeTransformer` with class `AST` or `AST` subclass parameter. `ast.NodeTransformer`
-	will call `visit_Name` to visit each node descendant class `AST` or `AST` subclass parameter of class `ast.Name`.
-	The class `ast.Name` descendant node identifier is `node`. If method `visit_Name` matches subclass `ast._Identifier`
-	`node.id` to a mapping key, it returns the subclass `ast.Attribute` or subclass `ast.Name` mapping value. Otherwise,
-	`visit_Name` returns subclass `ast.Name` `node`.
-	"""
-	def __init__(self, dictionarySubstitutions: dict[ast_Identifier, ast.Attribute | ast.Name]) -> None:
+	def __init__(self, dictionarySubstitutions: dict[str, ast.Attribute | ast.Name]) -> None:
 		super().__init__()
 		self.dictionarySubstitutions = dictionarySubstitutions
 
@@ -106,7 +87,7 @@ class Prepend_ast2astClasses(ast.NodeTransformer):
 		return node
 
 def makeTools(astStubFile: ast.AST) -> None:
-	def writeModule(astModule: ast.Module, moduleIdentifier: ast_Identifier) -> None:
+	def writeModule(astModule: ast.Module, moduleIdentifier: str) -> None:
 		ast.fix_missing_locations(astModule)
 		pythonSource: str = ast.unparse(astModule)
 		if 'Grab' in moduleIdentifier or 'DOT' in moduleIdentifier or 'ClassIsAndAttribute' in moduleIdentifier:
@@ -148,9 +129,9 @@ def makeTools(astStubFile: ast.AST) -> None:
 	ClassDefMake = ast.ClassDef(name='Make', bases=[], keywords=[], body=[], decorator_list=[])
 	ClassDefGrab = ast.ClassDef(name='Grab', bases=[], keywords=[], body=[], decorator_list=[])
 
-	dictionaryOf_astDOTclass: dict[ast_Identifier, ast.Attribute | ast.Name] = MakeDictionaryOf_astClassAnnotations(astStubFile).getDictionary()
+	dictionaryOf_astDOTclass: dict[str, ast.Attribute | ast.Name] = MakeDictionaryOf_astClassAnnotations(astStubFile).getDictionary()
 
-	attributeIdentifier2Str4TypeAlias2astAnnotationAndListClassDefIdentifier: dict[ast_Identifier, dict[str, AnnotationsAndDefs]] = {}
+	attributeIdentifier2Str4TypeAlias2astAnnotationAndListClassDefIdentifier: dict[str, dict[str, AnnotationsAndDefs]] = {}
 
 	# NOTE Convert each ast.ClassDef into `TypeAlias` and methods in `Be`, `DOT`, `Grab`, and `Make`.
 	for node in ast.walk(astStubFile):
@@ -167,7 +148,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 		del node # NOTE this is necessary because AI assistants don't always follow instructions.
 
 		# Create ast "fragments" before you need them.
-		ClassDefIdentifier: ast_Identifier = astDOTClassDef.name
+		ClassDefIdentifier: str = astDOTClassDef.name
 		ClassDef_astNameOrAttribute: ast.Attribute | ast.Name = dictionaryOf_astDOTclass[ClassDefIdentifier]
 		# Reset these identifiers in case they were changed
 		keywordArguments_ast_arg: ast.arg | None = ast.arg(keywordArgumentsIdentifier, ast.Name('int'))
@@ -181,9 +162,9 @@ def makeTools(astStubFile: ast.AST) -> None:
 
 		# Start: cope with different arguments for Python versions. ==============================================================
 		# NOTE: I would love suggestions to improve this section.
-		list_astDOTClassDefAttributeIdentifier: list[ast_Identifier] = []
-		list__match_args__: list[list[ast_Identifier]] = []
-		dictAttributes: dict[tuple[int, int], list[ast_Identifier]] = {}
+		list_astDOTClassDefAttributeIdentifier: list[str] = []
+		list__match_args__: list[list[str]] = []
+		dictAttributes: dict[tuple[int, int], list[str]] = {}
 		for subnode in ast.walk(astDOTClassDef):
 			list_astDOTClassDefAttributeIdentifier = []
 			if (isinstance(subnode, ast.If) and isinstance(subnode.test, ast.Compare)
@@ -265,7 +246,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 						case 'Import':
 							if cast(ast.FunctionDef, ClassDefMake.body[-1]).name == ClassDefIdentifier:
 								ClassDefMake.body.pop(-1)
-							ClassDefMake.body.append(MakeImportFunctionDef)
+							ClassDefMake.body.append(FunctionDefMake_Import)
 							continue
 						case _:
 							pass
@@ -397,11 +378,11 @@ def makeTools(astStubFile: ast.AST) -> None:
 		, type_ignores=[]
 		)
 
-	listAttributeIdentifier: list[ast_Identifier] = list(attributeIdentifier2Str4TypeAlias2astAnnotationAndListClassDefIdentifier.keys())
+	listAttributeIdentifier: list[str] = list(attributeIdentifier2Str4TypeAlias2astAnnotationAndListClassDefIdentifier.keys())
 	listAttributeIdentifier.sort(key=lambda attributeIdentifier: attributeIdentifier.lower())
 
 	for attributeIdentifier in listAttributeIdentifier:
-		hasDOTIdentifier: ast_Identifier = 'hasDOT' + attributeIdentifier
+		hasDOTIdentifier: str = 'hasDOT' + attributeIdentifier
 		hasDOTName_Store: ast.Name = ast.Name(hasDOTIdentifier, ast.Store())
 		hasDOTName_Load: ast.Name = ast.Name(hasDOTIdentifier)
 		list_hasDOTNameTypeAliasAnnotations: list[ast.Name] = []

@@ -98,7 +98,18 @@ def getElementsTypeAlias(deprecated: bool = False, versionMinorMaximum: int | No
 
 	dataframe = dataframe[listElements].drop_duplicates()
 
-	return dictionaryAttribute
+	listRows = dataframe.values.tolist()
+	dictionaryAttribute = {}
+	for attribute, listRowsByAttribute in toolz.groupby(lambda row: row[0], listRows).items():
+		dictionaryTypeAliasSubcategory = {}
+		for typeAliasSubcategory, listRowsByTypeAliasSubcategory in toolz.groupby(lambda row: row[1], listRowsByAttribute).items():
+			dictionaryAttributeVersionMinorMinimum = {}
+			for attributeVersionMinorMinimum, listRowsByAttributeVersionMinorMinimum in toolz.groupby(lambda row: row[2], listRowsByTypeAliasSubcategory).items():
+				listClassDefIdentifier = [row[3] for row in listRowsByAttributeVersionMinorMinimum]
+				dictionaryAttributeVersionMinorMinimum[attributeVersionMinorMinimum] = listClassDefIdentifier
+			dictionaryTypeAliasSubcategory[typeAliasSubcategory] = dictionaryAttributeVersionMinorMinimum
+		dictionaryAttribute[attribute] = dictionaryTypeAliasSubcategory
+	return cast(dict[str, dict[str, dict[int, list[str]]]], dictionaryAttribute)
 
 def getElementsBe(sortOn: str | None = None, deprecated: bool = False, versionMinorMaximum: int | None = None) -> list[dict[str, Any]]:
 	"""Get elements of class `AST` and its subclasses for tool manufacturing.
@@ -138,6 +149,55 @@ def getElementsBe(sortOn: str | None = None, deprecated: bool = False, versionMi
 	# Remove duplicate ClassDefIdentifier
 	# TODO think about how the function knows to remove _these_ duplicates
 	dataframe = dataframe.sort_values(by='versionMinor', inplace=False, ascending=False).drop_duplicates('ClassDefIdentifier') # type: ignore
+
+	if sortOn is not None:
+		# TODO after changing the dataframe storage from csv to something smart, make this check smarter
+		# match str(dataframe[sortOn].dtype):
+		dataframe = dataframe.iloc[dataframe[sortOn].astype(str).str.lower().argsort()]
+
+	# Select the requested columns, in the specified order
+	dataframe = dataframe[listElements]
+
+	return dataframe.to_dict(orient='records') # type: ignore
+
+def getElementsMake(sortOn: str | None = None, deprecated: bool = False, versionMinorMaximum: int | None = None) -> list[dict[str, Any]]:
+	"""Get elements of class `AST` and its subclasses for tool manufacturing.
+
+	Parameters
+	----------
+	sortOn (None)
+		The element to sort on; if a string, case-insensitive.
+	deprecated (False)
+		Whether to include deprecated classes.
+	versionMinorMaximum (None)
+		The maximum version minor to get. If None, get the latest version.
+
+	Returns
+		listDictionaryToolElements
+	-------
+			A list of dictionaries with element:value pairs.
+	"""
+
+	listElementsHARDCODED = ['ClassDefIdentifier', 'classAs_astAttribute', 'classVersionMinorMinimum']
+	listElements = listElementsHARDCODED
+
+	dataframe = getDataframe()
+
+	# Reset index to make the index columns regular columns
+	dataframe = dataframe.reset_index()
+
+	if not deprecated:
+		dataframe = dataframe[~dataframe['deprecated']]
+
+	dataframe['versionMinor'] = dataframe['versionMinor'].astype(int)
+
+	# Remove versions above maximum version
+	if versionMinorMaximum is not None:
+		dataframe = dataframe[dataframe['versionMinor'] <= versionMinorMaximum]
+
+	# Remove duplicate ClassDefIdentifier
+	# TODO think about how the function knows to remove _these_ duplicates
+	dataframe = dataframe.sort_values(by='versionMinor', inplace=False, ascending=False).drop_duplicates('ClassDefIdentifier')
 
 	if sortOn is not None:
 		# TODO after changing the dataframe storage from csv to something smart, make this check smarter

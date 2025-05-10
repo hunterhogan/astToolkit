@@ -74,3 +74,15 @@ docstring: str = (
 	)
 ClassDefDocstringMake = ast.Expr(ast.Constant(docstring))
 del docstring
+
+docstring: str = (
+	"""
+	If two identifiers are joined by a dot `.`, they are _usually_ an `ast.Attribute`, but see, for example, `ast.ImportFrom`.
+
+	Parameters:
+		value: the part before the dot (e.g., `ast.Name`.)
+		attribute: an identifier after a dot `.`; you can pass multiple `attribute` and they will be chained together.
+	"""
+)
+FunctionDefMake_AttributeDocstring = ast.Expr(ast.Constant(docstring))
+del docstring
