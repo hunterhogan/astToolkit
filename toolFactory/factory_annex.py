@@ -58,7 +58,6 @@ listStrRepresentationsOfTypeAlias: list[str] = [
 	(astTypes_intORstr := "intORstr: typing_TypeAlias = Any"),
 	(astTypes_intORstrORtype_params := "intORstrORtype_params: typing_TypeAlias = Any"),
 	(astTypes_intORtype_params := "intORtype_params: typing_TypeAlias = Any"),
-	(astTypes_yourPythonIsOld := "yourPythonIsOld: typing_TypeAlias = Any"),
 ]
 
 for string in listStrRepresentationsOfTypeAlias:

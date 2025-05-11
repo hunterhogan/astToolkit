@@ -136,8 +136,8 @@ def getElementsDOT(deprecated: bool = False, versionMinorMaximum: int | None = N
 		dictionaryAttribute[attribute] = dictionaryTypeAliasSubcategory
 	return dictionaryAttribute
 
-def getElementsGrab(deprecated: bool = False, versionMinorMaximum: int | None = None) -> dict[str, dict[str, int]]:
-	listElementsHARDCODED = ['attribute', 'ast_exprType', 'attributeVersionMinorMinimum']
+def getElementsGrab(deprecated: bool = False, versionMinorMaximum: int | None = None) -> dict[str, dict[int, list[str]]]:
+	listElementsHARDCODED = ['attribute', 'attributeVersionMinorMinimum', 'ast_exprType']
 	listElements = listElementsHARDCODED
 
 	dataframe = getDataframe()
@@ -157,22 +157,22 @@ def getElementsGrab(deprecated: bool = False, versionMinorMaximum: int | None = 
 		lambda version: -1 if version <= pythonVersionMinorMinimum else version
 	)
 
-	dataframe = dataframe.sort_values(
-		by=listElements,
-		ascending=[True, True, True],
-		key=lambda x: x.str.lower() if x.dtype == 'object' else x
-	)
+	dataframe = dataframe[listElements]
+	dataframe = dataframe.drop_duplicates()
 
-	dataframe = dataframe[listElements].drop_duplicates()
+	# For each (attribute, ast_exprType), select the row with the smallest attributeVersionMinorMinimum
+	dataframe = dataframe.sort_values(by=listElements, ascending=[True, True, True], key=lambda x: x.str.lower() if x.dtype == 'object' else x)
+	dataframe = dataframe.drop_duplicates(subset=['attribute', 'ast_exprType'], keep='first')
 
-	listRows = dataframe.values.tolist()
+	# Now group by attribute, then by attributeVersionMinorMinimum, collecting ast_exprType into lists
 	dictionaryAttribute = {}
-	for attribute, listRowsByAttribute in toolz.groupby(lambda row: row[0], listRows).items():
-		dictionaryExprType = {}
-		for ast_exprType, listRowsByExprType in toolz.groupby(lambda row: row[1], listRowsByAttribute).items():
-			rowMinimum = min(listRowsByExprType, key=lambda row: row[2])
-			dictionaryExprType[ast_exprType] = rowMinimum[2]
-		dictionaryAttribute[attribute] = dictionaryExprType
+	for attribute, groupAttribute in dataframe.groupby('attribute'):
+		dictionaryVersionMinorMinimum = {}
+		groupByVersion = groupAttribute.groupby('attributeVersionMinorMinimum')
+		for attributeVersionMinorMinimum, groupVersion in groupByVersion:
+			listExprType = sorted(groupVersion['ast_exprType'].unique(), key=lambda x: str(x).lower())
+			dictionaryVersionMinorMinimum[attributeVersionMinorMinimum] = listExprType
+		dictionaryAttribute[attribute] = dictionaryVersionMinorMinimum
 	return dictionaryAttribute
 
 def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = None) -> list[dict[str, Any]]:

@@ -17,6 +17,8 @@ from toolFactory._snippets import (
 	astName_overload as astName_overload,
 	astName_staticmethod as astName_staticmethod,
 	astName_typing_TypeAlias as	astName_typing_TypeAlias,
+	format_hasDOTIdentifier as format_hasDOTIdentifier,
+	formatTypeAliasSubcategory as formatTypeAliasSubcategory,
 )
 
 from toolFactory.datacenter import (
