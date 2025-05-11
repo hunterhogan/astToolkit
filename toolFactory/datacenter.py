@@ -1,6 +1,6 @@
-import pandas
 from toolFactory import pathFilenameDatabaseAST, pythonVersionMinorMinimum
 from typing import Any, cast
+import pandas
 import toolz
 
 cc=[
