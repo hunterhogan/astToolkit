@@ -21,7 +21,7 @@ from toolFactory.factory_annex import (
 )
 from toolFactory.docstrings import ClassDefDocstringBe, ClassDefDocstringMake, docstringWarning
 from typing import cast, TypedDict
-from Z0Z_tools import updateExtendPolishDictionaryLists, writeStringToHere
+from Z0Z_tools import writeStringToHere
 import ast
 from ast import Name, Store
 
@@ -188,9 +188,9 @@ def makeToolMake():
 		classVersionMinorMinimum: int = dictionaryToolElements['classVersionMinorMinimum']
 
 		list4FunctionDef_args_args: list[ast.arg] = []
+		
 		keywordArguments_ast_arg=[]
 		keywordArguments_ast_keyword = None
-
 		ast_stmt = ast.FunctionDef(
 			name=ClassDefIdentifier
 			, args=ast.arguments(posonlyargs=[], args=list4FunctionDef_args_args, vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=keywordArguments_ast_arg, defaults=[])

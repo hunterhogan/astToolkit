@@ -17,7 +17,6 @@ cc=[
 'type_field_type',
 'typeStub_typing_TypeAlias',
 'list2Sequence',
-'defaultValue__dict__',
 'defaultValue',
 'keywordArguments',
 'kwargAnnotation',
@@ -28,6 +27,9 @@ cc=[
 'attributeKind',
 'attributeVersionMinorMinimum',
 'TypeAliasSubcategory',
+'type',
+'ast_exprType',
+'ast_arg',
 ]
 
 def getDataframe() -> pandas.DataFrame:
@@ -179,6 +181,7 @@ def getElementsMake(sortOn: str | None = None, deprecated: bool = False, version
 	"""
 
 	listElementsHARDCODED = ['ClassDefIdentifier', 'classAs_astAttribute', 'classVersionMinorMinimum']
+	mm=['attributeVersionMinorMinimum', 'ast_arg']
 	listElements = listElementsHARDCODED
 
 	dataframe = getDataframe()
