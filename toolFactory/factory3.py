@@ -13,13 +13,14 @@ from toolFactory import (
 	pathPackage,
 	pythonVersionMinorMinimum,
 	getElementsMake,
+	getElementsDOT,
 	)
 from toolFactory.factory_annex import (
 	FunctionDefMake_Attribute,
 	FunctionDefMake_Import,
 	listHandmadeTypeAlias_astTypes,
 )
-from toolFactory.docstrings import ClassDefDocstringBe, ClassDefDocstringMake, docstringWarning
+from toolFactory.docstrings import ClassDefDocstringBe, ClassDefDocstringMake, docstringWarning, ClassDefDocstringDOT
 from typing import cast, TypedDict
 from Z0Z_tools import writeStringToHere
 import ast

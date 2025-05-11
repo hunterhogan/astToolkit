@@ -23,5 +23,6 @@ from toolFactory._snippets import (
 from toolFactory.datacenter import (
 	getElementsBe as getElementsBe,
 	getElementsMake as getElementsMake,
+	getElementsDOT as getElementsDOT,
 	getElementsTypeAlias as getElementsTypeAlias,
 	)
