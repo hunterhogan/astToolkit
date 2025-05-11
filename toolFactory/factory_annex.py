@@ -53,12 +53,12 @@ def andDoAllOf(listOfActions: list[Callable[[NodeORattribute], NodeORattribute]]
 	return workhorse
 """
 
-handmadeMethodsGrab: list[ast.FunctionDef] = []
+listHandmadeMethodsGrab: list[ast.FunctionDef] = []
 for string in [Grab_andDoAllOf]:
 	astModule = ast.parse(string)
 	for node in ast.iter_child_nodes(astModule):
 		if isinstance(node, ast.FunctionDef):
-			handmadeMethodsGrab.append(node)
+			listHandmadeMethodsGrab.append(node)
 
 FunctionDefMake_Attribute: ast.FunctionDef = ast.FunctionDef(
 	name='Attribute'

@@ -46,48 +46,6 @@ def getDataframe() -> pandas.DataFrame:
 	dataframeTarget = pandas.read_csv(pathFilenameDatabaseAST, index_col=indexColumns)
 	return dataframeTarget
 
-def getElementsTypeAlias(deprecated: bool = False, versionMinorMaximum: int | None = None) -> dict[str, dict[str, dict[int, list[str]]]]:
-	listElementsHARDCODED = ['attribute', 'TypeAliasSubcategory', 'attributeVersionMinorMinimum', 'classAs_astAttribute']
-	listElements = listElementsHARDCODED
-
-	dataframe = getDataframe()
-	dataframe = dataframe.reset_index()
-
-	if not deprecated:
-		dataframe = dataframe[~dataframe['deprecated']]
-
-	if versionMinorMaximum is not None:
-		dataframe = dataframe[dataframe['versionMinor'] <= versionMinorMaximum]
-
-	# Filter for _fields
-	dataframe = dataframe[dataframe['attributeKind'] == '_field']
-
-	# Update attributeVersionMinorMinimum
-	dataframe['attributeVersionMinorMinimum'] = dataframe['attributeVersionMinorMinimum'].apply(
-		lambda version: -1 if version <= pythonVersionMinorMinimum else version
-	)
-
-	dataframe = dataframe.sort_values(
-		by=listElements,
-		ascending=[True, True, True, True],
-		key=lambda x: x.str.lower() if x.dtype == 'object' else x
-	)
-
-	dataframe = dataframe[listElements].drop_duplicates()
-
-	listRows = dataframe.values.tolist()
-	dictionaryAttribute = {}
-	for attribute, listRowsByAttribute in toolz.groupby(lambda row: row[0], listRows).items():
-		dictionaryTypeAliasSubcategory = {}
-		for typeAliasSubcategory, listRowsByTypeAliasSubcategory in toolz.groupby(lambda row: row[1], listRowsByAttribute).items():
-			dictionaryAttributeVersionMinorMinimum = {}
-			for attributeVersionMinorMinimum, listRowsByAttributeVersionMinorMinimum in toolz.groupby(lambda row: row[2], listRowsByTypeAliasSubcategory).items():
-				listClassDefIdentifier = [row[3] for row in listRowsByAttributeVersionMinorMinimum]
-				dictionaryAttributeVersionMinorMinimum[attributeVersionMinorMinimum] = listClassDefIdentifier
-			dictionaryTypeAliasSubcategory[typeAliasSubcategory] = dictionaryAttributeVersionMinorMinimum
-		dictionaryAttribute[attribute] = dictionaryTypeAliasSubcategory
-	return cast(dict[str, dict[str, dict[int, list[str]]]], dictionaryAttribute)
-
 def getElementsBe(deprecated: bool = False, versionMinorMaximum: int | None = None) -> list[dict[str, Any]]:
 	"""Get elements of class `AST` and its subclasses for tool manufacturing.
 
@@ -178,6 +136,45 @@ def getElementsDOT(deprecated: bool = False, versionMinorMaximum: int | None = N
 		dictionaryAttribute[attribute] = dictionaryTypeAliasSubcategory
 	return dictionaryAttribute
 
+def getElementsGrab(deprecated: bool = False, versionMinorMaximum: int | None = None) -> dict[str, dict[str, int]]:
+	listElementsHARDCODED = ['attribute', 'ast_exprType', 'attributeVersionMinorMinimum']
+	listElements = listElementsHARDCODED
+
+	dataframe = getDataframe()
+	dataframe = dataframe.reset_index()
+
+	if not deprecated:
+		dataframe = dataframe[~dataframe['deprecated']]
+
+	dataframe['versionMinor'] = dataframe['versionMinor'].astype(int)
+
+	if versionMinorMaximum is not None:
+		dataframe = dataframe[dataframe['versionMinor'] <= versionMinorMaximum]
+
+	dataframe = dataframe[dataframe['attributeKind'] == '_field']
+
+	dataframe['attributeVersionMinorMinimum'] = dataframe['attributeVersionMinorMinimum'].apply(
+		lambda version: -1 if version <= pythonVersionMinorMinimum else version
+	)
+
+	dataframe = dataframe.sort_values(
+		by=listElements,
+		ascending=[True, True, True],
+		key=lambda x: x.str.lower() if x.dtype == 'object' else x
+	)
+
+	dataframe = dataframe[listElements].drop_duplicates()
+
+	listRows = dataframe.values.tolist()
+	dictionaryAttribute = {}
+	for attribute, listRowsByAttribute in toolz.groupby(lambda row: row[0], listRows).items():
+		dictionaryExprType = {}
+		for ast_exprType, listRowsByExprType in toolz.groupby(lambda row: row[1], listRowsByAttribute).items():
+			rowMinimum = min(listRowsByExprType, key=lambda row: row[2])
+			dictionaryExprType[ast_exprType] = rowMinimum[2]
+		dictionaryAttribute[attribute] = dictionaryExprType
+	return dictionaryAttribute
+
 def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = None) -> list[dict[str, Any]]:
 	"""Get elements of class `AST` and its subclasses for tool manufacturing.
 
@@ -226,3 +223,45 @@ def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = 
 	dataframe = dataframe[listElements]
 
 	return dataframe.to_dict(orient='records') # pyright: ignore[reportReturnType]
+
+def getElementsTypeAlias(deprecated: bool = False, versionMinorMaximum: int | None = None) -> dict[str, dict[str, dict[int, list[str]]]]:
+	listElementsHARDCODED = ['attribute', 'TypeAliasSubcategory', 'attributeVersionMinorMinimum', 'classAs_astAttribute']
+	listElements = listElementsHARDCODED
+
+	dataframe = getDataframe()
+	dataframe = dataframe.reset_index()
+
+	if not deprecated:
+		dataframe = dataframe[~dataframe['deprecated']]
+
+	if versionMinorMaximum is not None:
+		dataframe = dataframe[dataframe['versionMinor'] <= versionMinorMaximum]
+
+	# Filter for _fields
+	dataframe = dataframe[dataframe['attributeKind'] == '_field']
+
+	# Update attributeVersionMinorMinimum
+	dataframe['attributeVersionMinorMinimum'] = dataframe['attributeVersionMinorMinimum'].apply(
+		lambda version: -1 if version <= pythonVersionMinorMinimum else version
+	)
+
+	dataframe = dataframe.sort_values(
+		by=listElements,
+		ascending=[True, True, True, True],
+		key=lambda x: x.str.lower() if x.dtype == 'object' else x
+	)
+
+	dataframe = dataframe[listElements].drop_duplicates()
+
+	listRows = dataframe.values.tolist()
+	dictionaryAttribute = {}
+	for attribute, listRowsByAttribute in toolz.groupby(lambda row: row[0], listRows).items():
+		dictionaryTypeAliasSubcategory = {}
+		for typeAliasSubcategory, listRowsByTypeAliasSubcategory in toolz.groupby(lambda row: row[1], listRowsByAttribute).items():
+			dictionaryAttributeVersionMinorMinimum = {}
+			for attributeVersionMinorMinimum, listRowsByAttributeVersionMinorMinimum in toolz.groupby(lambda row: row[2], listRowsByTypeAliasSubcategory).items():
+				listClassDefIdentifier = [row[3] for row in listRowsByAttributeVersionMinorMinimum]
+				dictionaryAttributeVersionMinorMinimum[attributeVersionMinorMinimum] = listClassDefIdentifier
+			dictionaryTypeAliasSubcategory[typeAliasSubcategory] = dictionaryAttributeVersionMinorMinimum
+		dictionaryAttribute[attribute] = dictionaryTypeAliasSubcategory
+	return cast(dict[str, dict[str, dict[int, list[str]]]], dictionaryAttribute)

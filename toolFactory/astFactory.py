@@ -5,7 +5,7 @@ from toolFactory.Z0Z_hardcoded import keywordArgumentsIdentifier, listASTClasses
 from toolFactory._snippets import astName_overload, astName_staticmethod, astName_typing_TypeAlias
 from toolFactory.factory_annex import (
 	FunctionDefMake_Attribute,
-	handmadeMethodsGrab,
+	listHandmadeMethodsGrab,
 	listHandmadeTypeAlias_astTypes,
 	FunctionDefMake_Import,
 )
@@ -508,7 +508,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 	ClassDefGrab.body.insert(0, ClassDefDocstringGrab)
 	ClassDefMake.body.insert(0, ClassDefDocstringMake)
 
-	ClassDefGrab.body.extend(handmadeMethodsGrab)
+	ClassDefGrab.body.extend(listHandmadeMethodsGrab)
 
 	ClassDef = ClassDefClassIsAndAttribute
 	writeModule(ast.Module(

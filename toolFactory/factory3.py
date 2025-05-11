@@ -18,10 +18,12 @@ from toolFactory import (
 from toolFactory.factory_annex import (
 	FunctionDefMake_Attribute,
 	FunctionDefMake_Import,
+	listHandmadeMethodsGrab,
 	listHandmadeTypeAlias_astTypes,
+	listPylanceErrors,
 )
 from toolFactory.docstrings import ClassDefDocstringBe, ClassDefDocstringMake, docstringWarning, ClassDefDocstringDOT
-from typing import cast, TypedDict
+from typing import cast
 from Z0Z_tools import writeStringToHere
 import ast
 # NOTE you need these because of `eval()`
@@ -55,18 +57,19 @@ def writeModule(astModule: ast.Module, moduleIdentifier: str) -> None:
 	# 	astModule.type_ignores.extend(listTypeIgnore)
 	# 	pythonSource = ast.unparse(astModule)
 	# 	pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
-	# if 'Grab' in moduleIdentifier:
-	# 	listTypeIgnore: list[ast.TypeIgnore] = []
-	# 	tag = '[reportAttributeAccessIssue]'
-	# 	for attribute in listPylanceErrors:
-	# 		for splitlinesNumber, line in enumerate(pythonSource.splitlines()):
-	# 			if 'node.'+attribute in line:
-	# 				listTypeIgnore.append(ast.TypeIgnore(splitlinesNumber+1, tag))
-	# 				break
-	# 	astModule = ast.parse(pythonSource)
-	# 	astModule.type_ignores.extend(listTypeIgnore)
-	# 	pythonSource = ast.unparse(astModule)
-	# 	pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
+	if 'Grab' in moduleIdentifier:
+		listTypeIgnore: list[ast.TypeIgnore] = []
+		tag = '[reportAttributeAccessIssue]'
+		for attribute in listPylanceErrors:
+			for splitlinesNumber, line in enumerate(pythonSource.splitlines()):
+				if 'node.'+attribute in line:
+					listTypeIgnore.append(ast.TypeIgnore(splitlinesNumber+1, tag))
+					break
+		astModule = ast.parse(pythonSource)
+		astModule.type_ignores.extend(listTypeIgnore)
+		pythonSource = ast.unparse(astModule)
+		pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
+		pythonSource.replace('# type: ignore[', '# pyright: ignore[')
 	pathFilenameModule = PurePosixPath(pathPackage, moduleIdentifier + fileExtension)
 	writeStringToHere(pythonSource, pathFilenameModule)
 
@@ -243,6 +246,9 @@ def makeToolDOT():
 		)
 		, moduleIdentifierPrefix + ClassDef.name)
 	del ClassDef
+
+def makeToolGrab():
+	pass
 
 def makeToolMake():
 	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringMake]
