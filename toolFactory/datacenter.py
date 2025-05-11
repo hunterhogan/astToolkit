@@ -46,31 +46,6 @@ def getDataframe() -> pandas.DataFrame:
 	dataframeTarget = pandas.read_csv(pathFilenameDatabaseAST, index_col=indexColumns)
 	return dataframeTarget
 
-def Z0Z_getToolElements(elementIndex: str, *elements: str, sortOn: str | None = None, deprecated: bool = False, versionMinorMaximum: int | None = None):
-	"""Get elements of class `AST` and its subclasses for tool manufacturing.
-
-	This is a prototype function that would work for all tool manufacturing.
-
-	Parameters
-	----------
-	elementIndex
-		The column name to use as a primary identifier for each element.
-	elements
-		The data elements used to create the tool.
-	sortOn (None)
-		The element to sort on.
-	deprecated (False)
-		If True, include deprecated classes.
-	versionMinorMaximum (None)
-		The maximum version minor to get. If None, get the latest version.
-
-	Returns
-	-------
-		dictionaryToolElements
-			A list of tuples, The elements of the class, in the order requested.
-	"""
-	pass
-
 def getElementsTypeAlias(deprecated: bool = False, versionMinorMaximum: int | None = None) -> dict[str, dict[str, dict[int, list[str]]]]:
 	listElementsHARDCODED = ['attribute', 'TypeAliasSubcategory', 'attributeVersionMinorMinimum', 'classAs_astAttribute']
 	listElements = listElementsHARDCODED
@@ -113,7 +88,7 @@ def getElementsTypeAlias(deprecated: bool = False, versionMinorMaximum: int | No
 		dictionaryAttribute[attribute] = dictionaryTypeAliasSubcategory
 	return cast(dict[str, dict[str, dict[int, list[str]]]], dictionaryAttribute)
 
-def getElementsBe(sortOn: str | None = None, deprecated: bool = False, versionMinorMaximum: int | None = None) -> list[dict[str, Any]]:
+def getElementsBe(deprecated: bool = False, versionMinorMaximum: int | None = None) -> list[dict[str, Any]]:
 	"""Get elements of class `AST` and its subclasses for tool manufacturing.
 
 	Parameters
@@ -150,19 +125,21 @@ def getElementsBe(sortOn: str | None = None, deprecated: bool = False, versionMi
 
 	# Remove duplicate ClassDefIdentifier
 	# TODO think about how the function knows to remove _these_ duplicates
-	dataframe = dataframe.sort_values(by='versionMinor', inplace=False, ascending=False).drop_duplicates('ClassDefIdentifier') # type: ignore
+	dataframe = dataframe.sort_values(by='versionMinor', inplace=False, ascending=False).drop_duplicates('ClassDefIdentifier')
 
-	if sortOn is not None:
-		# TODO after changing the dataframe storage from csv to something smart, make this check smarter
-		# match str(dataframe[sortOn].dtype):
-		dataframe = dataframe.iloc[dataframe[sortOn].astype(str).str.lower().argsort()]
+	# TODO after changing the dataframe storage from csv to something smart, make this check smarter
+	# match str(dataframe[sortOn].dtype):
+	dataframe = dataframe.iloc[dataframe['ClassDefIdentifier'].astype(str).str.lower().argsort()]
 
 	# Select the requested columns, in the specified order
 	dataframe = dataframe[listElements]
 
-	return dataframe.to_dict(orient='records') # type: ignore
+	return dataframe.to_dict(orient='records')  # pyright: ignore[reportReturnType]
 
-def getElementsMake(sortOn: str | None = None, deprecated: bool = False, versionMinorMaximum: int | None = None) -> list[dict[str, Any]]:
+def getElementsDOT(deprecated: bool = False, versionMinorMaximum: int | None = None):
+	pass
+
+def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = None) -> list[dict[str, Any]]:
 	"""Get elements of class `AST` and its subclasses for tool manufacturing.
 
 	Parameters
@@ -202,12 +179,11 @@ def getElementsMake(sortOn: str | None = None, deprecated: bool = False, version
 	# TODO think about how the function knows to remove _these_ duplicates
 	dataframe = dataframe.sort_values(by='versionMinor', inplace=False, ascending=False).drop_duplicates('ClassDefIdentifier')
 
-	if sortOn is not None:
-		# TODO after changing the dataframe storage from csv to something smart, make this check smarter
-		# match str(dataframe[sortOn].dtype):
-		dataframe = dataframe.iloc[dataframe[sortOn].astype(str).str.lower().argsort()]
+	# TODO after changing the dataframe storage from csv to something smart, make this check smarter
+	# match str(dataframe[sortOn].dtype):
+	# dataframe = dataframe.iloc[dataframe[sortOn].astype(str).str.lower().argsort()]
 
 	# Select the requested columns, in the specified order
 	dataframe = dataframe[listElements]
 
-	return dataframe.to_dict(orient='records') # type: ignore
+	return dataframe.to_dict(orient='records') # pyright: ignore[reportReturnType]
