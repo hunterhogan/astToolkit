@@ -136,8 +136,47 @@ def getElementsBe(deprecated: bool = False, versionMinorMaximum: int | None = No
 
 	return dataframe.to_dict(orient='records')  # pyright: ignore[reportReturnType]
 
-def getElementsDOT(deprecated: bool = False, versionMinorMaximum: int | None = None):
-	pass
+def getElementsDOT(deprecated: bool = False, versionMinorMaximum: int | None = None) -> dict[str, dict[str, dict[str, int | str]]]:
+	listElementsHARDCODED = ['attribute', 'TypeAliasSubcategory', 'attributeVersionMinorMinimum', 'ast_exprType']
+	listElements = listElementsHARDCODED
+
+	dataframe = getDataframe()
+	dataframe = dataframe.reset_index()
+
+	if not deprecated:
+		dataframe = dataframe[~dataframe['deprecated']]
+
+	dataframe['versionMinor'] = dataframe['versionMinor'].astype(int)
+
+	if versionMinorMaximum is not None:
+		dataframe = dataframe[dataframe['versionMinor'] <= versionMinorMaximum]
+
+	dataframe = dataframe[dataframe['attributeKind'] == '_field']
+
+	dataframe['attributeVersionMinorMinimum'] = dataframe['attributeVersionMinorMinimum'].apply(
+		lambda version: -1 if version <= pythonVersionMinorMinimum else version
+	)
+
+	dataframe = dataframe.sort_values(
+		by=listElements,
+		ascending=[True, True, True, True],
+		key=lambda x: x.str.lower() if x.dtype == 'object' else x
+	)
+
+	dataframe = dataframe[listElements].drop_duplicates()
+
+	listRows = dataframe.values.tolist()
+	dictionaryAttribute = {}
+	for attribute, listRowsByAttribute in toolz.groupby(lambda row: row[0], listRows).items():
+		dictionaryTypeAliasSubcategory = {}
+		for typeAliasSubcategory, listRowsByTypeAliasSubcategory in toolz.groupby(lambda row: row[1], listRowsByAttribute).items():
+			rowMinimum = min(listRowsByTypeAliasSubcategory, key=lambda row: row[2])
+			dictionaryTypeAliasSubcategory[typeAliasSubcategory] = {
+				'attributeVersionMinorMinimum': rowMinimum[2],
+				'ast_exprType': rowMinimum[3]
+			}
+		dictionaryAttribute[attribute] = dictionaryTypeAliasSubcategory
+	return dictionaryAttribute
 
 def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = None) -> list[dict[str, Any]]:
 	"""Get elements of class `AST` and its subclasses for tool manufacturing.

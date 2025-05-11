@@ -39,7 +39,7 @@ TODO protect against AttributeError (I guess) in DOT, Grab, and ClassIsAndAttrib
 def writeModule(astModule: ast.Module, moduleIdentifier: str) -> None:
 	ast.fix_missing_locations(astModule)
 	pythonSource: str = ast.unparse(astModule)
-	if moduleIdentifier in {'ClassIsAndAttribute', 'DOT', 'Grab'}:
+	if 'ClassIsAndAttribute' in moduleIdentifier or 'DOT' in moduleIdentifier or 'Grab' in moduleIdentifier:
 		pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
 	# if 'ClassIsAndAttribute' in moduleIdentifier:
 	# 	listTypeIgnore: list[ast.TypeIgnore] = []
@@ -180,7 +180,69 @@ def makeToolBe():
 	del ClassDef
 
 def makeToolDOT():
-	pass
+	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringDOT]
+
+	dictionaryToolElements: dict[str, dict[str, dict[str, int | str]]] = getElementsDOT()
+
+	# Process each attribute group to generate overloaded methods and implementations
+	for attribute, attributeDictionary in dictionaryToolElements.items():
+		# print(attribute)
+		listElementsHARDCODED = ['attribute', 'TypeAliasSubcategory', 'attributeVersionMinorMinimum', 'ast_exprType']
+		for TypeAliasSubcategory, Z0Z_tired in attributeDictionary.items():
+			# print('\t', TypeAliasSubcategory)
+			ast_exprType = cast(ast.Attribute, eval(Z0Z_tired['ast_exprType'])) # pyright: ignore[reportArgumentType]
+			# print('\t\t', ast_exprType)
+			attributeVersionMinorMinimum: int = Z0Z_tired['attributeVersionMinorMinimum'] # pyright: ignore[reportAssignmentType]
+			# print('\t\t', attributeVersionMinorMinimum)
+			# continue
+
+			ast_stmt = ast.FunctionDef(
+				name=attribute,
+				args=ast.arguments(
+					posonlyargs=[],
+					args=[ast.arg('node', ast.Name('hasDOT' + attribute))],
+					vararg=None,
+					kwonlyargs=[],
+					kw_defaults=[],
+					kwarg=None,
+					defaults=[]
+				),
+				body=[ast.Expr(ast.Constant(value=...))],
+				decorator_list=[astName_staticmethod, astName_overload],
+				returns=ast_exprType
+			)
+
+			if attributeVersionMinorMinimum > pythonVersionMinorMinimum:
+				ast_stmt = ast.If(test=ast.Compare(
+					left=ast.Attribute(ast.Name('sys'), 'version_info'),
+					ops=[ast.GtE()],
+					comparators=[ast.Tuple(
+						elts=[ast.Constant(3), ast.Constant(attributeVersionMinorMinimum)],
+						ctx=ast.Load()
+					)]
+				),
+				body=[ast_stmt],
+				orelse=[])
+
+			list4ClassDefBody.append(ast_stmt)
+
+	ClassDefDOT = ast.ClassDef(name='DOT', bases=[], keywords=[], body=list4ClassDefBody, decorator_list=[])
+
+	ClassDef = ClassDefDOT
+	writeModule(ast.Module(
+		body=[docstringWarning
+			, ast.ImportFrom(module='astToolkit', names=[ast.alias(name='ast_Identifier'), ast.alias(name='ast_expr_Slice'), ast.alias(name='astDOTtype_param')], level=0)
+			, ast.ImportFrom(module='astToolkit._astTypes', names=[ast.alias(name='*')], level=0)
+			, ast.ImportFrom(module='collections.abc', names=[ast.alias(name='Sequence')], level=0)
+			, ast.ImportFrom(module='typing', names=[ast.alias(name='Any'), ast.alias(name='Literal'), ast.alias(name='overload')], level=0)
+			, ast.Import(names=[ast.alias(name='ast')])
+			, ast.Import(names=[ast.alias(name='sys')])
+			, ClassDef
+			],
+		type_ignores=[]
+		)
+		, moduleIdentifierPrefix + ClassDef.name)
+	del ClassDef
 
 def makeToolMake():
 	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringMake]
@@ -228,5 +290,6 @@ def makeToolMake():
 	del ClassDef
 
 if __name__ == "__main__":
-	makeTypeAlias()
-	makeToolBe()
+	# makeToolBe()
+	makeToolDOT()
+	# makeTypeAlias()
