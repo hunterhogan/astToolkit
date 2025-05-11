@@ -1,11 +1,11 @@
 from pathlib import PurePosixPath
 from string import ascii_letters
 from toolFactory import fileExtension, pathPackage, str_nameDOTname, sys_version_infoTarget
-from toolFactory.Z0Z_hardcoded import keywordArgumentsIdentifier, listASTClassesPostPythonVersionMinimum, moduleIdentifierPrefix
+from toolFactory.Z0Z_hardcoded import keywordArgumentsIdentifier, listASTClassesPostPythonVersionMinimum
 from toolFactory._snippets import astName_overload, astName_staticmethod, astName_typing_TypeAlias
 from toolFactory.factory_annex import (
 	FunctionDefMake_Attribute,
-	listHandmadeMethodsGrab,
+	FunctionDefGrab_andDoAllOf,
 	listHandmadeTypeAlias_astTypes,
 	FunctionDefMake_Import,
 )
@@ -13,6 +13,8 @@ from toolFactory.docstrings import ClassDefDocstringDOT, ClassDefDocstringGrab, 
 from typing import cast, TypedDict
 from Z0Z_tools import writeStringToHere
 import ast
+moduleIdentifierPrefix: str = '_tool'
+
 format_asNameAttribute: str = "astDOT{nameAttribute}"
 astImportFromClassNewInPythonVersion: ast.ImportFrom = ast.ImportFrom('astToolkit', [], 0)
 listPythonVersionNewClass = [(11, ['TryStar']),
@@ -37,7 +39,7 @@ for tupleOfClassData in listPythonVersionNewClass:
 		conditionalTypeAlias.orelse.append(ast.AnnAssign(target=ast.Name(asNameAttribute, ast.Store()), annotation=ast.Name('typing_TypeAlias'), value=ast.Name('yourPythonIsOld'), simple=1))
 		astImportFromClassNewInPythonVersion.names.append(ast.alias(name=asNameAttribute))
 
-	listHandmadeTypeAlias_astTypes.append(conditionalTypeAlias)
+	listHandmadeTypeAlias_astTypes.append(conditionalTypeAlias) # pyright: ignore[reportArgumentType]
 
 
 """
@@ -508,7 +510,7 @@ def makeTools(astStubFile: ast.AST) -> None:
 	ClassDefGrab.body.insert(0, ClassDefDocstringGrab)
 	ClassDefMake.body.insert(0, ClassDefDocstringMake)
 
-	ClassDefGrab.body.extend(listHandmadeMethodsGrab)
+	ClassDefGrab.body.extend([FunctionDefGrab_andDoAllOf])
 
 	ClassDef = ClassDefClassIsAndAttribute
 	writeModule(ast.Module(

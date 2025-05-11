@@ -19,9 +19,10 @@ listASTSubclasses = listASTSubclassesHARDCODED
 class FREAKOUT(Exception):
 	pass
 
+listPylanceErrors: list[str] = ['annotation', 'arg', 'args', 'body', 'keys', 'name', 'names', 'op', 'orelse', 'pattern', 'returns', 'target', 'value',]
+
 # filesystem and namespace ===============================================
 packageName: str = 'astToolkit'
-moduleIdentifierPrefix: str = '_tool'
 keywordArgumentsIdentifier: str = 'keywordArguments'
 
 pathRoot = Path('/apps') / packageName
@@ -33,6 +34,7 @@ pathFilenameDatabaseAST = pathToolFactory / 'databaseAST.csv'
 
 fileExtension: str = '.py'
 
+# classmethod .join() =================================================
 def joinOperatorExpressions(operatorClass: type[ast.operator], expressions: Iterable[ast.expr]) -> ast.expr:
 	"""
 	Join AST expressions with a specified operator into a nested BinOp structure.
