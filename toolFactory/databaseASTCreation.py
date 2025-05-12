@@ -147,8 +147,8 @@ def oneShotMakeDataframe(listData: list[dict[str, Any]]):
 	global pathFilenameDatabaseAST
 	dataframeTarget = pandas.DataFrame(listData, columns=list(listData[0].keys()))
 	indexColumns = ['astClass', 'versionMajor', 'versionMinor', 'versionMicro', 'base', 'field', '_attribute', 'deprecated']
-	dataframeTarget = dataframeTarget.set_index(indexColumns) # type: ignore
+	dataframeTarget = dataframeTarget.set_index(indexColumns)  # pyright: ignore[reportUnknownMemberType]
 	pathFilenameDatabaseAST = pathFilenameDatabaseAST.with_stem(pathFilenameDatabaseAST.stem + str(versionMinor))
-	dataframeTarget.to_csv(pathFilenameDatabaseAST) # type: ignore
+	dataframeTarget.to_csv(pathFilenameDatabaseAST)
 
 # oneShotMakeDataframe(listRecords)

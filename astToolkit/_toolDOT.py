@@ -1,10 +1,10 @@
 # ruff: noqa: F403, F405
 """This file is generated automatically, so changes to this file will be lost."""
-from astToolkit import ast_Identifier, ast_expr_Slice, astDOTtype_param
 from astToolkit._astTypes import *
 from collections.abc import Sequence
 from typing import Any, Literal, overload
 import ast
+import sys
 
 class DOT:
     """
@@ -34,16 +34,16 @@ class DOT:
 
     @staticmethod
     @overload
-    def arg(node: hasDOTarg_Identifier) -> ast_Identifier:
+    def arg(node: hasDOTarg_str) -> str:
         ...
 
     @staticmethod
     @overload
-    def arg(node: hasDOTarg_IdentifierOrNone) -> ast_Identifier | None:
+    def arg(node: hasDOTarg_strOrNone) -> str | None:
         ...
 
     @staticmethod
-    def arg(node: hasDOTarg) -> ast_Identifier | (ast_Identifier | None):
+    def arg(node: hasDOTarg) -> str | (str | None):
         return node.arg
 
     @staticmethod
@@ -53,38 +53,33 @@ class DOT:
 
     @staticmethod
     @overload
-    def args(node: hasDOTargs_list_expr) -> Sequence[ast.expr]:
-        ...
-
-    @staticmethod
-    @overload
     def args(node: hasDOTargs_list_arg) -> list[ast.arg]:
         ...
 
     @staticmethod
-    def args(node: hasDOTargs) -> ast.arguments | Sequence[ast.expr] | list[ast.arg]:
+    @overload
+    def args(node: hasDOTargs_list_expr) -> list[ast.expr]:
+        ...
+
+    @staticmethod
+    def args(node: hasDOTargs) -> ast.arguments | list[ast.arg] | list[ast.expr]:
         return node.args
 
     @staticmethod
-    def argtypes(node: hasDOTargtypes) -> Sequence[ast.expr]:
+    def argtypes(node: hasDOTargtypes) -> list[ast.expr]:
         return node.argtypes
 
     @staticmethod
-    def asname(node: hasDOTasname) -> ast_Identifier | None:
+    def asname(node: hasDOTasname) -> str | None:
         return node.asname
 
     @staticmethod
-    def attr(node: hasDOTattr) -> ast_Identifier:
+    def attr(node: hasDOTattr) -> str:
         return node.attr
 
     @staticmethod
-    def bases(node: hasDOTbases) -> Sequence[ast.expr]:
+    def bases(node: hasDOTbases) -> list[ast.expr]:
         return node.bases
-
-    @staticmethod
-    @overload
-    def body(node: hasDOTbody_list_stmt) -> Sequence[ast.stmt]:
-        ...
 
     @staticmethod
     @overload
@@ -92,12 +87,18 @@ class DOT:
         ...
 
     @staticmethod
-    def body(node: hasDOTbody) -> Sequence[ast.stmt] | ast.expr:
-        return node.body
+    @overload
+    def body(node: hasDOTbody_list_stmt) -> list[ast.stmt]:
+        ...
 
     @staticmethod
-    def bound(node: hasDOTbound) -> ast.expr | None:
-        return node.bound
+    def body(node: hasDOTbody) -> ast.expr | list[ast.stmt]:
+        return node.body
+    if sys.version_info >= (3, 12):
+
+        @staticmethod
+        def bound(node: hasDOTbound) -> ast.expr | None:
+            return node.bound
 
     @staticmethod
     def cases(node: hasDOTcases) -> list[ast.match_case]:
@@ -112,7 +113,7 @@ class DOT:
         return node.cls
 
     @staticmethod
-    def comparators(node: hasDOTcomparators) -> Sequence[ast.expr]:
+    def comparators(node: hasDOTcomparators) -> list[ast.expr]:
         return node.comparators
 
     @staticmethod
@@ -128,15 +129,16 @@ class DOT:
         return node.ctx
 
     @staticmethod
-    def decorator_list(node: hasDOTdecorator_list) -> Sequence[ast.expr]:
+    def decorator_list(node: hasDOTdecorator_list) -> list[ast.expr]:
         return node.decorator_list
+    if sys.version_info >= (3, 13):
+
+        @staticmethod
+        def default_value(node: hasDOTdefault_value) -> ast.expr | None:
+            return node.default_value
 
     @staticmethod
-    def default_value(node: hasDOTdefault_value) -> ast.expr | None:
-        return node.default_value
-
-    @staticmethod
-    def defaults(node: hasDOTdefaults) -> Sequence[ast.expr]:
+    def defaults(node: hasDOTdefaults) -> list[ast.expr]:
         return node.defaults
 
     @staticmethod
@@ -144,7 +146,7 @@ class DOT:
         return node.elt
 
     @staticmethod
-    def elts(node: hasDOTelts) -> Sequence[ast.expr]:
+    def elts(node: hasDOTelts) -> list[ast.expr]:
         return node.elts
 
     @staticmethod
@@ -152,7 +154,7 @@ class DOT:
         return node.exc
 
     @staticmethod
-    def finalbody(node: hasDOTfinalbody) -> Sequence[ast.stmt]:
+    def finalbody(node: hasDOTfinalbody) -> list[ast.stmt]:
         return node.finalbody
 
     @staticmethod
@@ -176,11 +178,11 @@ class DOT:
         return node.handlers
 
     @staticmethod
-    def id(node: hasDOTid) -> ast_Identifier:
+    def id(node: hasDOTid) -> str:
         return node.id
 
     @staticmethod
-    def ifs(node: hasDOTifs) -> Sequence[ast.expr]:
+    def ifs(node: hasDOTifs) -> list[ast.expr]:
         return node.ifs
 
     @staticmethod
@@ -201,16 +203,16 @@ class DOT:
 
     @staticmethod
     @overload
-    def keys(node: hasDOTkeys_list_exprOrNone) -> Sequence[ast.expr | None]:
+    def keys(node: hasDOTkeys_list_expr) -> list[ast.expr]:
         ...
 
     @staticmethod
     @overload
-    def keys(node: hasDOTkeys_list_expr) -> Sequence[ast.expr]:
+    def keys(node: hasDOTkeys_list_exprOrNone) -> list[ast.expr | None]:
         ...
 
     @staticmethod
-    def keys(node: hasDOTkeys) -> Sequence[ast.expr | None] | Sequence[ast.expr]:
+    def keys(node: hasDOTkeys) -> list[ast.expr] | list[ast.expr | None]:
         return node.keys
 
     @staticmethod
@@ -218,11 +220,11 @@ class DOT:
         return node.keywords
 
     @staticmethod
-    def kind(node: hasDOTkind) -> ast_Identifier | None:
+    def kind(node: hasDOTkind) -> str | None:
         return node.kind
 
     @staticmethod
-    def kw_defaults(node: hasDOTkw_defaults) -> Sequence[ast.expr | None]:
+    def kw_defaults(node: hasDOTkw_defaults) -> list[ast.expr | None]:
         return node.kw_defaults
 
     @staticmethod
@@ -230,11 +232,11 @@ class DOT:
         return node.kwarg
 
     @staticmethod
-    def kwd_attrs(node: hasDOTkwd_attrs) -> list[ast_Identifier]:
+    def kwd_attrs(node: hasDOTkwd_attrs) -> list[str]:
         return node.kwd_attrs
 
     @staticmethod
-    def kwd_patterns(node: hasDOTkwd_patterns) -> Sequence[ast.pattern]:
+    def kwd_patterns(node: hasDOTkwd_patterns) -> list[ast.pattern]:
         return node.kwd_patterns
 
     @staticmethod
@@ -258,36 +260,38 @@ class DOT:
         return node.lower
 
     @staticmethod
-    def module(node: hasDOTmodule) -> ast_Identifier | None:
+    def module(node: hasDOTmodule) -> str | None:
         return node.module
 
     @staticmethod
     def msg(node: hasDOTmsg) -> ast.expr | None:
         return node.msg
+    if sys.version_info >= (3, 12):
+
+        @staticmethod
+        @overload
+        def name(node: hasDOTname_Name) -> ast.Name:
+            ...
 
     @staticmethod
     @overload
-    def name(node: hasDOTname_Identifier) -> ast_Identifier:
+    def name(node: hasDOTname_str) -> str:
         ...
 
     @staticmethod
     @overload
-    def name(node: hasDOTname_IdentifierOrNone) -> ast_Identifier | None:
+    def name(node: hasDOTname_strOrNone) -> str | None:
         ...
+    if sys.version_info >= (3, 12):
 
-    @staticmethod
-    @overload
-    def name(node: hasDOTname_str) -> ast_Identifier:
-        ...
+        @staticmethod
+        def name(node: hasDOTname) -> ast.Name | str | (str | None):
+            return node.name
+    else:
 
-    @staticmethod
-    @overload
-    def name(node: hasDOTname_Name) -> ast.Name:
-        ...
-
-    @staticmethod
-    def name(node: hasDOTname) -> ast_Identifier | (ast_Identifier | None) | ast_Identifier | ast.Name:
-        return node.name
+        @staticmethod
+        def name(node: hasDOTname) -> str | (str | None):
+            return node.name
 
     @staticmethod
     @overload
@@ -296,17 +300,12 @@ class DOT:
 
     @staticmethod
     @overload
-    def names(node: hasDOTnames_list_Identifier) -> list[ast_Identifier]:
+    def names(node: hasDOTnames_list_str) -> list[str]:
         ...
 
     @staticmethod
-    def names(node: hasDOTnames) -> list[ast.alias] | list[ast_Identifier]:
+    def names(node: hasDOTnames) -> list[ast.alias] | list[str]:
         return node.names
-
-    @staticmethod
-    @overload
-    def op(node: hasDOTop_operator) -> ast.operator:
-        ...
 
     @staticmethod
     @overload
@@ -315,11 +314,16 @@ class DOT:
 
     @staticmethod
     @overload
+    def op(node: hasDOTop_operator) -> ast.operator:
+        ...
+
+    @staticmethod
+    @overload
     def op(node: hasDOTop_unaryop) -> ast.unaryop:
         ...
 
     @staticmethod
-    def op(node: hasDOTop) -> ast.operator | ast.boolop | ast.unaryop:
+    def op(node: hasDOTop) -> ast.boolop | ast.operator | ast.unaryop:
         return node.op
 
     @staticmethod
@@ -327,7 +331,7 @@ class DOT:
         return node.operand
 
     @staticmethod
-    def ops(node: hasDOTops) -> Sequence[ast.cmpop]:
+    def ops(node: hasDOTops) -> list[ast.cmpop]:
         return node.ops
 
     @staticmethod
@@ -336,21 +340,21 @@ class DOT:
 
     @staticmethod
     @overload
-    def orelse(node: hasDOTorelse_list_stmt) -> Sequence[ast.stmt]:
-        ...
-
-    @staticmethod
-    @overload
     def orelse(node: hasDOTorelse_expr) -> ast.expr:
         ...
 
     @staticmethod
-    def orelse(node: hasDOTorelse) -> Sequence[ast.stmt] | ast.expr:
+    @overload
+    def orelse(node: hasDOTorelse_list_stmt) -> list[ast.stmt]:
+        ...
+
+    @staticmethod
+    def orelse(node: hasDOTorelse) -> ast.expr | list[ast.stmt]:
         return node.orelse
 
     @staticmethod
     @overload
-    def pattern(node: hasDOTpattern_Pattern) -> ast.pattern:
+    def pattern(node: hasDOTpattern_pattern) -> ast.pattern:
         ...
 
     @staticmethod
@@ -363,7 +367,7 @@ class DOT:
         return node.pattern
 
     @staticmethod
-    def patterns(node: hasDOTpatterns) -> Sequence[ast.pattern]:
+    def patterns(node: hasDOTpatterns) -> list[ast.pattern]:
         return node.patterns
 
     @staticmethod
@@ -371,7 +375,7 @@ class DOT:
         return node.posonlyargs
 
     @staticmethod
-    def rest(node: hasDOTrest) -> ast_Identifier | None:
+    def rest(node: hasDOTrest) -> str | None:
         return node.rest
 
     @staticmethod
@@ -397,7 +401,7 @@ class DOT:
         return node.simple
 
     @staticmethod
-    def slice(node: hasDOTslice) -> ast_expr_Slice:
+    def slice(node: hasDOTslice) -> ast.expr:
         return node.slice
 
     @staticmethod
@@ -409,13 +413,8 @@ class DOT:
         return node.subject
 
     @staticmethod
-    def tag(node: hasDOTtag) -> ast_Identifier:
+    def tag(node: hasDOTtag) -> str:
         return node.tag
-
-    @staticmethod
-    @overload
-    def target(node: hasDOTtarget_NameOrAttributeOrSubscript) -> ast.Name | ast.Attribute | ast.Subscript:
-        ...
 
     @staticmethod
     @overload
@@ -428,11 +427,16 @@ class DOT:
         ...
 
     @staticmethod
-    def target(node: hasDOTtarget) -> ast.Name | ast.Attribute | ast.Subscript | ast.expr | ast.Name:
+    @overload
+    def target(node: hasDOTtarget_NameOrAttributeOrSubscript) -> ast.Name | ast.Attribute | ast.Subscript:
+        ...
+
+    @staticmethod
+    def target(node: hasDOTtarget) -> ast.expr | ast.Name | (ast.Name | ast.Attribute | ast.Subscript):
         return node.target
 
     @staticmethod
-    def targets(node: hasDOTtargets) -> Sequence[ast.expr]:
+    def targets(node: hasDOTtargets) -> list[ast.expr]:
         return node.targets
 
     @staticmethod
@@ -444,16 +448,17 @@ class DOT:
         return node.type
 
     @staticmethod
-    def type_comment(node: hasDOTtype_comment) -> ast_Identifier | None:
+    def type_comment(node: hasDOTtype_comment) -> str | None:
         return node.type_comment
 
     @staticmethod
     def type_ignores(node: hasDOTtype_ignores) -> list[ast.TypeIgnore]:
         return node.type_ignores
+    if sys.version_info >= (3, 12):
 
-    @staticmethod
-    def type_params(node: hasDOTtype_params) -> Sequence[astDOTtype_param]:
-        return node.type_params
+        @staticmethod
+        def type_params(node: hasDOTtype_params) -> list[ast.type_param]:
+            return node.type_params
 
     @staticmethod
     def upper(node: hasDOTupper) -> ast.expr | None:
@@ -461,7 +466,12 @@ class DOT:
 
     @staticmethod
     @overload
-    def value(node: hasDOTvalue_exprOrNone) -> ast.expr | None:
+    def value(node: hasDOTvalue_Any) -> Any:
+        ...
+
+    @staticmethod
+    @overload
+    def value(node: hasDOTvalue_boolOrNone) -> bool | None:
         ...
 
     @staticmethod
@@ -471,20 +481,15 @@ class DOT:
 
     @staticmethod
     @overload
-    def value(node: hasDOTvalue_Any) -> Any:
+    def value(node: hasDOTvalue_exprOrNone) -> ast.expr | None:
         ...
 
     @staticmethod
-    @overload
-    def value(node: hasDOTvalue_LiteralTrueFalseOrNone) -> Literal[True, False] | None:
-        ...
-
-    @staticmethod
-    def value(node: hasDOTvalue) -> ast.expr | None | ast.expr | Any | (Literal[True, False] | None):
+    def value(node: hasDOTvalue) -> Any | (bool | None) | ast.expr | (ast.expr | None):
         return node.value
 
     @staticmethod
-    def values(node: hasDOTvalues) -> Sequence[ast.expr]:
+    def values(node: hasDOTvalues) -> list[ast.expr]:
         return node.values
 
     @staticmethod

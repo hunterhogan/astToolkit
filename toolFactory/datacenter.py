@@ -43,7 +43,7 @@ def getDataframe() -> pandas.DataFrame:
 		The dataframe containing the AST data.
 	"""
 	indexColumns = cc
-	dataframeTarget = pandas.read_csv(pathFilenameDatabaseAST, index_col=indexColumns)
+	dataframeTarget = pandas.read_csv(pathFilenameDatabaseAST, index_col=indexColumns) # pyright: ignore[reportUnknownMemberType]
 	return dataframeTarget
 
 def getElementsBe(deprecated: bool = False, versionMinorMaximum: int | None = None) -> list[dict[str, Any]]:
@@ -83,7 +83,7 @@ def getElementsBe(deprecated: bool = False, versionMinorMaximum: int | None = No
 
 	# Remove duplicate ClassDefIdentifier
 	# TODO think about how the function knows to remove _these_ duplicates
-	dataframe = dataframe.sort_values(by='versionMinor', inplace=False, ascending=False).drop_duplicates('ClassDefIdentifier')
+	dataframe = dataframe.sort_values(by='versionMinor', inplace=False, ascending=False).drop_duplicates('ClassDefIdentifier') # pyright: ignore[reportUnknownMemberType]
 
 	# TODO after changing the dataframe storage from csv to something smart, make this check smarter
 	# match str(dataframe[sortOn].dtype):
@@ -92,7 +92,7 @@ def getElementsBe(deprecated: bool = False, versionMinorMaximum: int | None = No
 	# Select the requested columns, in the specified order
 	dataframe = dataframe[listElements]
 
-	return dataframe.to_dict(orient='records')  # pyright: ignore[reportReturnType]
+	return dataframe.to_dict(orient='records') # pyright: ignore[reportReturnType, reportUnknownMemberType]
 
 def getElementsClassIsAndAttribute(deprecated: bool = False, versionMinorMaximum: int | None = None) -> dict[str, dict[str, dict[str, int | str]]]:
 	return getElementsDOT(deprecated, versionMinorMaximum)
@@ -114,24 +114,24 @@ def getElementsDOT(deprecated: bool = False, versionMinorMaximum: int | None = N
 
 	dataframe = dataframe[dataframe['attributeKind'] == '_field']
 
-	dataframe['attributeVersionMinorMinimum'] = dataframe['attributeVersionMinorMinimum'].apply(
-		lambda version: -1 if version <= pythonVersionMinorMinimum else version
+	dataframe['attributeVersionMinorMinimum'] = dataframe['attributeVersionMinorMinimum'].apply( # pyright: ignore[reportUnknownMemberType]
+		lambda version: -1 if version <= pythonVersionMinorMinimum else version # pyright: ignore[reportUnknownLambdaType]
 	)
 
-	dataframe = dataframe.sort_values(
+	dataframe = dataframe.sort_values( # pyright: ignore[reportUnknownMemberType]
 		by=listElements,
 		ascending=[True, True, True, True],
-		key=lambda x: x.str.lower() if x.dtype == 'object' else x
+		key=lambda x: x.str.lower() if x.dtype == 'object' else x # pyright: ignore[reportUnknownMemberType,reportUnknownLambdaType]
 	)
 
 	dataframe = dataframe[listElements].drop_duplicates()
 
-	listRows = dataframe.values.tolist()
-	dictionaryAttribute = {}
-	for attribute, listRowsByAttribute in toolz.groupby(lambda row: row[0], listRows).items():
-		dictionaryTypeAliasSubcategory = {}
-		for typeAliasSubcategory, listRowsByTypeAliasSubcategory in toolz.groupby(lambda row: row[1], listRowsByAttribute).items():
-			rowMinimum = min(listRowsByTypeAliasSubcategory, key=lambda row: row[2])
+	listRows = dataframe.values.tolist() # pyright: ignore[reportUnknownMemberType, reportUnknownVariableType]
+	dictionaryAttribute: dict[str, dict[str, dict[str, int | str]]] = {}
+	for attribute, listRowsByAttribute in toolz.groupby(lambda row: row[0], listRows).items(): # pyright: ignore[reportUnknownArgumentType, reportUnknownLambdaType, reportUnknownMemberType, reportUnknownVariableType]
+		dictionaryTypeAliasSubcategory: dict[str, dict[str, int | str]] = {}
+		for typeAliasSubcategory, listRowsByTypeAliasSubcategory in toolz.groupby(lambda row: row[1], listRowsByAttribute).items(): # pyright: ignore[reportUnknownArgumentType, reportUnknownLambdaType, reportUnknownMemberType, reportUnknownVariableType]
+			rowMinimum = min(listRowsByTypeAliasSubcategory, key=lambda row: row[2]) # pyright: ignore[reportUnknownLambdaType, reportUnknownArgumentType, reportUnknownVariableType]
 			dictionaryTypeAliasSubcategory[typeAliasSubcategory] = {
 				'attributeVersionMinorMinimum': rowMinimum[2],
 				'ast_exprType': rowMinimum[3]
@@ -156,26 +156,26 @@ def getElementsGrab(deprecated: bool = False, versionMinorMaximum: int | None = 
 
 	dataframe = dataframe[dataframe['attributeKind'] == '_field']
 
-	dataframe['attributeVersionMinorMinimum'] = dataframe['attributeVersionMinorMinimum'].apply(
-		lambda version: -1 if version <= pythonVersionMinorMinimum else version
+	dataframe['attributeVersionMinorMinimum'] = dataframe['attributeVersionMinorMinimum'].apply( # pyright: ignore[reportUnknownMemberType]
+		lambda version: -1 if version <= pythonVersionMinorMinimum else version # pyright: ignore[reportUnknownLambdaType]
 	)
 
 	dataframe = dataframe[listElements]
 	dataframe = dataframe.drop_duplicates()
 
 	# For each (attribute, ast_exprType), select the row with the smallest attributeVersionMinorMinimum
-	dataframe = dataframe.sort_values(by=listElements, ascending=[True, True, True], key=lambda x: x.str.lower() if x.dtype == 'object' else x)
+	dataframe = dataframe.sort_values(by=listElements, ascending=[True, True, True], key=lambda x: x.str.lower() if x.dtype == 'object' else x) # pyright: ignore[reportUnknownLambdaType, reportUnknownMemberType]
 	dataframe = dataframe.drop_duplicates(subset=['attribute', 'ast_exprType'], keep='first')
 
 	# Now group by attribute, then by attributeVersionMinorMinimum, collecting ast_exprType into lists
-	dictionaryAttribute = {}
-	for attribute, groupAttribute in dataframe.groupby('attribute'):
-		dictionaryVersionMinorMinimum = {}
-		groupByVersion = groupAttribute.groupby('attributeVersionMinorMinimum')
+	dictionaryAttribute: dict[str, dict[int, list[str]]] = {}
+	for attribute, groupAttribute in dataframe.groupby('attribute'): # pyright: ignore[reportUnknownMemberType]
+		dictionaryVersionMinorMinimum: dict[int, list[str]] = {}
+		groupByVersion = groupAttribute.groupby('attributeVersionMinorMinimum') # pyright: ignore[reportUnknownMemberType]
 		for attributeVersionMinorMinimum, groupVersion in groupByVersion:
-			listExprType = sorted(groupVersion['ast_exprType'].unique(), key=lambda x: str(x).lower())
-			dictionaryVersionMinorMinimum[attributeVersionMinorMinimum] = listExprType
-		dictionaryAttribute[attribute] = dictionaryVersionMinorMinimum
+			listExprType = sorted(groupVersion['ast_exprType'].unique(), key=lambda x: str(x).lower()) # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]
+			dictionaryVersionMinorMinimum[attributeVersionMinorMinimum] = listExprType # pyright: ignore[reportArgumentType]
+		dictionaryAttribute[attribute] = dictionaryVersionMinorMinimum # pyright: ignore[reportArgumentType]
 	return dictionaryAttribute
 
 def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = None) -> list[dict[str, Any]]:
@@ -216,7 +216,7 @@ def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = 
 
 	# Remove duplicate ClassDefIdentifier
 	# TODO think about how the function knows to remove _these_ duplicates
-	dataframe = dataframe.sort_values(by='versionMinor', inplace=False, ascending=False).drop_duplicates('ClassDefIdentifier')
+	dataframe = dataframe.sort_values(by='versionMinor', inplace=False, ascending=False).drop_duplicates('ClassDefIdentifier') # pyright: ignore[reportUnknownMemberType]
 
 	# TODO after changing the dataframe storage from csv to something smart, make this check smarter
 	# match str(dataframe[sortOn].dtype):
@@ -225,7 +225,7 @@ def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = 
 	# Select the requested columns, in the specified order
 	dataframe = dataframe[listElements]
 
-	return dataframe.to_dict(orient='records') # pyright: ignore[reportReturnType]
+	return dataframe.to_dict(orient='records') # pyright: ignore[reportReturnType, reportUnknownMemberType]
 
 def getElementsTypeAlias(deprecated: bool = False, versionMinorMaximum: int | None = None) -> dict[str, dict[str, dict[int, list[str]]]]:
 	listElementsHARDCODED = ['attribute', 'TypeAliasSubcategory', 'attributeVersionMinorMinimum', 'classAs_astAttribute']
@@ -244,27 +244,27 @@ def getElementsTypeAlias(deprecated: bool = False, versionMinorMaximum: int | No
 	dataframe = dataframe[dataframe['attributeKind'] == '_field']
 
 	# Update attributeVersionMinorMinimum
-	dataframe['attributeVersionMinorMinimum'] = dataframe['attributeVersionMinorMinimum'].apply(
-		lambda version: -1 if version <= pythonVersionMinorMinimum else version
+	dataframe['attributeVersionMinorMinimum'] = dataframe['attributeVersionMinorMinimum'].apply( # pyright: ignore[reportUnknownMemberType]
+		lambda version: -1 if version <= pythonVersionMinorMinimum else version # pyright: ignore[reportUnknownLambdaType]
 	)
 
-	dataframe = dataframe.sort_values(
+	dataframe = dataframe.sort_values( # pyright: ignore[reportUnknownMemberType]
 		by=listElements,
 		ascending=[True, True, True, True],
-		key=lambda x: x.str.lower() if x.dtype == 'object' else x
+		key=lambda x: x.str.lower() if x.dtype == 'object' else x # pyright: ignore[reportUnknownLambdaType, reportUnknownMemberType]
 	)
 
 	dataframe = dataframe[listElements].drop_duplicates()
 
-	listRows = dataframe.values.tolist()
-	dictionaryAttribute = {}
-	for attribute, listRowsByAttribute in toolz.groupby(lambda row: row[0], listRows).items():
-		dictionaryTypeAliasSubcategory = {}
-		for typeAliasSubcategory, listRowsByTypeAliasSubcategory in toolz.groupby(lambda row: row[1], listRowsByAttribute).items():
-			dictionaryAttributeVersionMinorMinimum = {}
-			for attributeVersionMinorMinimum, listRowsByAttributeVersionMinorMinimum in toolz.groupby(lambda row: row[2], listRowsByTypeAliasSubcategory).items():
-				listClassDefIdentifier = [row[3] for row in listRowsByAttributeVersionMinorMinimum]
+	listRows: list[list[str | int]] = dataframe.values.tolist() # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
+	dictionaryAttribute: dict[str, dict[str, dict[int, list[str]]]] = {}
+	for attribute, listRowsByAttribute in toolz.groupby(lambda row: row[0], listRows).items(): # pyright: ignore[reportUnknownLambdaType, reportUnknownMemberType, reportUnknownVariableType]
+		dictionaryTypeAliasSubcategory: dict[str, dict[int, list[str]]] = {}
+		for typeAliasSubcategory, listRowsByTypeAliasSubcategory in toolz.groupby(lambda row: row[1], listRowsByAttribute).items(): # pyright: ignore[reportUnknownArgumentType, reportUnknownLambdaType, reportUnknownMemberType, reportUnknownVariableType]
+			dictionaryAttributeVersionMinorMinimum: dict[int, list[str]] = {}
+			for attributeVersionMinorMinimum, listRowsByAttributeVersionMinorMinimum in toolz.groupby(lambda row: row[2], listRowsByTypeAliasSubcategory).items(): # pyright: ignore[reportUnknownArgumentType, reportUnknownLambdaType, reportUnknownMemberType, reportUnknownVariableType]
+				listClassDefIdentifier: list[str] = [row[3] for row in listRowsByAttributeVersionMinorMinimum] # pyright: ignore[reportUnknownVariableType]
 				dictionaryAttributeVersionMinorMinimum[attributeVersionMinorMinimum] = listClassDefIdentifier
 			dictionaryTypeAliasSubcategory[typeAliasSubcategory] = dictionaryAttributeVersionMinorMinimum
 		dictionaryAttribute[attribute] = dictionaryTypeAliasSubcategory
-	return cast(dict[str, dict[str, dict[int, list[str]]]], dictionaryAttribute)
+	return dictionaryAttribute

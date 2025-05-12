@@ -47,19 +47,7 @@ def writeModule(astModule: ast.Module, moduleIdentifier: str) -> None:
 	if 'ClassIsAndAttribute' in moduleIdentifier or 'DOT' in moduleIdentifier or 'Grab' in moduleIdentifier:
 		pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
 	if 'ClassIsAndAttribute' in moduleIdentifier:
-		listTypeIgnore: list[ast.TypeIgnore] = []
-		tag = '[reportArgumentType, reportAttributeAccessIssue]'
-		for attribute in listPylanceErrors:
-			lineno = 0
-			for splitlinesNumber, line in enumerate(pythonSource.splitlines()):
-				# Cycle through the overloads and definitions: effectively keeping the last one, which is the definition.
-				if f"def {attribute}Is" in line:
-					lineno = splitlinesNumber + 1
-			listTypeIgnore.append(ast.TypeIgnore(lineno, tag))
-		astModule = ast.parse(pythonSource)
-		astModule.type_ignores.extend(listTypeIgnore)
-		pythonSource = ast.unparse(astModule)
-		pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
+		pythonSource = "# pyright: reportArgumentType=false\n" + pythonSource
 	if 'Grab' in moduleIdentifier:
 		listTypeIgnore: list[ast.TypeIgnore] = []
 		tag = '[reportArgumentType, reportAttributeAccessIssue]'
@@ -105,7 +93,7 @@ def makeToolBe():
 			, args=ast.arguments(posonlyargs=[], args=[ast.arg(arg='node', annotation=ast.Name('ast.AST'))], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
 			, body=[ast.Return(value=ast.Call(func=ast.Name('isinstance'), args=[ast.Name('node'), classAs_astAttribute], keywords=[]))]
 			, decorator_list=[astName_staticmethod]
-			, returns=ast.Subscript(value=ast.Name('TypeGuard'), slice=classAs_astAttribute))
+			, returns=ast.Subscript(ast.Name('TypeGuard'), slice=classAs_astAttribute))
 
 		if classVersionMinorMinimum > pythonVersionMinorMinimum:
 			ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info'),
@@ -124,7 +112,28 @@ def makeToolBe():
 
 	writeClass('Be', list4ClassDefBody, list4ModuleBody)
 
-def makeClassIsAndAttribute():
+def makeToolClassIsAndAttribute():
+	def create_ast_stmt():
+		ast_stmt = ast.FunctionDef(attribute + 'Is'
+				, args=ast.arguments(posonlyargs=[]
+					, args=[ast.arg('astClass', annotation = ast.Subscript(ast.Name('type'), astNameTypeAlias))
+						, ast.arg('attributeCondition', annotation=annotation)
+					], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
+					, body=body
+					, decorator_list=decorator_list
+					, returns=returns
+		)
+
+		if attributeVersionMinorMinimum > pythonVersionMinorMinimum:
+			ast_stmt = ast.If(ast.Compare(left=ast.Attribute(ast.Name('sys'), 'version_info')
+								, ops=[ast.GtE()]
+								, comparators=[ast.Tuple([ast.Constant(3), ast.Constant(attributeVersionMinorMinimum)])])
+							, body=[ast_stmt]
+							, orelse=orelse # pyright: ignore[reportUnknownArgumentType]
+			)
+
+		return ast_stmt
+
 	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringClassIsAndAttribute]
 
 	dictionaryToolElements: dict[str, dict[str, dict[str, int | str]]] = getElementsClassIsAndAttribute()
@@ -140,14 +149,86 @@ def makeClassIsAndAttribute():
 
 		if len(dictionaryTypeAliasSubcategory) > 1:
 			for TypeAliasSubcategory, dictionary_ast_exprType in dictionaryTypeAliasSubcategory.items():
-				continue
+				attributeVersionMinorMinimum: int = dictionary_ast_exprType['attributeVersionMinorMinimum'] # pyright: ignore[reportAssignmentType]
+				astNameTypeAlias: ast.Name = ast.Name(formatTypeAliasSubcategory.format(hasDOTIdentifier=hasDOTIdentifier, TypeAliasSubcategory=TypeAliasSubcategory))
+				body: list[ast.stmt] = [ast.Expr(ast.Constant(value=...))]
+				decorator_list=[astName_staticmethod, astName_overload]
+				returns=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([ast.Attribute(ast.Name('ast'), attr='AST')]), ast.BitOr.join([ast.Subscript(ast.Name('TypeGuard'), slice=astNameTypeAlias), ast.Name('bool')])])) # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
+
+				Z0Z_TypeWithoutNone = eval(dictionary_ast_exprType['ast_exprType']) # pyright: ignore[reportArgumentType]
+				annotation = ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([Z0Z_TypeWithoutNone]), ast.Name('bool')]))
+
+				list_ast_exprType.append(annotation)
+				dictionaryVersionsTypeAliasSubcategory[dictionary_ast_exprType['attributeVersionMinorMinimum']].append(annotation) # pyright: ignore[reportArgumentType]
+
+				list4ClassDefBody.append(create_ast_stmt())
 
 		astNameTypeAlias = hasDOTTypeAliasName_Load
 		if len(dictionaryVersionsTypeAliasSubcategory) > 1:
-			pass
+			attributeVersionMinorMinimum: int = min(dictionaryVersionsTypeAliasSubcategory.keys()) # pyright: ignore[reportAssignmentType]
+			decorator_list=[astName_staticmethod]
+
+			annotation: ast.expr = ast.BitOr.join(dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum]) # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType, reportAttributeAccessIssue]
+			workhorseReturnValue: ast.BoolOp = ast.BoolOp(op=ast.And(), values=[ast.Call(ast.Name('isinstance'), args=[ast.Name('node'), ast.Name('astClass')], keywords=[])])
+			for node in ast.walk(annotation): # pyright: ignore[reportUnknownArgumentType]
+				if isinstance(node, ast.Subscript) and isinstance(node.value, ast.Name) and node.value.id == 'Sequence' and isinstance(node.slice, ast.BinOp) and isinstance(node.slice.right, ast.Constant) and node.slice.right.value is None:
+					workhorseReturnValue.values.append(ast.Compare(ast.Attribute(ast.Name('node'), attribute)
+													, ops=[ast.NotEq()]
+													, comparators=[ast.List([ast.Constant(None)])]))
+					break
+				if isinstance(node, ast.Constant) and node.value is None:
+					workhorseReturnValue.values.append(ast.Compare(ast.Attribute(ast.Name('node'), attribute)
+													, ops=[ast.IsNot()]
+													, comparators=[ast.Constant(None)]))
+					break
+
+			workhorseReturnValue.values.append(ast.Call(ast.Name('attributeCondition'), args=[ast.Attribute(ast.Name('node'), attribute)]))
+
+			buffaloBuffalo_workhorse_returnsAnnotation: ast.expr = ast.BitOr.join([ast.Subscript(ast.Name('TypeGuard'), slice=astNameTypeAlias), ast.Name('bool')]) # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType, reportAttributeAccessIssue]
+			body: list[ast.stmt] = [ast.FunctionDef(name='workhorse',
+						args=ast.arguments(args=[ast.arg('node', ast.Attribute(ast.Name('ast'), attr='AST'))])
+						, body=[ast.Return(workhorseReturnValue)]
+						, returns=buffaloBuffalo_workhorse_returnsAnnotation) # pyright: ignore[reportUnknownArgumentType]
+					, ast.Return(ast.Name('workhorse'))]
+			returns=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([ast.Attribute(ast.Name('ast'), attr='AST')]), buffaloBuffalo_workhorse_returnsAnnotation])) # pyright: ignore[reportUnknownArgumentType]
+
+
+			del dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum]
+			orelse = [create_ast_stmt()]
 
 		for TypeAliasSubcategory, dictionary_ast_exprType in dictionaryTypeAliasSubcategory.items():
-			continue
+			attributeVersionMinorMinimum: int = dictionary_ast_exprType['attributeVersionMinorMinimum'] # pyright: ignore[reportAssignmentType]
+			decorator_list=[astName_staticmethod]
+			if list_ast_exprType:
+				annotation: ast.expr = ast.BitOr.join(list_ast_exprType) # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType, reportAttributeAccessIssue]
+			else:
+				Z0Z_TypeWithoutNone = eval(dictionary_ast_exprType['ast_exprType']) # pyright: ignore[reportArgumentType]
+				annotation = ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([Z0Z_TypeWithoutNone]), ast.Name('bool')]))
+
+			workhorseReturnValue: ast.BoolOp = ast.BoolOp(op=ast.And(), values=[ast.Call(ast.Name('isinstance'), args=[ast.Name('node'), ast.Name('astClass')], keywords=[])])
+			for node in ast.walk(annotation): # pyright: ignore[reportUnknownArgumentType]
+				if isinstance(node, ast.Subscript) and isinstance(node.value, ast.Name) and node.value.id == 'list' and isinstance(node.slice, ast.BinOp) and isinstance(node.slice.right, ast.Constant) and node.slice.right.value is None:
+					workhorseReturnValue.values.append(ast.Compare(ast.Attribute(ast.Name('node'), attribute)
+													, ops=[ast.NotEq()]
+													, comparators=[ast.List([ast.Constant(None)])]))
+					break
+				if isinstance(node, ast.Constant) and node.value is None:
+					workhorseReturnValue.values.append(ast.Compare(ast.Attribute(ast.Name('node'), attribute)
+													, ops=[ast.IsNot()]
+													, comparators=[ast.Constant(None)]))
+					break
+
+			workhorseReturnValue.values.append(ast.Call(ast.Name('attributeCondition'), args=[ast.Attribute(ast.Name('node'), attribute)]))
+			buffaloBuffalo_workhorse_returnsAnnotation: ast.expr = ast.BitOr.join([ast.Subscript(ast.Name('TypeGuard'), slice=astNameTypeAlias), ast.Name('bool')]) # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType, reportAttributeAccessIssue]
+			body: list[ast.stmt] = [ast.FunctionDef(name='workhorse',
+						args=ast.arguments(args=[ast.arg('node', ast.Attribute(ast.Name('ast'), attr='AST'))])
+						, body=[ast.Return(workhorseReturnValue)]
+						, returns=buffaloBuffalo_workhorse_returnsAnnotation) # pyright: ignore[reportUnknownArgumentType]
+					, ast.Return(ast.Name('workhorse'))]
+			returns=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([ast.Attribute(ast.Name('ast'), attr='AST')]), buffaloBuffalo_workhorse_returnsAnnotation])) # pyright: ignore[reportUnknownArgumentType]
+
+			list4ClassDefBody.append(create_ast_stmt())
+			break
 
 	list4ModuleBody: list[ast.stmt] = [
 			ast.ImportFrom('astToolkit._astTypes', [ast.alias('*')], 0)
@@ -165,7 +246,7 @@ def makeToolDOT():
 					, args=[ast.arg('node', astNameTypeAlias)], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
 					, body=body
 					, decorator_list=decorator_list
-					, returns=returns
+					, returns=returns # pyright: ignore[reportUnknownArgumentType]
 		)
 
 		if attributeVersionMinorMinimum > pythonVersionMinorMinimum:
@@ -173,7 +254,7 @@ def makeToolDOT():
 								, ops=[ast.GtE()]
 								, comparators=[ast.Tuple([ast.Constant(3), ast.Constant(attributeVersionMinorMinimum)])])
 							, body=[ast_stmt]
-							, orelse=orelse
+							, orelse=orelse # pyright: ignore[reportUnknownArgumentType]
 			)
 
 		return ast_stmt
@@ -206,7 +287,7 @@ def makeToolDOT():
 			body: list[ast.stmt] = [ast.Return(ast.Attribute(ast.Name('node'), attribute))]
 			decorator_list=[astName_staticmethod]
 			attributeVersionMinorMinimum: int = min(dictionaryVersionsTypeAliasSubcategory.keys()) # pyright: ignore[reportAssignmentType]
-			returns = ast.BitOr.join(dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum]) # pyright: ignore[reportAttributeAccessIssue]
+			returns: ast.expr = ast.BitOr.join(dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum]) # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType, reportAttributeAccessIssue]
 			del dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum]
 			orelse = [create_ast_stmt()]
 
@@ -215,7 +296,7 @@ def makeToolDOT():
 			body: list[ast.stmt] = [ast.Return(ast.Attribute(ast.Name('node'), attribute))]
 			decorator_list=[astName_staticmethod]
 			if list_ast_exprType:
-				returns = ast.BitOr.join(list_ast_exprType) # pyright: ignore[reportAttributeAccessIssue]
+				returns: ast.expr = ast.BitOr.join(list_ast_exprType) # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType, reportAttributeAccessIssue]
 			else:
 				returns = cast(ast.Attribute, eval(dictionary_ast_exprType['ast_exprType'])) # pyright: ignore[reportArgumentType]
 			list4ClassDefBody.append(create_ast_stmt())
@@ -235,15 +316,15 @@ def makeToolGrab():
 	def create_ast_stmt():
 		ast_stmt = None
 		for attributeVersionMinorMinimum, list_ast_exprType in dictionaryAttribute.items():
-			list_ast_expr4annotation = []
+			list_ast_expr4annotation: list[ast.expr] = []
 			for ast_exprTypeAsStr in list_ast_exprType:
 				ast_exprType = eval(ast_exprTypeAsStr)
 				list_ast_expr4annotation.append(ast.Subscript(ast.Name('Callable'), slice=ast.Tuple([ast.List([ast_exprType]), ast_exprType])))
 
-			ast_expr4annotation = ast.BitOr.join(list_ast_expr4annotation) # pyright: ignore[reportAttributeAccessIssue]
+			ast_expr4annotation: ast.expr = ast.BitOr.join(list_ast_expr4annotation) # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType, reportAttributeAccessIssue]
 
 			ast_stmt = ast.FunctionDef(attribute + 'Attribute'
-				, args=ast.arguments(posonlyargs=[], args=[ast.arg('action', annotation=ast_expr4annotation)], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
+				, args=ast.arguments(posonlyargs=[], args=[ast.arg('action', annotation=ast_expr4annotation)], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[]) # pyright: ignore[reportUnknownArgumentType]
 				, body=[ast.FunctionDef('workhorse'
 						, args=ast.arguments(args=[ast.arg('node', hasDOTTypeAliasName_Load)])
 						, body=[ast.Assign([ast.Attribute(ast.Name('node'), attribute, ast.Store())], value=ast.Call(ast.Name('action'), [ast.Attribute(ast.Name('node'), attribute)])), ast.Return(ast.Name('node'))]
@@ -261,7 +342,7 @@ def makeToolGrab():
 					)]
 				),
 				body=[ast_stmt],
-				orelse=ast_stmtAtPythonMinimum
+				orelse=ast_stmtAtPythonMinimum # pyright: ignore[reportUnknownArgumentType]
 				)
 		assert ast_stmt is not None
 		return ast_stmt
@@ -334,22 +415,22 @@ def makeToolMake():
 def makeTypeAlias():
 	def append_ast_stmtTypeAlias():
 		if len(dictionaryVersions) == 1:
+			# This branch is the simplest case: one TypeAlias for the attribute for all Python versions
 			for versionMinor, listClassAs_astAttribute in dictionaryVersions.items():
-				ast_stmt = ast.AnnAssign(astNameTypeAlias, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in listClassAs_astAttribute]), 1) # pyright: ignore[reportAttributeAccessIssue]
+				ast_stmt = ast.AnnAssign(astNameTypeAlias, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in listClassAs_astAttribute]), 1) # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType, reportAttributeAccessIssue]
 				if versionMinor > pythonVersionMinorMinimum:
 					ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
 								, ops=[ast.GtE()]
 								, comparators=[ast.Tuple([ast.Constant(3),
 										ast.Constant(versionMinor)])])
 								, body=[ast_stmt])
-				# This branch is the simplest case: one TypeAlias for the attribute for all Python versions
 		else:
 			# There is a smart way to do the following, but I don't see it right now. NOTE datacenter has the responsibility to aggregate all values <= pythonVersionMinorMinimum.
 			listVersionsMinor = sorted(dictionaryVersions.keys(), reverse=False)
 			if len(listVersionsMinor) > 2:
 				raise NotImplementedError
-			ast_stmtAtPythonMinimum = ast.AnnAssign(astNameTypeAlias, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in dictionaryVersions[min(listVersionsMinor)]]), 1) # pyright: ignore[reportAttributeAccessIssue]
-			ast_stmtAbovePythonMinimum = ast.AnnAssign(astNameTypeAlias, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in sorted(chain(*dictionaryVersions.values()), key=str.lower)]), 1) # pyright: ignore[reportAttributeAccessIssue]
+			ast_stmtAtPythonMinimum = ast.AnnAssign(astNameTypeAlias, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in dictionaryVersions[min(listVersionsMinor)]]), 1) # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType, reportAttributeAccessIssue]
+			ast_stmtAbovePythonMinimum = ast.AnnAssign(astNameTypeAlias, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in sorted(chain(*dictionaryVersions.values()), key=str.lower)]), 1) # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType, reportAttributeAccessIssue]
 
 			ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
 						, ops=[ast.GtE()]
@@ -399,6 +480,7 @@ def makeTypeAlias():
 
 if __name__ == "__main__":
 	makeToolBe()
+	makeToolClassIsAndAttribute()
 	makeToolDOT()
 	makeToolGrab()
 	makeTypeAlias()

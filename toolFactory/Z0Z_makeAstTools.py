@@ -1,9 +1,10 @@
 from collections.abc import Callable, Sequence
-import typeshed_client.finder
-from toolFactory import FREAKOUT, pathTypeshed, makeTools
 from pathlib import Path
+from toolFactory import FREAKOUT, pathTypeshed
+from toolFactory.astFactory import makeTools
 from typing import Any, TypeAlias as typing_TypeAlias, TypeVar as typing_TypeVar
 import ast
+import typeshed_client.finder
 
 ast_expr_Slice: typing_TypeAlias = ast.expr
 ast_Identifier: typing_TypeAlias = str

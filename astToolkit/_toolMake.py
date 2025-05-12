@@ -1,5 +1,5 @@
 """This file is generated automatically, so changes to this file will be lost."""
-from astToolkit import astDOTTryStar, astDOTParamSpec, astDOTtype_param, astDOTTypeAlias, astDOTTypeVar, astDOTTypeVarTuple
+from astToolkit._types import astDOTTryStar, astDOTParamSpec, astDOTtype_param, astDOTTypeAlias, astDOTTypeVar, astDOTTypeVarTuple
 from astToolkit import ast_Identifier, ast_expr_Slice, intORstr, intORstrORtype_params, intORtype_params, str_nameDOTname
 from collections.abc import Sequence
 from typing import Any, Literal

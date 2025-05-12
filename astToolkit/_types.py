@@ -1,8 +1,20 @@
-from astToolkit import astDOTParamSpec, astDOTTryStar, astDOTtype_param, astDOTTypeAlias, astDOTTypeVar, astDOTTypeVarTuple
 from typing import Any, TypeAlias as typing_TypeAlias, TypeVar as typing_TypeVar
 import ast
+import sys
 
-# TODO understand typing.
+yourPythonIsOld: typing_TypeAlias = Any
+if sys.version_info >= (3, 11):
+    from ast import TryStar as astDOTTryStar
+else:
+    astDOTTryStar: typing_TypeAlias = yourPythonIsOld
+if sys.version_info >= (3, 12):
+    from ast import ParamSpec as astDOTParamSpec, type_param as astDOTtype_param, TypeAlias as astDOTTypeAlias, TypeVar as astDOTTypeVar, TypeVarTuple as astDOTTypeVarTuple
+else:
+    astDOTParamSpec: typing_TypeAlias = yourPythonIsOld
+    astDOTtype_param: typing_TypeAlias = yourPythonIsOld
+    astDOTTypeAlias: typing_TypeAlias = yourPythonIsOld
+    astDOTTypeVar: typing_TypeAlias = yourPythonIsOld
+    astDOTTypeVarTuple: typing_TypeAlias = yourPythonIsOld
 
 # Type hints through TypeAlias or type "hints" through the identifier name.
 ast_expr_Slice: typing_TypeAlias = ast.expr
