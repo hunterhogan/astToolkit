@@ -124,55 +124,70 @@ def makeToolBe():
 	writeClass('Be', list4ClassDefBody, list4ModuleBody)
 
 def makeToolDOT():
+	def create_ast_stmt():
+		ast_stmt = ast.FunctionDef(attribute
+				, args=ast.arguments(posonlyargs=[]
+					, args=[ast.arg('node', astNameTypeAlias)], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
+					, body=body
+					, decorator_list=decorator_list
+					, returns=returns
+		)
+
+		if attributeVersionMinorMinimum > pythonVersionMinorMinimum:
+			ast_stmt = ast.If(ast.Compare(left=ast.Attribute(ast.Name('sys'), 'version_info')
+								, ops=[ast.GtE()]
+								, comparators=[ast.Tuple([ast.Constant(3), ast.Constant(attributeVersionMinorMinimum)])])
+							, body=[ast_stmt]
+							, orelse=orelse
+			)
+
+		return ast_stmt
+
 	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringDOT]
 
 	dictionaryToolElements: dict[str, dict[str, dict[str, int | str]]] = getElementsDOT()
 
 	# Process each attribute group to generate overloaded methods and implementations
-	for attribute, attributeDictionary in dictionaryToolElements.items():
-		# print(attribute)
-		listElementsHARDCODED = ['attribute', 'TypeAliasSubcategory', 'attributeVersionMinorMinimum', 'ast_exprType']
-		for TypeAliasSubcategory, Z0Z_tired in attributeDictionary.items():
-			# print('\t', TypeAliasSubcategory)
-			ast_exprType = cast(ast.Attribute, eval(Z0Z_tired['ast_exprType'])) # pyright: ignore[reportArgumentType]
-			# print('\t\t', ast_exprType)
-			attributeVersionMinorMinimum: int = Z0Z_tired['attributeVersionMinorMinimum'] # pyright: ignore[reportAssignmentType]
-			# print('\t\t', attributeVersionMinorMinimum)
-			# continue
+	for attribute, dictionaryTypeAliasSubcategory in dictionaryToolElements.items():
+		hasDOTIdentifier: str = format_hasDOTIdentifier.format(attribute=attribute)
+		hasDOTTypeAliasName_Load: ast.Name = ast.Name(hasDOTIdentifier)
+		orelse=[]
 
-			ast_stmt = ast.FunctionDef(
-				name=attribute,
-				args=ast.arguments(
-					posonlyargs=[],
-					args=[ast.arg('node', ast.Name('hasDOT' + attribute))],
-					vararg=None,
-					kwonlyargs=[],
-					kw_defaults=[],
-					kwarg=None,
-					defaults=[]
-				),
-				body=[ast.Expr(ast.Constant(value=...))],
-				decorator_list=[astName_staticmethod, astName_overload],
-				returns=ast_exprType
-			)
+		list_ast_exprType: list[ast.expr] = []
+		dictionaryVersionsTypeAliasSubcategory: dict[int, list[ast.expr]] = defaultdict(list)
+		if len(dictionaryTypeAliasSubcategory) > 1:
+			for TypeAliasSubcategory, dictionary_ast_exprType in dictionaryTypeAliasSubcategory.items():
+				attributeVersionMinorMinimum: int = dictionary_ast_exprType['attributeVersionMinorMinimum'] # pyright: ignore[reportAssignmentType]
+				astNameTypeAlias: ast.Name = ast.Name(formatTypeAliasSubcategory.format(hasDOTIdentifier=hasDOTIdentifier, TypeAliasSubcategory=TypeAliasSubcategory))
+				body: list[ast.stmt] = [ast.Expr(ast.Constant(value=...))]
+				decorator_list=[astName_staticmethod, astName_overload]
+				returns = cast(ast.Attribute, eval(dictionary_ast_exprType['ast_exprType'])) # pyright: ignore[reportArgumentType]
+				list_ast_exprType.append(returns)
+				dictionaryVersionsTypeAliasSubcategory[dictionary_ast_exprType['attributeVersionMinorMinimum']].append(returns) # pyright: ignore[reportArgumentType]
+				list4ClassDefBody.append(create_ast_stmt())
 
-			if attributeVersionMinorMinimum > pythonVersionMinorMinimum:
-				ast_stmt = ast.If(test=ast.Compare(
-					left=ast.Attribute(ast.Name('sys'), 'version_info'),
-					ops=[ast.GtE()],
-					comparators=[ast.Tuple(
-						elts=[ast.Constant(3), ast.Constant(attributeVersionMinorMinimum)],
-						ctx=ast.Load()
-					)]
-				),
-				body=[ast_stmt],
-				orelse=[])
+		astNameTypeAlias = hasDOTTypeAliasName_Load
+		if len(dictionaryVersionsTypeAliasSubcategory) > 1:
+			body: list[ast.stmt] = [ast.Return(ast.Attribute(ast.Name('node'), attribute))]
+			decorator_list=[astName_staticmethod]
+			attributeVersionMinorMinimum: int = min(dictionaryVersionsTypeAliasSubcategory.keys()) # pyright: ignore[reportAssignmentType]
+			returns = ast.BitOr.join(dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum]) # pyright: ignore[reportAttributeAccessIssue]
+			del dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum]
+			orelse = [create_ast_stmt()]
 
-			list4ClassDefBody.append(ast_stmt)
+		for TypeAliasSubcategory, dictionary_ast_exprType in dictionaryTypeAliasSubcategory.items():
+			attributeVersionMinorMinimum: int = dictionary_ast_exprType['attributeVersionMinorMinimum'] # pyright: ignore[reportAssignmentType]
+			body: list[ast.stmt] = [ast.Return(ast.Attribute(ast.Name('node'), attribute))]
+			decorator_list=[astName_staticmethod]
+			if list_ast_exprType:
+				returns = ast.BitOr.join(list_ast_exprType) # pyright: ignore[reportAttributeAccessIssue]
+			else:
+				returns = cast(ast.Attribute, eval(dictionary_ast_exprType['ast_exprType'])) # pyright: ignore[reportArgumentType]
+			list4ClassDefBody.append(create_ast_stmt())
+			break
 
-	list4ModuleBody: list[ast.stmt] = [docstringWarning
-			, ast.ImportFrom(module='astToolkit', names=[ast.alias(name='ast_Identifier'), ast.alias(name='ast_expr_Slice'), ast.alias(name='astDOTtype_param')], level=0)
-			, ast.ImportFrom(module='astToolkit._astTypes', names=[ast.alias(name='*')], level=0)
+	list4ModuleBody: list[ast.stmt] = [
+			ast.ImportFrom(module='astToolkit._astTypes', names=[ast.alias(name='*')], level=0)
 			, ast.ImportFrom(module='collections.abc', names=[ast.alias(name='Sequence')], level=0)
 			, ast.ImportFrom(module='typing', names=[ast.alias(name='Any'), ast.alias(name='Literal'), ast.alias(name='overload')], level=0)
 			, ast.Import(names=[ast.alias(name='ast')])
@@ -211,7 +226,8 @@ def makeToolGrab():
 					)]
 				),
 				body=[ast_stmt],
-				orelse=ast_stmtAtPythonMinimum if ast_stmtAtPythonMinimum is not None else [])
+				orelse=ast_stmtAtPythonMinimum
+				)
 		assert ast_stmt is not None
 		return ast_stmt
 
@@ -221,7 +237,7 @@ def makeToolGrab():
 	for attribute, dictionaryAttribute in dictionaryToolElements.items():
 		hasDOTIdentifier: str = format_hasDOTIdentifier.format(attribute=attribute)
 		hasDOTTypeAliasName_Load: ast.Name = ast.Name(hasDOTIdentifier)
-		ast_stmtAtPythonMinimum = None
+		ast_stmtAtPythonMinimum = []
 
 		if len(dictionaryAttribute) > 1:
 			abovePythonMinimum: dict[int, list[str]] = {max(dictionaryAttribute.keys()) : sorted(chain(*dictionaryAttribute.values()), key=str.lower)}
@@ -292,7 +308,6 @@ def makeTypeAlias():
 										ast.Constant(versionMinor)])])
 								, body=[ast_stmt])
 				# This branch is the simplest case: one TypeAlias for the attribute for all Python versions
-				astTypesModule.body.append(ast_stmt)
 		else:
 			# There is a smart way to do the following, but I don't see it right now. NOTE datacenter has the responsibility to aggregate all values <= pythonVersionMinorMinimum.
 			listVersionsMinor = sorted(dictionaryVersions.keys(), reverse=False)
@@ -307,7 +322,7 @@ def makeTypeAlias():
 								ast.Constant(max(listVersionsMinor))])])
 						, body=[ast_stmtAbovePythonMinimum]
 						, orelse=[ast_stmtAtPythonMinimum])
-			astTypesModule.body.append(ast_stmt)
+		astTypesModule.body.append(ast_stmt) # pyright: ignore[reportPossiblyUnboundVariable]
 
 	astTypesModule = ast.Module(
 		body=[docstringWarning
@@ -321,19 +336,19 @@ def makeTypeAlias():
 
 	dictionaryToolElements: dict[str, dict[str, dict[int, list[str]]]] = getElementsTypeAlias()
 
-	for attribute, dictionaryAttribute in dictionaryToolElements.items():
+	for attribute, dictionaryTypeAliasSubcategory in dictionaryToolElements.items():
 		hasDOTIdentifier: str = format_hasDOTIdentifier.format(attribute=attribute)
 		hasDOTTypeAliasName_Store: ast.Name = ast.Name(hasDOTIdentifier, ast.Store())
 
-		if len(dictionaryAttribute) == 1:
+		if len(dictionaryTypeAliasSubcategory) == 1:
 			astNameTypeAlias = hasDOTTypeAliasName_Store
-			for TypeAliasSubcategory, dictionaryVersions in dictionaryAttribute.items():
+			for TypeAliasSubcategory, dictionaryVersions in dictionaryTypeAliasSubcategory.items():
 				append_ast_stmtTypeAlias()
 		else:
 			# See?! Sometimes, I can see a smart way to do things. This defaultdict builds a dictionary to mimic the
 			# process I'm already using to build the TypeAlias.
 			attributeDictionaryVersions: dict[int, list[str]] = defaultdict(list)
-			for TypeAliasSubcategory, dictionaryVersions in dictionaryAttribute.items():
+			for TypeAliasSubcategory, dictionaryVersions in dictionaryTypeAliasSubcategory.items():
 				astNameTypeAlias: ast.Name = ast.Name(formatTypeAliasSubcategory.format(hasDOTIdentifier=hasDOTIdentifier, TypeAliasSubcategory=TypeAliasSubcategory), ast.Store())
 				if any(dictionaryVersions.keys()) <= pythonVersionMinorMinimum:
 					attributeDictionaryVersions[min(dictionaryVersions.keys())].append(ast.dump(astNameTypeAlias))
@@ -348,7 +363,7 @@ def makeTypeAlias():
 	writeModule(astTypesModule, '_astTypes')
 
 if __name__ == "__main__":
-	# makeToolBe()
-	# makeToolDOT()
+	makeToolBe()
+	makeToolDOT()
 	makeToolGrab()
 	makeTypeAlias()
