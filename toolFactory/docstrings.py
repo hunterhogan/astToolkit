@@ -41,6 +41,24 @@ del docstring
 
 docstring: str = (
 	"""
+	Create functions that verify AST nodes by type and attribute conditions.
+	
+	The ClassIsAndAttribute class provides static methods that generate conditional functions for determining if an AST 
+	node is of a specific type AND its attribute meets a specified condition. These functions return TypeGuard-enabled 
+	callables that can be used in conditional statements to narrow node types during code traversal and transformation.
+	
+	Each generated function performs two checks:
+	1. Verifies that the node is of the specified AST type
+	2. Tests if the specified attribute of the node meets a custom condition
+	
+	This enables complex filtering and targeting of AST nodes based on both their type and attribute contents.
+	"""
+)
+ClassDefDocstringClassIsAndAttribute = ast.Expr(ast.Constant(docstring))
+del docstring
+
+docstring: str = (
+	"""
 	Modify specific attributes of AST nodes while preserving the node structure.
 
 	The Grab class provides static methods that create transformation functions to modify specific attributes of AST

@@ -23,6 +23,7 @@ from toolFactory._snippets import (
 
 from toolFactory.datacenter import (
 	getElementsBe as getElementsBe,
+	getElementsClassIsAndAttribute as getElementsClassIsAndAttribute,
 	getElementsDOT as getElementsDOT,
 	getElementsGrab as getElementsGrab,
 	getElementsMake as getElementsMake,

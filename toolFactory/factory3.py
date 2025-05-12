@@ -9,6 +9,7 @@ from toolFactory import (
 	formatTypeAliasSubcategory,
 	fileExtension,
 	getElementsBe,
+	getElementsClassIsAndAttribute,
 	getElementsDOT,
 	getElementsGrab,
 	getElementsMake,
@@ -24,7 +25,7 @@ from toolFactory.factory_annex import (
 	FunctionDefMake_Import,
 	listHandmadeTypeAlias_astTypes,
 )
-from toolFactory.docstrings import ClassDefDocstringBe, ClassDefDocstringGrab, ClassDefDocstringMake, docstringWarning, ClassDefDocstringDOT
+from toolFactory.docstrings import ClassDefDocstringBe, ClassDefDocstringClassIsAndAttribute, ClassDefDocstringGrab, ClassDefDocstringMake, docstringWarning, ClassDefDocstringDOT
 from typing import cast
 from Z0Z_tools import writeStringToHere
 import ast
@@ -45,20 +46,20 @@ def writeModule(astModule: ast.Module, moduleIdentifier: str) -> None:
 	pythonSource: str = ast.unparse(astModule)
 	if 'ClassIsAndAttribute' in moduleIdentifier or 'DOT' in moduleIdentifier or 'Grab' in moduleIdentifier:
 		pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
-	# if 'ClassIsAndAttribute' in moduleIdentifier:
-	# 	listTypeIgnore: list[ast.TypeIgnore] = []
-	# 	tag = '[reportInconsistentOverload]'
-	# 	for attribute in listPylanceErrors:
-	# 		lineno = 0
-	# 		for splitlinesNumber, line in enumerate(pythonSource.splitlines()):
-	# 			# Cycle through the overloads and definitions: effectively keeping the last one, which is the definition.
-	# 			if f"def {attribute}Is" in line:
-	# 				lineno = splitlinesNumber + 1
-	# 		listTypeIgnore.append(ast.TypeIgnore(lineno, tag))
-	# 	astModule = ast.parse(pythonSource)
-	# 	astModule.type_ignores.extend(listTypeIgnore)
-	# 	pythonSource = ast.unparse(astModule)
-	# 	pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
+	if 'ClassIsAndAttribute' in moduleIdentifier:
+		listTypeIgnore: list[ast.TypeIgnore] = []
+		tag = '[reportArgumentType, reportAttributeAccessIssue]'
+		for attribute in listPylanceErrors:
+			lineno = 0
+			for splitlinesNumber, line in enumerate(pythonSource.splitlines()):
+				# Cycle through the overloads and definitions: effectively keeping the last one, which is the definition.
+				if f"def {attribute}Is" in line:
+					lineno = splitlinesNumber + 1
+			listTypeIgnore.append(ast.TypeIgnore(lineno, tag))
+		astModule = ast.parse(pythonSource)
+		astModule.type_ignores.extend(listTypeIgnore)
+		pythonSource = ast.unparse(astModule)
+		pythonSource = "# ruff: noqa: F403, F405\n" + pythonSource
 	if 'Grab' in moduleIdentifier:
 		listTypeIgnore: list[ast.TypeIgnore] = []
 		tag = '[reportArgumentType, reportAttributeAccessIssue]'
@@ -122,6 +123,40 @@ def makeToolBe():
 	]
 
 	writeClass('Be', list4ClassDefBody, list4ModuleBody)
+
+def makeClassIsAndAttribute():
+	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringClassIsAndAttribute]
+
+	dictionaryToolElements: dict[str, dict[str, dict[str, int | str]]] = getElementsClassIsAndAttribute()
+
+	# Process each attribute group to generate overloaded methods and implementations
+	for attribute, dictionaryTypeAliasSubcategory in dictionaryToolElements.items():
+		hasDOTIdentifier: str = format_hasDOTIdentifier.format(attribute=attribute)
+		hasDOTTypeAliasName_Load: ast.Name = ast.Name(hasDOTIdentifier)
+		orelse = []
+
+		list_ast_exprType: list[ast.expr] = []
+		dictionaryVersionsTypeAliasSubcategory: dict[int, list[ast.expr]] = defaultdict(list)
+
+		if len(dictionaryTypeAliasSubcategory) > 1:
+			for TypeAliasSubcategory, dictionary_ast_exprType in dictionaryTypeAliasSubcategory.items():
+				continue
+
+		astNameTypeAlias = hasDOTTypeAliasName_Load
+		if len(dictionaryVersionsTypeAliasSubcategory) > 1:
+			pass
+
+		for TypeAliasSubcategory, dictionary_ast_exprType in dictionaryTypeAliasSubcategory.items():
+			continue
+
+	list4ModuleBody: list[ast.stmt] = [
+			ast.ImportFrom('astToolkit._astTypes', [ast.alias('*')], 0)
+			, ast.ImportFrom('collections.abc', [ast.alias('Callable'), ast.alias('Sequence')], 0)
+			, ast.ImportFrom('typing', [ast.alias(identifier) for identifier in ['Any', 'Literal', 'overload', 'TypeGuard']], 0)
+			, ast.Import([ast.alias('ast')])
+	]
+
+	writeClass('ClassIsAndAttribute', list4ClassDefBody, list4ModuleBody)
 
 def makeToolDOT():
 	def create_ast_stmt():
@@ -312,7 +347,7 @@ def makeTypeAlias():
 			# There is a smart way to do the following, but I don't see it right now. NOTE datacenter has the responsibility to aggregate all values <= pythonVersionMinorMinimum.
 			listVersionsMinor = sorted(dictionaryVersions.keys(), reverse=False)
 			if len(listVersionsMinor) > 2:
-				raise NotImplementedError("Hunter's code can't handle this.")
+				raise NotImplementedError
 			ast_stmtAtPythonMinimum = ast.AnnAssign(astNameTypeAlias, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in dictionaryVersions[min(listVersionsMinor)]]), 1) # pyright: ignore[reportAttributeAccessIssue]
 			ast_stmtAbovePythonMinimum = ast.AnnAssign(astNameTypeAlias, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in sorted(chain(*dictionaryVersions.values()), key=str.lower)]), 1) # pyright: ignore[reportAttributeAccessIssue]
 

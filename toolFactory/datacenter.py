@@ -94,6 +94,9 @@ def getElementsBe(deprecated: bool = False, versionMinorMaximum: int | None = No
 
 	return dataframe.to_dict(orient='records')  # pyright: ignore[reportReturnType]
 
+def getElementsClassIsAndAttribute(deprecated: bool = False, versionMinorMaximum: int | None = None) -> dict[str, dict[str, dict[str, int | str]]]:
+	return getElementsDOT(deprecated, versionMinorMaximum)
+
 def getElementsDOT(deprecated: bool = False, versionMinorMaximum: int | None = None) -> dict[str, dict[str, dict[str, int | str]]]:
 	listElementsHARDCODED = ['attribute', 'TypeAliasSubcategory', 'attributeVersionMinorMinimum', 'ast_exprType']
 	listElements = listElementsHARDCODED
