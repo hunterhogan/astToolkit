@@ -1,7 +1,6 @@
 from toolFactory import pathFilenameDatabaseAST, pythonVersionMinorMinimum
-from typing import Any, cast
+from typing import Any
 import pandas
-import toolz
 
 cc=[
 'ClassDefIdentifier',
@@ -87,7 +86,7 @@ def getElementsBe(deprecated: bool = False, versionMinorMaximum: int | None = No
 
 	# TODO after changing the dataframe storage from csv to something smart, make this check smarter
 	# match str(dataframe[sortOn].dtype):
-	dataframe = dataframe.iloc[dataframe['ClassDefIdentifier'].astype(str).str.lower().argsort()]
+	dataframe = dataframe.iloc[dataframe['ClassDefIdentifier'].astype(str).str.lower().argsort()] # pyright: ignore[reportUnknownMemberType]
 
 	# Select the requested columns, in the specified order
 	dataframe = dataframe[listElements]
@@ -126,17 +125,25 @@ def getElementsDOT(deprecated: bool = False, versionMinorMaximum: int | None = N
 
 	dataframe = dataframe[listElements].drop_duplicates()
 
-	listRows = dataframe.values.tolist() # pyright: ignore[reportUnknownMemberType, reportUnknownVariableType]
 	dictionaryAttribute: dict[str, dict[str, dict[str, int | str]]] = {}
-	for attribute, listRowsByAttribute in toolz.groupby(lambda row: row[0], listRows).items(): # pyright: ignore[reportUnknownArgumentType, reportUnknownLambdaType, reportUnknownMemberType, reportUnknownVariableType]
-		dictionaryTypeAliasSubcategory: dict[str, dict[str, int | str]] = {}
-		for typeAliasSubcategory, listRowsByTypeAliasSubcategory in toolz.groupby(lambda row: row[1], listRowsByAttribute).items(): # pyright: ignore[reportUnknownArgumentType, reportUnknownLambdaType, reportUnknownMemberType, reportUnknownVariableType]
-			rowMinimum = min(listRowsByTypeAliasSubcategory, key=lambda row: row[2]) # pyright: ignore[reportUnknownLambdaType, reportUnknownArgumentType, reportUnknownVariableType]
-			dictionaryTypeAliasSubcategory[typeAliasSubcategory] = {
-				'attributeVersionMinorMinimum': rowMinimum[2],
-				'ast_exprType': rowMinimum[3]
+	for _elephino, row in dataframe.iterrows(): # pyright: ignore[reportUnknownMemberType, reportUnknownVariableType]
+		attributeKey = str(row['attribute']) # pyright: ignore[reportUnknownArgumentType]
+		typeAliasKey = str(row['TypeAliasSubcategory']) # pyright: ignore[reportUnknownArgumentType]
+		attributeVersionMinorMinimum = row['attributeVersionMinorMinimum'] # pyright: ignore[reportUnknownVariableType]
+		astExprType = row['ast_exprType'] # pyright: ignore[reportUnknownVariableType]
+		if attributeKey not in dictionaryAttribute:
+			dictionaryAttribute[attributeKey] = {}
+		if typeAliasKey not in dictionaryAttribute[attributeKey]:
+			dictionaryAttribute[attributeKey][typeAliasKey] = {
+				'attributeVersionMinorMinimum': attributeVersionMinorMinimum,
+				'ast_exprType': astExprType
 			}
-		dictionaryAttribute[attribute] = dictionaryTypeAliasSubcategory
+		else:
+			if attributeVersionMinorMinimum < dictionaryAttribute[attributeKey][typeAliasKey]['attributeVersionMinorMinimum']:
+				dictionaryAttribute[attributeKey][typeAliasKey] = {
+					'attributeVersionMinorMinimum': attributeVersionMinorMinimum,
+					'ast_exprType': astExprType
+				}
 	return dictionaryAttribute
 
 def getElementsGrab(deprecated: bool = False, versionMinorMaximum: int | None = None) -> dict[str, dict[int, list[str]]]:
@@ -256,15 +263,13 @@ def getElementsTypeAlias(deprecated: bool = False, versionMinorMaximum: int | No
 
 	dataframe = dataframe[listElements].drop_duplicates()
 
-	listRows: list[list[str | int]] = dataframe.values.tolist() # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
 	dictionaryAttribute: dict[str, dict[str, dict[int, list[str]]]] = {}
-	for attribute, listRowsByAttribute in toolz.groupby(lambda row: row[0], listRows).items(): # pyright: ignore[reportUnknownLambdaType, reportUnknownMemberType, reportUnknownVariableType]
-		dictionaryTypeAliasSubcategory: dict[str, dict[int, list[str]]] = {}
-		for typeAliasSubcategory, listRowsByTypeAliasSubcategory in toolz.groupby(lambda row: row[1], listRowsByAttribute).items(): # pyright: ignore[reportUnknownArgumentType, reportUnknownLambdaType, reportUnknownMemberType, reportUnknownVariableType]
-			dictionaryAttributeVersionMinorMinimum: dict[int, list[str]] = {}
-			for attributeVersionMinorMinimum, listRowsByAttributeVersionMinorMinimum in toolz.groupby(lambda row: row[2], listRowsByTypeAliasSubcategory).items(): # pyright: ignore[reportUnknownArgumentType, reportUnknownLambdaType, reportUnknownMemberType, reportUnknownVariableType]
-				listClassDefIdentifier: list[str] = [row[3] for row in listRowsByAttributeVersionMinorMinimum] # pyright: ignore[reportUnknownVariableType]
-				dictionaryAttributeVersionMinorMinimum[attributeVersionMinorMinimum] = listClassDefIdentifier
-			dictionaryTypeAliasSubcategory[typeAliasSubcategory] = dictionaryAttributeVersionMinorMinimum
-		dictionaryAttribute[attribute] = dictionaryTypeAliasSubcategory
+	grouped = dataframe.groupby(['attribute', 'TypeAliasSubcategory', 'attributeVersionMinorMinimum']) # pyright: ignore[reportUnknownMemberType, reportUnknownVariableType]
+	for (attribute, typeAliasSubcategory, attributeVersionMinorMinimum), group in grouped: # pyright: ignore[reportUnknownVariableType]
+		listClassDefIdentifier = sorted(group['classAs_astAttribute'].unique(), key=lambda x: str(x).lower()) # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]
+		if attribute not in dictionaryAttribute:
+			dictionaryAttribute[attribute] = {}
+		if typeAliasSubcategory not in dictionaryAttribute[attribute]:
+			dictionaryAttribute[attribute][typeAliasSubcategory] = {}
+		dictionaryAttribute[attribute][typeAliasSubcategory][attributeVersionMinorMinimum] = listClassDefIdentifier
 	return dictionaryAttribute
