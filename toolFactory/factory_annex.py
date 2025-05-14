@@ -68,8 +68,7 @@ for string in listStrRepresentationsOfTypeAlias:
 			listHandmadeTypeAlias_astTypes.append(node)
 
 # ww='''
-# if sys.version_info >= (3, 12):
-# 	"ImaBody"
+# listElementsHARDCODED = ['attribute', 'TypeAliasSubcategory', 'attributeVersionMinorMinimum', 'classAs_astAttribute']
 # '''
 
 # print(ast.dump(ast.parse(ww, type_comments=True), indent=4))

@@ -3,32 +3,7 @@ from typing import Any
 import pandas
 
 cc=[
-'ClassDefIdentifier',
-'versionMajor',
-'versionMinor',
-'versionMicro',
-'base',
-'deprecated',
-'base_typing_TypeAlias',
-'fieldRename',
-'typeC',
-'typeStub',
-'type_field_type',
-'typeStub_typing_TypeAlias',
-'list2Sequence',
-'defaultValue',
-'keywordArguments',
-'kwargAnnotation',
-'keywordArgumentsDefaultValue',
-'classAs_astAttribute',
-'classVersionMinorMinimum',
-'attribute',
-'attributeKind',
-'attributeVersionMinorMinimum',
-'TypeAliasSubcategory',
-'type',
-'ast_exprType',
-'ast_arg',
+'ClassDefIdentifier','versionMajor','versionMinor','versionMicro','base','deprecated','base_typing_TypeAlias','fieldRename','typeC','typeStub','type_field_type','typeStub_typing_TypeAlias','list2Sequence','defaultValue','keywordArguments','kwargAnnotation','keywordArgumentsDefaultValue','classAs_astAttribute','classVersionMinorMinimum','attribute','attributeKind','attributeVersionMinorMinimum','TypeAliasSubcategory','type','ast_exprType','ast_arg','match_args','match_argsVersionMinorMinimum',
 ]
 
 def getDataframe() -> pandas.DataFrame:
@@ -203,6 +178,27 @@ def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = 
 			A list of dictionaries with element:value pairs.
 	"""
 
+	"""
+	Only ast class with parameters that can be set in the constructor. (__init__ method), which should mean I can filter out 'attributeKind' == 'No'.
+	Approximately 40 methods in `Make` will only have the four `_attribute` attributes. Instead of treating those as `**keywordArguments`, I could make them args with default values.
+	The same top-level order as getElementsBe
+
+	AsyncFunctionDef,-1,-1
+	AsyncFunctionDef,-1,12
+	ClassDef,-1,-1
+	ClassDef,-1,12
+	FunctionDef,-1,-1
+	FunctionDef,-1,12
+
+	ParamSpec,12,12
+	ParamSpec,12,13
+	TypeVar,12,12
+	TypeVar,12,13
+	TypeVarTuple,12,12
+	TypeVarTuple,12,13
+
+	"""
+
 	listElementsHARDCODED = ['ClassDefIdentifier', 'classAs_astAttribute', 'classVersionMinorMinimum']
 	mm=['attributeVersionMinorMinimum', 'ast_arg']
 	listElements = listElementsHARDCODED
@@ -273,3 +269,13 @@ def getElementsTypeAlias(deprecated: bool = False, versionMinorMaximum: int | No
 			dictionaryAttribute[attribute][typeAliasSubcategory] = {}
 		dictionaryAttribute[attribute][typeAliasSubcategory][attributeVersionMinorMinimum] = listClassDefIdentifier
 	return dictionaryAttribute
+
+# dataframe = getDataframe()
+# dataframe = dataframe.reset_index()
+# listElementsHARDCODED = ['ClassDefIdentifier', 'classVersionMinorMinimum', 'attribute', 'attributeVersionMinorMinimum']
+# listElementsHARDCODED = ['ClassDefIdentifier', 'classVersionMinorMinimum', 'attributeVersionMinorMinimum']
+# listElements = listElementsHARDCODED
+# dataframe = dataframe.sort_values(['ClassDefIdentifier'])
+# dataframe = dataframe[listElements].drop_duplicates()
+# print(dataframe.to_csv(index=False))
+# print(dataframe)

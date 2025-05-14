@@ -374,6 +374,13 @@ def makeToolGrab():
 	writeClass('Grab', list4ClassDefBody, list4ModuleBody)
 
 def makeToolMake():
+	"""
+	Sort FunctionDef by ast class, case-insensitive.
+	For each FunctionDef, sort the argument specification to match the order of the class __init__ method.
+	When calling the class __init__ method,
+		1. use `ast.Call.keywords: list[keywords]` not ast.Call.args: list[args]
+		2. Nevertheless, sort the arguments in the order of the class __init__ method.
+	"""
 	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringMake]
 
 	listDictionaryToolElements = getElementsMake()
@@ -482,5 +489,5 @@ if __name__ == "__main__":
 	makeToolClassIsAndAttribute()
 	makeToolDOT()
 	makeToolGrab()
-	# makeToolMake()
+	makeToolMake()
 	makeTypeAlias()
