@@ -66,10 +66,3 @@ for string in listStrRepresentationsOfTypeAlias:
 	for node in ast.iter_child_nodes(astModule):
 		if isinstance(node, ast.AnnAssign):
 			listHandmadeTypeAlias_astTypes.append(node)
-
-# ww='''
-# listElementsHARDCODED = ['attribute', 'TypeAliasSubcategory', 'attributeVersionMinorMinimum', 'classAs_astAttribute']
-# '''
-
-# print(ast.dump(ast.parse(ww, type_comments=True), indent=4))
-# from ast import *

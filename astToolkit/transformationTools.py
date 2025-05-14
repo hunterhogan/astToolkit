@@ -1,4 +1,5 @@
 from astToolkit import (
+	NodeORattribute,
 	ast_Identifier,
 	Be,
 	ClassIsAndAttribute,
@@ -15,13 +16,29 @@ from astToolkit import (
 	个,
 )
 from autoflake import fix_code as autoflake_fix_code
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Mapping, Sequence
 from copy import deepcopy
 from os import PathLike
 from pathlib import PurePath
 from typing import Any, cast, overload
 from Z0Z_tools import writeStringToHere
 import ast
+
+# TODO Some `DOT` methods return lists, notably DOT.targets, which is an attribute of ast.Assign.
+# But, none or almost none of the other functions and methods accept a list as input.
+# This is most obviously a problem in `ClassIsAndAttribute.targetsIs` because the user needs to pass
+# a function that can take list[ast.expr] as a parameter.
+# I don't know if the following works, but it is interesting.
+# ClassIsAndAttribute.targetsIs(ast.Assign, lambda list_expr: any([IfThis.isSubscript_Identifier('foldGroups')(node) for node in list_expr]))
+
+class cleverNamePrototype:
+    @staticmethod
+    def index(at: int) -> Callable[[Sequence[NodeORattribute]], NodeORattribute]:
+        def workhorse(zzz: Sequence[NodeORattribute]) -> NodeORattribute:
+            node = zzz[at]
+			# slice?
+            return node
+        return workhorse
 
 def makeDictionaryFunctionDef(module: ast.Module) -> dict[ast_Identifier, ast.FunctionDef]:
 	"""

@@ -1,7 +1,7 @@
 from pathlib import PurePosixPath
 from string import ascii_letters
 from toolFactory import fileExtension, pathPackage, str_nameDOTname, sys_version_infoTarget
-from toolFactory.Z0Z_hardcoded import keywordArgumentsIdentifier, listASTClassesPostPythonVersionMinimum
+from toolFactory.Z0Z_hardcoded import keywordArgumentsIdentifier
 from toolFactory._snippets import astName_overload, astName_staticmethod, astName_typing_TypeAlias
 from toolFactory.factory_annex import (
 	FunctionDefMake_Attribute,
@@ -55,6 +55,12 @@ TODO protect against AttributeError (I guess) in DOT, Grab, and ClassIsAndAttrib
 class AnnotationsAndDefs(TypedDict):
 	astAnnotation: ast.expr
 	listClassDefIdentifier: list[str | str_nameDOTname]
+
+
+listASTClassesPostPythonVersionMinimumHARDCODED: list[str] = ['astDOTParamSpec', 'astDOTTryStar', 'astDOTTypeAlias', 'astDOTTypeVar', 'astDOTTypeVarTuple', 'astDOTtype_param']
+
+
+listASTClassesPostPythonVersionMinimum = listASTClassesPostPythonVersionMinimumHARDCODED
 
 class MakeDictionaryOf_astClassAnnotations(ast.NodeVisitor):
 	def __init__(self, astAST: ast.AST) -> None:
@@ -572,3 +578,9 @@ def makeTools(astStubFile: ast.AST) -> None:
 		)
 		, moduleIdentifierPrefix + ClassDef.name)
 	del ClassDef
+
+
+listASTSubclassesHARDCODED: list[str] = ['_Slice', 'AST', 'binaryop', 'boolop', 'cmpop', 'excepthandler', 'expr_context', 'expr', 'mod', 'operator', 'pattern', 'stmt', 'type_ignore', 'type_param', 'unaryop',]
+
+
+listASTSubclasses = listASTSubclassesHARDCODED

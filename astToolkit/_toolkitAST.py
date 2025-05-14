@@ -113,6 +113,7 @@ def parsePathFilename2astModule(pathFilename: PathLike[Any] | PurePath, mode: Li
 	"""
 	return ast.parse(Path(pathFilename).read_text(), mode)
 
+# TODO this is cool, but I need to learn how to properly add it to the classes so the type checker knows what to do with it. Note the use of setattr! grr!
 def joinOperatorExpressions(operatorClass: type[ast.operator], expressions: Iterable[ast.expr]) -> ast.expr:
 	"""
 	Join AST expressions with a specified operator into a nested BinOp structure.

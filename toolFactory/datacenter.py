@@ -178,30 +178,61 @@ def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = 
 			A list of dictionaries with element:value pairs.
 	"""
 
+	listElementsHARDCODED = [
+		'ClassDefIdentifier',
+		'attribute',
+		'fieldRename',
+		'attributeKind',
+		'ast_arg',
+		'defaultValue',
+		'classAs_astAttribute',
+		'classVersionMinorMinimum',
+		'attributeVersionMinorMinimum',
+		'keywordArguments',
+		'kwargAnnotation',
+		'match_args',
+		'match_argsVersionMinorMinimum',
+	]
+	listElements = listElementsHARDCODED
+
 	"""
 	Only ast class with parameters that can be set in the constructor. (__init__ method), which should mean I can filter out 'attributeKind' == 'No'.
 	Approximately 40 methods in `Make` will only have the four `_attribute` attributes. Instead of treating those as `**keywordArguments`, I could make them args with default values.
 	The same top-level order as getElementsBe
+	"""
 
-	AsyncFunctionDef,-1,-1
-	AsyncFunctionDef,-1,12
-	ClassDef,-1,-1
-	ClassDef,-1,12
-	FunctionDef,-1,-1
-	FunctionDef,-1,12
+	"""What to return, identifiers for the return are tentative.
+	ClassDefIdentifier
+	list_ast_arg: list[str] if `keywordArguments` is False, add `ast_arg` in the order of 'match_args'
+	kwarg: str, if `keywordArguments` is True, add `kwargAnnotation` to `list_kwargAnnotation`; later, get unique values and `'OR'.join(list_kwargAnnotation)`
+	defaults: list[str] = if `keywordArguments` is False, add `defaultValue` in the order of 'match_args'
 
-	ParamSpec,12,12
-	ParamSpec,12,13
-	TypeVar,12,12
-	TypeVar,12,13
-	TypeVarTuple,12,12
-	TypeVarTuple,12,13
+	classAs_astAttribute
+	listCall_args: list[tuple(str, str)] ('attribute', if `keywordArguments` is False, 'fieldRename' | if `keywordArguments` is True and there is a 'defaultValue', then 'defaultValue' | 'attribute')
+	'keywordArguments'
+
+	classVersionMinorMinimum: more than one if applicable, and with different values for some of the above returns; we should create the code to handle:
+		class,classVersionMinorMinimum,match_argsVersionMinorMinimum
+		AsyncFunctionDef,-1,-1
+		AsyncFunctionDef,-1,12
+		ClassDef,-1,-1
+		ClassDef,-1,12
+		FunctionDef,-1,-1
+		FunctionDef,-1,12
+
+	match_argsVersionMinorMinimum: more than one if applicable, and with different values for some of the above returns; certainly applies to:
+		class,classVersionMinorMinimum,match_argsVersionMinorMinimum
+		ParamSpec,12,12
+		ParamSpec,12,13
+		TypeVar,12,12
+		TypeVar,12,13
+		TypeVarTuple,12,12
+		TypeVarTuple,12,13
 
 	"""
 
-	listElementsHARDCODED = ['ClassDefIdentifier', 'classAs_astAttribute', 'classVersionMinorMinimum']
-	mm=['attributeVersionMinorMinimum', 'ast_arg']
-	listElements = listElementsHARDCODED
+
+	# TODO switch from csv to pickle, use dtype in the dataframe
 
 	dataframe = getDataframe()
 
@@ -269,13 +300,3 @@ def getElementsTypeAlias(deprecated: bool = False, versionMinorMaximum: int | No
 			dictionaryAttribute[attribute][typeAliasSubcategory] = {}
 		dictionaryAttribute[attribute][typeAliasSubcategory][attributeVersionMinorMinimum] = listClassDefIdentifier
 	return dictionaryAttribute
-
-# dataframe = getDataframe()
-# dataframe = dataframe.reset_index()
-# listElementsHARDCODED = ['ClassDefIdentifier', 'classVersionMinorMinimum', 'attribute', 'attributeVersionMinorMinimum']
-# listElementsHARDCODED = ['ClassDefIdentifier', 'classVersionMinorMinimum', 'attributeVersionMinorMinimum']
-# listElements = listElementsHARDCODED
-# dataframe = dataframe.sort_values(['ClassDefIdentifier'])
-# dataframe = dataframe[listElements].drop_duplicates()
-# print(dataframe.to_csv(index=False))
-# print(dataframe)

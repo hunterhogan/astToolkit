@@ -3,11 +3,11 @@ from itertools import chain
 from pathlib import PurePosixPath
 from toolFactory import (
 	astName_overload,
-	format_hasDOTIdentifier,
 	astName_staticmethod,
 	astName_typing_TypeAlias,
-	formatTypeAliasSubcategory,
 	fileExtension,
+	format_hasDOTIdentifier,
+	formatTypeAliasSubcategory,
 	getElementsBe,
 	getElementsClassIsAndAttribute,
 	getElementsDOT,
@@ -15,17 +15,18 @@ from toolFactory import (
 	getElementsMake,
 	getElementsTypeAlias,
 	keywordArgumentsIdentifier,
+	listPylanceErrors,
 	pathPackage,
 	pythonVersionMinorMinimum,
+	toolMakeFunctionDefReturnCall_keywords,
 	)
-from toolFactory.Z0Z_hardcoded import listPylanceErrors
 from toolFactory.factory_annex import (
 	FunctionDefGrab_andDoAllOf,
 	FunctionDefMake_Attribute,
 	FunctionDefMake_Import,
 	listHandmadeTypeAlias_astTypes,
 )
-from toolFactory.docstrings import ClassDefDocstringBe, ClassDefDocstringClassIsAndAttribute, ClassDefDocstringGrab, ClassDefDocstringMake, docstringWarning, ClassDefDocstringDOT
+from toolFactory.docstrings import ClassDefDocstringBe, ClassDefDocstringClassIsAndAttribute, ClassDefDocstringGrab, ClassDefDocstringMake, ClassDefDocstringDOT, docstringWarning
 from typing import cast
 from Z0Z_tools import writeStringToHere
 import ast
@@ -142,7 +143,7 @@ def makeToolClassIsAndAttribute():
 	for attribute, dictionaryTypeAliasSubcategory in dictionaryToolElements.items():
 		hasDOTIdentifier: str = format_hasDOTIdentifier.format(attribute=attribute)
 		hasDOTTypeAliasName_Load: ast.Name = ast.Name(hasDOTIdentifier)
-		orelse = []
+		orelse: list[ast.stmt] = []
 
 		list_ast_exprType: list[ast.expr] = []
 		dictionaryVersionsTypeAliasSubcategory: dict[int, list[ast.expr]] = defaultdict(list)
@@ -166,7 +167,7 @@ def makeToolClassIsAndAttribute():
 		astNameTypeAlias = hasDOTTypeAliasName_Load
 		if len(dictionaryVersionsTypeAliasSubcategory) > 1:
 			attributeVersionMinorMinimum: int = min(dictionaryVersionsTypeAliasSubcategory.keys()) # pyright: ignore[reportAssignmentType]
-			decorator_list=[astName_staticmethod]
+			decorator_list: list[ast.expr] = [astName_staticmethod]
 
 			annotation: ast.expr = ast.BitOr.join(dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum]) # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType, reportAttributeAccessIssue]
 			workhorseReturnValue: ast.BoolOp = ast.BoolOp(op=ast.And(), values=[ast.Call(ast.Name('isinstance'), args=[ast.Name('node'), ast.Name('astClass')], keywords=[])])
@@ -266,7 +267,7 @@ def makeToolDOT():
 	for attribute, dictionaryTypeAliasSubcategory in dictionaryToolElements.items():
 		hasDOTIdentifier: str = format_hasDOTIdentifier.format(attribute=attribute)
 		hasDOTTypeAliasName_Load: ast.Name = ast.Name(hasDOTIdentifier)
-		orelse=[]
+		orelse: list[ast.stmt] = []
 
 		list_ast_exprType: list[ast.expr] = []
 		dictionaryVersionsTypeAliasSubcategory: dict[int, list[ast.expr]] = defaultdict(list)
@@ -284,7 +285,7 @@ def makeToolDOT():
 		astNameTypeAlias = hasDOTTypeAliasName_Load
 		if len(dictionaryVersionsTypeAliasSubcategory) > 1:
 			body: list[ast.stmt] = [ast.Return(ast.Attribute(ast.Name('node'), attribute))]
-			decorator_list=[astName_staticmethod]
+			decorator_list: list[ast.expr] = [astName_staticmethod]
 			attributeVersionMinorMinimum: int = min(dictionaryVersionsTypeAliasSubcategory.keys()) # pyright: ignore[reportAssignmentType]
 			returns: ast.expr = ast.BitOr.join(dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum]) # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType, reportAttributeAccessIssue]
 			del dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum]
@@ -352,7 +353,7 @@ def makeToolGrab():
 	for attribute, dictionaryAttribute in dictionaryToolElements.items():
 		hasDOTIdentifier: str = format_hasDOTIdentifier.format(attribute=attribute)
 		hasDOTTypeAliasName_Load: ast.Name = ast.Name(hasDOTIdentifier)
-		ast_stmtAtPythonMinimum = []
+		ast_stmtAtPythonMinimum: list[ast.stmt] = []
 
 		if len(dictionaryAttribute) > 1:
 			abovePythonMinimum: dict[int, list[str]] = {max(dictionaryAttribute.keys()) : sorted(chain(*dictionaryAttribute.values()), key=str.lower)}
@@ -375,11 +376,21 @@ def makeToolGrab():
 
 def makeToolMake():
 	"""
-	Sort FunctionDef by ast class, case-insensitive.
-	For each FunctionDef, sort the argument specification to match the order of the class __init__ method.
-	When calling the class __init__ method,
+	Sort FunctionDef by ast class, case-insensitive. For each FunctionDef, sort the argument specification to match the
+	order of the class __init__ method. When calling the class __init__ method,
 		1. use `ast.Call.keywords: list[keywords]` not ast.Call.args: list[args]
 		2. Nevertheless, sort the arguments in the order of the class __init__ method.
+	There are two tiers I need to fill: my FunctionDef argument specification and the ast constructor in the return.
+	FunctionDef arguments:
+		args: list[ast.arg] the parameter and its annotation
+		defaults: list[ast.expr] if a parameter has a default value, the default value goes here because of course! that
+		is completely logical.
+		kwarg: ast.arg, if there is a `**keywordArguments` catchall, then its identifier and annotation go here. The
+		annotation is built from database values.
+	ast constructor:
+		args: list[ast.expr] is this a list of ast.arg? no. is this an argument specification? no, don't be silly! just
+		because they have the same name and serve similar purposes, they don't act the same: that would be logical.
+		keywords: this is the corresponding setting for `kwarg`, of course. what else would it be?!
 	"""
 	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringMake]
 
@@ -387,17 +398,29 @@ def makeToolMake():
 
 	for dictionaryToolElements in listDictionaryToolElements:
 		ClassDefIdentifier = cast(str, dictionaryToolElements['ClassDefIdentifier'])
+		listFunctionDef_args: list[ast.arg] = []
+		kwarg: ast.arg | None = None
+		defaults: list[ast.expr] = []
+
 		classAs_astAttribute = cast(ast.Attribute, eval(dictionaryToolElements['classAs_astAttribute']))
+		listCall_args: list[ast.expr] = []
+		if True:
+			keywords: list[ast.keyword] = []
+		else:
+			keywords = toolMakeFunctionDefReturnCall_keywords
+
 		classVersionMinorMinimum: int = dictionaryToolElements['classVersionMinorMinimum']
+		match_argsVersionMinorMinimum: int = dictionaryToolElements['match_argsVersionMinorMinimum']
 
-		list4FunctionDef_args_args: list[ast.arg] = []
+		# if attribute == 'Attribute'
+		# FunctionDefMake_Attribute
+		# if attribute == 'Import'
+		# FunctionDefMake_Import
 
-		keywordArguments_ast_arg=None
-		keywordArguments_ast_keyword = None
 		ast_stmt = ast.FunctionDef(
 			name=ClassDefIdentifier
-			, args=ast.arguments(posonlyargs=[], args=list4FunctionDef_args_args, vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=keywordArguments_ast_arg, defaults=[])
-			, body=[ast.Return(value=ast.Call(classAs_astAttribute, args=[], keywords=[keywordArguments_ast_keyword] if keywordArguments_ast_keyword else []))]
+			, args=ast.arguments(posonlyargs=[], args=listFunctionDef_args, vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=kwarg, defaults=defaults)
+			, body=[ast.Return(ast.Call(classAs_astAttribute, args=listCall_args, keywords=keywords))]
 			, decorator_list=[astName_staticmethod]
 			, returns=classAs_astAttribute)
 
@@ -411,7 +434,9 @@ def makeToolMake():
 		list4ClassDefBody.append(ast_stmt)
 
 	list4ModuleBody: list[ast.stmt] = [
-		ast.ImportFrom('typing', [ast.alias('TypeGuard')], 0)
+		ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in ['intORstr', 'intORstrORtype_params', 'intORtype_params', 'str_nameDOTname']], 0)
+		, ast.ImportFrom('collections.abc', [ast.alias('Sequence')], 0)
+		, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('Literal')], 0)
 		, ast.Import([ast.alias('ast')])
 		, ast.Import([ast.alias('sys')])
 		]

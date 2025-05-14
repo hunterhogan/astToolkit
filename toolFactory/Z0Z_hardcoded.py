@@ -1,5 +1,5 @@
-from pathlib import Path
 from collections.abc import Iterable
+from pathlib import Path
 from typing import TypeAlias as typing_TypeAlias
 import ast
 
@@ -9,12 +9,6 @@ str_nameDOTname: typing_TypeAlias = str
 pythonVersionMinorMinimum: int = 10
 sys_version_infoMinimum: tuple[int, int] = (3, 10)
 sys_version_infoTarget: tuple[int, int] = (3, 13)
-
-listASTClassesPostPythonVersionMinimumHARDCODED: list[str] = ['astDOTParamSpec', 'astDOTTryStar', 'astDOTTypeAlias', 'astDOTTypeVar', 'astDOTTypeVarTuple', 'astDOTtype_param']
-listASTClassesPostPythonVersionMinimum = listASTClassesPostPythonVersionMinimumHARDCODED
-
-listASTSubclassesHARDCODED: list[str] = ['_Slice', 'AST', 'binaryop', 'boolop', 'cmpop', 'excepthandler', 'expr_context', 'expr', 'mod', 'operator', 'pattern', 'stmt', 'type_ignore', 'type_param', 'unaryop',]
-listASTSubclasses = listASTSubclassesHARDCODED
 
 class FREAKOUT(Exception):
 	pass
@@ -28,7 +22,6 @@ keywordArgumentsIdentifier: str = 'keywordArguments'
 pathRoot = Path('/apps') / packageName
 pathPackage = pathRoot / packageName
 pathToolFactory = pathRoot / 'toolFactory'
-pathTypeshed = pathRoot / 'typeshed' / 'stdlib'
 
 pathFilenameDatabaseAST = pathToolFactory / 'databaseAST.csv'
 
@@ -88,3 +81,10 @@ for element in ImaIterable[1:]:
 joinedBinOp = ast.BitOr.join(ImaIterable)  # Creates the nested structure for a | b | c
 joinedAdd = ast.Add.join(ImaIterable)      # Creates the nested structure for a + b + c
 """
+
+# ww='''
+# listElementsHARDCODED = ['attribute', 'TypeAliasSubcategory', 'attributeVersionMinorMinimum', 'classAs_astAttribute']
+# '''
+
+# print(ast.dump(ast.parse(ww, type_comments=True), indent=4))
+# from ast import *
