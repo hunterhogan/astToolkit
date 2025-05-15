@@ -1,7 +1,9 @@
+from ast import BitOr
 from collections.abc import Iterable
 from pathlib import Path
 from typing import TypeAlias as typing_TypeAlias
 import ast
+import pandas
 
 ast_Identifier: typing_TypeAlias = str
 str_nameDOTname: typing_TypeAlias = str
@@ -23,7 +25,8 @@ pathRoot = Path('/apps') / packageName
 pathPackage = pathRoot / packageName
 pathToolFactory = pathRoot / 'toolFactory'
 
-pathFilenameDatabaseAST = pathToolFactory / 'databaseAST.csv'
+pathFilenameDataframeAST = pathToolFactory / 'dataframeAST.parquet'
+pathFilenameDatacenterTyping = pathToolFactory / 'datacenter.pyi'
 
 fileExtension: str = '.py'
 
@@ -66,6 +69,34 @@ def operatorJoinMethod(cls: type[ast.operator], expressions: Iterable[ast.expr])
 
 for operatorSubclass in ast.operator.__subclasses__():
     setattr(operatorSubclass, 'join', classmethod(operatorJoinMethod))
+
+
+# ast.BinOp.join = classmethod(operatorJoinMethod)
+# ast.BitOr.join = classmethod(operatorJoinMethod)  # Add join method specifically for ast.BitOr
+# class BitOr(ast.BitOr):
+# 	"""Custom BitOr class with a join method."""
+# 	@classmethod
+# 	def join(cls, expressions: Iterable[ast.expr]) -> ast.expr:
+# 		return operatorJoinMethod(cls, expressions)
+
+# super(ast.BitOr, ('join', classmethod(operatorJoinMethod)))
+# class BitOr():
+# 	@classmethod
+# 	def join(cls, expressions: Iterable[ast.expr]) -> ast.expr:
+# 		return operatorJoinMethod(cls, expressions)
+
+# class ast.Add
+# class ast.Sub
+# class ast.Mult
+# class ast.MatMult
+# class ast.Div
+# class ast.Mod
+# class ast.Pow
+# class ast.LShift
+# class ast.RShift
+# class ast.BitXor
+# class ast.BitAnd
+# class ast.FloorDiv
 
 """
 Usage examples:

@@ -168,12 +168,12 @@ class Be:
         return isinstance(node, ast.excepthandler)
 
     @staticmethod
-    def Expr(node: ast.AST) -> TypeGuard[ast.Expr]:
-        return isinstance(node, ast.Expr)
-
-    @staticmethod
     def expr(node: ast.AST) -> TypeGuard[ast.expr]:
         return isinstance(node, ast.expr)
+
+    @staticmethod
+    def Expr(node: ast.AST) -> TypeGuard[ast.Expr]:
+        return isinstance(node, ast.Expr)
 
     @staticmethod
     def expr_context(node: ast.AST) -> TypeGuard[ast.expr_context]:
@@ -490,12 +490,12 @@ class Be:
         return isinstance(node, ast.UAdd)
 
     @staticmethod
-    def UnaryOp(node: ast.AST) -> TypeGuard[ast.UnaryOp]:
-        return isinstance(node, ast.UnaryOp)
-
-    @staticmethod
     def unaryop(node: ast.AST) -> TypeGuard[ast.unaryop]:
         return isinstance(node, ast.unaryop)
+
+    @staticmethod
+    def UnaryOp(node: ast.AST) -> TypeGuard[ast.UnaryOp]:
+        return isinstance(node, ast.UnaryOp)
 
     @staticmethod
     def USub(node: ast.AST) -> TypeGuard[ast.USub]:

@@ -6,16 +6,11 @@ build-backend = "setuptools.build_meta"
 authors = [{ name = "Hunter Hogan", email = "HunterHogan@pm.me" }]
 classifiers = []
 dependencies = [
-	"astToolkit",
 	"mypy",
 	"pandas",
-	"PyGitHub",
-	"pytest",
-	"pytest-cov",
-	"pytest-xdist",
+	"pandas-stubs",
 	"pyupgrade",
 	"tomli",
-	"typeshed_client",
 	"Z0Z_tools",]
 description = ""
 keywords = []

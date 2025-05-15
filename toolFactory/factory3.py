@@ -20,6 +20,7 @@ from toolFactory import (
 	pythonVersionMinorMinimum,
 	toolMakeFunctionDefReturnCall_keywords,
 	)
+from toolFactory.datacenter import DictionaryAstExprType
 from toolFactory.factory_annex import (
 	FunctionDefGrab_andDoAllOf,
 	FunctionDefMake_Attribute,
@@ -130,14 +131,14 @@ def makeToolClassIsAndAttribute():
 								, ops=[ast.GtE()]
 								, comparators=[ast.Tuple([ast.Constant(3), ast.Constant(attributeVersionMinorMinimum)])])
 							, body=[ast_stmt]
-							, orelse=orelse # pyright: ignore[reportUnknownArgumentType]
+							, orelse=orelse
 			)
 
 		return ast_stmt
 
 	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringClassIsAndAttribute]
 
-	dictionaryToolElements: dict[str, dict[str, dict[str, int | str]]] = getElementsClassIsAndAttribute()
+	dictionaryToolElements: dict[str, dict[str, DictionaryAstExprType]] = getElementsClassIsAndAttribute()
 
 	# Process each attribute group to generate overloaded methods and implementations
 	for attribute, dictionaryTypeAliasSubcategory in dictionaryToolElements.items():
@@ -150,28 +151,28 @@ def makeToolClassIsAndAttribute():
 
 		if len(dictionaryTypeAliasSubcategory) > 1:
 			for TypeAliasSubcategory, dictionary_ast_exprType in dictionaryTypeAliasSubcategory.items():
-				attributeVersionMinorMinimum: int = dictionary_ast_exprType['attributeVersionMinorMinimum'] # pyright: ignore[reportAssignmentType]
+				attributeVersionMinorMinimum: int = dictionary_ast_exprType['attributeVersionMinorMinimum']
 				astNameTypeAlias: ast.Name = ast.Name(formatTypeAliasSubcategory.format(hasDOTIdentifier=hasDOTIdentifier, TypeAliasSubcategory=TypeAliasSubcategory))
 				body: list[ast.stmt] = [ast.Expr(ast.Constant(value=...))]
 				decorator_list=[astName_staticmethod, astName_overload]
 				returns=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([ast.Attribute(ast.Name('ast'), attr='AST')]), ast.BitOr.join([ast.Subscript(ast.Name('TypeGuard'), slice=astNameTypeAlias), ast.Name('bool')])])) # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
 
-				Z0Z_TypeWithoutNone = eval(dictionary_ast_exprType['ast_exprType']) # pyright: ignore[reportArgumentType]
+				Z0Z_TypeWithoutNone = eval(dictionary_ast_exprType['ast_exprType'])
 				annotation = ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([Z0Z_TypeWithoutNone]), ast.Name('bool')]))
 
 				list_ast_exprType.append(annotation)
-				dictionaryVersionsTypeAliasSubcategory[dictionary_ast_exprType['attributeVersionMinorMinimum']].append(annotation) # pyright: ignore[reportArgumentType]
+				dictionaryVersionsTypeAliasSubcategory[dictionary_ast_exprType['attributeVersionMinorMinimum']].append(annotation)
 
 				list4ClassDefBody.append(create_ast_stmt())
 
 		astNameTypeAlias = hasDOTTypeAliasName_Load
 		if len(dictionaryVersionsTypeAliasSubcategory) > 1:
-			attributeVersionMinorMinimum: int = min(dictionaryVersionsTypeAliasSubcategory.keys()) # pyright: ignore[reportAssignmentType]
+			attributeVersionMinorMinimum: int = min(dictionaryVersionsTypeAliasSubcategory.keys())
 			decorator_list: list[ast.expr] = [astName_staticmethod]
 
-			annotation: ast.expr = ast.BitOr.join(dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum]) # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType, reportAttributeAccessIssue]
+			annotation = cast( ast.expr , ast.BitOr.join(dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum])) # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
 			workhorseReturnValue: ast.BoolOp = ast.BoolOp(op=ast.And(), values=[ast.Call(ast.Name('isinstance'), args=[ast.Name('node'), ast.Name('astClass')], keywords=[])])
-			for node in ast.walk(annotation): # pyright: ignore[reportUnknownArgumentType]
+			for node in ast.walk(annotation):
 				if isinstance(node, ast.Subscript) and isinstance(node.value, ast.Name) and node.value.id == 'Sequence' and isinstance(node.slice, ast.BinOp) and isinstance(node.slice.right, ast.Constant) and node.slice.right.value is None:
 					workhorseReturnValue.values.append(ast.Compare(ast.Attribute(ast.Name('node'), attribute)
 													, ops=[ast.NotEq()]
@@ -185,28 +186,28 @@ def makeToolClassIsAndAttribute():
 
 			workhorseReturnValue.values.append(ast.Call(ast.Name('attributeCondition'), args=[ast.Attribute(ast.Name('node'), attribute)]))
 
-			buffaloBuffalo_workhorse_returnsAnnotation: ast.expr = ast.BitOr.join([ast.Subscript(ast.Name('TypeGuard'), slice=astNameTypeAlias), ast.Name('bool')]) # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType, reportAttributeAccessIssue]
+			buffaloBuffalo_workhorse_returnsAnnotation = cast(ast.expr, ast.BitOr.join([ast.Subscript(ast.Name('TypeGuard'), slice=astNameTypeAlias), ast.Name('bool')])) # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
 			body: list[ast.stmt] = [ast.FunctionDef(name='workhorse',
 						args=ast.arguments(args=[ast.arg('node', ast.Attribute(ast.Name('ast'), attr='AST'))])
 						, body=[ast.Return(workhorseReturnValue)]
-						, returns=buffaloBuffalo_workhorse_returnsAnnotation) # pyright: ignore[reportUnknownArgumentType]
+						, returns=buffaloBuffalo_workhorse_returnsAnnotation)
 					, ast.Return(ast.Name('workhorse'))]
-			returns=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([ast.Attribute(ast.Name('ast'), attr='AST')]), buffaloBuffalo_workhorse_returnsAnnotation])) # pyright: ignore[reportUnknownArgumentType]
+			returns=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([ast.Attribute(ast.Name('ast'), attr='AST')]), buffaloBuffalo_workhorse_returnsAnnotation]))
 
 			del dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum]
 			orelse = [create_ast_stmt()]
 
 		for TypeAliasSubcategory, dictionary_ast_exprType in dictionaryTypeAliasSubcategory.items():
-			attributeVersionMinorMinimum: int = dictionary_ast_exprType['attributeVersionMinorMinimum'] # pyright: ignore[reportAssignmentType]
+			attributeVersionMinorMinimum: int = dictionary_ast_exprType['attributeVersionMinorMinimum']
 			decorator_list=[astName_staticmethod]
 			if list_ast_exprType:
-				annotation: ast.expr = ast.BitOr.join(list_ast_exprType) # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType, reportAttributeAccessIssue]
+				annotation = cast(ast.expr,  ast.BitOr.join(list_ast_exprType)) # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
 			else:
-				Z0Z_TypeWithoutNone = eval(dictionary_ast_exprType['ast_exprType']) # pyright: ignore[reportArgumentType]
+				Z0Z_TypeWithoutNone = eval(dictionary_ast_exprType['ast_exprType'])
 				annotation = ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([Z0Z_TypeWithoutNone]), ast.Name('bool')]))
 
 			workhorseReturnValue: ast.BoolOp = ast.BoolOp(op=ast.And(), values=[ast.Call(ast.Name('isinstance'), args=[ast.Name('node'), ast.Name('astClass')], keywords=[])])
-			for node in ast.walk(annotation): # pyright: ignore[reportUnknownArgumentType]
+			for node in ast.walk(annotation):
 				if isinstance(node, ast.Subscript) and isinstance(node.value, ast.Name) and node.value.id == 'list' and isinstance(node.slice, ast.BinOp) and isinstance(node.slice.right, ast.Constant) and node.slice.right.value is None:
 					workhorseReturnValue.values.append(ast.Compare(ast.Attribute(ast.Name('node'), attribute)
 													, ops=[ast.NotEq()]
@@ -219,13 +220,13 @@ def makeToolClassIsAndAttribute():
 					break
 
 			workhorseReturnValue.values.append(ast.Call(ast.Name('attributeCondition'), args=[ast.Attribute(ast.Name('node'), attribute)]))
-			buffaloBuffalo_workhorse_returnsAnnotation: ast.expr = ast.BitOr.join([ast.Subscript(ast.Name('TypeGuard'), slice=astNameTypeAlias), ast.Name('bool')]) # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType, reportAttributeAccessIssue]
+			buffaloBuffalo_workhorse_returnsAnnotation = cast(ast.expr,  ast.BitOr.join([ast.Subscript(ast.Name('TypeGuard'), slice=astNameTypeAlias), ast.Name('bool')])) # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
 			body: list[ast.stmt] = [ast.FunctionDef(name='workhorse',
 						args=ast.arguments(args=[ast.arg('node', ast.Attribute(ast.Name('ast'), attr='AST'))])
 						, body=[ast.Return(workhorseReturnValue)]
-						, returns=buffaloBuffalo_workhorse_returnsAnnotation) # pyright: ignore[reportUnknownArgumentType]
+						, returns=buffaloBuffalo_workhorse_returnsAnnotation)
 					, ast.Return(ast.Name('workhorse'))]
-			returns=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([ast.Attribute(ast.Name('ast'), attr='AST')]), buffaloBuffalo_workhorse_returnsAnnotation])) # pyright: ignore[reportUnknownArgumentType]
+			returns=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([ast.Attribute(ast.Name('ast'), attr='AST')]), buffaloBuffalo_workhorse_returnsAnnotation]))
 
 			list4ClassDefBody.append(create_ast_stmt())
 			break
@@ -246,7 +247,7 @@ def makeToolDOT():
 					, args=[ast.arg('node', astNameTypeAlias)], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
 					, body=body
 					, decorator_list=decorator_list
-					, returns=returns # pyright: ignore[reportUnknownArgumentType]
+					, returns=returns
 		)
 
 		if attributeVersionMinorMinimum > pythonVersionMinorMinimum:
@@ -254,14 +255,14 @@ def makeToolDOT():
 								, ops=[ast.GtE()]
 								, comparators=[ast.Tuple([ast.Constant(3), ast.Constant(attributeVersionMinorMinimum)])])
 							, body=[ast_stmt]
-							, orelse=orelse # pyright: ignore[reportUnknownArgumentType]
+							, orelse=orelse
 			)
 
 		return ast_stmt
 
 	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringDOT]
 
-	dictionaryToolElements: dict[str, dict[str, dict[str, int | str]]] = getElementsDOT()
+	dictionaryToolElements: dict[str, dict[str, DictionaryAstExprType]] = getElementsDOT()
 
 	# Process each attribute group to generate overloaded methods and implementations
 	for attribute, dictionaryTypeAliasSubcategory in dictionaryToolElements.items():
@@ -273,32 +274,32 @@ def makeToolDOT():
 		dictionaryVersionsTypeAliasSubcategory: dict[int, list[ast.expr]] = defaultdict(list)
 		if len(dictionaryTypeAliasSubcategory) > 1:
 			for TypeAliasSubcategory, dictionary_ast_exprType in dictionaryTypeAliasSubcategory.items():
-				attributeVersionMinorMinimum: int = dictionary_ast_exprType['attributeVersionMinorMinimum'] # pyright: ignore[reportAssignmentType]
+				attributeVersionMinorMinimum: int = dictionary_ast_exprType['attributeVersionMinorMinimum']
 				astNameTypeAlias: ast.Name = ast.Name(formatTypeAliasSubcategory.format(hasDOTIdentifier=hasDOTIdentifier, TypeAliasSubcategory=TypeAliasSubcategory))
 				body: list[ast.stmt] = [ast.Expr(ast.Constant(value=...))]
 				decorator_list=[astName_staticmethod, astName_overload]
-				returns = cast(ast.Attribute, eval(dictionary_ast_exprType['ast_exprType'])) # pyright: ignore[reportArgumentType]
+				returns = cast(ast.Attribute, eval(dictionary_ast_exprType['ast_exprType']))
 				list_ast_exprType.append(returns)
-				dictionaryVersionsTypeAliasSubcategory[dictionary_ast_exprType['attributeVersionMinorMinimum']].append(returns) # pyright: ignore[reportArgumentType]
+				dictionaryVersionsTypeAliasSubcategory[dictionary_ast_exprType['attributeVersionMinorMinimum']].append(returns)
 				list4ClassDefBody.append(create_ast_stmt())
 
 		astNameTypeAlias = hasDOTTypeAliasName_Load
 		if len(dictionaryVersionsTypeAliasSubcategory) > 1:
 			body: list[ast.stmt] = [ast.Return(ast.Attribute(ast.Name('node'), attribute))]
 			decorator_list: list[ast.expr] = [astName_staticmethod]
-			attributeVersionMinorMinimum: int = min(dictionaryVersionsTypeAliasSubcategory.keys()) # pyright: ignore[reportAssignmentType]
-			returns: ast.expr = ast.BitOr.join(dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum]) # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType, reportAttributeAccessIssue]
+			attributeVersionMinorMinimum: int = min(dictionaryVersionsTypeAliasSubcategory.keys())
+			returns = cast( ast.expr, ast.BitOr.join(dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum])) # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
 			del dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum]
 			orelse = [create_ast_stmt()]
 
 		for TypeAliasSubcategory, dictionary_ast_exprType in dictionaryTypeAliasSubcategory.items():
-			attributeVersionMinorMinimum: int = dictionary_ast_exprType['attributeVersionMinorMinimum'] # pyright: ignore[reportAssignmentType]
+			attributeVersionMinorMinimum: int = dictionary_ast_exprType['attributeVersionMinorMinimum']
 			body: list[ast.stmt] = [ast.Return(ast.Attribute(ast.Name('node'), attribute))]
 			decorator_list=[astName_staticmethod]
 			if list_ast_exprType:
-				returns: ast.expr = ast.BitOr.join(list_ast_exprType) # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType, reportAttributeAccessIssue]
+				returns = cast(ast.expr, ast.BitOr.join(list_ast_exprType)) # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
 			else:
-				returns = cast(ast.Attribute, eval(dictionary_ast_exprType['ast_exprType'])) # pyright: ignore[reportArgumentType]
+				returns = cast(ast.Attribute, eval(dictionary_ast_exprType['ast_exprType']))
 			list4ClassDefBody.append(create_ast_stmt())
 			break
 
@@ -321,10 +322,10 @@ def makeToolGrab():
 				ast_exprType = eval(ast_exprTypeAsStr)
 				list_ast_expr4annotation.append(ast.Subscript(ast.Name('Callable'), slice=ast.Tuple([ast.List([ast_exprType]), ast_exprType])))
 
-			ast_expr4annotation: ast.expr = ast.BitOr.join(list_ast_expr4annotation) # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType, reportAttributeAccessIssue]
+			ast_expr4annotation = cast(ast.expr, ast.BitOr.join(list_ast_expr4annotation)) # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
 
 			ast_stmt = ast.FunctionDef(attribute + 'Attribute'
-				, args=ast.arguments(posonlyargs=[], args=[ast.arg('action', annotation=ast_expr4annotation)], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[]) # pyright: ignore[reportUnknownArgumentType]
+				, args=ast.arguments(posonlyargs=[], args=[ast.arg('action', annotation=ast_expr4annotation)], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
 				, body=[ast.FunctionDef('workhorse'
 						, args=ast.arguments(args=[ast.arg('node', hasDOTTypeAliasName_Load)])
 						, body=[ast.Assign([ast.Attribute(ast.Name('node'), attribute, ast.Store())], value=ast.Call(ast.Name('action'), [ast.Attribute(ast.Name('node'), attribute)])), ast.Return(ast.Name('node'))]
@@ -342,7 +343,7 @@ def makeToolGrab():
 					)]
 				),
 				body=[ast_stmt],
-				orelse=ast_stmtAtPythonMinimum # pyright: ignore[reportUnknownArgumentType]
+				orelse=ast_stmtAtPythonMinimum
 				)
 		assert ast_stmt is not None
 		return ast_stmt
@@ -386,7 +387,7 @@ def makeToolMake():
 		defaults: list[ast.expr] if a parameter has a default value, the default value goes here because of course! that
 		is completely logical.
 		kwarg: ast.arg, if there is a `**keywordArguments` catchall, then its identifier and annotation go here. The
-		annotation is built from database values.
+		annotation is built from datacenter values.
 	ast constructor:
 		args: list[ast.expr] is this a list of ast.arg? no. is this an argument specification? no, don't be silly! just
 		because they have the same name and serve similar purposes, they don't act the same: that would be logical.
@@ -514,5 +515,5 @@ if __name__ == "__main__":
 	makeToolClassIsAndAttribute()
 	makeToolDOT()
 	makeToolGrab()
-	makeToolMake()
+	# makeToolMake()
 	makeTypeAlias()
