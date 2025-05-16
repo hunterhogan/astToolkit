@@ -96,12 +96,12 @@ class Be:
         return isinstance(node, ast.BitXor)
 
     @staticmethod
-    def BoolOp(node: ast.AST) -> TypeGuard[ast.BoolOp]:
-        return isinstance(node, ast.BoolOp)
-
-    @staticmethod
     def boolop(node: ast.AST) -> TypeGuard[ast.boolop]:
         return isinstance(node, ast.boolop)
+
+    @staticmethod
+    def BoolOp(node: ast.AST) -> TypeGuard[ast.BoolOp]:
+        return isinstance(node, ast.BoolOp)
 
     @staticmethod
     def Break(node: ast.AST) -> TypeGuard[ast.Break]:
@@ -160,12 +160,12 @@ class Be:
         return isinstance(node, ast.Eq)
 
     @staticmethod
-    def ExceptHandler(node: ast.AST) -> TypeGuard[ast.ExceptHandler]:
-        return isinstance(node, ast.ExceptHandler)
-
-    @staticmethod
     def excepthandler(node: ast.AST) -> TypeGuard[ast.excepthandler]:
         return isinstance(node, ast.excepthandler)
+
+    @staticmethod
+    def ExceptHandler(node: ast.AST) -> TypeGuard[ast.ExceptHandler]:
+        return isinstance(node, ast.ExceptHandler)
 
     @staticmethod
     def expr(node: ast.AST) -> TypeGuard[ast.expr]:
@@ -336,12 +336,12 @@ class Be:
         return isinstance(node, ast.MatMult)
 
     @staticmethod
-    def Mod(node: ast.AST) -> TypeGuard[ast.Mod]:
-        return isinstance(node, ast.Mod)
-
-    @staticmethod
     def mod(node: ast.AST) -> TypeGuard[ast.mod]:
         return isinstance(node, ast.mod)
+
+    @staticmethod
+    def Mod(node: ast.AST) -> TypeGuard[ast.Mod]:
+        return isinstance(node, ast.Mod)
 
     @staticmethod
     def Module(node: ast.AST) -> TypeGuard[ast.Module]:
@@ -490,12 +490,12 @@ class Be:
         return isinstance(node, ast.UAdd)
 
     @staticmethod
-    def UnaryOp(node: ast.AST) -> TypeGuard[ast.UnaryOp]:
-        return isinstance(node, ast.UnaryOp)
-
-    @staticmethod
     def unaryop(node: ast.AST) -> TypeGuard[ast.unaryop]:
         return isinstance(node, ast.unaryop)
+
+    @staticmethod
+    def UnaryOp(node: ast.AST) -> TypeGuard[ast.UnaryOp]:
+        return isinstance(node, ast.UnaryOp)
 
     @staticmethod
     def USub(node: ast.AST) -> TypeGuard[ast.USub]:

@@ -100,7 +100,7 @@ for operatorSubclass in ast.operator.__subclasses__():
 
 """
 Usage examples:
-ImaIterable: Iterable[ast.expr] = [ast.Name(id='a'), ast.Name(id='b'), ast.Name(id='c')]
+ImaIterable: Iterable[ast.expr] = [ast.Name('a'), ast.Name('b'), ast.Name('c')]
 
 # Manual approach
 joinedBinOp: ast.expr | ast.BinOp = ImaIterable[0]
@@ -114,8 +114,10 @@ joinedAdd = ast.Add.join(ImaIterable)      # Creates the nested structure for a 
 """
 
 # ww='''
-# ast.parse(ww, type_comments=AA)
+# ast.arguments()
+# ast.Load()
 # '''
 
-# print(ast.dump(ast.parse(ww, type_comments=True), indent=4))
+# print(ast.dump(ast.parse(ww, type_comments=True), indent=None))
 # from ast import *
+

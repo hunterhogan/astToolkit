@@ -1,4 +1,5 @@
 from collections import defaultdict
+from collections.abc import Sequence
 from itertools import chain
 from pathlib import PurePosixPath
 from toolFactory import (
@@ -380,60 +381,63 @@ def makeToolGrab():
 	writeClass('Grab', list4ClassDefBody, list4ModuleBody)
 
 def makeToolMake():
-	"""
-	Sort FunctionDef by ast class, case-insensitive. For each FunctionDef, sort the argument specification to match the
-	order of the class __init__ method. When calling the class __init__ method,
-		1. use `ast.Call.keywords: list[keywords]` not ast.Call.args: list[args]
-		2. Nevertheless, sort the arguments in the order of the class __init__ method.
-	There are two tiers I need to fill: my FunctionDef argument specification and the ast constructor in the return.
-	FunctionDef arguments:
-		args: list[ast.arg] the parameter and its annotation
-		defaults: list[ast.expr] if a parameter has a default value, the default value goes here because of course! that
-		is completely logical.
-		kwarg: ast.arg, if there is a `**keywordArguments` catchall, then its identifier and annotation go here. The
-		annotation is built from datacenter values.
-	ast constructor:
-		keywords: stuff everything in here.
-	"""
 	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringMake]
+	setKeywordArgumentsAnnotationTypeAlias: set[str] = set()
 
 	listDictionaryToolElements = getElementsMake()
 
-	for dictionaryToolElements in listDictionaryToolElements[2:4]:
+	for dictionaryToolElements in listDictionaryToolElements:
 		# for k,v in dictionaryToolElements.items():
-		# 	print(k,v)
+			# print(k,v)
+			# continue
+			# print(k)
+			# if isinstance(v, list):
+			# 	for item in v:
+			# 		if isinstance(item, tuple):
+			# 			print(item[0], item[1], item[2], sep='\n\t')
+			# 		else:
+			# 			print('\t', item)
+			# else:
+			# 	print('\t', v)
 		# continue
 		"""
-ClassDefIdentifier arg
-classAs_astAttribute ast.Attribute(ast.Name('ast'), 'arg')
+ClassDefIdentifier alias
+classAs_astAttribute ast.Attribute(ast.Name('ast'), 'alias')
 classVersionMinorMinimum -1
 match_argsVersionMinorMinimum -1
-listStr4FunctionDef_args "ast.arg('arg', ast.Name('str'))","ast.arg('annotation', ast.BinOp(left=ast.Attribute(value=ast.Name('ast'), attr='expr'), op=ast.BitOr(), right=ast.Constant(value=None)))"
-listDefaults "ast.Constant(None)"
-listTupleCall_keywords "('arg', False, 'arg')","('annotation', False, 'annotation')","('type_comment', True, 'ast.Constant(None)')"
-kwarg intORstr
+listStr4FunctionDef_args ["ast.arg('name', ast.Name('str'))", "ast.arg('asName', ast.BinOp(left=ast.Name('str'), op=ast.BitOr(), right=ast.Constant(value=None)))"]
+listDefaults ['ast.Constant(None)']
+listTupleCall_keywords [('name', False, 'name'), ('asname', False, 'asName')]
+kwarg int
 
-ClassDefIdentifier arguments
-classAs_astAttribute ast.Attribute(ast.Name('ast'), 'arguments')
-classVersionMinorMinimum -1
-match_argsVersionMinorMinimum -1
-listStr4FunctionDef_args "ast.arg('posonlyargs', ast.Subscript(value=ast.Name('list'), slice=ast.Attribute(value=ast.Name('ast'), attr='arg')))","ast.arg('args', ast.Subscript(value=ast.Name('list'), slice=ast.Attribute(value=ast.Name('ast'), attr='arg')))","ast.arg('vararg', ast.BinOp(left=ast.Attribute(value=ast.Name('ast'), attr='arg'), op=ast.BitOr(), right=ast.Constant(value=None)))","ast.arg('kwonlyargs', ast.Subscript(value=ast.Name('list'), slice=ast.Attribute(value=ast.Name('ast'), attr='arg')))","ast.arg('kw_defaults', ast.Subscript(value=ast.Name('list'), slice=ast.BinOp(left=ast.Attribute(value=ast.Name('ast'), attr='expr'), op=ast.BitOr(), right=ast.Constant(value=None))))","ast.arg('kwarg', ast.BinOp(left=ast.Attribute(value=ast.Name('ast'), attr='arg'), op=ast.BitOr(), right=ast.Constant(value=None)))","ast.arg('defaults', ast.Subscript(value=ast.Name('list'), slice=ast.Attribute(value=ast.Name('ast'), attr='expr')))"
-listDefaults "ast.List()","ast.List()","ast.Constant(None)","ast.List()","ast.List(ast.Constant(None))","ast.Constant(None)","ast.List()"
-listTupleCall_keywords "('posonlyargs', False, 'posonlyargs')","('args', False, 'args')","('vararg', False, 'vararg')","('kwonlyargs', False, 'kwonlyargs')","('kw_defaults', False, 'kw_defaults')","('kwarg', False, 'kwarg')","('defaults', False, 'defaults')"
-kwarg No
 		"""
 		ClassDefIdentifier = str(dictionaryToolElements['ClassDefIdentifier'])
 		classAs_astAttribute = cast(ast.expr, eval(dictionaryToolElements['classAs_astAttribute']))
 
-		listFunctionDef_args: list[ast.arg] = []
+		listFunctionDef_args: list[ast.arg] = [cast(ast.arg, eval(ast_argAsStr)) for ast_argAsStr in dictionaryToolElements['listStr4FunctionDef_args']]
 		kwarg: ast.arg | None = None
 		if str(dictionaryToolElements['kwarg']) != 'No':
+			setKeywordArgumentsAnnotationTypeAlias.add(dictionaryToolElements['kwarg'])
 			kwarg = ast.arg(keywordArgumentsIdentifier, annotation=ast.Name(str(dictionaryToolElements['kwarg'])))
-		defaults: list[ast.expr] = []
+
+		defaults: list[ast.expr] = [cast(ast.expr, eval(defaultAsStr)) for defaultAsStr in dictionaryToolElements['listDefaults']]
 
 		listCall_keywords: list[ast.keyword] = []
+		for tupleCall_keywords in dictionaryToolElements['listTupleCall_keywords']:
+			argIdentifier, defaultValueNeedsEval, keywordValue = tupleCall_keywords
+			if defaultValueNeedsEval:
+				listCall_keywords.append(ast.keyword(argIdentifier, value=eval(keywordValue)))
+			else:
+				listCall_keywords.append(ast.keyword(argIdentifier, value=ast.Name(keywordValue)))
 		if kwarg is not None:
 			listCall_keywords.append(toolMakeFunctionDefReturnCall_keywords)
+
+		# print(f"{ClassDefIdentifier=}")
+		# print(ast.dump(classAs_astAttribute))
+		# print('listFunctionDef_args', *[ast.dump(FunctionDef_arg) for FunctionDef_arg in listFunctionDef_args], sep='\n\t')
+		# print(ast.dump(kwarg) if kwarg else kwarg)
+		# print('defaults', f"{type(defaults)=}", *[ast.dump(ast_expr) for ast_expr in defaults], sep='\n\t')
+		# print('listCall_keywords', *[ast.dump(Call_keyword) for Call_keyword in listCall_keywords], sep='\n\t')
 
 		classVersionMinorMinimum: int = dictionaryToolElements['classVersionMinorMinimum']
 		match_argsVersionMinorMinimum: int = dictionaryToolElements['match_argsVersionMinorMinimum']
@@ -459,15 +463,16 @@ kwarg No
 
 		list4ClassDefBody.append(ast_stmt)
 
-	# list4ModuleBody: list[ast.stmt] = [
-	# 	ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in ['intORstr', 'intORstrORtype_params', 'intORtype_params', 'str_nameDOTname']], 0)
-	# 	, ast.ImportFrom('collections.abc', [ast.alias('Sequence')], 0)
-	# 	, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('Literal')], 0)
-	# 	, ast.Import([ast.alias('ast')])
-	# 	, ast.Import([ast.alias('sys')])
-	# 	]
+	setKeywordArgumentsAnnotationTypeAlias.discard('int')
+	list4ModuleBody: list[ast.stmt] = [
+		ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in sorted([*setKeywordArgumentsAnnotationTypeAlias, 'str_nameDOTname'])], 0)
+		, ast.ImportFrom('collections.abc', [ast.alias('Sequence')], 0)
+		, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('Literal')], 0)
+		, ast.Import([ast.alias('ast')])
+		, ast.Import([ast.alias('sys')])
+		]
 
-	# writeClass('Make', list4ClassDefBody, list4ModuleBody)
+	writeClass('Make', list4ClassDefBody, list4ModuleBody)
 
 def makeTypeAlias():
 	def append_ast_stmtTypeAlias():
