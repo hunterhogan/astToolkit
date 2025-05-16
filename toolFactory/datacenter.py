@@ -20,7 +20,7 @@ class DictionaryToolBe(TypedDict):
 
 class DictionaryMatchArgs(TypedDict):
 	listFunctionDef_args: list[str]
-	kwargAnnotation: str
+	kwarg: str
 	defaults: list[str]
 	listCall_args: list[tuple[str, str]]
 
@@ -125,27 +125,10 @@ def getElementsGrab(deprecated: bool = False, versionMinorMaximum: Version | Non
 
 def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = None) -> list[DictionaryToolMake]:
 	listElementsHARDCODED = [
-		'ClassDefIdentifier',
-		'attribute',
-		'attributeRename',
-		'attributeKind',
-		'ast_arg',
-		'defaultValue',
-		'classAs_astAttribute',
-		'classVersionMinorMinimum',
-		'attributeVersionMinorMinimum',
-		'keywordArguments',
-		'kwargAnnotation',
-		'match_args',
-		'match_argsVersionMinorMinimum',
+	'ClassDefIdentifier', 'classAs_astAttribute', 'match_args', 'attribute', 'attributeRename', 'ast_arg', 'defaultValue',
+	'keywordArguments', 'kwargAnnotation', 'classVersionMinorMinimum', 'attributeVersionMinorMinimum', 'match_argsVersionMinorMinimum',
 	]
 	listElements = listElementsHARDCODED
-
-	"""
-	Only ast class with parameters that can be set in the constructor. (__init__ method), which should mean I can filter out 'attributeKind' == 'No'.
-	Approximately 40 methods in `Make` will only have the four `_attribute` attributes. Instead of treating those as `**keywordArguments`, I could make them args with default values.
-	The same top-level order as getElementsBe
-	"""
 
 	"""What to return, identifiers for the return are tentative.
 	ClassDefIdentifier
@@ -157,28 +140,6 @@ def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = 
 	listCall_args: list[tuple(str, str)] ('attribute', if `keywordArguments` is False, 'attributeRename' | if `keywordArguments` is True and there is a 'defaultValue', then 'defaultValue' | 'attribute')
 	'keywordArguments'
 
-	'ClassDefIdentifier',
-		'classAs_astAttribute',
-
-		'match_args',
-
-		'attribute',
-		'attributeRename',
-		'attributeKind',
-		'ast_arg',
-		'defaultValue',
-		'keywordArguments',
-
-		'kwargAnnotation',
-
-		'classVersionMinorMinimum', -1
-		'attributeVersionMinorMinimum', -1
-		'match_argsVersionMinorMinimum', -1
-
-	The simplest case all version are -1:
-		get 'match_args': it is one or more comma separated identifiers that have a 1:1 correspondence with the row values in column 'attribute'.
-		put the rows in the same order as 'match_args'. (if there are additional attribute values, put them at the end of the list)
-
 pythonVersionMinorMinimum = 10
 df = df[~df['deprecated']]
 df['classVersionMinorMinimum'] = df['classVersionMinorMinimum'].where(df['classVersionMinorMinimum'] > pythonVersionMinorMinimum, -1)
@@ -186,15 +147,56 @@ df['attributeVersionMinorMinimum'] = df['attributeVersionMinorMinimum'].where(df
 df['match_argsVersionMinorMinimum'] = df['match_argsVersionMinorMinimum'].where(df['match_argsVersionMinorMinimum'] > pythonVersionMinorMinimum, -1)
 
 listElements = ['ClassDefIdentifier', 'classAs_astAttribute', 'match_args', 'attribute', 'attributeRename', 'ast_arg', 'defaultValue', 'keywordArguments', 'kwargAnnotation', 'classVersionMinorMinimum', 'attributeVersionMinorMinimum', 'match_argsVersionMinorMinimum',]
-df = df[listElements].drop_duplicates()
 df = df[df['attribute'] != "No"]
+subset = [element for element in listElements if element not in ['match_args', 'match_argsVersionMinorMinimum']]
+df = df[listElements].drop_duplicates()
+
+# Create a new column 'listFunctionDef_args' based on conditions
+def compute_listFunctionDef_args(row):
+	listAttributes = row['match_args'].replace("'","").replace(" ","").split(',')  # Split 'match_args' into a list
+	className = row['ClassDefIdentifier']  # Get 'ClassDefIdentifier'
+	version = row['match_argsVersionMinorMinimum']  # Get 'match_argsVersionMinorMinimum'
+	collected_args: list[str] = []
+	collected_defaultValue: list[str] = []
+	for attributeTarget in listAttributes:
+		# Find the row matching the conditions
+		matching_row = df[
+			(df['attribute'] == attributeTarget) &
+			(df['ClassDefIdentifier'] == className) &
+			(df['match_argsVersionMinorMinimum'] == version)
+		]
+		if not matching_row.empty:
+			if not matching_row.iloc[0]['keywordArguments']:  # Check 'keywordArguments'
+				collected_args.append(matching_row.iloc[0]['ast_arg'])  # Collect 'ast_arg'
+				if matching_row.iloc[0]['defaultValue'] != "No":
+					collected_defaultValue.append(matching_row.iloc[0]['defaultValue'])  # Collect 'defaultValue'
+	# Format the collected arguments as a string
+	listFunctionDef_args = ', '.join(f'"{arg}"' for arg in collected_args)
+	defaults = 'No'
+	if collected_defaultValue:
+		defaults = ', '.join(f'"{defaultValue}"' for defaultValue in collected_defaultValue)
+	return pd.Series([listFunctionDef_args, defaults], index=['listFunctionDef_args', 'defaults'])
+# Apply the function to create the new column
+# df['listFunctionDef_args'] = df.apply(compute_listFunctionDef_args, axis=1)
+df[['listFunctionDef_args', 'defaults']] = df.apply(compute_listFunctionDef_args, axis=1)
+
+# Compute 'kwarg' column based on 'kwargAnnotation'
+def compute_kwarg(group):
+	list_kwargAnnotation = sorted(val for val in group.unique() if val != "No")
+	return 'OR'.join(list_kwargAnnotation) if list_kwargAnnotation else "No"
+df['kwarg'] = (
+	df.groupby(['ClassDefIdentifier', 'match_argsVersionMinorMinimum'])['kwargAnnotation']
+	.transform(compute_kwarg)
+)
 	"""
 
 	dataframe = getDataframe(deprecated, versionMinorMaximum)
 
 	dd = [DictionaryToolMake(ClassDefIdentifier='', classAs_astAttribute='', versionMinimum={}, classVersionMinorMinimum=-1, attributeVersionMinorMinimum=-1, match_argsVersionMinorMinimum=-1)]
 	return dd
-	"""Additional notes
+
+
+"""Additional notes
 	classVersionMinorMinimum: more than one if applicable, and with different values for some of the above returns; we should create the code to handle:
 		class,classVersionMinorMinimum,match_argsVersionMinorMinimum
 		AsyncFunctionDef,-1,-1
