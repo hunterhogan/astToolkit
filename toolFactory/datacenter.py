@@ -1,45 +1,40 @@
+from collections.abc import Sequence
 from toolFactory import pathFilenameDataframeAST, pythonVersionMinorMinimum
-from typing import Any, TypedDict
+from typing import TypedDict, TypeAlias
 import pandas
-import pandera
+
+Attribute: TypeAlias = str
+Version: TypeAlias = int
+ListTypesASTformAsStr: TypeAlias = list[str]
+TupleTypesForVersion: TypeAlias = tuple[Version, ListTypesASTformAsStr]
+ListTypesByVersion: TypeAlias = list[TupleTypesForVersion]
 
 class DictionaryAstExprType(TypedDict):
 	attributeVersionMinorMinimum: int
 	ast_exprType: str
 
-panderaSchema = pandera.DataFrameSchema({
-	"ClassDefIdentifier": pandera.Column(str),
-	"versionMajor": pandera.Column(int),
-	"versionMinor": pandera.Column(int),
-	"versionMicro": pandera.Column(int),
-	"base": pandera.Column(str),
-	"deprecated": pandera.Column(bool),
-	"base_typing_TypeAlias": pandera.Column(str),
-	"attributeRename": pandera.Column(str),
-	"typeC": pandera.Column(str),
-	"typeStub": pandera.Column(str),
-	"type_field_type": pandera.Column(str),
-	"typeStub_typing_TypeAlias": pandera.Column(str),
-	"list2Sequence": pandera.Column(bool),
-	"defaultValue": pandera.Column(str),
-	"keywordArguments": pandera.Column(bool),
-	"kwargAnnotation": pandera.Column(str),
-	"classAs_astAttribute": pandera.Column(str),
-	"classVersionMinorMinimum": pandera.Column(int),
-	"attribute": pandera.Column(str),
-	"attributeKind": pandera.Column(str),
-	"attributeVersionMinorMinimum": pandera.Column(int),
-	"TypeAliasSubcategory": pandera.Column(str),
-	"type": pandera.Column(str),
-	"ast_exprType": pandera.Column(str),
-	"ast_arg": pandera.Column(str),
-	"match_args": pandera.Column(str),
-	"match_argsVersionMinorMinimum": pandera.Column(int),
-})
+class DictionaryToolBe(TypedDict):
+	ClassDefIdentifier: str
+	classAs_astAttribute: str
+	classVersionMinorMinimum: int
+
+class DictionaryMatchArgs(TypedDict):
+	listFunctionDef_args: list[str]
+	kwargAnnotation: str
+	defaults: list[str]
+	listCall_args: list[tuple[str, str]]
+
+class DictionaryToolMake(TypedDict):
+	ClassDefIdentifier: str
+	classAs_astAttribute: str
+	versionMinimum: dict[int, DictionaryMatchArgs]
+
+	classVersionMinorMinimum: int
+	attributeVersionMinorMinimum: int
+	match_argsVersionMinorMinimum: int
 
 def getDataframe(deprecated: bool, versionMinorMaximum: int | None, *indices: str) -> pandas.DataFrame:
 	dataframe = pandas.read_parquet(pathFilenameDataframeAST)
-	dataframe = panderaSchema.validate(dataframe)
 
 	if not deprecated:
 		dataframe = dataframe[~dataframe['deprecated']]
@@ -52,19 +47,15 @@ def getDataframe(deprecated: bool, versionMinorMaximum: int | None, *indices: st
 
 	return dataframe
 
-def getElementsBe(deprecated: bool = False, versionMinorMaximum: int | None = None) -> list[dict[str, Any]]:
+def getElementsBe(deprecated: bool = False, versionMinorMaximum: int | None = None) -> Sequence[DictionaryToolBe]:
 	listElementsHARDCODED = ['ClassDefIdentifier', 'classAs_astAttribute', 'classVersionMinorMinimum']
 	listElements = listElementsHARDCODED
 
 	dataframe = getDataframe(deprecated, versionMinorMaximum)
 
-	dataframe = dataframe.sort_values(by='versionMinor', inplace=False, ascending=False).drop_duplicates('ClassDefIdentifier')
+	dataframe = dataframe[listElements].drop_duplicates()
 
-	dataframe = dataframe.iloc[dataframe['ClassDefIdentifier'].astype(str).str.lower().argsort()] # pyright: ignore[reportUnknownMemberType]
-
-	dataframe = dataframe[listElements]
-
-	return dataframe.to_dict(orient='records') # pyright: ignore[reportReturnType, reportUnknownMemberType]
+	return dataframe.to_dict(orient='records') # pyright: ignore[reportReturnType]
 
 def getElementsClassIsAndAttribute(deprecated: bool = False, versionMinorMaximum: int | None = None) -> dict[str, dict[str, DictionaryAstExprType]]:
 	return getElementsDOT(deprecated, versionMinorMaximum)
@@ -106,7 +97,7 @@ def getElementsDOT(deprecated: bool = False, versionMinorMaximum: int | None = N
 				)
 	return dictionaryAttribute
 
-def getElementsGrab(deprecated: bool = False, versionMinorMaximum: int | None = None) -> dict[str, dict[int, list[str]]]:
+def getElementsGrab(deprecated: bool = False, versionMinorMaximum: Version | None = None) -> dict[Attribute, ListTypesByVersion]:
 	listElementsHARDCODED = ['attribute', 'attributeVersionMinorMinimum', 'ast_exprType']
 	listElements = listElementsHARDCODED
 
@@ -120,25 +111,23 @@ def getElementsGrab(deprecated: bool = False, versionMinorMaximum: int | None = 
 
 	dataframe = dataframe[listElements]
 	dataframe = dataframe.drop_duplicates()
-
 	dataframe = dataframe.drop_duplicates(subset=['attribute', 'ast_exprType'], keep='first')
 
-	# Now group by attribute, then by attributeVersionMinorMinimum, collecting ast_exprType into lists
-	dictionaryAttribute: dict[str, dict[int, list[str]]] = {}
-	for attribute, groupAttribute in dataframe.groupby('attribute'):
-		dictionaryVersionMinorMinimum: dict[int, list[str]] = {}
-		groupByVersion = groupAttribute.groupby('attributeVersionMinorMinimum')
-		for attributeVersionMinorMinimum, groupVersion in groupByVersion:
-			listExprType = sorted(groupVersion['ast_exprType'].unique(), key=lambda x: str(x).lower()) # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]
-			dictionaryVersionMinorMinimum[attributeVersionMinorMinimum] = listExprType # pyright: ignore[reportArgumentType]
-		dictionaryAttribute[attribute] = dictionaryVersionMinorMinimum # pyright: ignore[reportArgumentType]
-	return dictionaryAttribute
+	dataframe = dataframe.groupby(['attribute', 'attributeVersionMinorMinimum'])['ast_exprType'].agg(list).reset_index() # pyright: ignore[reportUnknownMemberType]
+	# Sort each list of ast_exprType case-insensitively
+	dataframe['ast_exprType'] = dataframe['ast_exprType'].apply(sorted, key=str.lower) # pyright: ignore[reportUnknownMemberType]
 
-def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = None) -> list[dict[str, Any]]:
+	# Create tuples of (Version, ListTypesASTformAsStr)
+	dataframe['listTypesByVersion'] = dataframe[['attributeVersionMinorMinimum', 'ast_exprType']].apply(tuple, axis=1) # pyright: ignore[reportUnknownMemberType]
+
+	# Final grouping by attribute and convert to dictionary
+	return dataframe.groupby('attribute')['listTypesByVersion'].agg(list).to_dict() # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
+
+def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = None) -> list[DictionaryToolMake]:
 	listElementsHARDCODED = [
 		'ClassDefIdentifier',
 		'attribute',
-		'fieldRename',
+		'attributeRename',
 		'attributeKind',
 		'ast_arg',
 		'defaultValue',
@@ -160,14 +149,52 @@ def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = 
 
 	"""What to return, identifiers for the return are tentative.
 	ClassDefIdentifier
-	list_ast_arg: list[str] if `keywordArguments` is False, add `ast_arg` in the order of 'match_args'
+	listFunctionDef_args: list[str] if `keywordArguments` is False, add `ast_arg` in the order of 'match_args'
 	kwarg: str, if `keywordArguments` is True, add `kwargAnnotation` to `list_kwargAnnotation`; later, get unique values and `'OR'.join(list_kwargAnnotation)`
 	defaults: list[str] = if `keywordArguments` is False, add `defaultValue` in the order of 'match_args'
 
 	classAs_astAttribute
-	listCall_args: list[tuple(str, str)] ('attribute', if `keywordArguments` is False, 'fieldRename' | if `keywordArguments` is True and there is a 'defaultValue', then 'defaultValue' | 'attribute')
+	listCall_args: list[tuple(str, str)] ('attribute', if `keywordArguments` is False, 'attributeRename' | if `keywordArguments` is True and there is a 'defaultValue', then 'defaultValue' | 'attribute')
 	'keywordArguments'
 
+	'ClassDefIdentifier',
+		'classAs_astAttribute',
+
+		'match_args',
+
+		'attribute',
+		'attributeRename',
+		'attributeKind',
+		'ast_arg',
+		'defaultValue',
+		'keywordArguments',
+
+		'kwargAnnotation',
+
+		'classVersionMinorMinimum', -1
+		'attributeVersionMinorMinimum', -1
+		'match_argsVersionMinorMinimum', -1
+
+	The simplest case all version are -1:
+		get 'match_args': it is one or more comma separated identifiers that have a 1:1 correspondence with the row values in column 'attribute'.
+		put the rows in the same order as 'match_args'. (if there are additional attribute values, put them at the end of the list)
+
+pythonVersionMinorMinimum = 10
+df = df[~df['deprecated']]
+df['classVersionMinorMinimum'] = df['classVersionMinorMinimum'].where(df['classVersionMinorMinimum'] > pythonVersionMinorMinimum, -1)
+df['attributeVersionMinorMinimum'] = df['attributeVersionMinorMinimum'].where(df['attributeVersionMinorMinimum'] > pythonVersionMinorMinimum, -1)
+df['match_argsVersionMinorMinimum'] = df['match_argsVersionMinorMinimum'].where(df['match_argsVersionMinorMinimum'] > pythonVersionMinorMinimum, -1)
+
+listElements = ['ClassDefIdentifier', 'classAs_astAttribute', 'match_args', 'attribute', 'attributeRename', 'ast_arg', 'defaultValue', 'keywordArguments', 'kwargAnnotation', 'classVersionMinorMinimum', 'attributeVersionMinorMinimum', 'match_argsVersionMinorMinimum',]
+df = df[listElements].drop_duplicates()
+df = df[df['attribute'] != "No"]
+	"""
+
+	dataframe = getDataframe(deprecated, versionMinorMaximum)
+
+	dd = [DictionaryToolMake(ClassDefIdentifier='', classAs_astAttribute='', versionMinimum={}, classVersionMinorMinimum=-1, attributeVersionMinorMinimum=-1, match_argsVersionMinorMinimum=-1)]
+	return dd
+	"""Additional notes
 	classVersionMinorMinimum: more than one if applicable, and with different values for some of the above returns; we should create the code to handle:
 		class,classVersionMinorMinimum,match_argsVersionMinorMinimum
 		AsyncFunctionDef,-1,-1
@@ -185,16 +212,7 @@ def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = 
 		TypeVar,12,13
 		TypeVarTuple,12,12
 		TypeVarTuple,12,13
-
 	"""
-
-	dataframe = getDataframe(deprecated, versionMinorMaximum)
-
-	dataframe = dataframe.sort_values(by='versionMinor', inplace=False, ascending=False).drop_duplicates('ClassDefIdentifier')
-
-	dataframe = dataframe[listElements]
-
-	return dataframe.to_dict(orient='records') # pyright: ignore[reportReturnType, reportUnknownMemberType]
 
 def getElementsTypeAlias(deprecated: bool = False, versionMinorMaximum: int | None = None) -> dict[str, dict[str, dict[int, list[str]]]]:
 	listElementsHARDCODED = ['attribute', 'TypeAliasSubcategory', 'attributeVersionMinorMinimum', 'classAs_astAttribute']
@@ -215,7 +233,7 @@ def getElementsTypeAlias(deprecated: bool = False, versionMinorMaximum: int | No
 	dataframe = dataframe[listElements].drop_duplicates()
 
 	dictionaryAttribute: dict[str, dict[str, dict[int, list[str]]]] = {}
-	grouped = dataframe.groupby(['attribute', 'TypeAliasSubcategory', 'attributeVersionMinorMinimum'])
+	grouped = dataframe.groupby(['attribute', 'TypeAliasSubcategory', 'attributeVersionMinorMinimum']) # pyright: ignore[reportUnknownMemberType]
 	for (attribute, typeAliasSubcategory, attributeVersionMinorMinimum), group in grouped:
 		listClassDefIdentifier = sorted(group['classAs_astAttribute'].unique(), key=lambda x: str(x).lower()) # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]
 		if attribute not in dictionaryAttribute:

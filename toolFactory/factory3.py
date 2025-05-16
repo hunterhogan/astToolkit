@@ -5,13 +5,14 @@ from toolFactory import (
 	astName_overload,
 	astName_staticmethod,
 	astName_typing_TypeAlias,
+	DictionaryAstExprType,
+	DictionaryToolMake,
 	fileExtension,
 	format_hasDOTIdentifier,
 	formatTypeAliasSubcategory,
 	getElementsBe,
 	getElementsClassIsAndAttribute,
 	getElementsDOT,
-	getElementsGrab,
 	getElementsMake,
 	getElementsTypeAlias,
 	keywordArgumentsIdentifier,
@@ -20,7 +21,7 @@ from toolFactory import (
 	pythonVersionMinorMinimum,
 	toolMakeFunctionDefReturnCall_keywords,
 	)
-from toolFactory.datacenter import DictionaryAstExprType
+from toolFactory.datacenter import getElementsGrab
 from toolFactory.factory_annex import (
 	FunctionDefGrab_andDoAllOf,
 	FunctionDefMake_Attribute,
@@ -86,9 +87,9 @@ def makeToolBe():
 	listDictionaryToolElements = getElementsBe()
 
 	for dictionaryToolElements in listDictionaryToolElements:
-		ClassDefIdentifier = cast(str, dictionaryToolElements['ClassDefIdentifier'])
-		classAs_astAttribute = cast(ast.Attribute, eval(dictionaryToolElements['classAs_astAttribute']))
-		classVersionMinorMinimum: int = dictionaryToolElements['classVersionMinorMinimum']
+		ClassDefIdentifier = dictionaryToolElements['ClassDefIdentifier']
+		classAs_astAttribute = eval(dictionaryToolElements['classAs_astAttribute'])
+		classVersionMinorMinimum = dictionaryToolElements['classVersionMinorMinimum']
 
 		ast_stmt = ast.FunctionDef(
 			name=ClassDefIdentifier
@@ -316,7 +317,7 @@ def makeToolDOT():
 def makeToolGrab():
 	def create_ast_stmt():
 		ast_stmt = None
-		for attributeVersionMinorMinimum, list_ast_exprType in dictionaryAttribute.items():
+		for attributeVersionMinorMinimum, list_ast_exprType in listTypesByVersion:
 			list_ast_expr4annotation: list[ast.expr] = []
 			for ast_exprTypeAsStr in list_ast_exprType:
 				ast_exprType = eval(ast_exprTypeAsStr)
@@ -349,18 +350,21 @@ def makeToolGrab():
 		return ast_stmt
 
 	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringGrab, FunctionDefGrab_andDoAllOf]
-	dictionaryToolElements: dict[str, dict[int, list[str]]] = getElementsGrab()
+	dictionaryToolElements = getElementsGrab()
 
-	for attribute, dictionaryAttribute in dictionaryToolElements.items():
+	for attribute, listTypesByVersion in dictionaryToolElements.items():
 		hasDOTIdentifier: str = format_hasDOTIdentifier.format(attribute=attribute)
 		hasDOTTypeAliasName_Load: ast.Name = ast.Name(hasDOTIdentifier)
 		ast_stmtAtPythonMinimum: list[ast.stmt] = []
 
-		if len(dictionaryAttribute) > 1:
-			abovePythonMinimum: dict[int, list[str]] = {max(dictionaryAttribute.keys()) : sorted(chain(*dictionaryAttribute.values()), key=str.lower)}
-			del dictionaryAttribute[max(dictionaryAttribute.keys())]
+		if len(listTypesByVersion) > 1:
+			abovePythonMinimum = [((versionMax := max([typesForVersion[0] for typesForVersion in listTypesByVersion])),  sorted(chain(*[typesForVersion[1] for typesForVersion in listTypesByVersion]), key=str.lower))]
+			for typesForVersion in listTypesByVersion:
+				if typesForVersion[0] == versionMax:
+					listTypesByVersion.remove(typesForVersion)
+					break
 			ast_stmtAtPythonMinimum = [create_ast_stmt()]
-			dictionaryAttribute = abovePythonMinimum
+			listTypesByVersion = abovePythonMinimum
 
 		list4ClassDefBody.append(create_ast_stmt())
 
@@ -398,12 +402,13 @@ def makeToolMake():
 	listDictionaryToolElements = getElementsMake()
 
 	for dictionaryToolElements in listDictionaryToolElements:
-		ClassDefIdentifier = cast(str, dictionaryToolElements['ClassDefIdentifier'])
+		ClassDefIdentifier = dictionaryToolElements['ClassDefIdentifier']
+		classAs_astAttribute = eval(dictionaryToolElements['classAs_astAttribute'])
+
 		listFunctionDef_args: list[ast.arg] = []
 		kwarg: ast.arg | None = None
 		defaults: list[ast.expr] = []
 
-		classAs_astAttribute = cast(ast.Attribute, eval(dictionaryToolElements['classAs_astAttribute']))
 		listCall_args: list[ast.expr] = []
 		if True:
 			keywords: list[ast.keyword] = []

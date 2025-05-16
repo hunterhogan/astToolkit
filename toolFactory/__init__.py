@@ -24,6 +24,8 @@ from toolFactory._snippets import (
 )
 
 from toolFactory.datacenter import (
+	DictionaryAstExprType as DictionaryAstExprType,
+	DictionaryToolMake as DictionaryToolMake,
 	getElementsBe as getElementsBe,
 	getElementsClassIsAndAttribute as getElementsClassIsAndAttribute,
 	getElementsDOT as getElementsDOT,

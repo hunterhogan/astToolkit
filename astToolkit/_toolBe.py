@@ -490,12 +490,12 @@ class Be:
         return isinstance(node, ast.UAdd)
 
     @staticmethod
-    def unaryop(node: ast.AST) -> TypeGuard[ast.unaryop]:
-        return isinstance(node, ast.unaryop)
-
-    @staticmethod
     def UnaryOp(node: ast.AST) -> TypeGuard[ast.UnaryOp]:
         return isinstance(node, ast.UnaryOp)
+
+    @staticmethod
+    def unaryop(node: ast.AST) -> TypeGuard[ast.unaryop]:
+        return isinstance(node, ast.unaryop)
 
     @staticmethod
     def USub(node: ast.AST) -> TypeGuard[ast.USub]:
