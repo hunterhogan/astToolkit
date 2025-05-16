@@ -1,6 +1,6 @@
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from toolFactory import pathFilenameDataframeAST, pythonVersionMinorMinimum
-from typing import TypedDict, TypeAlias
+from typing import Any, TypedDict, TypeAlias
 import pandas
 
 Attribute: TypeAlias = str
@@ -22,7 +22,7 @@ class DictionaryMatchArgs(TypedDict):
 	listFunctionDef_args: list[str]
 	kwarg: str
 	defaults: list[str]
-	listCall_args: list[tuple[str, str]]
+	listTuplesCall_keywords: list[tuple[str, bool, str]]
 
 class DictionaryToolMake(TypedDict):
 	ClassDefIdentifier: str
@@ -52,6 +52,10 @@ def getElementsBe(deprecated: bool = False, versionMinorMaximum: int | None = No
 	listElements = listElementsHARDCODED
 
 	dataframe = getDataframe(deprecated, versionMinorMaximum)
+
+	dataframe['classVersionMinorMinimum'] = dataframe['classVersionMinorMinimum'].where( # pyright: ignore[reportUnknownMemberType]
+		dataframe['classVersionMinorMinimum'] > pythonVersionMinorMinimum, -1
+	)
 
 	dataframe = dataframe[listElements].drop_duplicates()
 
@@ -130,25 +134,16 @@ def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = 
 	]
 	listElements = listElementsHARDCODED
 
-	"""What to return, identifiers for the return are tentative.
-	ClassDefIdentifier
-	listFunctionDef_args: list[str] if `keywordArguments` is False, add `ast_arg` in the order of 'match_args'
-	kwarg: str, if `keywordArguments` is True, add `kwargAnnotation` to `list_kwargAnnotation`; later, get unique values and `'OR'.join(list_kwargAnnotation)`
-	defaults: list[str] = if `keywordArguments` is False, add `defaultValue` in the order of 'match_args'
-
-	classAs_astAttribute
-	listCall_args: list[tuple(str, str)] ('attribute', if `keywordArguments` is False, 'attributeRename' | if `keywordArguments` is True and there is a 'defaultValue', then 'defaultValue' | 'attribute')
-	'keywordArguments'
-
+	dataframe = getDataframe(deprecated, versionMinorMaximum)
+	"""
 pythonVersionMinorMinimum = 10
+listElements = ['ClassDefIdentifier', 'classAs_astAttribute', 'match_args', 'attribute', 'attributeRename', 'ast_arg', 'defaultValue', 'keywordArguments', 'kwargAnnotation', 'classVersionMinorMinimum', 'match_argsVersionMinorMinimum',]
 df = df[~df['deprecated']]
+
 df['classVersionMinorMinimum'] = df['classVersionMinorMinimum'].where(df['classVersionMinorMinimum'] > pythonVersionMinorMinimum, -1)
-df['attributeVersionMinorMinimum'] = df['attributeVersionMinorMinimum'].where(df['attributeVersionMinorMinimum'] > pythonVersionMinorMinimum, -1)
 df['match_argsVersionMinorMinimum'] = df['match_argsVersionMinorMinimum'].where(df['match_argsVersionMinorMinimum'] > pythonVersionMinorMinimum, -1)
 
-listElements = ['ClassDefIdentifier', 'classAs_astAttribute', 'match_args', 'attribute', 'attributeRename', 'ast_arg', 'defaultValue', 'keywordArguments', 'kwargAnnotation', 'classVersionMinorMinimum', 'attributeVersionMinorMinimum', 'match_argsVersionMinorMinimum',]
 df = df[df['attribute'] != "No"]
-subset = [element for element in listElements if element not in ['match_args', 'match_argsVersionMinorMinimum']]
 df = df[listElements].drop_duplicates()
 
 # Create a new column 'listFunctionDef_args' based on conditions
@@ -158,27 +153,39 @@ def compute_listFunctionDef_args(row):
 	version = row['match_argsVersionMinorMinimum']  # Get 'match_argsVersionMinorMinimum'
 	collected_args: list[str] = []
 	collected_defaultValue: list[str] = []
+	collectedTupleCall_keywords = []
 	for attributeTarget in listAttributes:
+		tupleCall_keywords = []
 		# Find the row matching the conditions
+		tupleCall_keywords.append(attributeTarget)
 		matching_row = df[
 			(df['attribute'] == attributeTarget) &
 			(df['ClassDefIdentifier'] == className) &
 			(df['match_argsVersionMinorMinimum'] == version)
 		]
 		if not matching_row.empty:
-			if not matching_row.iloc[0]['keywordArguments']:  # Check 'keywordArguments'
+			if matching_row.iloc[0]['keywordArguments']:  # Check 'keywordArguments'
+				tupleCall_keywords.append(True)
+				tupleCall_keywords.append(matching_row.iloc[0]['defaultValue'])
+			else:
 				collected_args.append(matching_row.iloc[0]['ast_arg'])  # Collect 'ast_arg'
+				tupleCall_keywords.append(False)
+				if matching_row.iloc[0]['attributeRename'] != "No":
+					tupleCall_keywords.append(matching_row.iloc[0]['attributeRename'])
+				else:
+					tupleCall_keywords.append(attributeTarget)
 				if matching_row.iloc[0]['defaultValue'] != "No":
 					collected_defaultValue.append(matching_row.iloc[0]['defaultValue'])  # Collect 'defaultValue'
+		collectedTupleCall_keywords.append(tuple(tupleCall_keywords))
 	# Format the collected arguments as a string
-	listFunctionDef_args = ', '.join(f'"{arg}"' for arg in collected_args)
+	listFunctionDef_args = ','.join(f'"{arg}"' for arg in collected_args)
+	listTupleCall_keywords = ','.join(f'"{tupleCall_keywords}"' for tupleCall_keywords in collectedTupleCall_keywords)
 	defaults = 'No'
 	if collected_defaultValue:
-		defaults = ', '.join(f'"{defaultValue}"' for defaultValue in collected_defaultValue)
-	return pd.Series([listFunctionDef_args, defaults], index=['listFunctionDef_args', 'defaults'])
+		defaults = ','.join(f'"{defaultValue}"' for defaultValue in collected_defaultValue)
+	return pd.Series([listFunctionDef_args, defaults, listTupleCall_keywords], index=['listFunctionDef_args', 'defaults', 'listTupleCall_keywords'])
 # Apply the function to create the new column
-# df['listFunctionDef_args'] = df.apply(compute_listFunctionDef_args, axis=1)
-df[['listFunctionDef_args', 'defaults']] = df.apply(compute_listFunctionDef_args, axis=1)
+df[['listFunctionDef_args', 'defaults', 'listTupleCall_keywords']] = df.apply(compute_listFunctionDef_args, axis=1)
 
 # Compute 'kwarg' column based on 'kwargAnnotation'
 def compute_kwarg(group):
@@ -188,16 +195,28 @@ df['kwarg'] = (
 	df.groupby(['ClassDefIdentifier', 'match_argsVersionMinorMinimum'])['kwargAnnotation']
 	.transform(compute_kwarg)
 )
+
+df = df.drop(columns=['match_args', 'attribute', 'attributeRename', 'ast_arg', 'defaultValue', 'keywordArguments', 'kwargAnnotation'])
+
+df = df.drop_duplicates()
+
+# newColumns = ['listFunctionDef_args', 'defaults', 'listTupleCall_keywords', 'kwarg']
 	"""
 
-	dataframe = getDataframe(deprecated, versionMinorMaximum)
+	"""Additional notes
+	What to return, identifiers for the return are tentative.
+	ClassDefIdentifier
+	listFunctionDef_args: list[str] if `keywordArguments` is False, add `ast_arg` in the order of 'match_args'
+	kwarg: str, if `keywordArguments` is True, add `kwargAnnotation` to `list_kwargAnnotation`; later, get unique values and `'OR'.join(list_kwargAnnotation)`
+	defaults: list[str] = if `keywordArguments` is False, add `defaultValue` in the order of 'match_args'
 
-	dd = [DictionaryToolMake(ClassDefIdentifier='', classAs_astAttribute='', versionMinimum={}, classVersionMinorMinimum=-1, attributeVersionMinorMinimum=-1, match_argsVersionMinorMinimum=-1)]
-	return dd
+	classAs_astAttribute
+	listTupleCall_keywords: list[tuple(str, bool, str)]
+		attributes in match_args:
+			attribute, if `keywordArguments` is False, False, 'attributeRename' if 'attributeRename' is not "No", else 'attribute'
+						if `keywordArguments` is True, True, then 'defaultValue'
 
-
-"""Additional notes
-	classVersionMinorMinimum: more than one if applicable, and with different values for some of the above returns; we should create the code to handle:
+							classVersionMinorMinimum: more than one if applicable, and with different values for some of the above returns; we should create the code to handle:
 		class,classVersionMinorMinimum,match_argsVersionMinorMinimum
 		AsyncFunctionDef,-1,-1
 		AsyncFunctionDef,-1,12
@@ -215,6 +234,8 @@ df['kwarg'] = (
 		TypeVarTuple,12,12
 		TypeVarTuple,12,13
 	"""
+	dd = [DictionaryToolMake(ClassDefIdentifier='', classAs_astAttribute='', versionMinimum={}, classVersionMinorMinimum=-1, attributeVersionMinorMinimum=-1, match_argsVersionMinorMinimum=-1)]
+	return dd
 
 def getElementsTypeAlias(deprecated: bool = False, versionMinorMaximum: int | None = None) -> dict[str, dict[str, dict[int, list[str]]]]:
 	listElementsHARDCODED = ['attribute', 'TypeAliasSubcategory', 'attributeVersionMinorMinimum', 'classAs_astAttribute']

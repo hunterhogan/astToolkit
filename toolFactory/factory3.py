@@ -393,9 +393,7 @@ def makeToolMake():
 		kwarg: ast.arg, if there is a `**keywordArguments` catchall, then its identifier and annotation go here. The
 		annotation is built from datacenter values.
 	ast constructor:
-		args: list[ast.expr] is this a list of ast.arg? no. is this an argument specification? no, don't be silly! just
-		because they have the same name and serve similar purposes, they don't act the same: that would be logical.
-		keywords: this is the corresponding setting for `kwarg`, of course. what else would it be?!
+		keywords: stuff everything in here.
 	"""
 	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringMake]
 
@@ -409,24 +407,22 @@ def makeToolMake():
 		kwarg: ast.arg | None = None
 		defaults: list[ast.expr] = []
 
-		listCall_args: list[ast.expr] = []
-		if True:
-			keywords: list[ast.keyword] = []
-		else:
-			keywords = toolMakeFunctionDefReturnCall_keywords
+		listCall_keywords: list[ast.keyword] = []
+		if kwarg is not None:
+			listCall_keywords.append(toolMakeFunctionDefReturnCall_keywords)
 
 		classVersionMinorMinimum: int = dictionaryToolElements['classVersionMinorMinimum']
 		match_argsVersionMinorMinimum: int = dictionaryToolElements['match_argsVersionMinorMinimum']
 
-		# if attribute == 'Attribute'
+		# if ClassDefIdentifier == 'Attribute'
 		# FunctionDefMake_Attribute
-		# if attribute == 'Import'
+		# if ClassDefIdentifier == 'Import'
 		# FunctionDefMake_Import
 
 		ast_stmt = ast.FunctionDef(
 			name=ClassDefIdentifier
 			, args=ast.arguments(posonlyargs=[], args=listFunctionDef_args, vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=kwarg, defaults=defaults)
-			, body=[ast.Return(ast.Call(classAs_astAttribute, args=listCall_args, keywords=keywords))]
+			, body=[ast.Return(ast.Call(classAs_astAttribute, args=[], keywords=listCall_keywords))]
 			, decorator_list=[astName_staticmethod]
 			, returns=classAs_astAttribute)
 

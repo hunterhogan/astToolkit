@@ -13,4 +13,7 @@ astName_typing_TypeAlias: ast.expr = cast(ast.expr, ast.Name('typing_TypeAlias')
 format_hasDOTIdentifier: str = "hasDOT{attribute}"
 formatTypeAliasSubcategory: str = "{hasDOTIdentifier}_{TypeAliasSubcategory}"
 
-toolMakeFunctionDefReturnCall_keywords = [ast.keyword(None, ast.Name(keywordArgumentsIdentifier))]
+toolMakeFunctionDefReturnCall_keywords = ast.keyword(None, ast.Name(keywordArgumentsIdentifier))
+
+def keywordValueName(attribute: str):
+	return f"ast.Name('{str(attribute)}')"

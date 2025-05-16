@@ -114,7 +114,7 @@ joinedAdd = ast.Add.join(ImaIterable)      # Creates the nested structure for a 
 """
 
 # ww='''
-# listElementsHARDCODED = ['attribute', 'TypeAliasSubcategory', 'attributeVersionMinorMinimum', 'classAs_astAttribute']
+# ast.parse(ww, type_comments=AA)
 # '''
 
 # print(ast.dump(ast.parse(ww, type_comments=True), indent=4))
