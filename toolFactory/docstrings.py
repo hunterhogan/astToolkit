@@ -42,15 +42,15 @@ del docstring
 docstring: str = (
 	"""
 	Create functions that verify AST nodes by type and attribute conditions.
-	
-	The ClassIsAndAttribute class provides static methods that generate conditional functions for determining if an AST 
-	node is of a specific type AND its attribute meets a specified condition. These functions return TypeGuard-enabled 
+
+	The ClassIsAndAttribute class provides static methods that generate conditional functions for determining if an AST
+	node is of a specific type AND its attribute meets a specified condition. These functions return TypeGuard-enabled
 	callables that can be used in conditional statements to narrow node types during code traversal and transformation.
-	
+
 	Each generated function performs two checks:
 	1. Verifies that the node is of the specified AST type
 	2. Tests if the specified attribute of the node meets a custom condition
-	
+
 	This enables complex filtering and targeting of AST nodes based on both their type and attribute contents.
 	"""
 )
@@ -95,11 +95,11 @@ del docstring
 
 docstring: str = (
 	"""
-	If two identifiers are joined by a dot `.`, they are _usually_ an `ast.Attribute`, but see, for example, `ast.ImportFrom`.
+	If two identifiers are joined by a dot '`.`', they are _usually_ an `ast.Attribute`, but see, for example, `ast.ImportFrom`.
 
 	Parameters:
 		value: the part before the dot (e.g., `ast.Name`.)
-		attribute: an identifier after a dot `.`; you can pass multiple `attribute` and they will be chained together.
+		attribute: an identifier after a dot '`.`'; you can pass multiple `attribute` and they will be chained together.
 	"""
 )
 FunctionDefMake_AttributeDocstring = ast.Expr(ast.Constant(docstring))

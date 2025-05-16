@@ -100,11 +100,12 @@ def makeToolBe():
 			, returns=ast.Subscript(ast.Name('TypeGuard'), slice=classAs_astAttribute))
 
 		if classVersionMinorMinimum > pythonVersionMinorMinimum:
-			ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info'),
-				ops=[ast.GtE()],
-				comparators=[ast.Tuple([ast.Constant(3),
-							ast.Constant(classVersionMinorMinimum)])]),
-				body=[ast_stmt])
+			ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
+						, ops=[ast.GtE()]
+						, comparators=[ast.Tuple([ast.Constant(3)
+												, ast.Constant(classVersionMinorMinimum)])])
+					, body=[ast_stmt]
+				)
 
 		list4ClassDefBody.append(ast_stmt)
 
@@ -386,20 +387,22 @@ def makeToolMake():
 
 	listDictionaryToolElements = getElementsMake()
 
+	ff = ['AsyncFunctionDef', 'ClassDef', 'FunctionDef']
 	for dictionaryToolElements in listDictionaryToolElements:
-		# for k,v in dictionaryToolElements.items():
-			# print(k,v)
+		if dictionaryToolElements['ClassDefIdentifier'] in ff:
+			for k,v in dictionaryToolElements.items():
+				print(k,v)
+				continue
+				print(k)
+				if isinstance(v, list):
+					for item in v:
+						if isinstance(item, tuple):
+							print(item[0], item[1], item[2], sep='\n\t')
+						else:
+							print('\t', item)
+				else:
+					print('\t', v)
 			# continue
-			# print(k)
-			# if isinstance(v, list):
-			# 	for item in v:
-			# 		if isinstance(item, tuple):
-			# 			print(item[0], item[1], item[2], sep='\n\t')
-			# 		else:
-			# 			print('\t', item)
-			# else:
-			# 	print('\t', v)
-		# continue
 		"""
 ClassDefIdentifier alias
 classAs_astAttribute ast.Attribute(ast.Name('ast'), 'alias')
@@ -412,6 +415,15 @@ kwarg int
 
 		"""
 		ClassDefIdentifier = str(dictionaryToolElements['ClassDefIdentifier'])
+		if ClassDefIdentifier == 'Attribute':
+			ast_stmt = FunctionDefMake_Attribute
+			list4ClassDefBody.append(ast_stmt)
+			continue
+		if ClassDefIdentifier == 'Import':
+			ast_stmt = FunctionDefMake_Import
+			list4ClassDefBody.append(ast_stmt)
+			continue
+
 		classAs_astAttribute = cast(ast.expr, eval(dictionaryToolElements['classAs_astAttribute']))
 
 		listFunctionDef_args: list[ast.arg] = [cast(ast.arg, eval(ast_argAsStr)) for ast_argAsStr in dictionaryToolElements['listStr4FunctionDef_args']]
@@ -440,12 +452,10 @@ kwarg int
 		# print('listCall_keywords', *[ast.dump(Call_keyword) for Call_keyword in listCall_keywords], sep='\n\t')
 
 		classVersionMinorMinimum: int = dictionaryToolElements['classVersionMinorMinimum']
+		# if match_argsVersionMinorMinimum > classVersionMinorMinimum:
+		# Do some variations of the method need to be conditional on the Python version?
+		# if match_argsVersionMinorMinimum == classVersionMinorMinimum, then access to match_argsVersionMinorMinimum is already conditional on the python version because it is checked at the class level.
 		match_argsVersionMinorMinimum: int = dictionaryToolElements['match_argsVersionMinorMinimum']
-
-		# if ClassDefIdentifier == 'Attribute'
-		# FunctionDefMake_Attribute
-		# if ClassDefIdentifier == 'Import'
-		# FunctionDefMake_Import
 
 		ast_stmt = ast.FunctionDef(
 			name=ClassDefIdentifier
@@ -454,12 +464,22 @@ kwarg int
 			, decorator_list=[astName_staticmethod]
 			, returns=classAs_astAttribute)
 
+		# Does _every_ variation of the method need to be conditional on the Python version?
 		if classVersionMinorMinimum > pythonVersionMinorMinimum:
-			ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info'),
-				ops=[ast.GtE()],
-				comparators=[ast.Tuple([ast.Constant(3),
-							ast.Constant(classVersionMinorMinimum)])]),
-				body=[ast_stmt])
+			ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
+						, ops=[ast.GtE()]
+						, comparators=[ast.Tuple([ast.Constant(3)
+												, ast.Constant(classVersionMinorMinimum)])])
+					, body=[ast_stmt]
+				)
+		elif match_argsVersionMinorMinimum > classVersionMinorMinimum:
+			# Only some variations of the method need to be conditional on the Python version.
+			ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
+						, ops=[ast.GtE()]
+						, comparators=[ast.Tuple([ast.Constant(3)
+												, ast.Constant(match_argsVersionMinorMinimum)])])
+					, body=[ast_stmt]
+				)
 
 		list4ClassDefBody.append(ast_stmt)
 
