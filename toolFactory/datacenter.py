@@ -1,6 +1,8 @@
 from collections.abc import Callable, Sequence
+
+import pandas._typing
 from toolFactory import pathFilenameDataframeAST, pythonVersionMinorMinimum
-from typing import Any, TypedDict, TypeAlias
+from typing import Any, TypedDict, TypeAlias, cast
 import pandas
 
 Attribute: TypeAlias = str
@@ -19,9 +21,9 @@ class DictionaryToolBe(TypedDict):
 	classVersionMinorMinimum: int
 
 class DictionaryMatchArgs(TypedDict):
-	listFunctionDef_args: list[str]
+	listStr4FunctionDef_args: list[str]
 	kwarg: str
-	defaults: list[str]
+	listDefaults: list[str]
 	listTuplesCall_keywords: list[tuple[str, bool, str]]
 
 class DictionaryToolMake(TypedDict):
@@ -127,10 +129,19 @@ def getElementsGrab(deprecated: bool = False, versionMinorMaximum: Version | Non
 	# Final grouping by attribute and convert to dictionary
 	return dataframe.groupby('attribute')['listTypesByVersion'].agg(list).to_dict() # pyright: ignore[reportUnknownVariableType, reportUnknownMemberType]
 
-def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = None) -> list[DictionaryToolMake]:
+def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = None):
 	listElementsHARDCODED = [
-	'ClassDefIdentifier', 'classAs_astAttribute', 'match_args', 'attribute', 'attributeRename', 'ast_arg', 'defaultValue',
-	'keywordArguments', 'kwargAnnotation', 'classVersionMinorMinimum', 'attributeVersionMinorMinimum', 'match_argsVersionMinorMinimum',
+	'ClassDefIdentifier',
+	'classAs_astAttribute',
+	'match_args',
+	'attribute',
+	'attributeRename',
+	'ast_arg',
+	'defaultValue',
+	'keywordArguments',
+	'kwargAnnotation',
+	'classVersionMinorMinimum',
+	'match_argsVersionMinorMinimum',
 	]
 	listElements = listElementsHARDCODED
 
@@ -139,76 +150,76 @@ def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = 
 pythonVersionMinorMinimum = 10
 listElements = ['ClassDefIdentifier', 'classAs_astAttribute', 'match_args', 'attribute', 'attributeRename', 'ast_arg', 'defaultValue', 'keywordArguments', 'kwargAnnotation', 'classVersionMinorMinimum', 'match_argsVersionMinorMinimum',]
 df = df[~df['deprecated']]
-
-df['classVersionMinorMinimum'] = df['classVersionMinorMinimum'].where(df['classVersionMinorMinimum'] > pythonVersionMinorMinimum, -1)
-df['match_argsVersionMinorMinimum'] = df['match_argsVersionMinorMinimum'].where(df['match_argsVersionMinorMinimum'] > pythonVersionMinorMinimum, -1)
-
-df = df[df['attribute'] != "No"]
-df = df[listElements].drop_duplicates()
-
-# Create a new column 'listFunctionDef_args' based on conditions
-def compute_listFunctionDef_args(row):
-	listAttributes = row['match_args'].replace("'","").replace(" ","").split(',')  # Split 'match_args' into a list
-	className = row['ClassDefIdentifier']  # Get 'ClassDefIdentifier'
-	version = row['match_argsVersionMinorMinimum']  # Get 'match_argsVersionMinorMinimum'
-	collected_args: list[str] = []
-	collected_defaultValue: list[str] = []
-	collectedTupleCall_keywords = []
-	for attributeTarget in listAttributes:
-		tupleCall_keywords = []
-		# Find the row matching the conditions
-		tupleCall_keywords.append(attributeTarget)
-		matching_row = df[
-			(df['attribute'] == attributeTarget) &
-			(df['ClassDefIdentifier'] == className) &
-			(df['match_argsVersionMinorMinimum'] == version)
-		]
-		if not matching_row.empty:
-			if matching_row.iloc[0]['keywordArguments']:  # Check 'keywordArguments'
-				tupleCall_keywords.append(True)
-				tupleCall_keywords.append(matching_row.iloc[0]['defaultValue'])
-			else:
-				collected_args.append(matching_row.iloc[0]['ast_arg'])  # Collect 'ast_arg'
-				tupleCall_keywords.append(False)
-				if matching_row.iloc[0]['attributeRename'] != "No":
-					tupleCall_keywords.append(matching_row.iloc[0]['attributeRename'])
-				else:
-					tupleCall_keywords.append(attributeTarget)
-				if matching_row.iloc[0]['defaultValue'] != "No":
-					collected_defaultValue.append(matching_row.iloc[0]['defaultValue'])  # Collect 'defaultValue'
-		collectedTupleCall_keywords.append(tuple(tupleCall_keywords))
-	# Format the collected arguments as a string
-	listFunctionDef_args = ','.join(f'"{arg}"' for arg in collected_args)
-	listTupleCall_keywords = ','.join(f'"{tupleCall_keywords}"' for tupleCall_keywords in collectedTupleCall_keywords)
-	defaults = 'No'
-	if collected_defaultValue:
-		defaults = ','.join(f'"{defaultValue}"' for defaultValue in collected_defaultValue)
-	return pd.Series([listFunctionDef_args, defaults, listTupleCall_keywords], index=['listFunctionDef_args', 'defaults', 'listTupleCall_keywords'])
-# Apply the function to create the new column
-df[['listFunctionDef_args', 'defaults', 'listTupleCall_keywords']] = df.apply(compute_listFunctionDef_args, axis=1)
-
-# Compute 'kwarg' column based on 'kwargAnnotation'
-def compute_kwarg(group):
-	list_kwargAnnotation = sorted(val for val in group.unique() if val != "No")
-	return 'OR'.join(list_kwargAnnotation) if list_kwargAnnotation else "No"
-df['kwarg'] = (
-	df.groupby(['ClassDefIdentifier', 'match_argsVersionMinorMinimum'])['kwargAnnotation']
-	.transform(compute_kwarg)
-)
-
-df = df.drop(columns=['match_args', 'attribute', 'attributeRename', 'ast_arg', 'defaultValue', 'keywordArguments', 'kwargAnnotation'])
-
-df = df.drop_duplicates()
-
-# newColumns = ['listFunctionDef_args', 'defaults', 'listTupleCall_keywords', 'kwarg']
 	"""
+
+	dataframe['classVersionMinorMinimum'] = dataframe['classVersionMinorMinimum'].where(dataframe['classVersionMinorMinimum'] > pythonVersionMinorMinimum, -1) # pyright: ignore[reportUnknownMemberType]
+	dataframe['match_argsVersionMinorMinimum'] = dataframe['match_argsVersionMinorMinimum'].where(dataframe['match_argsVersionMinorMinimum'] > pythonVersionMinorMinimum, -1) # pyright: ignore[reportUnknownMemberType]
+
+	dataframe = dataframe[dataframe['attribute'] != "No"]
+	dataframe = dataframe[listElements].drop_duplicates()
+
+	# Create a new column 'listStr4FunctionDef_args' based on conditions
+	def compute_listFunctionDef_args(row: pandas.Series) -> pandas.Series: # pyright: ignore[reportUnknownParameterType, reportMissingTypeArgument]
+		listAttributes = cast(str, row['match_args']).replace("'","").replace(" ","").split(',')  # Split 'match_args' into a list
+		className = row['ClassDefIdentifier']  # pyright: ignore[reportUnknownVariableType] # Get 'ClassDefIdentifier'
+		version = row['match_argsVersionMinorMinimum']  # pyright: ignore[reportUnknownVariableType] # Get 'match_argsVersionMinorMinimum'
+		collected_args: list[str] = []
+		collected_defaultValue: list[str] = []
+		collectedTupleCall_keywords: list[str | bool] = []
+		for attributeTarget in listAttributes:
+			tupleCall_keywords = []
+			# Find the row matching the conditions
+			tupleCall_keywords.append(attributeTarget) # pyright: ignore[reportUnknownMemberType]
+			matching_row = dataframe[ # pyright: ignore[reportUnknownVariableType]
+				(dataframe['attribute'] == attributeTarget) &
+				(dataframe['ClassDefIdentifier'] == className) &
+				(dataframe['match_argsVersionMinorMinimum'] == version)
+			]
+			if not matching_row.empty: # pyright: ignore[reportUnknownMemberType]
+				if matching_row.iloc[0]['keywordArguments']:  # pyright: ignore[reportUnknownMemberType] # Check 'keywordArguments'
+					tupleCall_keywords.append(True) # pyright: ignore[reportUnknownMemberType]
+					tupleCall_keywords.append(matching_row.iloc[0]['defaultValue']) # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]
+				else:
+					collected_args.append(matching_row.iloc[0]['ast_arg'])  # pyright: ignore[reportUnknownMemberType, reportUnknownArgumentType] # Collect 'ast_arg'
+					tupleCall_keywords.append(False) # pyright: ignore[reportUnknownMemberType]
+					if matching_row.iloc[0]['attributeRename'] != "No": # pyright: ignore[reportUnknownMemberType]
+						tupleCall_keywords.append(matching_row.iloc[0]['attributeRename']) # pyright: ignore[reportUnknownMemberType, reportUnknownArgumentType]
+					else:
+						tupleCall_keywords.append(attributeTarget) # pyright: ignore[reportUnknownMemberType]
+					if matching_row.iloc[0]['defaultValue'] != "No": # pyright: ignore[reportUnknownMemberType]
+						collected_defaultValue.append(matching_row.iloc[0]['defaultValue'])  # pyright: ignore[reportUnknownMemberType, reportUnknownArgumentType] # Collect 'defaultValue'
+			collectedTupleCall_keywords.append(tuple(tupleCall_keywords)) # pyright: ignore[reportArgumentType, reportUnknownArgumentType]
+		# Format the collected arguments as a string
+		listStr4FunctionDef_args = ','.join(f'"{arg}"' for arg in collected_args)
+		listTupleCall_keywords = ','.join(f'"{tupleCall_keywords}"' for tupleCall_keywords in collectedTupleCall_keywords)
+		listDefaults = 'No'
+		if collected_defaultValue:
+			listDefaults = ','.join(f'"{defaultValue}"' for defaultValue in collected_defaultValue)
+		return pandas.Series([listStr4FunctionDef_args, listDefaults, listTupleCall_keywords], index=['listStr4FunctionDef_args', 'listDefaults', 'listTupleCall_keywords'])
+	# Apply the function to create the new column
+	dataframe[['listStr4FunctionDef_args', 'listDefaults', 'listTupleCall_keywords']] = dataframe.apply(compute_listFunctionDef_args, axis=1) # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType]
+
+	# Compute 'kwarg' column based on 'kwargAnnotation'
+	def compute_kwarg(group: pandas.Series) -> str: # pyright: ignore[reportMissingTypeArgument, reportUnknownParameterType]
+		list_kwargAnnotation = sorted(val for val in group.unique() if val != "No")
+		return 'OR'.join(list_kwargAnnotation) if list_kwargAnnotation else "No"
+	dataframe['kwarg'] = (
+		dataframe.groupby(['ClassDefIdentifier', 'match_argsVersionMinorMinimum'])['kwargAnnotation'] # pyright: ignore[reportUnknownMemberType]
+		.transform(compute_kwarg)
+	)
+
+	dataframe = dataframe.drop(columns=['match_args', 'attribute', 'attributeRename', 'ast_arg', 'defaultValue', 'keywordArguments', 'kwargAnnotation'])
+
+	dataframe = dataframe.drop_duplicates()
+
+	# newColumns = ['listStr4FunctionDef_args', 'listDefaults', 'listTupleCall_keywords', 'kwarg']
 
 	"""Additional notes
 	What to return, identifiers for the return are tentative.
 	ClassDefIdentifier
-	listFunctionDef_args: list[str] if `keywordArguments` is False, add `ast_arg` in the order of 'match_args'
+	listStr4FunctionDef_args: list[str] if `keywordArguments` is False, add `ast_arg` in the order of 'match_args'
 	kwarg: str, if `keywordArguments` is True, add `kwargAnnotation` to `list_kwargAnnotation`; later, get unique values and `'OR'.join(list_kwargAnnotation)`
-	defaults: list[str] = if `keywordArguments` is False, add `defaultValue` in the order of 'match_args'
+	listDefaults: list[str] = if `keywordArguments` is False, add `defaultValue` in the order of 'match_args'
 
 	classAs_astAttribute
 	listTupleCall_keywords: list[tuple(str, bool, str)]
@@ -234,8 +245,8 @@ df = df.drop_duplicates()
 		TypeVarTuple,12,12
 		TypeVarTuple,12,13
 	"""
-	dd = [DictionaryToolMake(ClassDefIdentifier='', classAs_astAttribute='', versionMinimum={}, classVersionMinorMinimum=-1, attributeVersionMinorMinimum=-1, match_argsVersionMinorMinimum=-1)]
-	return dd
+
+	return dataframe.to_dict(orient='records') # pyright: ignore[reportReturnType]
 
 def getElementsTypeAlias(deprecated: bool = False, versionMinorMaximum: int | None = None) -> dict[str, dict[str, dict[int, list[str]]]]:
 	listElementsHARDCODED = ['attribute', 'TypeAliasSubcategory', 'attributeVersionMinorMinimum', 'classAs_astAttribute']

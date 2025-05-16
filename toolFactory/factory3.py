@@ -399,12 +399,36 @@ def makeToolMake():
 
 	listDictionaryToolElements = getElementsMake()
 
-	for dictionaryToolElements in listDictionaryToolElements:
-		ClassDefIdentifier = dictionaryToolElements['ClassDefIdentifier']
-		classAs_astAttribute = eval(dictionaryToolElements['classAs_astAttribute'])
+	for dictionaryToolElements in listDictionaryToolElements[2:4]:
+		# for k,v in dictionaryToolElements.items():
+		# 	print(k,v)
+		# continue
+		"""
+ClassDefIdentifier arg
+classAs_astAttribute ast.Attribute(ast.Name('ast'), 'arg')
+classVersionMinorMinimum -1
+match_argsVersionMinorMinimum -1
+listStr4FunctionDef_args "ast.arg('arg', ast.Name('str'))","ast.arg('annotation', ast.BinOp(left=ast.Attribute(value=ast.Name('ast'), attr='expr'), op=ast.BitOr(), right=ast.Constant(value=None)))"
+listDefaults "ast.Constant(None)"
+listTupleCall_keywords "('arg', False, 'arg')","('annotation', False, 'annotation')","('type_comment', True, 'ast.Constant(None)')"
+kwarg intORstr
+
+ClassDefIdentifier arguments
+classAs_astAttribute ast.Attribute(ast.Name('ast'), 'arguments')
+classVersionMinorMinimum -1
+match_argsVersionMinorMinimum -1
+listStr4FunctionDef_args "ast.arg('posonlyargs', ast.Subscript(value=ast.Name('list'), slice=ast.Attribute(value=ast.Name('ast'), attr='arg')))","ast.arg('args', ast.Subscript(value=ast.Name('list'), slice=ast.Attribute(value=ast.Name('ast'), attr='arg')))","ast.arg('vararg', ast.BinOp(left=ast.Attribute(value=ast.Name('ast'), attr='arg'), op=ast.BitOr(), right=ast.Constant(value=None)))","ast.arg('kwonlyargs', ast.Subscript(value=ast.Name('list'), slice=ast.Attribute(value=ast.Name('ast'), attr='arg')))","ast.arg('kw_defaults', ast.Subscript(value=ast.Name('list'), slice=ast.BinOp(left=ast.Attribute(value=ast.Name('ast'), attr='expr'), op=ast.BitOr(), right=ast.Constant(value=None))))","ast.arg('kwarg', ast.BinOp(left=ast.Attribute(value=ast.Name('ast'), attr='arg'), op=ast.BitOr(), right=ast.Constant(value=None)))","ast.arg('defaults', ast.Subscript(value=ast.Name('list'), slice=ast.Attribute(value=ast.Name('ast'), attr='expr')))"
+listDefaults "ast.List()","ast.List()","ast.Constant(None)","ast.List()","ast.List(ast.Constant(None))","ast.Constant(None)","ast.List()"
+listTupleCall_keywords "('posonlyargs', False, 'posonlyargs')","('args', False, 'args')","('vararg', False, 'vararg')","('kwonlyargs', False, 'kwonlyargs')","('kw_defaults', False, 'kw_defaults')","('kwarg', False, 'kwarg')","('defaults', False, 'defaults')"
+kwarg No
+		"""
+		ClassDefIdentifier = str(dictionaryToolElements['ClassDefIdentifier'])
+		classAs_astAttribute = cast(ast.expr, eval(dictionaryToolElements['classAs_astAttribute']))
 
 		listFunctionDef_args: list[ast.arg] = []
 		kwarg: ast.arg | None = None
+		if str(dictionaryToolElements['kwarg']) != 'No':
+			kwarg = ast.arg(keywordArgumentsIdentifier, annotation=ast.Name(str(dictionaryToolElements['kwarg'])))
 		defaults: list[ast.expr] = []
 
 		listCall_keywords: list[ast.keyword] = []
@@ -435,15 +459,15 @@ def makeToolMake():
 
 		list4ClassDefBody.append(ast_stmt)
 
-	list4ModuleBody: list[ast.stmt] = [
-		ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in ['intORstr', 'intORstrORtype_params', 'intORtype_params', 'str_nameDOTname']], 0)
-		, ast.ImportFrom('collections.abc', [ast.alias('Sequence')], 0)
-		, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('Literal')], 0)
-		, ast.Import([ast.alias('ast')])
-		, ast.Import([ast.alias('sys')])
-		]
+	# list4ModuleBody: list[ast.stmt] = [
+	# 	ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in ['intORstr', 'intORstrORtype_params', 'intORtype_params', 'str_nameDOTname']], 0)
+	# 	, ast.ImportFrom('collections.abc', [ast.alias('Sequence')], 0)
+	# 	, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('Literal')], 0)
+	# 	, ast.Import([ast.alias('ast')])
+	# 	, ast.Import([ast.alias('sys')])
+	# 	]
 
-	writeClass('Make', list4ClassDefBody, list4ModuleBody)
+	# writeClass('Make', list4ClassDefBody, list4ModuleBody)
 
 def makeTypeAlias():
 	def append_ast_stmtTypeAlias():
@@ -516,5 +540,5 @@ if __name__ == "__main__":
 	makeToolClassIsAndAttribute()
 	makeToolDOT()
 	makeToolGrab()
-	# makeToolMake()
+	makeToolMake()
 	makeTypeAlias()
