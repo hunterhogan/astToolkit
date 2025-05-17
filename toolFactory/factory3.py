@@ -7,7 +7,8 @@ from toolFactory import (
 	astName_staticmethod,
 	astName_typing_TypeAlias,
 	DictionaryAstExprType,
-	DictionaryToolMake,
+	DictionaryClassDef,
+	DictionaryMatchArgs,
 	fileExtension,
 	format_hasDOTIdentifier,
 	formatTypeAliasSubcategory,
@@ -385,57 +386,17 @@ def makeToolMake():
 	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringMake]
 	setKeywordArgumentsAnnotationTypeAlias: set[str] = set()
 
-	listDictionaryToolElements = getElementsMake()
-
-	ff = ['AsyncFunctionDef', 'ClassDef', 'FunctionDef']
-	for dictionaryToolElements in listDictionaryToolElements:
-		if dictionaryToolElements['ClassDefIdentifier'] in ff:
-			for k,v in dictionaryToolElements.items():
-				print(k,v)
-				continue
-				print(k)
-				if isinstance(v, list):
-					for item in v:
-						if isinstance(item, tuple):
-							print(item[0], item[1], item[2], sep='\n\t')
-						else:
-							print('\t', item)
-				else:
-					print('\t', v)
-			# continue
-		"""
-ClassDefIdentifier alias
-classAs_astAttribute ast.Attribute(ast.Name('ast'), 'alias')
-classVersionMinorMinimum -1
-match_argsVersionMinorMinimum -1
-listStr4FunctionDef_args ["ast.arg('name', ast.Name('str'))", "ast.arg('asName', ast.BinOp(left=ast.Name('str'), op=ast.BitOr(), right=ast.Constant(value=None)))"]
-listDefaults ['ast.Constant(None)']
-listTupleCall_keywords [('name', False, 'name'), ('asname', False, 'asName')]
-kwarg int
-
-		"""
-		ClassDefIdentifier = str(dictionaryToolElements['ClassDefIdentifier'])
-		if ClassDefIdentifier == 'Attribute':
-			ast_stmt = FunctionDefMake_Attribute
-			list4ClassDefBody.append(ast_stmt)
-			continue
-		if ClassDefIdentifier == 'Import':
-			ast_stmt = FunctionDefMake_Import
-			list4ClassDefBody.append(ast_stmt)
-			continue
-
-		classAs_astAttribute = cast(ast.expr, eval(dictionaryToolElements['classAs_astAttribute']))
-
-		listFunctionDef_args: list[ast.arg] = [cast(ast.arg, eval(ast_argAsStr)) for ast_argAsStr in dictionaryToolElements['listStr4FunctionDef_args']]
+	def create_ast_stmt(dictionaryMethodElements: DictionaryMatchArgs) -> ast.FunctionDef:
+		listFunctionDef_args: list[ast.arg] = [cast(ast.arg, eval(ast_argAsStr)) for ast_argAsStr in dictionaryMethodElements['listStr4FunctionDef_args']]
 		kwarg: ast.arg | None = None
-		if str(dictionaryToolElements['kwarg']) != 'No':
-			setKeywordArgumentsAnnotationTypeAlias.add(dictionaryToolElements['kwarg'])
-			kwarg = ast.arg(keywordArgumentsIdentifier, annotation=ast.Name(str(dictionaryToolElements['kwarg'])))
+		if str(dictionaryMethodElements['kwarg']) != 'No':
+			setKeywordArgumentsAnnotationTypeAlias.add(dictionaryMethodElements['kwarg'])
+			kwarg = ast.arg(keywordArgumentsIdentifier, annotation=ast.Name(str(dictionaryMethodElements['kwarg'])))
 
-		defaults: list[ast.expr] = [cast(ast.expr, eval(defaultAsStr)) for defaultAsStr in dictionaryToolElements['listDefaults']]
+		defaults: list[ast.expr] = [cast(ast.expr, eval(defaultAsStr)) for defaultAsStr in dictionaryMethodElements['listDefaults']]
 
 		listCall_keywords: list[ast.keyword] = []
-		for tupleCall_keywords in dictionaryToolElements['listTupleCall_keywords']:
+		for tupleCall_keywords in dictionaryMethodElements['listTupleCall_keywords']:
 			argIdentifier, defaultValueNeedsEval, keywordValue = tupleCall_keywords
 			if defaultValueNeedsEval:
 				listCall_keywords.append(ast.keyword(argIdentifier, value=eval(keywordValue)))
@@ -444,19 +405,6 @@ kwarg int
 		if kwarg is not None:
 			listCall_keywords.append(toolMakeFunctionDefReturnCall_keywords)
 
-		# print(f"{ClassDefIdentifier=}")
-		# print(ast.dump(classAs_astAttribute))
-		# print('listFunctionDef_args', *[ast.dump(FunctionDef_arg) for FunctionDef_arg in listFunctionDef_args], sep='\n\t')
-		# print(ast.dump(kwarg) if kwarg else kwarg)
-		# print('defaults', f"{type(defaults)=}", *[ast.dump(ast_expr) for ast_expr in defaults], sep='\n\t')
-		# print('listCall_keywords', *[ast.dump(Call_keyword) for Call_keyword in listCall_keywords], sep='\n\t')
-
-		classVersionMinorMinimum: int = dictionaryToolElements['classVersionMinorMinimum']
-		# if match_argsVersionMinorMinimum > classVersionMinorMinimum:
-		# Do some variations of the method need to be conditional on the Python version?
-		# if match_argsVersionMinorMinimum == classVersionMinorMinimum, then access to match_argsVersionMinorMinimum is already conditional on the python version because it is checked at the class level.
-		match_argsVersionMinorMinimum: int = dictionaryToolElements['match_argsVersionMinorMinimum']
-
 		ast_stmt = ast.FunctionDef(
 			name=ClassDefIdentifier
 			, args=ast.arguments(posonlyargs=[], args=listFunctionDef_args, vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=kwarg, defaults=defaults)
@@ -464,22 +412,56 @@ kwarg int
 			, decorator_list=[astName_staticmethod]
 			, returns=classAs_astAttribute)
 
-		# Does _every_ variation of the method need to be conditional on the Python version?
-		if classVersionMinorMinimum > pythonVersionMinorMinimum:
-			ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
-						, ops=[ast.GtE()]
-						, comparators=[ast.Tuple([ast.Constant(3)
-												, ast.Constant(classVersionMinorMinimum)])])
-					, body=[ast_stmt]
-				)
-		elif match_argsVersionMinorMinimum > classVersionMinorMinimum:
-			# Only some variations of the method need to be conditional on the Python version.
-			ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
-						, ops=[ast.GtE()]
-						, comparators=[ast.Tuple([ast.Constant(3)
-												, ast.Constant(match_argsVersionMinorMinimum)])])
-					, body=[ast_stmt]
-				)
+		return ast_stmt
+
+	def unpackDictionaryAllMatch_argsVersions():
+		if len(dictionaryAllMatch_argsVersions) == 1:
+			for match_argsVersionMinorMinimum, dictionaryMethodElements in dictionaryAllMatch_argsVersions.items():
+				ast_stmt = create_ast_stmt(dictionaryMethodElements)
+		else:
+			# and more stuff
+			for match_argsVersionMinorMinimum, dictionaryMethodElements in dictionaryAllMatch_argsVersions.items():
+				# Do some variations of the method need to be conditional on the Python version?
+				# if match_argsVersionMinorMinimum == classVersionMinorMinimum, then access to match_argsVersionMinorMinimum is already conditional on the python version because it is checked at the class level.
+				# Does _every_ variation of the method need to be conditional on the Python version?
+				if match_argsVersionMinorMinimum > classVersionMinorMinimum:
+					# Only some variations of the method need to be conditional on the Python version.
+					ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
+								, ops=[ast.GtE()]
+								, comparators=[ast.Tuple([ast.Constant(3)
+														, ast.Constant(match_argsVersionMinorMinimum)])])
+							, body=[ast_stmt]
+						)
+				ast_stmt = create_ast_stmt(dictionaryMethodElements)
+
+	dictionaryToolElements: dict[str, DictionaryClassDef] = getElementsMake()
+
+	for ClassDefIdentifier, dictionaryClassDef in dictionaryToolElements.items():
+		if ClassDefIdentifier == 'Attribute':
+			ast_stmt = FunctionDefMake_Attribute
+			list4ClassDefBody.append(ast_stmt)
+			continue
+		if ClassDefIdentifier == 'Import':
+			ast_stmt = FunctionDefMake_Import
+			list4ClassDefBody.append(ast_stmt)
+			continue
+		classAs_astAttribute = cast(ast.expr, eval(dictionaryClassDef['classAs_astAttribute']))
+		dictionaryAllClassVersions: dict[int, dict[int, DictionaryMatchArgs]] = dictionaryClassDef['classVersionMinorMinimum']
+
+		if len(dictionaryAllClassVersions) == 1:
+			for classVersionMinorMinimum, dictionaryAllMatch_argsVersions in dictionaryAllClassVersions.items():
+				unpackDictionaryAllMatch_argsVersions()
+		else:
+			# and more stuff
+			for classVersionMinorMinimum, dictionaryAllMatch_argsVersions in dictionaryAllClassVersions.items():
+				if classVersionMinorMinimum > pythonVersionMinorMinimum:
+					ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
+								, ops=[ast.GtE()]
+								, comparators=[ast.Tuple([ast.Constant(3)
+														, ast.Constant(classVersionMinorMinimum)])])
+							, body=[ast_stmt]
+						)
+				unpackDictionaryAllMatch_argsVersions()
 
 		list4ClassDefBody.append(ast_stmt)
 

@@ -28,19 +28,14 @@ class DictionaryToolBe(TypedDict):
 	classVersionMinorMinimum: int
 
 class DictionaryMatchArgs(TypedDict):
-	listStr4FunctionDef_args: list[str]
 	kwarg: str
 	listDefaults: list[str]
-	listTuplesCall_keywords: list[tuple[str, bool, str]]
+	listStr4FunctionDef_args: list[str]
+	listTupleCall_keywords: list[tuple[str, bool, str]]
 
-class DictionaryToolMake(TypedDict):
-	ClassDefIdentifier: str
+class DictionaryClassDef(TypedDict):
 	classAs_astAttribute: str
-	versionMinimum: dict[int, DictionaryMatchArgs]
-
-	classVersionMinorMinimum: int
-	attributeVersionMinorMinimum: int
-	match_argsVersionMinorMinimum: int
+	classVersionMinorMinimum: dict[int, dict[int, DictionaryMatchArgs]]
 
 def getDataframe(deprecated: bool, versionMinorMaximum: int | None, *indices: str) -> pandas.DataFrame:
 	dataframe = pandas.read_parquet(pathFilenameDataframeAST)
@@ -136,7 +131,7 @@ def getElementsGrab(deprecated: bool = False, versionMinorMaximum: Version | Non
 	# Final grouping by attribute and convert to dictionary
 	return dataframe.groupby('attribute')['listTypesByVersion'].agg(list).to_dict()
 
-def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = None):
+def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = None) -> dict[str, DictionaryClassDef]:
 	listElementsHARDCODED = [
 	'ClassDefIdentifier',
 	'classAs_astAttribute',
@@ -192,7 +187,6 @@ def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = 
 						collected_defaultValue.append(matching_row.iloc[0]['defaultValue'])   # Collect 'defaultValue'
 			collectedTupleCall_keywords.append(tuple(tupleCall_keywords))
 
-		# Store the actual lists/tuples instead of formatting as strings
 		return pandas.Series([collected_args, collected_defaultValue, collectedTupleCall_keywords],
 							index=['listStr4FunctionDef_args', 'listDefaults', 'listTupleCall_keywords'])
 
@@ -211,38 +205,48 @@ def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = 
 	dataframe = dataframe.drop(columns=['match_args', 'attribute', 'attributeRename', 'ast_arg', 'defaultValue', 'keywordArguments', 'kwargAnnotation'])
 
 	# Convert columns to strings for drop_duplicates (since lists aren't hashable)
-	temp_dataframe = dataframe.copy()
-	temp_dataframe['listStr4FunctionDef_args'] = temp_dataframe['listStr4FunctionDef_args'].apply(lambda x: str(x))
-	temp_dataframe['listDefaults'] = temp_dataframe['listDefaults'].apply(lambda x: str(x))
-	temp_dataframe['listTupleCall_keywords'] = temp_dataframe['listTupleCall_keywords'].apply(lambda x: str(x))
+	dataframeHashable = dataframe.copy()
+	dataframeHashable['listStr4FunctionDef_args'] = dataframeHashable['listStr4FunctionDef_args'].apply(lambda x: str(x))
+	dataframeHashable['listDefaults'] = dataframeHashable['listDefaults'].apply(lambda x: str(x))
+	dataframeHashable['listTupleCall_keywords'] = dataframeHashable['listTupleCall_keywords'].apply(lambda x: str(x))
 
 	# Drop duplicates on the string representation
-	temp_dataframe = temp_dataframe.drop_duplicates()
+	dataframeHashable = dataframeHashable.drop_duplicates()
 
 	# Get the indices of the unique rows
-	unique_indices = temp_dataframe.index
+	indicesToKeep = dataframeHashable.index
 
 	# Filter the original dataframe to keep only the unique rows
-	dataframe = dataframe.loc[unique_indices]
+	dataframe = dataframe.loc[indicesToKeep]
 
-	# newColumns = ['listStr4FunctionDef_args', 'listDefaults', 'listTupleCall_keywords', 'kwarg']
-	return dataframe.to_dict(orient='records')
+	# Create the nested dictionary structure using pandas groupby and apply
+	# First, create a function to build the inner match_args dictionaries
+	def create_match_args_dict(group: pandas.Series) -> dict[int, DictionaryMatchArgs]:
+		return {
+			row['match_argsVersionMinorMinimum']: {
+				'kwarg': row['kwarg'],
+				'listDefaults': row['listDefaults'],
+				'listStr4FunctionDef_args': row['listStr4FunctionDef_args'],
+				'listTupleCall_keywords': row['listTupleCall_keywords']
+			}
+			for _elephino, row in group.iterrows()
+		}
 
-	"""Additional notes
-	What to return, identifiers for the return are tentative.
-	ClassDefIdentifier
-	listStr4FunctionDef_args: list[str] if `keywordArguments` is False, add `ast_arg` in the order of 'match_args'
-	kwarg: str, if `keywordArguments` is True, add `kwargAnnotation` to `list_kwargAnnotation`; later, get unique values and `'OR'.join(list_kwargAnnotation)`
-	listDefaults: list[str] = if `keywordArguments` is False, add `defaultValue` in the order of 'match_args'
+	# Group by ClassDefIdentifier and classVersionMinorMinimum to create nested structure
+	ImaAIGeneratedDictionaryWithTheStupidestIdentifier = {}
+	for class_id, class_group in dataframe.groupby('ClassDefIdentifier'):
+		ImaAIGeneratedDictionaryWithTheStupidestIdentifier[class_id] = {
+			'classAs_astAttribute': class_group['classAs_astAttribute'].iloc[0],
+			'classVersionMinorMinimum': {}
+		}
 
-	classAs_astAttribute
-	listTupleCall_keywords: list[tuple(str, bool, str)]
-		attributes in match_args:
-			attribute, if `keywordArguments` is False, False, 'attributeRename' if 'attributeRename' is not "No", else 'attribute'
-						if `keywordArguments` is True, True, then 'defaultValue'
+		# Group by classVersionMinorMinimum and build the inner dictionaries
+		for class_ver, ver_group in class_group.groupby('classVersionMinorMinimum'):
+			ImaAIGeneratedDictionaryWithTheStupidestIdentifier[class_id]['classVersionMinorMinimum'][class_ver] = create_match_args_dict(ver_group)
 
-							classVersionMinorMinimum: more than one if applicable, and with different values for some of the above returns; we should create the code to handle:
-		class,classVersionMinorMinimum,match_argsVersionMinorMinimum
+	return ImaAIGeneratedDictionaryWithTheStupidestIdentifier
+
+"""Additional notes
 		AsyncFunctionDef,-1,-1
 		AsyncFunctionDef,-1,12
 		ClassDef,-1,-1
@@ -250,20 +254,12 @@ def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = 
 		FunctionDef,-1,-1
 		FunctionDef,-1,12
 
-	match_argsVersionMinorMinimum: more than one if applicable, and with different values for some of the above returns; certainly applies to:
-		class,classVersionMinorMinimum,match_argsVersionMinorMinimum
 		ParamSpec,12,12
 		ParamSpec,12,13
 		TypeVar,12,12
 		TypeVar,12,13
 		TypeVarTuple,12,12
 		TypeVarTuple,12,13
-	"""
-
-	"""
-pythonVersionMinorMinimum = 10
-listElements = ['ClassDefIdentifier', 'classAs_astAttribute', 'match_args', 'attribute', 'attributeRename', 'ast_arg', 'defaultValue', 'keywordArguments', 'kwargAnnotation', 'classVersionMinorMinimum', 'match_argsVersionMinorMinimum',]
-df = df[~df['deprecated']]
 	"""
 
 def getElementsTypeAlias(deprecated: bool = False, versionMinorMaximum: int | None = None) -> dict[str, dict[str, dict[int, list[str]]]]:
@@ -287,7 +283,7 @@ def getElementsTypeAlias(deprecated: bool = False, versionMinorMaximum: int | No
 	dictionaryAttribute: dict[str, dict[str, dict[int, list[str]]]] = {}
 	grouped = dataframe.groupby(['attribute', 'TypeAliasSubcategory', 'attributeVersionMinorMinimum'])
 	for (attribute, typeAliasSubcategory, attributeVersionMinorMinimum), group in grouped:
-		listClassDefIdentifier = sorted(group['classAs_astAttribute'].unique(), key=lambda x: str(x).lower()) 
+		listClassDefIdentifier = sorted(group['classAs_astAttribute'].unique(), key=lambda x: str(x).lower())
 		if attribute not in dictionaryAttribute:
 			dictionaryAttribute[attribute] = {}
 		if typeAliasSubcategory not in dictionaryAttribute[attribute]:
