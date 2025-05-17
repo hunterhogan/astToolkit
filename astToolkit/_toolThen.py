@@ -12,7 +12,7 @@ Together, these classes provide a complete system for manipulating AST nodes onc
 predicate functions from ifThis.
 """
 
-from astToolkit import ast_Identifier, NodeORattribute
+from astToolkit import NodeORattribute
 from collections.abc import Callable, Sequence
 from typing import Any
 import ast
@@ -29,8 +29,8 @@ class Then:
 	for AST manipulation.
 	"""
 	@staticmethod
-	def appendTo(listOfAny: list[Any]) -> Callable[[ast.AST | ast_Identifier], ast.AST | ast_Identifier]:
-		def workhorse(node: ast.AST | ast_Identifier) -> ast.AST | ast_Identifier:
+	def appendTo(listOfAny: list[Any]) -> Callable[[ast.AST | str], ast.AST | str]:
+		def workhorse(node: ast.AST | str) -> ast.AST | str:
 			listOfAny.append(node)
 			return node
 		return workhorse

@@ -9,8 +9,12 @@
 
 from collections.abc import Sequence
 from toolFactory import pathFilenameDataframeAST, pythonVersionMinorMinimum
-from typing import TypedDict, TypeAlias, cast
+from typing import cast, TypeAlias, TypedDict
 import pandas
+
+# TODO datacenter needs to do all data manipulation, not the toolFactory
+# TODO more and better pandas usage
+# TODO or better, get rid of Pandas and use the original sources
 
 Attribute: TypeAlias = str
 Version: TypeAlias = int
@@ -122,13 +126,8 @@ def getElementsGrab(deprecated: bool = False, versionMinorMaximum: Version | Non
 	dataframe = dataframe.drop_duplicates(subset=['attribute', 'ast_exprType'], keep='first')
 
 	dataframe = dataframe.groupby(['attribute', 'attributeVersionMinorMinimum'])['ast_exprType'].agg(list).reset_index()
-	# Sort each list of ast_exprType case-insensitively
 	dataframe['ast_exprType'] = dataframe['ast_exprType'].apply(sorted, key=str.lower)
-
-	# Create tuples of (Version, ListTypesASTformAsStr)
 	dataframe['listTypesByVersion'] = dataframe[['attributeVersionMinorMinimum', 'ast_exprType']].apply(tuple, axis=1)
-
-	# Final grouping by attribute and convert to dictionary
 	return dataframe.groupby('attribute')['listTypesByVersion'].agg(list).to_dict()
 
 def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = None) -> dict[str, DictionaryClassDef]:
@@ -155,17 +154,15 @@ def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = 
 	dataframe = dataframe[dataframe['attribute'] != "No"]
 	dataframe = dataframe[listElements].drop_duplicates()
 
-	# Create a new column 'listStr4FunctionDef_args' based on conditions
 	def compute_listFunctionDef_args(row: pandas.Series) -> pandas.Series:
-		listAttributes = cast(str, row['match_args']).replace("'","").replace(" ","").split(',')  # Split 'match_args' into a list
-		className = row['ClassDefIdentifier']   # Get 'ClassDefIdentifier'
-		version = row['match_argsVersionMinorMinimum']   # Get 'match_argsVersionMinorMinimum'
+		listAttributes: list[str] = cast(str, row['match_args']).replace("'","").replace(" ","").split(',')  # Split 'match_args' into a list
+		className = row['ClassDefIdentifier']
+		version = row['match_argsVersionMinorMinimum']
 		collected_args: list[str] = []
 		collected_defaultValue: list[str] = []
 		collectedTupleCall_keywords: list[str | bool] = []
 		for attributeTarget in listAttributes:
 			tupleCall_keywords = []
-			# Find the row matching the conditions
 			tupleCall_keywords.append(attributeTarget)
 			matching_row = dataframe[
 				(dataframe['attribute'] == attributeTarget) &
@@ -173,18 +170,18 @@ def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = 
 				(dataframe['match_argsVersionMinorMinimum'] == version)
 			]
 			if not matching_row.empty:
-				if matching_row.iloc[0]['keywordArguments']:   # Check 'keywordArguments'
+				if matching_row.iloc[0]['keywordArguments']:
 					tupleCall_keywords.append(True)
 					tupleCall_keywords.append(matching_row.iloc[0]['defaultValue'])
 				else:
-					collected_args.append(matching_row.iloc[0]['ast_arg'])   # Collect 'ast_arg'
+					collected_args.append(matching_row.iloc[0]['ast_arg'])
 					tupleCall_keywords.append(False)
 					if matching_row.iloc[0]['attributeRename'] != "No":
 						tupleCall_keywords.append(matching_row.iloc[0]['attributeRename'])
 					else:
 						tupleCall_keywords.append(attributeTarget)
 					if matching_row.iloc[0]['defaultValue'] != "No":
-						collected_defaultValue.append(matching_row.iloc[0]['defaultValue'])   # Collect 'defaultValue'
+						collected_defaultValue.append(matching_row.iloc[0]['defaultValue'])
 			collectedTupleCall_keywords.append(tuple(tupleCall_keywords))
 
 		return pandas.Series([collected_args, collected_defaultValue, collectedTupleCall_keywords],
@@ -193,14 +190,10 @@ def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = 
 	# Apply the function to create the new columns
 	dataframe[['listStr4FunctionDef_args', 'listDefaults', 'listTupleCall_keywords']] = dataframe.apply(compute_listFunctionDef_args, axis=1)
 
-	# Compute 'kwarg' column based on 'kwargAnnotation'
 	def compute_kwarg(group: pandas.Series) -> str:
 		list_kwargAnnotation = sorted(value for value in group.unique() if value != "No")
 		return 'OR'.join(list_kwargAnnotation) if list_kwargAnnotation else "No"
-	dataframe['kwarg'] = (
-		dataframe.groupby(['ClassDefIdentifier', 'match_argsVersionMinorMinimum'])['kwargAnnotation']
-		.transform(compute_kwarg)
-	)
+	dataframe['kwarg'] = (dataframe.groupby(['ClassDefIdentifier', 'match_argsVersionMinorMinimum'])['kwargAnnotation'].transform(compute_kwarg))
 
 	dataframe = dataframe.drop(columns=['match_args', 'attribute', 'attributeRename', 'ast_arg', 'defaultValue', 'keywordArguments', 'kwargAnnotation'])
 
@@ -209,17 +202,13 @@ def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = 
 	dataframeHashable['listStr4FunctionDef_args'] = dataframeHashable['listStr4FunctionDef_args'].apply(lambda x: str(x))
 	dataframeHashable['listDefaults'] = dataframeHashable['listDefaults'].apply(lambda x: str(x))
 	dataframeHashable['listTupleCall_keywords'] = dataframeHashable['listTupleCall_keywords'].apply(lambda x: str(x))
-
-	# Drop duplicates on the string representation
 	dataframeHashable = dataframeHashable.drop_duplicates()
-
-	# Get the indices of the unique rows
 	indicesToKeep = dataframeHashable.index
 
 	# Filter the original dataframe to keep only the unique rows
 	dataframe = dataframe.loc[indicesToKeep]
 
-	# Create the nested dictionary structure using pandas groupby and apply
+	# Create the nested dictionary structure
 	# First, create a function to build the inner match_args dictionaries
 	def create_match_args_dict(group: pandas.Series) -> dict[int, DictionaryMatchArgs]:
 		return {
@@ -246,32 +235,14 @@ def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = 
 
 	return ImaAIGeneratedDictionaryWithTheStupidestIdentifier
 
-"""Additional notes
-		AsyncFunctionDef,-1,-1
-		AsyncFunctionDef,-1,12
-		ClassDef,-1,-1
-		ClassDef,-1,12
-		FunctionDef,-1,-1
-		FunctionDef,-1,12
-
-		ParamSpec,12,12
-		ParamSpec,12,13
-		TypeVar,12,12
-		TypeVar,12,13
-		TypeVarTuple,12,12
-		TypeVarTuple,12,13
-	"""
-
 def getElementsTypeAlias(deprecated: bool = False, versionMinorMaximum: int | None = None) -> dict[str, dict[str, dict[int, list[str]]]]:
 	listElementsHARDCODED = ['attribute', 'TypeAliasSubcategory', 'attributeVersionMinorMinimum', 'classAs_astAttribute']
 	listElements = listElementsHARDCODED
 
 	dataframe = getDataframe(deprecated, versionMinorMaximum)
 
-	# Filter for _fields
 	dataframe = dataframe[dataframe['attributeKind'] == '_field']
 
-	# Update attributeVersionMinorMinimum
 	dataframe['attributeVersionMinorMinimum'] = dataframe['attributeVersionMinorMinimum'].where(
 		dataframe['attributeVersionMinorMinimum'] > pythonVersionMinorMinimum, -1
 	)

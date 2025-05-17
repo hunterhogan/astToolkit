@@ -1,7 +1,6 @@
 """This file is generated automatically, so changes to this file will be lost."""
 from astToolkit import intORstr, intORstrORtype_params, intORtype_params, str_nameDOTname
-from collections.abc import Sequence
-from typing import Any, Literal
+from typing import Any
 import ast
 import sys
 
@@ -50,16 +49,10 @@ class Make:
     @staticmethod
     def AsyncFor(target: ast.expr, iter: ast.expr, body: list[ast.stmt], orElse: list[ast.stmt]=[], **keywordArguments: intORstr) -> ast.AsyncFor:
         return ast.AsyncFor(target=target, iter=iter, body=body, orelse=orElse, type_comment=None, **keywordArguments)
-    if sys.version_info >= (3, 12):
 
-        @staticmethod
-        def AsyncFunctionDef(name: str, args: ast.arguments=ast.arguments(), body: list[ast.stmt]=[], decorator_list: list[ast.expr]=[], returns: ast.expr | None=None, **keywordArguments: intORstrORtype_params) -> ast.AsyncFunctionDef:
-            return ast.AsyncFunctionDef(name=name, args=args, body=body, decorator_list=decorator_list, returns=returns, type_comment=None, type_params=[], **keywordArguments)
-    else:
-
-        @staticmethod
-        def AsyncFunctionDef(name: str, args: ast.arguments=ast.arguments(), body: list[ast.stmt]=[], decorator_list: list[ast.expr]=[], returns: ast.expr | None=None, **keywordArguments: intORstr) -> ast.AsyncFunctionDef:
-            return ast.AsyncFunctionDef(name=name, args=args, body=body, decorator_list=decorator_list, returns=returns, type_comment=None, **keywordArguments)
+    @staticmethod
+    def AsyncFunctionDef(name: str, args: ast.arguments=ast.arguments(), body: list[ast.stmt]=[], decorator_list: list[ast.expr]=[], returns: ast.expr | None=None, **keywordArguments: intORstrORtype_params) -> ast.AsyncFunctionDef:
+        return ast.AsyncFunctionDef(name=name, args=args, body=body, decorator_list=decorator_list, returns=returns, type_comment=None, **keywordArguments)
 
     @staticmethod
     def AsyncWith(items: list[ast.withitem], body: list[ast.stmt], **keywordArguments: intORstr) -> ast.AsyncWith:
@@ -105,16 +98,10 @@ class Make:
     @staticmethod
     def Call(callee: ast.expr, args: list[ast.expr]=[], list_keyword: list[ast.keyword]=[], **keywordArguments: int) -> ast.Call:
         return ast.Call(func=callee, args=args, keywords=list_keyword, **keywordArguments)
-    if sys.version_info >= (3, 12):
 
-        @staticmethod
-        def ClassDef(name: str, bases: list[ast.expr]=[], list_keyword: list[ast.keyword]=[], body: list[ast.stmt]=[], decorator_list: list[ast.expr]=[], **keywordArguments: intORtype_params) -> ast.ClassDef:
-            return ast.ClassDef(name=name, bases=bases, keywords=list_keyword, body=body, decorator_list=decorator_list, type_params=[], **keywordArguments)
-    else:
-
-        @staticmethod
-        def ClassDef(name: str, bases: list[ast.expr]=[], list_keyword: list[ast.keyword]=[], body: list[ast.stmt]=[], decorator_list: list[ast.expr]=[], **keywordArguments: int) -> ast.ClassDef:
-            return ast.ClassDef(name=name, bases=bases, keywords=list_keyword, body=body, decorator_list=decorator_list, **keywordArguments)
+    @staticmethod
+    def ClassDef(name: str, bases: list[ast.expr]=[], list_keyword: list[ast.keyword]=[], body: list[ast.stmt]=[], decorator_list: list[ast.expr]=[], **keywordArguments: intORtype_params) -> ast.ClassDef:
+        return ast.ClassDef(name=name, bases=bases, keywords=list_keyword, body=body, decorator_list=decorator_list, **keywordArguments)
 
     @staticmethod
     def Compare(left: ast.expr, ops: list[ast.cmpop], comparators: list[ast.expr], **keywordArguments: int) -> ast.Compare:
@@ -171,16 +158,10 @@ class Make:
     @staticmethod
     def FormattedValue(value: ast.expr, conversion: int, format_spec: ast.expr | None=None, **keywordArguments: int) -> ast.FormattedValue:
         return ast.FormattedValue(value=value, conversion=conversion, format_spec=format_spec, **keywordArguments)
-    if sys.version_info >= (3, 12):
 
-        @staticmethod
-        def FunctionDef(name: str, args: ast.arguments=ast.arguments(), body: list[ast.stmt]=[], decorator_list: list[ast.expr]=[], returns: ast.expr | None=None, **keywordArguments: intORstrORtype_params) -> ast.FunctionDef:
-            return ast.FunctionDef(name=name, args=args, body=body, decorator_list=decorator_list, returns=returns, type_comment=None, type_params=[], **keywordArguments)
-    else:
-
-        @staticmethod
-        def FunctionDef(name: str, args: ast.arguments=ast.arguments(), body: list[ast.stmt]=[], decorator_list: list[ast.expr]=[], returns: ast.expr | None=None, **keywordArguments: intORstr) -> ast.FunctionDef:
-            return ast.FunctionDef(name=name, args=args, body=body, decorator_list=decorator_list, returns=returns, type_comment=None, **keywordArguments)
+    @staticmethod
+    def FunctionDef(name: str, args: ast.arguments=ast.arguments(), body: list[ast.stmt]=[], decorator_list: list[ast.expr]=[], returns: ast.expr | None=None, **keywordArguments: intORstrORtype_params) -> ast.FunctionDef:
+        return ast.FunctionDef(name=name, args=args, body=body, decorator_list=decorator_list, returns=returns, type_comment=None, **keywordArguments)
 
     @staticmethod
     def FunctionType(argtypes: list[ast.expr], returns: ast.expr) -> ast.FunctionType:
@@ -289,17 +270,16 @@ class Make:
     @staticmethod
     def Nonlocal(names: list[str], **keywordArguments: int) -> ast.Nonlocal:
         return ast.Nonlocal(names=names, **keywordArguments)
-    if sys.version_info >= (3, 12):
-        if sys.version_info >= (3, 13):
+    if sys.version_info >= (3, 13):
 
-            @staticmethod
-            def ParamSpec(name: str, default_value: ast.expr | None=None, **keywordArguments: int) -> ast.ParamSpec:
-                return ast.ParamSpec(name=name, default_value=default_value, **keywordArguments)
-        else:
+        @staticmethod
+        def ParamSpec(name: str, default_value: ast.expr | None=None, **keywordArguments: int) -> ast.ParamSpec:
+            return ast.ParamSpec(name=name, default_value=default_value, **keywordArguments)
+    else:
 
-            @staticmethod
-            def ParamSpec(name: str, **keywordArguments: int) -> ast.ParamSpec:
-                return ast.ParamSpec(name=name, **keywordArguments)
+        @staticmethod
+        def ParamSpec(name: str, **keywordArguments: int) -> ast.ParamSpec:
+            return ast.ParamSpec(name=name, **keywordArguments)
 
     @staticmethod
     def Pass(lineno: int, col_offset: int, end_lineno: int | None=None, end_col_offset: int | None=None) -> ast.Pass:
@@ -344,51 +324,46 @@ class Make:
     @staticmethod
     def Try(body: list[ast.stmt], handlers: list[ast.ExceptHandler], orElse: list[ast.stmt]=[], finalbody: list[ast.stmt]=[], **keywordArguments: int) -> ast.Try:
         return ast.Try(body=body, handlers=handlers, orelse=orElse, finalbody=finalbody, **keywordArguments)
-    if sys.version_info >= (3, 11):
 
-        @staticmethod
-        def TryStar(body: list[ast.stmt], handlers: list[ast.ExceptHandler], orElse: list[ast.stmt]=[], finalbody: list[ast.stmt]=[], **keywordArguments: int) -> ast.TryStar:
-            return ast.TryStar(body=body, handlers=handlers, orelse=orElse, finalbody=finalbody, **keywordArguments)
+    @staticmethod
+    def TryStar(body: list[ast.stmt], handlers: list[ast.ExceptHandler], orElse: list[ast.stmt]=[], finalbody: list[ast.stmt]=[], **keywordArguments: int) -> ast.TryStar:
+        return ast.TryStar(body=body, handlers=handlers, orelse=orElse, finalbody=finalbody, **keywordArguments)
 
     @staticmethod
     def Tuple(elts: list[ast.expr]=[], context: ast.expr_context=ast.Load(), **keywordArguments: int) -> ast.Tuple:
         return ast.Tuple(elts=elts, ctx=context, **keywordArguments)
-    if sys.version_info >= (3, 12):
 
-        @staticmethod
-        def type_param(lineno: int, col_offset: int, end_lineno: int, end_col_offset: int) -> ast.type_param:
-            return ast.type_param(lineno=lineno, col_offset=col_offset, end_lineno=end_lineno, end_col_offset=end_col_offset)
-    if sys.version_info >= (3, 12):
+    @staticmethod
+    def type_param(lineno: int, col_offset: int, end_lineno: int, end_col_offset: int) -> ast.type_param:
+        return ast.type_param(lineno=lineno, col_offset=col_offset, end_lineno=end_lineno, end_col_offset=end_col_offset)
 
-        @staticmethod
-        def TypeAlias(name: ast.Name, value: ast.expr, **keywordArguments: intORtype_params) -> ast.TypeAlias:
-            return ast.TypeAlias(name=name, type_params=[], value=value, **keywordArguments)
+    @staticmethod
+    def TypeAlias(name: ast.Name, value: ast.expr, **keywordArguments: intORtype_params) -> ast.TypeAlias:
+        return ast.TypeAlias(name=name, type_params=[], value=value, **keywordArguments)
 
     @staticmethod
     def TypeIgnore(lineno: int, tag: str) -> ast.TypeIgnore:
         return ast.TypeIgnore(lineno=lineno, tag=tag)
-    if sys.version_info >= (3, 12):
-        if sys.version_info >= (3, 13):
+    if sys.version_info >= (3, 13):
 
-            @staticmethod
-            def TypeVar(name: str, bound: ast.expr | None=None, default_value: ast.expr | None=None, **keywordArguments: int) -> ast.TypeVar:
-                return ast.TypeVar(name=name, bound=bound, default_value=default_value, **keywordArguments)
-        else:
+        @staticmethod
+        def TypeVar(name: str, bound: ast.expr | None=None, default_value: ast.expr | None=None, **keywordArguments: int) -> ast.TypeVar:
+            return ast.TypeVar(name=name, bound=bound, default_value=default_value, **keywordArguments)
+    else:
 
-            @staticmethod
-            def TypeVar(name: str, bound: ast.expr | None=None, **keywordArguments: int) -> ast.TypeVar:
-                return ast.TypeVar(name=name, bound=bound, **keywordArguments)
-    if sys.version_info >= (3, 12):
-        if sys.version_info >= (3, 13):
+        @staticmethod
+        def TypeVar(name: str, bound: ast.expr | None=None, **keywordArguments: int) -> ast.TypeVar:
+            return ast.TypeVar(name=name, bound=bound, **keywordArguments)
+    if sys.version_info >= (3, 13):
 
-            @staticmethod
-            def TypeVarTuple(name: str, default_value: ast.expr | None=None, **keywordArguments: int) -> ast.TypeVarTuple:
-                return ast.TypeVarTuple(name=name, default_value=default_value, **keywordArguments)
-        else:
+        @staticmethod
+        def TypeVarTuple(name: str, default_value: ast.expr | None=None, **keywordArguments: int) -> ast.TypeVarTuple:
+            return ast.TypeVarTuple(name=name, default_value=default_value, **keywordArguments)
+    else:
 
-            @staticmethod
-            def TypeVarTuple(name: str, **keywordArguments: int) -> ast.TypeVarTuple:
-                return ast.TypeVarTuple(name=name, **keywordArguments)
+        @staticmethod
+        def TypeVarTuple(name: str, **keywordArguments: int) -> ast.TypeVarTuple:
+            return ast.TypeVarTuple(name=name, **keywordArguments)
 
     @staticmethod
     def UnaryOp(op: ast.unaryop, operand: ast.expr, **keywordArguments: int) -> ast.UnaryOp:

@@ -1,16 +1,8 @@
-from ast import BitOr
 from collections.abc import Iterable
 from pathlib import Path
-from typing import TypeAlias as typing_TypeAlias
 import ast
-import pandas
 
-ast_Identifier: typing_TypeAlias = str
-str_nameDOTname: typing_TypeAlias = str
-
-pythonVersionMinorMinimum: int = 10
-sys_version_infoMinimum: tuple[int, int] = (3, 10)
-sys_version_infoTarget: tuple[int, int] = (3, 13)
+pythonVersionMinorMinimum: int = 12
 
 class FREAKOUT(Exception):
 	pass
@@ -26,7 +18,6 @@ pathPackage = pathRoot / packageName
 pathToolFactory = pathRoot / 'toolFactory'
 
 pathFilenameDataframeAST = pathToolFactory / 'dataframeAST.parquet'
-pathFilenameDatacenterTyping = pathToolFactory / 'datacenter.pyi'
 
 fileExtension: str = '.py'
 
@@ -120,4 +111,3 @@ joinedAdd = ast.Add.join(ImaIterable)      # Creates the nested structure for a 
 
 # print(ast.dump(ast.parse(ww, type_comments=True), indent=None))
 # from ast import *
-

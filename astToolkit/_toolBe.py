@@ -382,11 +382,10 @@ class Be:
     @staticmethod
     def Or(node: ast.AST) -> TypeGuard[ast.Or]:
         return isinstance(node, ast.Or)
-    if sys.version_info >= (3, 12):
 
-        @staticmethod
-        def ParamSpec(node: ast.AST) -> TypeGuard[ast.ParamSpec]:
-            return isinstance(node, ast.ParamSpec)
+    @staticmethod
+    def ParamSpec(node: ast.AST) -> TypeGuard[ast.ParamSpec]:
+        return isinstance(node, ast.ParamSpec)
 
     @staticmethod
     def Pass(node: ast.AST) -> TypeGuard[ast.Pass]:
@@ -447,11 +446,10 @@ class Be:
     @staticmethod
     def Try(node: ast.AST) -> TypeGuard[ast.Try]:
         return isinstance(node, ast.Try)
-    if sys.version_info >= (3, 11):
 
-        @staticmethod
-        def TryStar(node: ast.AST) -> TypeGuard[ast.TryStar]:
-            return isinstance(node, ast.TryStar)
+    @staticmethod
+    def TryStar(node: ast.AST) -> TypeGuard[ast.TryStar]:
+        return isinstance(node, ast.TryStar)
 
     @staticmethod
     def Tuple(node: ast.AST) -> TypeGuard[ast.Tuple]:
@@ -460,30 +458,26 @@ class Be:
     @staticmethod
     def type_ignore(node: ast.AST) -> TypeGuard[ast.type_ignore]:
         return isinstance(node, ast.type_ignore)
-    if sys.version_info >= (3, 12):
 
-        @staticmethod
-        def type_param(node: ast.AST) -> TypeGuard[ast.type_param]:
-            return isinstance(node, ast.type_param)
-    if sys.version_info >= (3, 12):
+    @staticmethod
+    def type_param(node: ast.AST) -> TypeGuard[ast.type_param]:
+        return isinstance(node, ast.type_param)
 
-        @staticmethod
-        def TypeAlias(node: ast.AST) -> TypeGuard[ast.TypeAlias]:
-            return isinstance(node, ast.TypeAlias)
+    @staticmethod
+    def TypeAlias(node: ast.AST) -> TypeGuard[ast.TypeAlias]:
+        return isinstance(node, ast.TypeAlias)
 
     @staticmethod
     def TypeIgnore(node: ast.AST) -> TypeGuard[ast.TypeIgnore]:
         return isinstance(node, ast.TypeIgnore)
-    if sys.version_info >= (3, 12):
 
-        @staticmethod
-        def TypeVar(node: ast.AST) -> TypeGuard[ast.TypeVar]:
-            return isinstance(node, ast.TypeVar)
-    if sys.version_info >= (3, 12):
+    @staticmethod
+    def TypeVar(node: ast.AST) -> TypeGuard[ast.TypeVar]:
+        return isinstance(node, ast.TypeVar)
 
-        @staticmethod
-        def TypeVarTuple(node: ast.AST) -> TypeGuard[ast.TypeVarTuple]:
-            return isinstance(node, ast.TypeVarTuple)
+    @staticmethod
+    def TypeVarTuple(node: ast.AST) -> TypeGuard[ast.TypeVarTuple]:
+        return isinstance(node, ast.TypeVarTuple)
 
     @staticmethod
     def UAdd(node: ast.AST) -> TypeGuard[ast.UAdd]:

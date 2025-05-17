@@ -2,29 +2,13 @@ from typing import Any, TypeAlias as typing_TypeAlias, TypeVar as typing_TypeVar
 import ast
 import sys
 
-yourPythonIsOld: typing_TypeAlias = Any
-if sys.version_info >= (3, 11):
-    from ast import TryStar as astDOTTryStar
-else:
-    astDOTTryStar: typing_TypeAlias = yourPythonIsOld
-if sys.version_info >= (3, 12):
-    from ast import ParamSpec as astDOTParamSpec, type_param as astDOTtype_param, TypeAlias as astDOTTypeAlias, TypeVar as astDOTTypeVar, TypeVarTuple as astDOTTypeVarTuple
-else:
-    astDOTParamSpec: typing_TypeAlias = yourPythonIsOld
-    astDOTtype_param: typing_TypeAlias = yourPythonIsOld
-    astDOTTypeAlias: typing_TypeAlias = yourPythonIsOld
-    astDOTTypeVar: typing_TypeAlias = yourPythonIsOld
-    astDOTTypeVarTuple: typing_TypeAlias = yourPythonIsOld
-
 # Type hints through TypeAlias or type "hints" through the identifier name.
-ast_expr_Slice: typing_TypeAlias = ast.expr
-ast_Identifier: typing_TypeAlias = str
 str_nameDOTname: typing_TypeAlias = str
 
 # Limited success with TypeVar.
 个 = typing_TypeVar('个', bound = ast.AST, covariant = True)
 个return = typing_TypeVar('个return', covariant = True)
-NodeORattribute = typing_TypeVar('NodeORattribute', bound = ast.AST | ast_Identifier | str_nameDOTname | bool | Any | None, covariant = True)
+NodeORattribute = typing_TypeVar('NodeORattribute', bound = ast.AST | str | str_nameDOTname | bool | Any | None, covariant = True)
 
 # For my reference, all ast classes by subgroup:
 Ima_ast_boolop: typing_TypeAlias = ast.boolop | ast.And | ast.Or
@@ -35,9 +19,9 @@ Ima_ast_expr: typing_TypeAlias = ast.expr | ast.Attribute | ast.Await | ast.BinO
 Ima_ast_mod: typing_TypeAlias = ast.mod | ast.Expression | ast.FunctionType | ast.Interactive | ast.Module
 Ima_ast_operator: typing_TypeAlias = ast.operator | ast.Add | ast.Sub | ast.Mult | ast.MatMult | ast.Div | ast.Mod | ast.Pow | ast.LShift | ast.RShift | ast.BitOr | ast.BitXor | ast.BitAnd | ast.FloorDiv
 iMa_ast_pattern: typing_TypeAlias = ast.pattern | ast.MatchAs | ast.MatchClass | ast.MatchMapping | ast.MatchOr | ast.MatchSequence | ast.MatchSingleton | ast.MatchStar | ast.MatchValue
-Ima_ast_stmt: typing_TypeAlias = ast.stmt | ast.AnnAssign | ast.Assert | ast.Assign | ast.AsyncFor | ast.AsyncFunctionDef | ast.AsyncWith | ast.AugAssign | ast.Break | ast.ClassDef | ast.Continue | ast.Delete | ast.Expr | ast.For | ast.FunctionDef | ast.Global | ast.If | ast.Import | ast.ImportFrom | ast.Match | ast.Nonlocal | ast.Pass | ast.Raise | ast.Return | ast.Try | astDOTTryStar | astDOTTypeAlias | ast.While | ast.With
+Ima_ast_stmt: typing_TypeAlias = ast.stmt | ast.AnnAssign | ast.Assert | ast.Assign | ast.AsyncFor | ast.AsyncFunctionDef | ast.AsyncWith | ast.AugAssign | ast.Break | ast.ClassDef | ast.Continue | ast.Delete | ast.Expr | ast.For | ast.FunctionDef | ast.Global | ast.If | ast.Import | ast.ImportFrom | ast.Match | ast.Nonlocal | ast.Pass | ast.Raise | ast.Return | ast.Try | ast.TryStar | ast.TypeAlias | ast.While | ast.With
 Ima_ast_type_ignore: typing_TypeAlias = ast.type_ignore | ast.TypeIgnore
-Ima_ast_type_param: typing_TypeAlias = astDOTtype_param | astDOTParamSpec | astDOTTypeVar | astDOTTypeVarTuple
+Ima_ast_type_param: typing_TypeAlias = ast.type_param | ast.ParamSpec | ast.TypeVar | ast.TypeVarTuple
 Ima_ast_unaryop: typing_TypeAlias = ast.unaryop | ast.Invert | ast.Not | ast.UAdd | ast.USub
 
 Ima_ast_orphan = ast.alias | ast.arg | ast.arguments | ast.comprehension | ast.keyword | ast.match_case | ast.withitem

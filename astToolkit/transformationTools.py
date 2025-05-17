@@ -1,6 +1,4 @@
 from astToolkit import (
-	NodeORattribute,
-	ast_Identifier,
 	Be,
 	ClassIsAndAttribute,
 	DOT,
@@ -11,6 +9,7 @@ from astToolkit import (
 	IngredientsModule,
 	Make,
 	NodeChanger,
+	NodeORattribute,
 	NodeTourist,
 	Then,
 	个,
@@ -20,7 +19,7 @@ from collections.abc import Callable, Mapping, Sequence
 from copy import deepcopy
 from os import PathLike
 from pathlib import PurePath
-from typing import Any, cast, overload
+from typing import Any, cast
 from Z0Z_tools import writeStringToHere
 import ast
 
@@ -29,7 +28,7 @@ import ast
 # This is most obviously a problem in `ClassIsAndAttribute.targetsIs` because the user needs to pass
 # a function that can take list[ast.expr] as a parameter.
 # I don't know if the following works, but it is interesting.
-# ClassIsAndAttribute.targetsIs(ast.Assign, lambda list_expr: any([IfThis.isSubscript_Identifier('foldGroups')(node) for node in list_expr]))
+# ClassIsAndAttribute.targetsIs(ast.Assign, lambda list_expr: any([IfThis.isSubscriptIdentifier('foldGroups')(node) for node in list_expr]))
 
 class cleverNamePrototype:
     @staticmethod
@@ -40,7 +39,7 @@ class cleverNamePrototype:
             return node
         return workhorse
 
-def makeDictionaryFunctionDef(module: ast.Module) -> dict[ast_Identifier, ast.FunctionDef]:
+def makeDictionaryFunctionDef(module: ast.Module) -> dict[str, ast.FunctionDef]:
 	"""
 	Create a dictionary mapping function names to their AST definitions.
 
@@ -53,11 +52,11 @@ def makeDictionaryFunctionDef(module: ast.Module) -> dict[ast_Identifier, ast.Fu
 	Returns:
 		A dictionary mapping function identifiers to their AST function definition nodes.
 	"""
-	dictionaryIdentifier2FunctionDef: dict[ast_Identifier, ast.FunctionDef] = {}
+	dictionaryIdentifier2FunctionDef: dict[str, ast.FunctionDef] = {}
 	NodeTourist(Be.FunctionDef, Then.updateKeyValueIn(DOT.name, Then.extractIt, dictionaryIdentifier2FunctionDef)).visit(module)
 	return dictionaryIdentifier2FunctionDef
 
-def inlineFunctionDef(identifierToInline: ast_Identifier, module: ast.Module) -> ast.FunctionDef:
+def inlineFunctionDef(identifierToInline: str, module: ast.Module) -> ast.FunctionDef:
 	"""
 	Inline function calls within a function definition to create a self-contained function.
 
@@ -76,20 +75,20 @@ def inlineFunctionDef(identifierToInline: ast_Identifier, module: ast.Module) ->
 	Raises:
 		ValueError: If the function to inline is not found in the module.
 	"""
-	dictionaryFunctionDef: dict[ast_Identifier, ast.FunctionDef] = makeDictionaryFunctionDef(module)
+	dictionaryFunctionDef: dict[str, ast.FunctionDef] = makeDictionaryFunctionDef(module)
 	try:
 		FunctionDefToInline = dictionaryFunctionDef[identifierToInline]
 	except KeyError as ERRORmessage:
 		raise ValueError(f"FunctionDefToInline not found in dictionaryIdentifier2FunctionDef: {identifierToInline = }") from ERRORmessage
 
-	listIdentifiersCalledFunctions: list[ast_Identifier] = []
+	listIdentifiersCalledFunctions: list[str] = []
 	findIdentifiersToInline = NodeTourist(findThis = IfThis.isCallToName
-							, doThat = Grab.funcAttribute(cast(Callable[[ast.expr], ast.expr], Grab.idAttribute(cast(Callable[[ast_Identifier], ast_Identifier], Then.appendTo(listIdentifiersCalledFunctions))))))
+							, doThat = Grab.funcAttribute(cast(Callable[[ast.expr], ast.expr], Grab.idAttribute(cast(Callable[[str], str], Then.appendTo(listIdentifiersCalledFunctions))))))
 	findIdentifiersToInline.visit(FunctionDefToInline)
 
-	dictionary4Inlining: dict[ast_Identifier, ast.FunctionDef] = {}
+	dictionary4Inlining: dict[str, ast.FunctionDef] = {}
 	for identifier in sorted(set(listIdentifiersCalledFunctions).intersection(dictionaryFunctionDef.keys())):
-		if NodeTourist(IfThis.matchesMeButNotAnyDescendant(IfThis.isCall_Identifier(identifier)), Then.extractIt).captureLastMatch(module) is not None:
+		if NodeTourist(IfThis.matchesMeButNotAnyDescendant(IfThis.isCallIdentifier(identifier)), Then.extractIt).captureLastMatch(module) is not None:
 			dictionary4Inlining[identifier] = dictionaryFunctionDef[identifier]
 
 	keepGoing = True
@@ -102,28 +101,28 @@ def inlineFunctionDef(identifierToInline: ast_Identifier, module: ast.Module) ->
 		if len(listIdentifiersCalledFunctions) > 0:
 			keepGoing = True
 			for identifier in listIdentifiersCalledFunctions:
-				if NodeTourist(IfThis.matchesMeButNotAnyDescendant(IfThis.isCall_Identifier(identifier)), Then.extractIt).captureLastMatch(module) is not None:
+				if NodeTourist(IfThis.matchesMeButNotAnyDescendant(IfThis.isCallIdentifier(identifier)), Then.extractIt).captureLastMatch(module) is not None:
 					FunctionDefTarget = dictionaryFunctionDef[identifier]
 					if len(FunctionDefTarget.body) == 1:
 						replacement = NodeTourist(Be.Return, Then.extractIt(DOT.value)).captureLastMatch(FunctionDefTarget)
 
-						findThis = IfThis.isCall_Identifier(identifier)
+						findThis = IfThis.isCallIdentifier(identifier)
 						doThat = Then.replaceWith(replacement)
 						inliner = NodeChanger(findThis, doThat)
 						for astFunctionDef in dictionary4Inlining.values():
 							inliner.visit(astFunctionDef)
 					else:
-						inliner = NodeChanger(ClassIsAndAttribute.valueIs(ast.Assign, IfThis.isCall_Identifier(identifier)),Then.replaceWith(FunctionDefTarget.body[0:-1]))
+						inliner = NodeChanger(ClassIsAndAttribute.valueIs(ast.Assign, IfThis.isCallIdentifier(identifier)),Then.replaceWith(FunctionDefTarget.body[0:-1]))
 						for astFunctionDef in dictionary4Inlining.values():
 							inliner.visit(astFunctionDef)
 
 	for identifier, FunctionDefTarget in dictionary4Inlining.items():
 		if len(FunctionDefTarget.body) == 1:
 			replacement = NodeTourist(Be.Return, Then.extractIt(DOT.value)).captureLastMatch(FunctionDefTarget)
-			inliner = NodeChanger(IfThis.isCall_Identifier(identifier), Then.replaceWith(replacement))
+			inliner = NodeChanger(IfThis.isCallIdentifier(identifier), Then.replaceWith(replacement))
 			inliner.visit(FunctionDefToInline)
 		else:
-			inliner = NodeChanger(ClassIsAndAttribute.valueIs(ast.Assign, IfThis.isCall_Identifier(identifier)),Then.replaceWith(FunctionDefTarget.body[0:-1]))
+			inliner = NodeChanger(ClassIsAndAttribute.valueIs(ast.Assign, IfThis.isCallIdentifier(identifier)),Then.replaceWith(FunctionDefTarget.body[0:-1]))
 			inliner.visit(FunctionDefToInline)
 	ast.fix_missing_locations(FunctionDefToInline)
 	return FunctionDefToInline
@@ -151,20 +150,20 @@ def removeUnusedParameters(ingredientsFunction: IngredientsFunction) -> Ingredie
 	The modification is done in-place on the original AST nodes within the IngredientsFunction object.
 	"""
 	list_argCuzMyBrainRefusesToThink = ingredientsFunction.astFunctionDef.args.args + ingredientsFunction.astFunctionDef.args.posonlyargs + ingredientsFunction.astFunctionDef.args.kwonlyargs
-	list_arg_arg: list[ast_Identifier] = [ast_arg.arg for ast_arg in list_argCuzMyBrainRefusesToThink]
+	list_arg_arg: list[str] = [ast_arg.arg for ast_arg in list_argCuzMyBrainRefusesToThink]
 	listName: list[ast.Name] = []
 	fauxFunctionDef = deepcopy(ingredientsFunction.astFunctionDef)
 	NodeChanger(Be.Return, Then.removeIt).visit(fauxFunctionDef)
 	NodeTourist(Be.Name, Then.appendTo(listName)).visit(fauxFunctionDef)
-	list_Identifiers: list[ast_Identifier] = [astName.id for astName in listName]
-	list_IdentifiersNotUsed: list[ast_Identifier] = list(set(list_arg_arg) - set(list_Identifiers))
-	for arg_Identifier in list_IdentifiersNotUsed:
-		remove_arg = NodeChanger(IfThis.is_arg_Identifier(arg_Identifier), Then.removeIt)
+	listIdentifiers: list[str] = [astName.id for astName in listName]
+	listIdentifiersNotUsed: list[str] = list(set(list_arg_arg) - set(listIdentifiers))
+	for argIdentifier in listIdentifiersNotUsed:
+		remove_arg = NodeChanger(IfThis.is_argIdentifier(argIdentifier), Then.removeIt)
 		remove_arg.visit(ingredientsFunction.astFunctionDef)
 
 	list_argCuzMyBrainRefusesToThink = ingredientsFunction.astFunctionDef.args.args + ingredientsFunction.astFunctionDef.args.posonlyargs + ingredientsFunction.astFunctionDef.args.kwonlyargs
 
-	listName: list[ast.Name] = [Make.Name(ast_arg.arg) for ast_arg in list_argCuzMyBrainRefusesToThink]
+	listName = [Make.Name(ast_arg.arg) for ast_arg in list_argCuzMyBrainRefusesToThink]
 	replaceReturn = NodeChanger(Be.Return, Then.replaceWith(Make.Return(Make.Tuple(listName))))
 	replaceReturn.visit(ingredientsFunction.astFunctionDef)
 
@@ -209,10 +208,10 @@ def unparseFindReplace(astTree: 个, mappingFindReplaceNodes: Mapping[ast.AST, a
 	return newTree
 
 # @overload
-# def write_astModule(astModule: ast.AST, pathFilename: PathLike[Any] | PurePath, packageName: ast_Identifier | None = None) -> None:...
+# def write_astModule(astModule: ast.AST, pathFilename: PathLike[Any] | PurePath, packageName: str | None = None) -> None:...
 # @overload
-# def write_astModule(ingredients: IngredientsModule, pathFilename: PathLike[Any] | PurePath, packageName: ast_Identifier | None = None) -> None:...
-def write_astModule(ingredients: IngredientsModule, pathFilename: PathLike[Any] | PurePath, packageName: ast_Identifier | None = None) -> None:
+# def write_astModule(ingredients: IngredientsModule, pathFilename: PathLike[Any] | PurePath, packageName: str | None = None) -> None:...
+def write_astModule(ingredients: IngredientsModule, pathFilename: PathLike[Any] | PurePath, packageName: str | None = None) -> None:
 	"""
 	Convert an IngredientsModule to Python source code and write it to a file.
 

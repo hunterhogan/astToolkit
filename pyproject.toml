@@ -34,9 +34,9 @@ optional-dependencies = { testing = [
 	"pyupgrade",
 	"trove_classifiers",] }
 readme = { file = "README.md", content-type = "text/markdown" }
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 urls = { Donate = "https://www.patreon.com/integrated", Homepage = "https://github.com/hunterhogan/astToolkit", Issues = "https://github.com/hunterhogan/astToolkit/issues", Repository = "https://github.com/hunterhogan/astToolkit.git" }
-version = "0.2.3"
+version = "0.3.0"
 
 [tool.coverage]
 report = { exclude_lines = [

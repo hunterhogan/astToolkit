@@ -91,15 +91,14 @@ class Grab:
             node.body = action(node.body) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
             return node
         return workhorse
-    if sys.version_info >= (3, 12):
 
-        @staticmethod
-        def boundAttribute(action: Callable[[ast.expr | None], ast.expr | None]) -> Callable[[hasDOTbound], hasDOTbound]:
+    @staticmethod
+    def boundAttribute(action: Callable[[ast.expr | None], ast.expr | None]) -> Callable[[hasDOTbound], hasDOTbound]:
 
-            def workhorse(node: hasDOTbound) -> hasDOTbound:
-                node.bound = action(node.bound)
-                return node
-            return workhorse
+        def workhorse(node: hasDOTbound) -> hasDOTbound:
+            node.bound = action(node.bound)
+            return node
+        return workhorse
 
     @staticmethod
     def casesAttribute(action: Callable[[list[ast.match_case]], list[ast.match_case]]) -> Callable[[hasDOTcases], hasDOTcases]:
@@ -413,24 +412,14 @@ class Grab:
             node.msg = action(node.msg)
             return node
         return workhorse
-    if sys.version_info >= (3, 12):
 
-        @staticmethod
-        def nameAttribute(action: Callable[[ast.Name], ast.Name] | Callable[[str | None], str | None] | Callable[[str], str]) -> Callable[[hasDOTname], hasDOTname]:
+    @staticmethod
+    def nameAttribute(action: Callable[[ast.Name], ast.Name] | Callable[[str | None], str | None] | Callable[[str], str]) -> Callable[[hasDOTname], hasDOTname]:
 
-            def workhorse(node: hasDOTname) -> hasDOTname:
-                node.name = action(node.name) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
-                return node
-            return workhorse
-    else:
-
-        @staticmethod
-        def nameAttribute(action: Callable[[str | None], str | None] | Callable[[str], str]) -> Callable[[hasDOTname], hasDOTname]:
-
-            def workhorse(node: hasDOTname) -> hasDOTname:
-                node.name = action(node.name)
-                return node
-            return workhorse
+        def workhorse(node: hasDOTname) -> hasDOTname:
+            node.name = action(node.name) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
+            return node
+        return workhorse
 
     @staticmethod
     def namesAttribute(action: Callable[[list[ast.alias]], list[ast.alias]] | Callable[[list[str]], list[str]]) -> Callable[[hasDOTnames], hasDOTnames]:
@@ -615,15 +604,14 @@ class Grab:
             node.type_ignores = action(node.type_ignores)
             return node
         return workhorse
-    if sys.version_info >= (3, 12):
 
-        @staticmethod
-        def type_paramsAttribute(action: Callable[[list[ast.type_param]], list[ast.type_param]]) -> Callable[[hasDOTtype_params], hasDOTtype_params]:
+    @staticmethod
+    def type_paramsAttribute(action: Callable[[list[ast.type_param]], list[ast.type_param]]) -> Callable[[hasDOTtype_params], hasDOTtype_params]:
 
-            def workhorse(node: hasDOTtype_params) -> hasDOTtype_params:
-                node.type_params = action(node.type_params)
-                return node
-            return workhorse
+        def workhorse(node: hasDOTtype_params) -> hasDOTtype_params:
+            node.type_params = action(node.type_params)
+            return node
+        return workhorse
 
     @staticmethod
     def upperAttribute(action: Callable[[ast.expr | None], ast.expr | None]) -> Callable[[hasDOTupper], hasDOTupper]:

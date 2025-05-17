@@ -140,32 +140,32 @@ print(ast.unparse(tree))
 This example shows a more complex transformation inspired by the mapFolding package:
 
 ```python
-from astToolkit import ast_Identifier, Be, DOT, Grab, IfThis as astToolkit_IfThis, Make, NodeChanger, Then
+from astToolkit import str, Be, DOT, Grab, IfThis as astToolkit_IfThis, Make, NodeChanger, Then
 import ast
 
 # Define custom predicates by extending IfThis
 class IfThis(astToolkit_IfThis):
   @staticmethod
-  def isAttributeNamespace_IdentifierGreaterThan0(
-      namespace: ast_Identifier,
-      identifier: ast_Identifier
+  def isAttributeNamespaceIdentifierGreaterThan0(
+      namespace: str,
+      identifier: str
       ) -> Callable[[ast.AST], TypeGuard[ast.Compare] | bool]:
 
     return lambda node: (
         Be.Compare(node)
-        and IfThis.isAttributeNamespace_Identifier(namespace, identifier)(DOT.left(node))
+        and IfThis.isAttributeNamespaceIdentifier(namespace, identifier)(DOT.left(node))
         and Be.Gt(node.ops[0])
         and IfThis.isConstant_value(0)(node.comparators[0]))
 
   @staticmethod
-  def isWhileAttributeNamespace_IdentifierGreaterThan0(
-      namespace: ast_Identifier,
-      identifier: ast_Identifier
+  def isWhileAttributeNamespaceIdentifierGreaterThan0(
+      namespace: str,
+      identifier: str
       ) -> Callable[[ast.AST], TypeGuard[ast.While] | bool]:
 
     return lambda node: (
         Be.While(node)
-        and IfThis.isAttributeNamespace_IdentifierGreaterThan0(namespace, identifier)(DOT.test(node)))
+        and IfThis.isAttributeNamespaceIdentifierGreaterThan0(namespace, identifier)(DOT.test(node)))
 
 # Parse some code
 code = """
@@ -176,7 +176,7 @@ while claude.counter > 0:
 tree = ast.parse(code)
 
 # Find the while loop with our custom predicate
-find_while_loop = IfThis.isWhileAttributeNamespace_IdentifierGreaterThan0("claude", "counter")
+find_while_loop = IfThis.isWhileAttributeNamespaceIdentifierGreaterThan0("claude", "counter")
 
 # Replace counter > 0 with counter > 1
 change_condition = Grab.testAttribute(
@@ -212,7 +212,7 @@ module_ast = parseLogicalPath2astModule("my_package.source_module")
 # Extract a function and track its imports
 function_name = "target_function"
 function_def = NodeTourist(
-    IfThis.isFunctionDef_Identifier(function_name),
+    IfThis.isFunctionDefIdentifier(function_name),
     Then.extractIt
 ).captureLastMatch(module_ast)
 
@@ -247,34 +247,34 @@ if function_def:
 To create specialized patterns for your codebase, extend the core classes:
 
 ```python
-from astToolkit import ast_Identifier, Be, IfThis as astToolkit_IfThis
+from astToolkit import str, Be, IfThis as astToolkit_IfThis
 from collections.abc import Callable
 from typing import TypeGuard
 import ast
 
 class IfThis(astToolkit_IfThis):
     @staticmethod
-    def isAttributeNamespace_IdentifierGreaterThan0(
-        namespace: ast_Identifier,
-        identifier: ast_Identifier
+    def isAttributeNamespaceIdentifierGreaterThan0(
+        namespace: str,
+        identifier: str
     ) -> Callable[[ast.AST], TypeGuard[ast.Compare] | bool]:
         """Find comparisons like 'state.counter > 0'"""
         return lambda node: (
             Be.Compare(node)
-            and IfThis.isAttributeNamespace_Identifier(namespace, identifier)(node.left)
+            and IfThis.isAttributeNamespaceIdentifier(namespace, identifier)(node.left)
             and Be.Gt(node.ops[0])
             and IfThis.isConstant_value(0)(node.comparators[0])
         )
 
     @staticmethod
-    def isWhileAttributeNamespace_IdentifierGreaterThan0(
-        namespace: ast_Identifier,
-        identifier: ast_Identifier
+    def isWhileAttributeNamespaceIdentifierGreaterThan0(
+        namespace: str,
+        identifier: str
     ) -> Callable[[ast.AST], TypeGuard[ast.While] | bool]:
         """Find while loops like 'while state.counter > 0:'"""
         return lambda node: (
             Be.While(node)
-            and IfThis.isAttributeNamespace_IdentifierGreaterThan0(namespace, identifier)(node.test)
+            and IfThis.isAttributeNamespaceIdentifierGreaterThan0(namespace, identifier)(node.test)
         )
 ```
 

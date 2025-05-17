@@ -1,7 +1,6 @@
 # pyright: reportUnknownMemberType = false
 # pyright: reportAttributeAccessIssue = false
 from collections import defaultdict
-from collections.abc import Sequence
 from itertools import chain
 from pathlib import PurePosixPath
 from toolFactory import (
@@ -37,6 +36,7 @@ from typing import cast
 from Z0Z_tools import writeStringToHere
 import ast
 # NOTE you need these because of `eval()`
+# from ast import Name, Store
 from ast import Name, Store
 
 """
@@ -85,7 +85,7 @@ def writeClass(classIdentifier: str, list4ClassDefBody: list[ast.stmt], list4Mod
 			)
 		, moduleIdentifier)
 
-def makeToolBe():
+def makeToolBe() -> None:
 	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringBe]
 
 	listDictionaryToolElements = getElementsBe()
@@ -120,8 +120,8 @@ def makeToolBe():
 
 	writeClass('Be', list4ClassDefBody, list4ModuleBody)
 
-def makeToolClassIsAndAttribute():
-	def create_ast_stmt():
+def makeToolClassIsAndAttribute() -> None:
+	def create_ast_stmt() -> ast.If | ast.FunctionDef:
 		ast_stmt = ast.FunctionDef(attribute + 'Is'
 				, args=ast.arguments(posonlyargs=[]
 					, args=[ast.arg('astClass', annotation = ast.Subscript(ast.Name('type'), astNameTypeAlias))
@@ -246,8 +246,8 @@ def makeToolClassIsAndAttribute():
 
 	writeClass('ClassIsAndAttribute', list4ClassDefBody, list4ModuleBody)
 
-def makeToolDOT():
-	def create_ast_stmt():
+def makeToolDOT() -> None:
+	def create_ast_stmt() -> ast.If | ast.FunctionDef:
 		ast_stmt = ast.FunctionDef(attribute
 				, args=ast.arguments(posonlyargs=[]
 					, args=[ast.arg('node', astNameTypeAlias)], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
@@ -319,8 +319,8 @@ def makeToolDOT():
 
 	writeClass('DOT', list4ClassDefBody, list4ModuleBody)
 
-def makeToolGrab():
-	def create_ast_stmt():
+def makeToolGrab() -> None:
+	def create_ast_stmt() -> ast.If | ast.FunctionDef:
 		ast_stmt = None
 		for attributeVersionMinorMinimum, list_ast_exprType in listTypesByVersion:
 			list_ast_expr4annotation: list[ast.expr] = []
@@ -384,7 +384,7 @@ def makeToolGrab():
 
 	writeClass('Grab', list4ClassDefBody, list4ModuleBody)
 
-def makeToolMake():
+def makeToolMake() -> None:
 	def create_ast_stmt(dictionaryMethodElements: DictionaryMatchArgs) -> ast.FunctionDef:
 		listFunctionDef_args: list[ast.arg] = [cast(ast.arg, eval(ast_argAsStr)) for ast_argAsStr in dictionaryMethodElements['listStr4FunctionDef_args']]
 		kwarg: ast.arg | None = None
@@ -413,7 +413,7 @@ def makeToolMake():
 
 		return ast_stmt
 
-	def unpackDictionaryAllMatch_argsVersions():
+	def unpackDictionaryAllMatch_argsVersions() -> ast.stmt:
 		ast_stmt = None
 		if len(dictionaryAllMatch_argsVersions) == 1:
 			for match_argsVersionMinorMinimum, dictionaryMethodElements in dictionaryAllMatch_argsVersions.items():
@@ -509,20 +509,20 @@ def makeToolMake():
 	setKeywordArgumentsAnnotationTypeAlias.discard('int')
 	list4ModuleBody: list[ast.stmt] = [
 		ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in sorted([*setKeywordArgumentsAnnotationTypeAlias, 'str_nameDOTname'])], 0)
-		, ast.ImportFrom('collections.abc', [ast.alias('Sequence')], 0)
-		, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('Literal')], 0)
+		, ast.ImportFrom('typing', [ast.alias('Any')], 0)
 		, ast.Import([ast.alias('ast')])
 		, ast.Import([ast.alias('sys')])
 		]
 
 	writeClass('Make', list4ClassDefBody, list4ModuleBody)
 
-def makeTypeAlias():
-	def append_ast_stmtTypeAlias():
+def makeTypeAlias() -> None:
+	def append_ast_stmtTypeAlias() -> None:
+		ast_stmt = None
 		if len(dictionaryVersions) == 1:
 			# This branch is the simplest case: one TypeAlias for the attribute for all Python versions
 			for versionMinor, listClassAs_astAttribute in dictionaryVersions.items():
-				ast_stmt = ast.AnnAssign(astNameTypeAlias, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in listClassAs_astAttribute]), 1) # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType, reportAttributeAccessIssue]
+				ast_stmt = ast.AnnAssign(astNameTypeAlias, astName_typing_TypeAlias, cast(ast.expr, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in listClassAs_astAttribute])), 1)
 				if versionMinor > pythonVersionMinorMinimum:
 					ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
 								, ops=[ast.GtE()]
@@ -534,8 +534,8 @@ def makeTypeAlias():
 			listVersionsMinor = sorted(dictionaryVersions.keys(), reverse=False)
 			if len(listVersionsMinor) > 2:
 				raise NotImplementedError
-			ast_stmtAtPythonMinimum = ast.AnnAssign(astNameTypeAlias, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in dictionaryVersions[min(listVersionsMinor)]]), 1) # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType, reportAttributeAccessIssue]
-			ast_stmtAbovePythonMinimum = ast.AnnAssign(astNameTypeAlias, astName_typing_TypeAlias, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in sorted(chain(*dictionaryVersions.values()), key=str.lower)]), 1) # pyright: ignore[reportUnknownArgumentType, reportUnknownMemberType, reportAttributeAccessIssue]
+			ast_stmtAtPythonMinimum = ast.AnnAssign(astNameTypeAlias, astName_typing_TypeAlias, cast(ast.expr, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in dictionaryVersions[min(listVersionsMinor)]])), 1)
+			ast_stmtAbovePythonMinimum = ast.AnnAssign(astNameTypeAlias, astName_typing_TypeAlias, cast(ast.expr, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in sorted(chain(*dictionaryVersions.values()), key=str.lower)])), 1)
 
 			ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
 						, ops=[ast.GtE()]
@@ -543,7 +543,8 @@ def makeTypeAlias():
 								ast.Constant(max(listVersionsMinor))])])
 						, body=[ast_stmtAbovePythonMinimum]
 						, orelse=[ast_stmtAtPythonMinimum])
-		astTypesModule.body.append(ast_stmt) # pyright: ignore[reportPossiblyUnboundVariable]
+		assert ast_stmt is not None, "Coding by brinkmanship!"
+		astTypesModule.body.append(ast_stmt)
 
 	astTypesModule = ast.Module(
 		body=[docstringWarning

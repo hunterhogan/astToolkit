@@ -1,15 +1,15 @@
-import importlib
+from astToolkit import IfThis, IngredientsFunction, LedgerOfImports, NodeTourist, Then, str_nameDOTname
+from astToolkit import FREAKOUT
 from collections.abc import Iterable
 from inspect import getsource as inspect_getsource
 from os import PathLike
 from pathlib import Path, PurePath
 from types import ModuleType
-from typing import Any, Literal, TypeAlias, ClassVar
-from astToolkit import ast_Identifier, IfThis, IngredientsFunction, LedgerOfImports, NodeTourist, Then, str_nameDOTname
-from astToolkit import FREAKOUT
+from typing import Any, Literal
 import ast
+import importlib
 
-def astModuleToIngredientsFunction(astModule: ast.AST, identifierFunctionDef: ast_Identifier) -> IngredientsFunction:
+def astModuleToIngredientsFunction(astModule: ast.AST, identifierFunctionDef: str) -> IngredientsFunction:
 	"""
 	Extract a function definition from an AST module and create an `IngredientsFunction`.
 
@@ -31,7 +31,7 @@ def astModuleToIngredientsFunction(astModule: ast.AST, identifierFunctionDef: as
 	if not astFunctionDef: raise FREAKOUT
 	return IngredientsFunction(astFunctionDef, LedgerOfImports(astModule))
 
-def extractClassDef(module: ast.AST, identifier: ast_Identifier) -> ast.ClassDef | None:
+def extractClassDef(module: ast.AST, identifier: str) -> ast.ClassDef | None:
 	"""
 	Extract a class definition with a specific name from an AST module.
 
@@ -45,9 +45,9 @@ def extractClassDef(module: ast.AST, identifier: ast_Identifier) -> ast.ClassDef
 	Returns:
 		astClassDef|None: The matching class definition AST node, or `None` if not found.
 	"""
-	return NodeTourist(IfThis.isClassDef_Identifier(identifier), Then.extractIt).captureLastMatch(module)
+	return NodeTourist(IfThis.isClassDefIdentifier(identifier), Then.extractIt).captureLastMatch(module)
 
-def extractFunctionDef(module: ast.AST, identifier: ast_Identifier) -> ast.FunctionDef | None:
+def extractFunctionDef(module: ast.AST, identifier: str) -> ast.FunctionDef | None:
 	"""
 	Extract a function definition with a specific name from an AST module.
 
@@ -61,9 +61,9 @@ def extractFunctionDef(module: ast.AST, identifier: ast_Identifier) -> ast.Funct
 	Returns:
 		astFunctionDef|None: The matching function definition AST node, or `None` if not found.
 	"""
-	return NodeTourist(IfThis.isFunctionDef_Identifier(identifier), Then.extractIt).captureLastMatch(module)
+	return NodeTourist(IfThis.isFunctionDefIdentifier(identifier), Then.extractIt).captureLastMatch(module)
 
-def parseLogicalPath2astModule(logicalPathModule: str_nameDOTname, packageIdentifierIfRelative: ast_Identifier | None = None, mode: Literal['exec'] = 'exec') -> ast.Module:
+def parseLogicalPath2astModule(logicalPathModule: str_nameDOTname, packageIdentifierIfRelative: str | None = None, mode: Literal['exec'] = 'exec') -> ast.Module:
 	"""
 	Parse a logical Python module path into an `ast.Module`.
 

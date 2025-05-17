@@ -94,11 +94,10 @@ class DOT:
     @staticmethod
     def body(node: hasDOTbody) -> ast.expr | list[ast.stmt]:
         return node.body
-    if sys.version_info >= (3, 12):
 
-        @staticmethod
-        def bound(node: hasDOTbound) -> ast.expr | None:
-            return node.bound
+    @staticmethod
+    def bound(node: hasDOTbound) -> ast.expr | None:
+        return node.bound
 
     @staticmethod
     def cases(node: hasDOTcases) -> list[ast.match_case]:
@@ -266,12 +265,11 @@ class DOT:
     @staticmethod
     def msg(node: hasDOTmsg) -> ast.expr | None:
         return node.msg
-    if sys.version_info >= (3, 12):
 
-        @staticmethod
-        @overload
-        def name(node: hasDOTname_Name) -> ast.Name:
-            ...
+    @staticmethod
+    @overload
+    def name(node: hasDOTname_Name) -> ast.Name:
+        ...
 
     @staticmethod
     @overload
@@ -282,16 +280,10 @@ class DOT:
     @overload
     def name(node: hasDOTname_strOrNone) -> str | None:
         ...
-    if sys.version_info >= (3, 12):
 
-        @staticmethod
-        def name(node: hasDOTname) -> ast.Name | str | (str | None):
-            return node.name
-    else:
-
-        @staticmethod
-        def name(node: hasDOTname) -> str | (str | None):
-            return node.name
+    @staticmethod
+    def name(node: hasDOTname) -> ast.Name | str | (str | None):
+        return node.name
 
     @staticmethod
     @overload
@@ -454,11 +446,10 @@ class DOT:
     @staticmethod
     def type_ignores(node: hasDOTtype_ignores) -> list[ast.TypeIgnore]:
         return node.type_ignores
-    if sys.version_info >= (3, 12):
 
-        @staticmethod
-        def type_params(node: hasDOTtype_params) -> list[ast.type_param]:
-            return node.type_params
+    @staticmethod
+    def type_params(node: hasDOTtype_params) -> list[ast.type_param]:
+        return node.type_params
 
     @staticmethod
     def upper(node: hasDOTupper) -> ast.expr | None:

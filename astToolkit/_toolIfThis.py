@@ -20,7 +20,7 @@ they implement a declarative approach to AST manipulation that separates node id
 """
 
 from collections.abc import Callable
-from astToolkit import ast_Identifier, Be, DOT
+from astToolkit import Be, DOT
 from typing import Any, TypeGuard, cast
 import ast
 
@@ -36,16 +36,16 @@ class IfThis:
 	enabling precise targeting of AST elements for analysis or transformation.
 	"""
 	@staticmethod
-	def is_arg_Identifier(identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.arg] | bool]:
-		"""see also `isArgument_Identifier`"""
+	def is_argIdentifier(identifier: str) -> Callable[[ast.AST], TypeGuard[ast.arg] | bool]:
+		"""see also `isArgumentIdentifier`"""
 		return lambda node: Be.arg(node) and IfThis.isIdentifier(identifier)(DOT.arg(node))
 	@staticmethod
-	def is_keyword_Identifier(identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.keyword] | bool]:
-		"""see also `isArgument_Identifier`"""
+	def is_keywordIdentifier(identifier: str) -> Callable[[ast.AST], TypeGuard[ast.keyword] | bool]:
+		"""see also `isArgumentIdentifier`"""
 		return lambda node: Be.keyword(node) and IfThis.isIdentifier(identifier)(DOT.arg(node))
 
 	@staticmethod
-	def isArgument_Identifier(identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.arg | ast.keyword] | bool]:
+	def isArgumentIdentifier(identifier: str) -> Callable[[ast.AST], TypeGuard[ast.arg | ast.keyword] | bool]:
 		return lambda node: (Be.arg(node) or Be.keyword(node)) and IfThis.isIdentifier(identifier)(DOT.arg(node))
 
 	@staticmethod
@@ -54,13 +54,13 @@ class IfThis:
 		return lambda node: Be.Assign(node) and targets0Predicate(node.targets[0])
 
 	@staticmethod
-	def isAttribute_Identifier(identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.Attribute] | bool]:
+	def isAttributeIdentifier(identifier: str) -> Callable[[ast.AST], TypeGuard[ast.Attribute] | bool]:
 		""" 1. `node` is `ast.Attribute`,
 			2. zero or more direct descendants in an unbroken chain are `ast.Attribute`, `ast.Subscript`, or `ast.Starred`,
 			3. the direct descendant chain ends with `ast.Name`, and
 			4. the `ast.Name` `id` attribute is `identifier`."""
 		def workhorse(node: ast.AST) -> TypeGuard[ast.Attribute]:
-			return Be.Attribute(node) and IfThis.isNestedName_Identifier(identifier)(DOT.value(node))
+			return Be.Attribute(node) and IfThis.isNestedNameIdentifier(identifier)(DOT.value(node))
 		return workhorse
 
 	@staticmethod
@@ -69,19 +69,19 @@ class IfThis:
 		return Be.Attribute(node) and Be.Name(DOT.value(node))
 
 	@staticmethod
-	def isAttributeNamespace_Identifier(namespace: ast_Identifier, identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.Attribute] | bool]:
-		return lambda node: IfThis.isAttributeName(node) and IfThis.isName_Identifier(namespace)(DOT.value(node)) and IfThis.isIdentifier(identifier)(DOT.attr(node))
+	def isAttributeNamespaceIdentifier(namespace: str, identifier: str) -> Callable[[ast.AST], TypeGuard[ast.Attribute] | bool]:
+		return lambda node: IfThis.isAttributeName(node) and IfThis.isNameIdentifier(namespace)(DOT.value(node)) and IfThis.isIdentifier(identifier)(DOT.attr(node))
 
 	@staticmethod
-	def isCall_Identifier(identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.Call] | bool]:
+	def isCallIdentifier(identifier: str) -> Callable[[ast.AST], TypeGuard[ast.Call] | bool]:
 		def workhorse(node: ast.AST) -> TypeGuard[ast.Call] | bool:
 			return IfThis.isCallToName(node) and IfThis.isIdentifier(identifier)(DOT.id(cast(ast.Name, DOT.func(node))))
 		return workhorse
 
 	@staticmethod
-	def isCallAttributeNamespace_Identifier(namespace: ast_Identifier, identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.Call] | bool]:
+	def isCallAttributeNamespaceIdentifier(namespace: str, identifier: str) -> Callable[[ast.AST], TypeGuard[ast.Call] | bool]:
 		def workhorse(node: ast.AST) -> TypeGuard[ast.Call] | bool:
-			return Be.Call(node) and IfThis.isAttributeNamespace_Identifier(namespace, identifier)(DOT.func(node))
+			return Be.Call(node) and IfThis.isAttributeNamespaceIdentifier(namespace, identifier)(DOT.func(node))
 		return workhorse
 
 	@staticmethod
@@ -89,7 +89,7 @@ class IfThis:
 		return Be.Call(node) and Be.Name(DOT.func(node))
 
 	@staticmethod
-	def isClassDef_Identifier(identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.ClassDef] | bool]:
+	def isClassDefIdentifier(identifier: str) -> Callable[[ast.AST], TypeGuard[ast.ClassDef] | bool]:
 		return lambda node: Be.ClassDef(node) and IfThis.isIdentifier(identifier)(DOT.name(node))
 
 	@staticmethod
@@ -97,24 +97,24 @@ class IfThis:
 		return lambda node: Be.Constant(node) and DOT.value(node) == value
 
 	@staticmethod
-	def isFunctionDef_Identifier(identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.FunctionDef] | bool]:
+	def isFunctionDefIdentifier(identifier: str) -> Callable[[ast.AST], TypeGuard[ast.FunctionDef] | bool]:
 		return lambda node: Be.FunctionDef(node) and IfThis.isIdentifier(identifier)(DOT.name(node))
 
 	@staticmethod
-	def isIdentifier(identifier: ast_Identifier) -> Callable[[ast_Identifier | None], TypeGuard[ast_Identifier] | bool]:
+	def isIdentifier(identifier: str) -> Callable[[str | None], TypeGuard[str] | bool]:
 		return lambda node: node == identifier
 
 	@staticmethod
-	def isIfUnaryNotAttributeNamespace_Identifier(namespace: ast_Identifier, identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.If] | bool]:
+	def isIfUnaryNotAttributeNamespaceIdentifier(namespace: str, identifier: str) -> Callable[[ast.AST], TypeGuard[ast.If] | bool]:
 		return lambda node: (Be.If(node)
-					and IfThis.isUnaryNotAttributeNamespace_Identifier(namespace, identifier)(node.test))
+					and IfThis.isUnaryNotAttributeNamespaceIdentifier(namespace, identifier)(node.test))
 
 	@staticmethod
-	def isName_Identifier(identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.Name] | bool]:
+	def isNameIdentifier(identifier: str) -> Callable[[ast.AST], TypeGuard[ast.Name] | bool]:
 		return lambda node: Be.Name(node) and IfThis.isIdentifier(identifier)(DOT.id(node))
 
 	@staticmethod
-	def isNestedName_Identifier(identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.Attribute | ast.Starred | ast.Subscript] | bool]:
+	def isNestedNameIdentifier(identifier: str) -> Callable[[ast.AST], TypeGuard[ast.Attribute | ast.Starred | ast.Subscript] | bool]:
 		""" `node` is `ast.Name`
 
 			OR
@@ -127,33 +127,33 @@ class IfThis:
 
 			The `ast.Name` `id` attribute is `identifier`."""
 		def workhorse(node: ast.AST) -> TypeGuard[ast.Attribute | ast.Starred | ast.Subscript] | bool:
-			return IfThis.isName_Identifier(identifier)(node) or IfThis.isAttribute_Identifier(identifier)(node) or IfThis.isSubscript_Identifier(identifier)(node) or IfThis.isStarred_Identifier(identifier)(node)
+			return IfThis.isNameIdentifier(identifier)(node) or IfThis.isAttributeIdentifier(identifier)(node) or IfThis.isSubscriptIdentifier(identifier)(node) or IfThis.isStarredIdentifier(identifier)(node)
 		return workhorse
 
 	@staticmethod
-	def isStarred_Identifier(identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.Starred] | bool]:
+	def isStarredIdentifier(identifier: str) -> Callable[[ast.AST], TypeGuard[ast.Starred] | bool]:
 		""" 1. `node` is `ast.Starred`,
 			2. zero or more direct descendants in an unbroken chain are `ast.Attribute`, `ast.Subscript`, or `ast.Starred`,
 			3. the direct descendant chain ends with `ast.Name`, and
 			4. the `ast.Name` `id` attribute is `identifier`."""
 		def workhorse(node: ast.AST) -> TypeGuard[ast.Starred]:
-			return Be.Starred(node) and IfThis.isNestedName_Identifier(identifier)(DOT.value(node))
+			return Be.Starred(node) and IfThis.isNestedNameIdentifier(identifier)(DOT.value(node))
 		return workhorse
 	@staticmethod
-	def isSubscript_Identifier(identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.Subscript] | bool]:
+	def isSubscriptIdentifier(identifier: str) -> Callable[[ast.AST], TypeGuard[ast.Subscript] | bool]:
 		""" 1. `node` is `ast.Subscript`,
 			2. zero or more direct descendants in an unbroken chain are `ast.Attribute`, `ast.Subscript`, or `ast.Starred`,
 			3. the direct descendant chain ends with `ast.Name`, and
 			4. the `ast.Name` `id` attribute is `identifier`."""
 		def workhorse(node: ast.AST) -> TypeGuard[ast.Subscript]:
-			return Be.Subscript(node) and IfThis.isNestedName_Identifier(identifier)(DOT.value(node))
+			return Be.Subscript(node) and IfThis.isNestedNameIdentifier(identifier)(DOT.value(node))
 		return workhorse
 
 	@staticmethod
-	def isUnaryNotAttributeNamespace_Identifier(namespace: ast_Identifier, identifier: ast_Identifier) -> Callable[[ast.AST], TypeGuard[ast.UnaryOp] | bool]:
+	def isUnaryNotAttributeNamespaceIdentifier(namespace: str, identifier: str) -> Callable[[ast.AST], TypeGuard[ast.UnaryOp] | bool]:
 		return lambda node: (Be.UnaryOp(node)
 					and Be.Not(node.op)
-					and IfThis.isAttributeNamespace_Identifier(namespace, identifier)(node.operand))
+					and IfThis.isAttributeNamespaceIdentifier(namespace, identifier)(node.operand))
 
 	@staticmethod
 	def matchesMeButNotAnyDescendant(predicate: Callable[[ast.AST], bool]) -> Callable[[ast.AST], bool]:

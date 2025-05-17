@@ -18,7 +18,7 @@ The containers work in conjunction with transformation tools that manipulate the
 specific optimizations and transformations.
 """
 
-from astToolkit import ast_Identifier, Make, str_nameDOTname
+from astToolkit import Make, str_nameDOTname
 from collections import defaultdict
 from collections.abc import Sequence
 from Z0Z_tools import updateExtendPolishDictionaryLists
@@ -44,7 +44,7 @@ class LedgerOfImports:
 	# TODO When resolving the ledger of imports, remove self-referential imports
 
 	def __init__(self, startWith: ast.AST | None = None, type_ignores: list[ast.TypeIgnore] | None = None) -> None:
-		self.dictionaryImportFrom: dict[str_nameDOTname, list[tuple[ast_Identifier, ast_Identifier | None]]] = defaultdict(list)
+		self.dictionaryImportFrom: dict[str_nameDOTname, list[tuple[str, str | None]]] = defaultdict(list)
 		self.listImport: list[str_nameDOTname] = []
 		self.type_ignores = [] if type_ignores is None else list(type_ignores)
 		if startWith:
@@ -71,7 +71,7 @@ class LedgerOfImports:
 		if type_ignores:
 			self.type_ignores.extend(type_ignores)
 
-	def addImportFrom_asStr(self, moduleWithLogicalPath: str_nameDOTname, name: ast_Identifier, asname: ast_Identifier | None = None, type_ignores: list[ast.TypeIgnore] | None = None) -> None:
+	def addImportFrom_asStr(self, moduleWithLogicalPath: str_nameDOTname, name: str, asname: str | None = None, type_ignores: list[ast.TypeIgnore] | None = None) -> None:
 		self.dictionaryImportFrom[moduleWithLogicalPath].append((name, asname))
 		if type_ignores:
 			self.type_ignores.extend(type_ignores)
@@ -80,13 +80,13 @@ class LedgerOfImports:
 		"""Remove all imports from a specific module."""
 		self.removeImportFrom(moduleWithLogicalPath, None, None)
 
-	def removeImportFrom(self, moduleWithLogicalPath: str_nameDOTname, name: ast_Identifier | None, asname: ast_Identifier | None = None) -> None:
+	def removeImportFrom(self, moduleWithLogicalPath: str_nameDOTname, name: str | None, asname: str | None = None) -> None:
 		"""
 		name, 			asname				  	Action
 		None, 			None					: remove all matches for the module
-		ast_Identifier, ast_Identifier			: remove exact matches
-		ast_Identifier, None					: remove exact matches
-		None, 			ast_Identifier			: remove all matches for asname and if entry_asname is None remove name == ast_Identifier
+		str, str			: remove exact matches
+		str, None					: remove exact matches
+		None, 			str			: remove all matches for asname and if entry_asname is None remove name == str
 		"""
 		if moduleWithLogicalPath in self.dictionaryImportFrom:
 			if name is None and asname is None:
@@ -102,8 +102,8 @@ class LedgerOfImports:
 				if not self.dictionaryImportFrom[moduleWithLogicalPath]:
 					self.dictionaryImportFrom.pop(moduleWithLogicalPath)
 
-	def exportListModuleIdentifiers(self) -> list[ast_Identifier]:
-		listModuleIdentifiers: list[ast_Identifier] = list(self.dictionaryImportFrom.keys())
+	def exportListModuleIdentifiers(self) -> list[str]:
+		listModuleIdentifiers: list[str] = list(self.dictionaryImportFrom.keys())
 		listModuleIdentifiers.extend(self.listImport)
 		return sorted(set(listModuleIdentifiers))
 
@@ -254,7 +254,7 @@ class IngredientsModule:
 		self.removeImportFrom(moduleWithLogicalPath, None, None)
 		"""Remove all imports from a specific module."""
 
-	def removeImportFrom(self, moduleWithLogicalPath: str_nameDOTname, name: ast_Identifier | None, asname: ast_Identifier | None = None) -> None:
+	def removeImportFrom(self, moduleWithLogicalPath: str_nameDOTname, name: str | None, asname: str | None = None) -> None:
 		"""
 		This method modifies all `LedgerOfImports` in this `IngredientsModule` and all `IngredientsFunction` in `listIngredientsFunctions`.
 		It is not a "blacklist", so the `import from` could be added after this modification.
