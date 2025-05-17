@@ -233,16 +233,16 @@ def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = 
 		}
 
 	# Group by ClassDefIdentifier and classVersionMinorMinimum to create nested structure
-	ImaAIGeneratedDictionaryWithTheStupidestIdentifier = {}
-	for class_id, class_group in dataframe.groupby('ClassDefIdentifier'):
-		ImaAIGeneratedDictionaryWithTheStupidestIdentifier[class_id] = {
+	ImaAIGeneratedDictionaryWithTheStupidestIdentifier: dict[str, DictionaryClassDef] = {}
+	for ClassDefIdentifier, class_group in dataframe.groupby('ClassDefIdentifier', sort=False):
+		ImaAIGeneratedDictionaryWithTheStupidestIdentifier[ClassDefIdentifier] = {
 			'classAs_astAttribute': class_group['classAs_astAttribute'].iloc[0],
 			'classVersionMinorMinimum': {}
 		}
 
 		# Group by classVersionMinorMinimum and build the inner dictionaries
-		for class_ver, ver_group in class_group.groupby('classVersionMinorMinimum'):
-			ImaAIGeneratedDictionaryWithTheStupidestIdentifier[class_id]['classVersionMinorMinimum'][class_ver] = create_match_args_dict(ver_group)
+		for classVersionMinorMinimum, ver_group in class_group.groupby('classVersionMinorMinimum'):
+			ImaAIGeneratedDictionaryWithTheStupidestIdentifier[ClassDefIdentifier]['classVersionMinorMinimum'][classVersionMinorMinimum] = create_match_args_dict(ver_group)
 
 	return ImaAIGeneratedDictionaryWithTheStupidestIdentifier
 

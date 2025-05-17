@@ -1,3 +1,5 @@
+# pyright: reportUnknownMemberType = false
+# pyright: reportAttributeAccessIssue = false
 from collections import defaultdict
 from collections.abc import Sequence
 from itertools import chain
@@ -159,7 +161,7 @@ def makeToolClassIsAndAttribute():
 				astNameTypeAlias: ast.Name = ast.Name(formatTypeAliasSubcategory.format(hasDOTIdentifier=hasDOTIdentifier, TypeAliasSubcategory=TypeAliasSubcategory))
 				body: list[ast.stmt] = [ast.Expr(ast.Constant(value=...))]
 				decorator_list=[astName_staticmethod, astName_overload]
-				returns=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([ast.Attribute(ast.Name('ast'), attr='AST')]), ast.BitOr.join([ast.Subscript(ast.Name('TypeGuard'), slice=astNameTypeAlias), ast.Name('bool')])])) # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
+				returns=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([ast.Attribute(ast.Name('ast'), attr='AST')]), ast.BitOr.join([ast.Subscript(ast.Name('TypeGuard'), slice=astNameTypeAlias), ast.Name('bool')])]))
 
 				Z0Z_TypeWithoutNone = eval(dictionary_ast_exprType['ast_exprType'])
 				annotation = ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([Z0Z_TypeWithoutNone]), ast.Name('bool')]))
@@ -174,7 +176,7 @@ def makeToolClassIsAndAttribute():
 			attributeVersionMinorMinimum: int = min(dictionaryVersionsTypeAliasSubcategory.keys())
 			decorator_list: list[ast.expr] = [astName_staticmethod]
 
-			annotation = cast( ast.expr , ast.BitOr.join(dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum])) # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
+			annotation = cast( ast.expr , ast.BitOr.join(dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum]))
 			workhorseReturnValue: ast.BoolOp = ast.BoolOp(op=ast.And(), values=[ast.Call(ast.Name('isinstance'), args=[ast.Name('node'), ast.Name('astClass')], keywords=[])])
 			for node in ast.walk(annotation):
 				if isinstance(node, ast.Subscript) and isinstance(node.value, ast.Name) and node.value.id == 'Sequence' and isinstance(node.slice, ast.BinOp) and isinstance(node.slice.right, ast.Constant) and node.slice.right.value is None:
@@ -190,7 +192,7 @@ def makeToolClassIsAndAttribute():
 
 			workhorseReturnValue.values.append(ast.Call(ast.Name('attributeCondition'), args=[ast.Attribute(ast.Name('node'), attribute)]))
 
-			buffaloBuffalo_workhorse_returnsAnnotation = cast(ast.expr, ast.BitOr.join([ast.Subscript(ast.Name('TypeGuard'), slice=astNameTypeAlias), ast.Name('bool')])) # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
+			buffaloBuffalo_workhorse_returnsAnnotation = cast(ast.expr, ast.BitOr.join([ast.Subscript(ast.Name('TypeGuard'), slice=astNameTypeAlias), ast.Name('bool')]))
 			body: list[ast.stmt] = [ast.FunctionDef(name='workhorse',
 						args=ast.arguments(args=[ast.arg('node', ast.Attribute(ast.Name('ast'), attr='AST'))])
 						, body=[ast.Return(workhorseReturnValue)]
@@ -205,7 +207,7 @@ def makeToolClassIsAndAttribute():
 			attributeVersionMinorMinimum: int = dictionary_ast_exprType['attributeVersionMinorMinimum']
 			decorator_list=[astName_staticmethod]
 			if list_ast_exprType:
-				annotation = cast(ast.expr,  ast.BitOr.join(list_ast_exprType)) # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
+				annotation = cast(ast.expr,  ast.BitOr.join(list_ast_exprType))
 			else:
 				Z0Z_TypeWithoutNone = eval(dictionary_ast_exprType['ast_exprType'])
 				annotation = ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([Z0Z_TypeWithoutNone]), ast.Name('bool')]))
@@ -224,7 +226,7 @@ def makeToolClassIsAndAttribute():
 					break
 
 			workhorseReturnValue.values.append(ast.Call(ast.Name('attributeCondition'), args=[ast.Attribute(ast.Name('node'), attribute)]))
-			buffaloBuffalo_workhorse_returnsAnnotation = cast(ast.expr,  ast.BitOr.join([ast.Subscript(ast.Name('TypeGuard'), slice=astNameTypeAlias), ast.Name('bool')])) # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
+			buffaloBuffalo_workhorse_returnsAnnotation = cast(ast.expr,  ast.BitOr.join([ast.Subscript(ast.Name('TypeGuard'), slice=astNameTypeAlias), ast.Name('bool')]))
 			body: list[ast.stmt] = [ast.FunctionDef(name='workhorse',
 						args=ast.arguments(args=[ast.arg('node', ast.Attribute(ast.Name('ast'), attr='AST'))])
 						, body=[ast.Return(workhorseReturnValue)]
@@ -292,7 +294,7 @@ def makeToolDOT():
 			body: list[ast.stmt] = [ast.Return(ast.Attribute(ast.Name('node'), attribute))]
 			decorator_list: list[ast.expr] = [astName_staticmethod]
 			attributeVersionMinorMinimum: int = min(dictionaryVersionsTypeAliasSubcategory.keys())
-			returns = cast( ast.expr, ast.BitOr.join(dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum])) # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
+			returns = cast(ast.expr, ast.BitOr.join(dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum]))
 			del dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum]
 			orelse = [create_ast_stmt()]
 
@@ -301,7 +303,7 @@ def makeToolDOT():
 			body: list[ast.stmt] = [ast.Return(ast.Attribute(ast.Name('node'), attribute))]
 			decorator_list=[astName_staticmethod]
 			if list_ast_exprType:
-				returns = cast(ast.expr, ast.BitOr.join(list_ast_exprType)) # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
+				returns = cast(ast.expr, ast.BitOr.join(list_ast_exprType))
 			else:
 				returns = cast(ast.Attribute, eval(dictionary_ast_exprType['ast_exprType']))
 			list4ClassDefBody.append(create_ast_stmt())
@@ -326,7 +328,7 @@ def makeToolGrab():
 				ast_exprType = eval(ast_exprTypeAsStr)
 				list_ast_expr4annotation.append(ast.Subscript(ast.Name('Callable'), slice=ast.Tuple([ast.List([ast_exprType]), ast_exprType])))
 
-			ast_expr4annotation = cast(ast.expr, ast.BitOr.join(list_ast_expr4annotation)) # pyright: ignore[reportUnknownMemberType, reportAttributeAccessIssue]
+			ast_expr4annotation = cast(ast.expr, ast.BitOr.join(list_ast_expr4annotation))
 
 			ast_stmt = ast.FunctionDef(attribute + 'Attribute'
 				, args=ast.arguments(posonlyargs=[], args=[ast.arg('action', annotation=ast_expr4annotation)], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
@@ -349,7 +351,7 @@ def makeToolGrab():
 				body=[ast_stmt],
 				orelse=ast_stmtAtPythonMinimum
 				)
-		assert ast_stmt is not None
+		assert ast_stmt is not None, "Coding by brinkmanship!"
 		return ast_stmt
 
 	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringGrab, FunctionDefGrab_andDoAllOf]
@@ -383,9 +385,6 @@ def makeToolGrab():
 	writeClass('Grab', list4ClassDefBody, list4ModuleBody)
 
 def makeToolMake():
-	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringMake]
-	setKeywordArgumentsAnnotationTypeAlias: set[str] = set()
-
 	def create_ast_stmt(dictionaryMethodElements: DictionaryMatchArgs) -> ast.FunctionDef:
 		listFunctionDef_args: list[ast.arg] = [cast(ast.arg, eval(ast_argAsStr)) for ast_argAsStr in dictionaryMethodElements['listStr4FunctionDef_args']]
 		kwarg: ast.arg | None = None
@@ -415,28 +414,50 @@ def makeToolMake():
 		return ast_stmt
 
 	def unpackDictionaryAllMatch_argsVersions():
+		ast_stmt = None
 		if len(dictionaryAllMatch_argsVersions) == 1:
 			for match_argsVersionMinorMinimum, dictionaryMethodElements in dictionaryAllMatch_argsVersions.items():
 				ast_stmt = create_ast_stmt(dictionaryMethodElements)
-		else:
-			# and more stuff
-			for match_argsVersionMinorMinimum, dictionaryMethodElements in dictionaryAllMatch_argsVersions.items():
-				# Do some variations of the method need to be conditional on the Python version?
-				# if match_argsVersionMinorMinimum == classVersionMinorMinimum, then access to match_argsVersionMinorMinimum is already conditional on the python version because it is checked at the class level.
-				# Does _every_ variation of the method need to be conditional on the Python version?
 				if match_argsVersionMinorMinimum > classVersionMinorMinimum:
-					# Only some variations of the method need to be conditional on the Python version.
+					versionMinor: int = match_argsVersionMinorMinimum
+					body = [ast_stmt]
+					orelse = []
 					ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
 								, ops=[ast.GtE()]
 								, comparators=[ast.Tuple([ast.Constant(3)
-														, ast.Constant(match_argsVersionMinorMinimum)])])
-							, body=[ast_stmt]
+														, ast.Constant(versionMinor)])])
+							, body=body
+							, orelse=orelse
 						)
-				ast_stmt = create_ast_stmt(dictionaryMethodElements)
+		else:
+			body: list[ast.stmt] = []
+			orelse: list[ast.stmt] = []
+			versionMinor: int = -999999999999999999
+			for match_argsVersionMinorMinimum, dictionaryMethodElements in dictionaryAllMatch_argsVersions.items():
+				# Do some variations of the method need to be conditional on the Python version?
+				# if match_argsVersionMinorMinimum == classVersionMinorMinimum, then access to match_argsVersionMinorMinimum is already conditional on the python version because it is checked at the class level.
+				if match_argsVersionMinorMinimum > classVersionMinorMinimum:
+					body = [create_ast_stmt(dictionaryMethodElements)]
+					versionMinor = match_argsVersionMinorMinimum
+				else:
+					orelse = [create_ast_stmt(dictionaryMethodElements)]
+			ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
+						, ops=[ast.GtE()]
+						, comparators=[ast.Tuple([ast.Constant(3)
+												, ast.Constant(versionMinor)])])
+					, body=body
+					, orelse=orelse
+				)
+		assert ast_stmt is not None, "Coding by brinkmanship!"
+		return ast_stmt
+
+	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringMake]
+	setKeywordArgumentsAnnotationTypeAlias: set[str] = set()
 
 	dictionaryToolElements: dict[str, DictionaryClassDef] = getElementsMake()
 
 	for ClassDefIdentifier, dictionaryClassDef in dictionaryToolElements.items():
+		ast_stmt = None
 		if ClassDefIdentifier == 'Attribute':
 			ast_stmt = FunctionDefMake_Attribute
 			list4ClassDefBody.append(ast_stmt)
@@ -450,19 +471,39 @@ def makeToolMake():
 
 		if len(dictionaryAllClassVersions) == 1:
 			for classVersionMinorMinimum, dictionaryAllMatch_argsVersions in dictionaryAllClassVersions.items():
-				unpackDictionaryAllMatch_argsVersions()
-		else:
-			# and more stuff
-			for classVersionMinorMinimum, dictionaryAllMatch_argsVersions in dictionaryAllClassVersions.items():
+				ast_stmt = unpackDictionaryAllMatch_argsVersions()
 				if classVersionMinorMinimum > pythonVersionMinorMinimum:
+					versionMinor: int = classVersionMinorMinimum
+					body = [ast_stmt]
+					orelse = []
 					ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
 								, ops=[ast.GtE()]
 								, comparators=[ast.Tuple([ast.Constant(3)
-														, ast.Constant(classVersionMinorMinimum)])])
-							, body=[ast_stmt]
+														, ast.Constant(versionMinor)])])
+							, body=body
+							, orelse=orelse
 						)
-				unpackDictionaryAllMatch_argsVersions()
 
+		else:
+			# Does _every_ variation of the method need to be conditional on the Python version?
+			body: list[ast.stmt] = []
+			orelse: list[ast.stmt] = []
+			versionMinor: int = -999999999999999999
+			for classVersionMinorMinimum, dictionaryAllMatch_argsVersions in dictionaryAllClassVersions.items():
+				if classVersionMinorMinimum > pythonVersionMinorMinimum:
+					body = [unpackDictionaryAllMatch_argsVersions()]
+					versionMinor = classVersionMinorMinimum
+				else:
+					orelse = [unpackDictionaryAllMatch_argsVersions()]
+			ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
+						, ops=[ast.GtE()]
+						, comparators=[ast.Tuple([ast.Constant(3)
+												, ast.Constant(versionMinor)])])
+					, body=body
+					, orelse=orelse
+				)
+
+		assert ast_stmt is not None, "Coding by brinkmanship!"
 		list4ClassDefBody.append(ast_stmt)
 
 	setKeywordArgumentsAnnotationTypeAlias.discard('int')
