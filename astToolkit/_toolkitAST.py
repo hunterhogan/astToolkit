@@ -1,11 +1,12 @@
 from astToolkit import IfThis, IngredientsFunction, LedgerOfImports, NodeTourist, Then, str_nameDOTname
-from astToolkit import FREAKOUT
 from collections.abc import Iterable
 from inspect import getsource as inspect_getsource
 from os import PathLike
 from pathlib import Path, PurePath
 from types import ModuleType
 from typing import Any, Literal
+from typing import Generic, TypeVar as typing_TypeVar, TypedDict, Unpack
+from Z0Z_tools import raiseIfNone
 import ast
 import importlib
 
@@ -27,8 +28,7 @@ def astModuleToIngredientsFunction(astModule: ast.AST, identifierFunctionDef: st
 	Raises:
 		FREAKOUT: If the function definition is not found.
 	"""
-	astFunctionDef = extractFunctionDef(astModule, identifierFunctionDef)
-	if not astFunctionDef: raise FREAKOUT
+	astFunctionDef = raiseIfNone(extractFunctionDef(astModule, identifierFunctionDef))
 	return IngredientsFunction(astFunctionDef, LedgerOfImports(astModule))
 
 def extractClassDef(module: ast.AST, identifier: str) -> ast.ClassDef | None:
@@ -113,45 +113,30 @@ def parsePathFilename2astModule(pathFilename: PathLike[Any] | PurePath, mode: Li
 	"""
 	return ast.parse(Path(pathFilename).read_text(), mode)
 
-# TODO this is cool, but I need to learn how to properly add it to the classes so the type checker knows what to do with it. Note the use of setattr! grr!
-def joinOperatorExpressions(operatorClass: type[ast.operator], expressions: Iterable[ast.expr]) -> ast.expr:
-	"""
-	Join AST expressions with a specified operator into a nested BinOp structure.
+# Used for node end positions in constructor keyword arguments
+_EndPositionT = typing_TypeVar("_EndPositionT", int, int | None, default=int | None)
 
-	This function creates a chain of binary operations by nesting BinOp nodes.
-	Each BinOp node uses the specified operator to join two expressions.
+# Corresponds to the names in the `_attributes` class variable which is non-empty in certain AST nodes
+class _Attributes(TypedDict, Generic[_EndPositionT], total=False):
+	lineno: int
+	col_offset: int
+	end_lineno: _EndPositionT
+	end_col_offset: _EndPositionT
 
-	Parameters:
-		operatorClass: The ast.operator subclass to use for joining (e.g., ast.Add, ast.BitOr).
-		expressions: Iterable of ast.expr objects to join together.
+def operatorJoinMethod(ast_operator: type[ast.operator], expressions: Iterable[ast.expr], **keywordArguments: Unpack[_Attributes]) -> ast.expr:
+	listExpressions = list(expressions)
 
-	Returns:
-		ast.expr: A single expression representing the joined operations, or the single expression if only one was provided.
+	if not listExpressions:
+		listExpressions.append(ast.Constant(value='', **keywordArguments))
 
-	Raises:
-		ValueError: If the expressions iterable is empty.
-	"""
-	expressionsList = list(expressions)
+	expressionsJoined: ast.expr = listExpressions[0]
+	for expression in listExpressions[1:]:
+		expressionsJoined = ast.BinOp(left=expressionsJoined, op=ast_operator(), right=expression, **keywordArguments)
 
-	if not expressionsList:
-		raise ValueError("Cannot join an empty iterable of expressions")
-
-	if len(expressionsList) == 1:
-		return expressionsList[0]
-
-	result: ast.expr = expressionsList[0]
-	for expression in expressionsList[1:]:
-		result = ast.BinOp(left=result, op=operatorClass(), right=expression)
-
-	return result
-
-# Add join method to all ast.operator subclasses
-def operatorJoinMethod(cls: type[ast.operator], expressions: Iterable[ast.expr]) -> ast.expr:
-    """Class method that joins AST expressions using this operator."""
-    return joinOperatorExpressions(cls, expressions)
+	return expressionsJoined
 
 for operatorSubclass in ast.operator.__subclasses__():
-    setattr(operatorSubclass, 'join', classmethod(operatorJoinMethod))
+	setattr(operatorSubclass, 'join', classmethod(operatorJoinMethod))
 
 """
 Usage examples:
@@ -160,7 +145,7 @@ ImaIterable: Iterable[ast.expr] = [ast.Name(id='a'), ast.Name(id='b'), ast.Name(
 # Manual approach
 joinedBinOp: ast.expr | ast.BinOp = ImaIterable[0]
 for element in ImaIterable[1:]:
-    joinedBinOp = ast.BinOp(left=joinedBinOp, op=ast.BitOr(), right=element)
+	joinedBinOp = ast.BinOp(left=joinedBinOp, op=ast.BitOr(), right=element)
 # Result is equivalent to: a | b | c
 
 # Using the new join method

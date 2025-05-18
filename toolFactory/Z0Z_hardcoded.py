@@ -1,11 +1,8 @@
 from collections.abc import Iterable
 from pathlib import Path
 import ast
-
+from typing import Generic, TypeVar as typing_TypeVar, TypedDict, Unpack
 pythonVersionMinorMinimum: int = 12
-
-class FREAKOUT(Exception):
-	pass
 
 listPylanceErrors: list[str] = ['annotation', 'arg', 'args', 'body', 'keys', 'name', 'names', 'op', 'orelse', 'pattern', 'returns', 'target', 'value',]
 
@@ -22,81 +19,41 @@ pathFilenameDataframeAST = pathToolFactory / 'dataframeAST.parquet'
 fileExtension: str = '.py'
 
 # classmethod .join() =================================================
-def joinOperatorExpressions(operatorClass: type[ast.operator], expressions: Iterable[ast.expr]) -> ast.expr:
-	"""
-	Join AST expressions with a specified operator into a nested BinOp structure.
+# TODO this is cool, but I need to learn how to properly add it to the classes so the type checker knows what to do with it. Note the use of setattr! grr!
 
-	This function creates a chain of binary operations by nesting BinOp nodes.
-	Each BinOp node uses the specified operator to join two expressions.
+# Used for node end positions in constructor keyword arguments
+_EndPositionT = typing_TypeVar("_EndPositionT", int, int | None, default=int | None)
 
-	Parameters:
-		operatorClass: The ast.operator subclass to use for joining (e.g., ast.Add, ast.BitOr).
-		expressions: Iterable of ast.expr objects to join together.
+# Corresponds to the names in the `_attributes` class variable which is non-empty in certain AST nodes
+class _Attributes(TypedDict, Generic[_EndPositionT], total=False):
+	lineno: int
+	col_offset: int
+	end_lineno: _EndPositionT
+	end_col_offset: _EndPositionT
 
-	Returns:
-		ast.expr: A single expression representing the joined operations, or the single expression if only one was provided.
+def operatorJoinMethod(ast_operator: type[ast.operator], expressions: Iterable[ast.expr], **keywordArguments: Unpack[_Attributes]) -> ast.expr:
+	listExpressions = list(expressions)
 
-	Raises:
-		ValueError: If the expressions iterable is empty.
-	"""
-	expressionsList = list(expressions)
+	if not listExpressions:
+		listExpressions.append(ast.Constant(value='', **keywordArguments))
 
-	if not expressionsList:
-		raise ValueError("Cannot join an empty iterable of expressions")
+	expressionsJoined: ast.expr = listExpressions[0]
+	for expression in listExpressions[1:]:
+		expressionsJoined = ast.BinOp(left=expressionsJoined, op=ast_operator(), right=expression, **keywordArguments)
 
-	if len(expressionsList) == 1:
-		return expressionsList[0]
-
-	result: ast.expr = expressionsList[0]
-	for expression in expressionsList[1:]:
-		result = ast.BinOp(left=result, op=operatorClass(), right=expression)
-
-	return result
-
-# Add join method to all ast.operator subclasses
-def operatorJoinMethod(cls: type[ast.operator], expressions: Iterable[ast.expr]) -> ast.expr:
-    """Class method that joins AST expressions using this operator."""
-    return joinOperatorExpressions(cls, expressions)
+	return expressionsJoined
 
 for operatorSubclass in ast.operator.__subclasses__():
-    setattr(operatorSubclass, 'join', classmethod(operatorJoinMethod))
-
-
-# ast.BinOp.join = classmethod(operatorJoinMethod)
-# ast.BitOr.join = classmethod(operatorJoinMethod)  # Add join method specifically for ast.BitOr
-# class BitOr(ast.BitOr):
-# 	"""Custom BitOr class with a join method."""
-# 	@classmethod
-# 	def join(cls, expressions: Iterable[ast.expr]) -> ast.expr:
-# 		return operatorJoinMethod(cls, expressions)
-
-# super(ast.BitOr, ('join', classmethod(operatorJoinMethod)))
-# class BitOr():
-# 	@classmethod
-# 	def join(cls, expressions: Iterable[ast.expr]) -> ast.expr:
-# 		return operatorJoinMethod(cls, expressions)
-
-# class ast.Add
-# class ast.Sub
-# class ast.Mult
-# class ast.MatMult
-# class ast.Div
-# class ast.Mod
-# class ast.Pow
-# class ast.LShift
-# class ast.RShift
-# class ast.BitXor
-# class ast.BitAnd
-# class ast.FloorDiv
+	setattr(operatorSubclass, 'join', classmethod(operatorJoinMethod))
 
 """
 Usage examples:
-ImaIterable: Iterable[ast.expr] = [ast.Name('a'), ast.Name('b'), ast.Name('c')]
+ImaIterable: Iterable[ast.expr] = [ast.Name(id='a'), ast.Name(id='b'), ast.Name(id='c')]
 
 # Manual approach
 joinedBinOp: ast.expr | ast.BinOp = ImaIterable[0]
 for element in ImaIterable[1:]:
-    joinedBinOp = ast.BinOp(left=joinedBinOp, op=ast.BitOr(), right=element)
+	joinedBinOp = ast.BinOp(left=joinedBinOp, op=ast.BitOr(), right=element)
 # Result is equivalent to: a | b | c
 
 # Using the new join method
@@ -105,8 +62,7 @@ joinedAdd = ast.Add.join(ImaIterable)      # Creates the nested structure for a 
 """
 
 # ww='''
-# ast.arguments()
-# ast.Load()
+# ""
 # '''
 
 # print(ast.dump(ast.parse(ww, type_comments=True), indent=None))
