@@ -1,5 +1,3 @@
-# pyright: reportUnknownMemberType = false
-# pyright: reportAttributeAccessIssue = false
 from collections import defaultdict
 from itertools import chain
 from pathlib import PurePosixPath
@@ -7,6 +5,7 @@ from toolFactory import (
 	astName_overload,
 	astName_staticmethod,
 	astName_typing_TypeAlias,
+	BitOr,
 	DictionaryAstExprType,
 	DictionaryClassDef,
 	DictionaryMatchArgs,
@@ -26,10 +25,12 @@ from toolFactory import (
 	)
 from toolFactory.datacenter import getElementsGrab
 from toolFactory.factory_annex import (
+	astAssign_EndPositionT,
+	astClassDef_Attributes,
 	FunctionDefGrab_andDoAllOf,
 	FunctionDefMake_Attribute,
 	FunctionDefMake_Import,
-	listHandmadeTypeAlias_astTypes,
+	listHandmade_astTypes,
 )
 from toolFactory.docstrings import ClassDefDocstringBe, ClassDefDocstringClassIsAndAttribute, ClassDefDocstringGrab, ClassDefDocstringMake, ClassDefDocstringDOT, docstringWarning
 from typing import cast
@@ -161,7 +162,7 @@ def makeToolClassIsAndAttribute() -> None:
 				astNameTypeAlias: ast.Name = ast.Name(formatTypeAliasSubcategory.format(hasDOTIdentifier=hasDOTIdentifier, TypeAliasSubcategory=TypeAliasSubcategory))
 				body: list[ast.stmt] = [ast.Expr(ast.Constant(value=...))]
 				decorator_list=[astName_staticmethod, astName_overload]
-				returns=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([ast.Attribute(ast.Name('ast'), attr='AST')]), ast.BitOr.join([ast.Subscript(ast.Name('TypeGuard'), slice=astNameTypeAlias), ast.Name('bool')])]))
+				returns=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([ast.Attribute(ast.Name('ast'), attr='AST')]), BitOr.join([ast.Subscript(ast.Name('TypeGuard'), slice=astNameTypeAlias), ast.Name('bool')])]))
 
 				Z0Z_TypeWithoutNone = eval(dictionary_ast_exprType['ast_exprType'])
 				annotation = ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([Z0Z_TypeWithoutNone]), ast.Name('bool')]))
@@ -176,7 +177,7 @@ def makeToolClassIsAndAttribute() -> None:
 			attributeVersionMinorMinimum: int = min(dictionaryVersionsTypeAliasSubcategory.keys())
 			decorator_list: list[ast.expr] = [astName_staticmethod]
 
-			annotation = cast( ast.expr , ast.BitOr.join(dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum]))
+			annotation = BitOr.join(dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum])
 			workhorseReturnValue: ast.BoolOp = ast.BoolOp(op=ast.And(), values=[ast.Call(ast.Name('isinstance'), args=[ast.Name('node'), ast.Name('astClass')], keywords=[])])
 			for node in ast.walk(annotation):
 				if isinstance(node, ast.Subscript) and isinstance(node.value, ast.Name) and node.value.id == 'Sequence' and isinstance(node.slice, ast.BinOp) and isinstance(node.slice.right, ast.Constant) and node.slice.right.value is None:
@@ -192,7 +193,7 @@ def makeToolClassIsAndAttribute() -> None:
 
 			workhorseReturnValue.values.append(ast.Call(ast.Name('attributeCondition'), args=[ast.Attribute(ast.Name('node'), attribute)]))
 
-			buffaloBuffalo_workhorse_returnsAnnotation = cast(ast.expr, ast.BitOr.join([ast.Subscript(ast.Name('TypeGuard'), slice=astNameTypeAlias), ast.Name('bool')]))
+			buffaloBuffalo_workhorse_returnsAnnotation = BitOr.join([ast.Subscript(ast.Name('TypeGuard'), slice=astNameTypeAlias), ast.Name('bool')])
 			body: list[ast.stmt] = [ast.FunctionDef(name='workhorse',
 						args=ast.arguments(args=[ast.arg('node', ast.Attribute(ast.Name('ast'), attr='AST'))])
 						, body=[ast.Return(workhorseReturnValue)]
@@ -207,7 +208,7 @@ def makeToolClassIsAndAttribute() -> None:
 			attributeVersionMinorMinimum: int = dictionary_ast_exprType['attributeVersionMinorMinimum']
 			decorator_list=[astName_staticmethod]
 			if list_ast_exprType:
-				annotation = cast(ast.expr,  ast.BitOr.join(list_ast_exprType))
+				annotation = BitOr.join(list_ast_exprType)
 			else:
 				Z0Z_TypeWithoutNone = eval(dictionary_ast_exprType['ast_exprType'])
 				annotation = ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([Z0Z_TypeWithoutNone]), ast.Name('bool')]))
@@ -226,7 +227,7 @@ def makeToolClassIsAndAttribute() -> None:
 					break
 
 			workhorseReturnValue.values.append(ast.Call(ast.Name('attributeCondition'), args=[ast.Attribute(ast.Name('node'), attribute)]))
-			buffaloBuffalo_workhorse_returnsAnnotation = cast(ast.expr,  ast.BitOr.join([ast.Subscript(ast.Name('TypeGuard'), slice=astNameTypeAlias), ast.Name('bool')]))
+			buffaloBuffalo_workhorse_returnsAnnotation = BitOr.join([ast.Subscript(ast.Name('TypeGuard'), slice=astNameTypeAlias), ast.Name('bool')])
 			body: list[ast.stmt] = [ast.FunctionDef(name='workhorse',
 						args=ast.arguments(args=[ast.arg('node', ast.Attribute(ast.Name('ast'), attr='AST'))])
 						, body=[ast.Return(workhorseReturnValue)]
@@ -294,7 +295,7 @@ def makeToolDOT() -> None:
 			body: list[ast.stmt] = [ast.Return(ast.Attribute(ast.Name('node'), attribute))]
 			decorator_list: list[ast.expr] = [astName_staticmethod]
 			attributeVersionMinorMinimum: int = min(dictionaryVersionsTypeAliasSubcategory.keys())
-			returns = cast(ast.expr, ast.BitOr.join(dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum]))
+			returns = BitOr.join(dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum])
 			del dictionaryVersionsTypeAliasSubcategory[attributeVersionMinorMinimum]
 			orelse = [create_ast_stmt()]
 
@@ -303,7 +304,7 @@ def makeToolDOT() -> None:
 			body: list[ast.stmt] = [ast.Return(ast.Attribute(ast.Name('node'), attribute))]
 			decorator_list=[astName_staticmethod]
 			if list_ast_exprType:
-				returns = cast(ast.expr, ast.BitOr.join(list_ast_exprType))
+				returns = BitOr.join(list_ast_exprType)
 			else:
 				returns = cast(ast.Attribute, eval(dictionary_ast_exprType['ast_exprType']))
 			list4ClassDefBody.append(create_ast_stmt())
@@ -328,7 +329,7 @@ def makeToolGrab() -> None:
 				ast_exprType = eval(ast_exprTypeAsStr)
 				list_ast_expr4annotation.append(ast.Subscript(ast.Name('Callable'), slice=ast.Tuple([ast.List([ast_exprType]), ast_exprType])))
 
-			ast_expr4annotation = cast(ast.expr, ast.BitOr.join(list_ast_expr4annotation))
+			ast_expr4annotation = BitOr.join(list_ast_expr4annotation)
 
 			ast_stmt = ast.FunctionDef(attribute + 'Attribute'
 				, args=ast.arguments(posonlyargs=[], args=[ast.arg('action', annotation=ast_expr4annotation)], vararg=None, kwonlyargs=[], kw_defaults=[], kwarg=None, defaults=[])
@@ -451,6 +452,7 @@ def makeToolMake() -> None:
 		assert ast_stmt is not None, "Coding by brinkmanship!"
 		return ast_stmt
 
+	list_aliasIdentifier: list[str] = []
 	list4ClassDefBody: list[ast.stmt] = [ClassDefDocstringMake]
 	setKeywordArgumentsAnnotationTypeAlias: set[str] = set()
 
@@ -465,6 +467,7 @@ def makeToolMake() -> None:
 		if ClassDefIdentifier == 'Import':
 			ast_stmt = FunctionDefMake_Import
 			list4ClassDefBody.append(ast_stmt)
+			list_aliasIdentifier.append('str_nameDOTname')
 			continue
 		classAs_astAttribute = cast(ast.expr, eval(dictionaryClassDef['classAs_astAttribute']))
 		dictionaryAllClassVersions: dict[int, dict[int, DictionaryMatchArgs]] = dictionaryClassDef['classVersionMinorMinimum']
@@ -506,23 +509,31 @@ def makeToolMake() -> None:
 		assert ast_stmt is not None, "Coding by brinkmanship!"
 		list4ClassDefBody.append(ast_stmt)
 
+	# `.join` ===============
+	# create FunctionDef operatorJoinMethod
+	# create FunctionDef join@classmethod
+	listOperatorIdentifiers: list[str] = ['Add', 'BitAnd', 'BitOr', 'BitXor', 'Div', 'FloorDiv', 'LShift', 'MatMult', 'Mod', 'Mult', 'Pow', 'RShift', 'Sub',]
+	# create loop to create ClassDef astToolkit.operatorIdentifier.bases[ast.operatorIdentifier]
+	# Module-level operations ===============
 	setKeywordArgumentsAnnotationTypeAlias.discard('int')
+	list_aliasIdentifier = sorted(set([*setKeywordArgumentsAnnotationTypeAlias, *list_aliasIdentifier]), key=str.lower)
 	list4ModuleBody: list[ast.stmt] = [
-		ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in sorted([*setKeywordArgumentsAnnotationTypeAlias, 'str_nameDOTname'])], 0)
-		, ast.ImportFrom('typing', [ast.alias('Any')], 0)
+		ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in list_aliasIdentifier], 0)
+		, ast.ImportFrom('collections.abc', [ast.alias('Callable'), ast.alias('Iterable'), ast.alias('Sequence')], 0)
+		, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('Unpack')], 0)
 		, ast.Import([ast.alias('ast')])
 		, ast.Import([ast.alias('sys')])
 		]
 
 	writeClass('Make', list4ClassDefBody, list4ModuleBody)
 
-def makeTypeAlias() -> None:
+def make_astTypes() -> None:
 	def append_ast_stmtTypeAlias() -> None:
 		ast_stmt = None
 		if len(dictionaryVersions) == 1:
 			# This branch is the simplest case: one TypeAlias for the attribute for all Python versions
 			for versionMinor, listClassAs_astAttribute in dictionaryVersions.items():
-				ast_stmt = ast.AnnAssign(astNameTypeAlias, astName_typing_TypeAlias, cast(ast.expr, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in listClassAs_astAttribute])), 1)
+				ast_stmt = ast.AnnAssign(astNameTypeAlias, astName_typing_TypeAlias, BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in listClassAs_astAttribute]), 1)
 				if versionMinor > pythonVersionMinorMinimum:
 					ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
 								, ops=[ast.GtE()]
@@ -534,8 +545,8 @@ def makeTypeAlias() -> None:
 			listVersionsMinor = sorted(dictionaryVersions.keys(), reverse=False)
 			if len(listVersionsMinor) > 2:
 				raise NotImplementedError
-			ast_stmtAtPythonMinimum = ast.AnnAssign(astNameTypeAlias, astName_typing_TypeAlias, cast(ast.expr, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in dictionaryVersions[min(listVersionsMinor)]])), 1)
-			ast_stmtAbovePythonMinimum = ast.AnnAssign(astNameTypeAlias, astName_typing_TypeAlias, cast(ast.expr, ast.BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in sorted(chain(*dictionaryVersions.values()), key=str.lower)])), 1)
+			ast_stmtAtPythonMinimum = ast.AnnAssign(astNameTypeAlias, astName_typing_TypeAlias, BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in dictionaryVersions[min(listVersionsMinor)]]), 1)
+			ast_stmtAbovePythonMinimum = ast.AnnAssign(astNameTypeAlias, astName_typing_TypeAlias, BitOr.join([eval(classAs_astAttribute) for classAs_astAttribute in sorted(chain(*dictionaryVersions.values()), key=str.lower)]), 1)
 
 			ast_stmt = ast.If(ast.Compare(ast.Attribute(ast.Name('sys'), 'version_info')
 						, ops=[ast.GtE()]
@@ -551,7 +562,7 @@ def makeTypeAlias() -> None:
 			, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('TypeAlias', 'typing_TypeAlias')], 0)
 			, ast.Import([ast.alias('ast')])
 			, ast.Import([ast.alias('sys')])
-			, *listHandmadeTypeAlias_astTypes
+			, *listHandmade_astTypes
 			]
 		, type_ignores=[]
 		)
@@ -590,4 +601,4 @@ if __name__ == "__main__":
 	makeToolDOT()
 	makeToolGrab()
 	makeToolMake()
-	makeTypeAlias()
+	make_astTypes()
