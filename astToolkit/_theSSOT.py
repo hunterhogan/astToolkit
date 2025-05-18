@@ -29,5 +29,3 @@ class PackageSettings:
 	"""Absolute path to the installed package directory."""
 
 The = PackageSettings()
-
-class FREAKOUT(Exception): pass
