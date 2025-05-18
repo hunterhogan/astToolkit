@@ -1,4 +1,5 @@
 from toolFactory.Z0Z_hardcoded import (
+	BitOr as BitOr,
 	fileExtension as fileExtension,
 	keywordArgumentsIdentifier as keywordArgumentsIdentifier,
 	listPylanceErrors as listPylanceErrors,

@@ -32,7 +32,7 @@ class _Attributes(TypedDict, Generic[_EndPositionT], total=False):
 	end_col_offset: _EndPositionT
 
 def operatorJoinMethod(ast_operator: type[ast.operator], expressions: Iterable[ast.expr], **keywordArguments: Unpack[_Attributes]) -> ast.expr:
-	listExpressions = list(expressions)
+	listExpressions: list[ast.expr] = list(expressions)
 
 	if not listExpressions:
 		listExpressions.append(ast.Constant(value='', **keywordArguments))
@@ -42,9 +42,6 @@ def operatorJoinMethod(ast_operator: type[ast.operator], expressions: Iterable[a
 		expressionsJoined = ast.BinOp(left=expressionsJoined, op=ast_operator(), right=expression, **keywordArguments)
 
 	return expressionsJoined
-
-for operatorSubclass in ast.operator.__subclasses__():
-	setattr(operatorSubclass, 'join', classmethod(operatorJoinMethod))
 
 """
 Usage examples:
@@ -61,8 +58,69 @@ joinedBinOp = ast.BitOr.join(ImaIterable)  # Creates the nested structure for a 
 joinedAdd = ast.Add.join(ImaIterable)      # Creates the nested structure for a + b + c
 """
 
+class Add(ast.Add):
+	@classmethod
+	def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[_Attributes]) -> ast.expr:
+		return operatorJoinMethod(cls, expressions, **keywordArguments)
+class BitAnd(ast.BitAnd):
+	@classmethod
+	def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[_Attributes]) -> ast.expr:
+		return operatorJoinMethod(cls, expressions, **keywordArguments)
+class BitOr(ast.BitOr):
+	@classmethod
+	def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[_Attributes]) -> ast.expr:
+		return operatorJoinMethod(cls, expressions, **keywordArguments)
+class BitXor(ast.BitXor):
+	@classmethod
+	def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[_Attributes]) -> ast.expr:
+		return operatorJoinMethod(cls, expressions, **keywordArguments)
+class Div(ast.Div):
+	@classmethod
+	def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[_Attributes]) -> ast.expr:
+		return operatorJoinMethod(cls, expressions, **keywordArguments)
+class FloorDiv(ast.FloorDiv):
+	@classmethod
+	def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[_Attributes]) -> ast.expr:
+		return operatorJoinMethod(cls, expressions, **keywordArguments)
+class LShift(ast.LShift):
+	@classmethod
+	def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[_Attributes]) -> ast.expr:
+		return operatorJoinMethod(cls, expressions, **keywordArguments)
+class MatMult(ast.MatMult):
+	@classmethod
+	def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[_Attributes]) -> ast.expr:
+		return operatorJoinMethod(cls, expressions, **keywordArguments)
+class Mod(ast.Mod):
+	@classmethod
+	def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[_Attributes]) -> ast.expr:
+		return operatorJoinMethod(cls, expressions, **keywordArguments)
+class Mult(ast.Mult):
+	@classmethod
+	def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[_Attributes]) -> ast.expr:
+		return operatorJoinMethod(cls, expressions, **keywordArguments)
+class Pow(ast.Pow):
+	@classmethod
+	def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[_Attributes]) -> ast.expr:
+		return operatorJoinMethod(cls, expressions, **keywordArguments)
+class RShift(ast.RShift):
+	@classmethod
+	def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[_Attributes]) -> ast.expr:
+		return operatorJoinMethod(cls, expressions, **keywordArguments)
+class Sub(ast.Sub):
+	@classmethod
+	def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[_Attributes]) -> ast.expr:
+		return operatorJoinMethod(cls, expressions, **keywordArguments)
+
 # ww='''
-# ""
+# _EndPositionT = typing_TypeVar("_EndPositionT", int, int | None, default=int | None)
+
+# # Corresponds to the names in the `_attributes` class variable which is non-empty in certain AST nodes
+# class _Attributes(TypedDict, Generic[_EndPositionT], total=False):
+# 	lineno: int
+# 	col_offset: int
+# 	end_lineno: _EndPositionT
+# 	end_col_offset: _EndPositionT
+
 # '''
 
 # print(ast.dump(ast.parse(ww, type_comments=True), indent=None))
