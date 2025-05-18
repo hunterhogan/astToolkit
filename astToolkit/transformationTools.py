@@ -2,7 +2,6 @@ from astToolkit import (
 	Be,
 	ClassIsAndAttribute,
 	DOT,
-	FREAKOUT,
 	Grab,
 	IfThis,
 	IngredientsFunction,
@@ -20,7 +19,7 @@ from copy import deepcopy
 from os import PathLike
 from pathlib import PurePath
 from typing import Any, cast
-from Z0Z_tools import writeStringToHere
+from Z0Z_tools import raiseIfNone, writeStringToHere
 import ast
 
 # TODO Some `DOT` methods return lists, notably DOT.targets, which is an attribute of ast.Assign.
@@ -241,8 +240,7 @@ def write_astModule(ingredients: IngredientsModule, pathFilename: PathLike[Any] 
 	# 	astModule = Make.Module(ingredients.body, ingredients.type_ignores)
 	astModule = Make.Module(ingredients.body, ingredients.type_ignores)
 	ast.fix_missing_locations(astModule)
-	pythonSource: str = ast.unparse(astModule)
-	if not pythonSource: raise FREAKOUT
+	pythonSource: str = raiseIfNone(ast.unparse(astModule))
 	autoflake_additional_imports: list[str] = ingredients.imports.exportListModuleIdentifiers()
 	if packageName:
 		autoflake_additional_imports.append(packageName)

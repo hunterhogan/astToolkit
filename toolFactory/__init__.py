@@ -1,6 +1,5 @@
 from toolFactory.Z0Z_hardcoded import (
 	fileExtension as fileExtension,
-	FREAKOUT as FREAKOUT,
 	keywordArgumentsIdentifier as keywordArgumentsIdentifier,
 	listPylanceErrors as listPylanceErrors,
 	packageName as packageName,

@@ -1,6 +1,8 @@
+# import astToolkit._extendPython_ast
+
 from astToolkit._astTypes import *  # noqa: F403
 
-from astToolkit.theSSOT import FREAKOUT as FREAKOUT, The as The
+from astToolkit._theSSOT import The as The
 
 from astToolkit._types import (
 	NodeORattribute as NodeORattribute,
