@@ -13,6 +13,10 @@ FunctionDefGrab_andDoAllOf = ast.FunctionDef('andDoAllOf'
 	, returns=ast.Subscript(ast.Name('Callable'), ast.Tuple([ast.List([ast.Name('NodeORattribute')]), ast.Name('NodeORattribute')])))
 
 # `Make` =====================================================================
+astAssign_EndPositionT = ast.Assign([ast.Name('_EndPositionT', ast.Store())], value=ast.Call(ast.Name('typing_TypeVar'), args=[ast.Constant('_EndPositionT'), ast.Name('int'), ast.BinOp(ast.Name('int'), ast.BitOr(), ast.Constant(None))], keywords=[ast.keyword('default', value=ast.BinOp(ast.Name('int'), ast.BitOr(), ast.Constant(None)))]))
+
+astClassDef_Attributes = ast.ClassDef('_Attributes', bases=[ast.Name('TypedDict'), ast.Subscript(ast.Name('Generic'), slice=ast.Name('_EndPositionT'))], keywords=[ast.keyword('total', value=ast.Constant(False))], body=[ast.AnnAssign(ast.Name('lineno', ast.Store()), annotation=ast.Name('int'), simple=1), ast.AnnAssign(ast.Name('col_offset', ast.Store()), annotation=ast.Name('int'), simple=1), ast.AnnAssign(ast.Name('end_lineno', ast.Store()), annotation=ast.Name('_EndPositionT'), simple=1), ast.AnnAssign(ast.Name('end_col_offset', ast.Store()), annotation=ast.Name('_EndPositionT'), simple=1)])
+
 FunctionDefMake_Attribute: ast.FunctionDef = ast.FunctionDef('Attribute'
 	, args=ast.arguments(args=[ast.arg(arg='value', annotation=ast.Attribute(ast.Name('ast'), 'expr'))]
 						, vararg=ast.arg(arg='attribute', annotation=ast.Name('str'))
@@ -52,17 +56,8 @@ FunctionDefMake_Import: ast.FunctionDef = ast.FunctionDef('Import'
 	, returns=ast.Attribute(ast.Name('ast'), 'Import'))
 
 # `TypeAlias` =====================================================================
-listHandmadeTypeAlias_astTypes: list[ast.AnnAssign] = []
-
-listStrRepresentationsOfTypeAlias: list[str] = [
-	(astTypes_intORstr := "intORstr: typing_TypeAlias = Any"),
-	(astTypes_intORstrORtype_params := "intORstrORtype_params: typing_TypeAlias = Any"),
-	(astTypes_intORtype_params := "intORtype_params: typing_TypeAlias = Any"),
+listHandmade_astTypes: list[ast.stmt] = [
+	ast.AnnAssign(ast.Name('intORstr', ast.Store()), annotation=ast.Name('typing_TypeAlias'), value=ast.Name('Any'), simple=1),
+	ast.AnnAssign(ast.Name('intORstrORtype_params', ast.Store()), annotation=ast.Name('typing_TypeAlias'), value=ast.Name('Any'), simple=1),
+	ast.AnnAssign(ast.Name('intORtype_params', ast.Store()), annotation=ast.Name('typing_TypeAlias'), value=ast.Name('Any'), simple=1),
 ]
-
-for string in listStrRepresentationsOfTypeAlias:
-	# The string representation of the type alias is parsed into an AST module.
-	astModule = ast.parse(string)
-	for node in ast.iter_child_nodes(astModule):
-		if isinstance(node, ast.AnnAssign):
-			listHandmadeTypeAlias_astTypes.append(node)
