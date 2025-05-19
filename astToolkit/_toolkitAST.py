@@ -9,6 +9,7 @@ from typing import Generic, TypeVar as typing_TypeVar, TypedDict, Unpack
 from Z0Z_tools import raiseIfNone
 import ast
 import importlib
+import sys
 
 def astModuleToIngredientsFunction(astModule: ast.AST, identifierFunctionDef: str) -> IngredientsFunction:
 	"""
@@ -114,7 +115,10 @@ def parsePathFilename2astModule(pathFilename: PathLike[Any] | PurePath, mode: Li
 	return ast.parse(Path(pathFilename).read_text(), mode)
 
 # Used for node end positions in constructor keyword arguments
-_EndPositionT = typing_TypeVar("_EndPositionT", int, int | None, default=int | None)
+if sys.version_info >= (3, 13):
+	_EndPositionT = typing_TypeVar("_EndPositionT", int, int | None, default=int | None)
+else:
+	_EndPositionT = typing_TypeVar("_EndPositionT", int, int | None)
 
 # Corresponds to the names in the `_attributes` class variable which is non-empty in certain AST nodes
 class _Attributes(TypedDict, Generic[_EndPositionT], total=False):

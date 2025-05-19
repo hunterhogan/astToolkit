@@ -1,6 +1,7 @@
 from collections.abc import Iterable
 from pathlib import Path
 import ast
+import sys
 from typing import Generic, TypeVar as typing_TypeVar, TypedDict, Unpack
 pythonVersionMinorMinimum: int = 12
 
@@ -24,7 +25,10 @@ fileExtension: str = '.py'
 # TODO this is cool, but I need to learn how to properly add it to the classes so the type checker knows what to do with it. Note the use of setattr! grr!
 
 # Used for node end positions in constructor keyword arguments
-_EndPositionT = typing_TypeVar("_EndPositionT", int, int | None, default=int | None)
+if sys.version_info >= (3, 13):
+	_EndPositionT = typing_TypeVar("_EndPositionT", int, int | None, default=int | None)
+else:
+	_EndPositionT = typing_TypeVar("_EndPositionT", int, int | None)
 
 # Corresponds to the names in the `_attributes` class variable which is non-empty in certain AST nodes
 class _Attributes(TypedDict, Generic[_EndPositionT], total=False):
