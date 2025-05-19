@@ -519,8 +519,9 @@ def makeToolMake() -> None:
 	list_aliasIdentifier = sorted(set([*setKeywordArgumentsAnnotationTypeAlias, *list_aliasIdentifier]), key=str.lower)
 	list4ModuleBody: list[ast.stmt] = [
 		ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in list_aliasIdentifier], 0)
-		, ast.ImportFrom('collections.abc', [ast.alias('Callable'), ast.alias('Iterable'), ast.alias('Sequence')], 0)
-		, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('Unpack')], 0)
+		# , ast.ImportFrom('collections.abc', [ast.alias('Callable'), ast.alias('Iterable'), ast.alias('Sequence')], 0)
+		# , ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('Unpack')], 0)
+		, ast.ImportFrom('typing', [ast.alias('Any')], 0)
 		, ast.Import([ast.alias('ast')])
 		, ast.Import([ast.alias('sys')])
 		]

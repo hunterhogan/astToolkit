@@ -112,16 +112,15 @@ class Sub(ast.Sub):
 		return operatorJoinMethod(cls, expressions, **keywordArguments)
 
 # ww='''
-# _EndPositionT = typing_TypeVar("_EndPositionT", int, int | None, default=int | None)
-
-# # Corresponds to the names in the `_attributes` class variable which is non-empty in certain AST nodes
-# class _Attributes(TypedDict, Generic[_EndPositionT], total=False):
-# 	lineno: int
-# 	col_offset: int
-# 	end_lineno: _EndPositionT
-# 	end_col_offset: _EndPositionT
-
+# key=lambda x: x.str.lower()
 # '''
 
 # print(ast.dump(ast.parse(ww, type_comments=True), indent=None))
-# from ast import *
+# from ast import *  # noqa: E402, F403
+# # ruff: noqa: F405
+
+# rr='''
+# Assign(lineno=0,col_offset=0, targets=[Name(id='key', ctx=Store())], value=Lambda(args=arguments(args=[arg(arg='x', annotation=ast.Attribute(ast.Name('pandas'), 'Series'))]), body=Call(func=Attribute(value=Attribute(value=Name(id='x', ctx=Load()), attr='str', ctx=Load()), attr='lower', ctx=Load()))))
+# '''
+
+# print(ast.unparse(ast.Module([eval(rr)])))
