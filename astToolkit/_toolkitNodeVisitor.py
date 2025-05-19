@@ -14,14 +14,14 @@ The module also provides utilities for importing modules, loading callables from
 structures, creating a complete workflow for code analysis and transformation.
 """
 
-from astToolkit import 个, 个return
+from astToolkit import 木, 个return
 from collections.abc import Callable
 from typing import Any, cast, Generic, TypeGuard
 import ast
 
 # TODO Identify the logic that narrows the type and can help the user during static type checking.
 
-class NodeTourist(ast.NodeVisitor, Generic[个, 个return]):
+class NodeTourist(ast.NodeVisitor, Generic[木, 个return]):
 	"""
 	Visit and extract information from AST nodes that match a predicate.
 
@@ -32,14 +32,14 @@ class NodeTourist(ast.NodeVisitor, Generic[个, 个return]):
 	This class is particularly useful for analyzing AST structures, extracting specific nodes or node properties, and
 	gathering information about code patterns.
 	"""
-	def __init__(self, findThis: Callable[[ast.AST], TypeGuard[个] | bool], doThat: Callable[[个], 个return]) -> None:
+	def __init__(self, findThis: Callable[[ast.AST], TypeGuard[木] | bool], doThat: Callable[[木], 个return]) -> None:
 		self.findThis = findThis
 		self.doThat = doThat
 		self.nodeCaptured: 个return | None = None
 
 	def visit(self, node: ast.AST) -> None:
 		if self.findThis(node):
-			node = cast(个, node)
+			node = cast(木, node)
 			self.nodeCaptured = self.doThat(node)
 		self.generic_visit(node)
 

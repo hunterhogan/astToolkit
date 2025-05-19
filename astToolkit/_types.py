@@ -5,11 +5,6 @@ import sys
 # Type hints through TypeAlias or type "hints" through the identifier name.
 str_nameDOTname: typing_TypeAlias = str
 
-# Limited success with TypeVar.
-个 = typing_TypeVar('个', bound = ast.AST, covariant = True)
-个return = typing_TypeVar('个return', covariant = True)
-NodeORattribute = typing_TypeVar('NodeORattribute', bound = ast.AST | str | str_nameDOTname | bool | Any | None, covariant = True)
-
 # For my reference, all ast classes by subgroup:
 Ima_ast_boolop: typing_TypeAlias = ast.boolop | ast.And | ast.Or
 Ima_ast_cmpop: typing_TypeAlias = ast.cmpop | ast.Eq | ast.NotEq | ast.Lt | ast.LtE | ast.Gt | ast.GtE | ast.Is | ast.IsNot | ast.In | ast.NotIn

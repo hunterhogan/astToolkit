@@ -8,10 +8,10 @@ from astToolkit import (
 	IngredientsModule,
 	Make,
 	NodeChanger,
-	NodeORattribute,
 	NodeTourist,
 	Then,
 	个,
+	木,
 )
 from autoflake import fix_code as autoflake_fix_code
 from collections.abc import Callable, Mapping, Sequence
@@ -31,8 +31,8 @@ import ast
 
 class cleverNamePrototype:
     @staticmethod
-    def index(at: int) -> Callable[[Sequence[NodeORattribute]], NodeORattribute]:
-        def workhorse(zzz: Sequence[NodeORattribute]) -> NodeORattribute:
+    def index(at: int) -> Callable[[Sequence[个]], 个]:
+        def workhorse(zzz: Sequence[个]) -> 个:
             node = zzz[at]
 			# slice?
             return node
@@ -173,7 +173,7 @@ def removeUnusedParameters(ingredientsFunction: IngredientsFunction) -> Ingredie
 
 	return ingredientsFunction
 
-def unparseFindReplace(astTree: 个, mappingFindReplaceNodes: Mapping[ast.AST, ast.AST]) -> 个:
+def unparseFindReplace(astTree: 木, mappingFindReplaceNodes: Mapping[ast.AST, ast.AST]) -> 木:
 	"""
 	Recursively replace AST nodes based on a mapping of find-replace pairs.
 

@@ -12,7 +12,7 @@ Together, these classes provide a complete system for manipulating AST nodes onc
 predicate functions from ifThis.
 """
 
-from astToolkit import NodeORattribute
+from astToolkit import 个
 from collections.abc import Callable, Sequence
 from typing import Any
 import ast
@@ -36,7 +36,7 @@ class Then:
 		return workhorse
 
 	@staticmethod
-	def extractIt(node: NodeORattribute) -> NodeORattribute:
+	def extractIt(node: 个) -> 个:
 		return node
 
 	@staticmethod
@@ -52,7 +52,7 @@ class Then:
 		return None
 
 	@staticmethod
-	def replaceWith(astAST: NodeORattribute) -> Callable[[NodeORattribute], NodeORattribute]:
+	def replaceWith(astAST: 个) -> Callable[[个], 个]:
 		return lambda _replaceMe: astAST
 
 	@staticmethod

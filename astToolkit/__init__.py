@@ -5,10 +5,7 @@ from astToolkit._astTypes import *  # noqa: F403
 from astToolkit._theSSOT import The as The
 
 from astToolkit._types import (
-	NodeORattribute as NodeORattribute,
 	str_nameDOTname as str_nameDOTname,
-	个 as 个,
-	个return as 个return,
 )
 
 from astToolkit._toolkitNodeVisitor import (
