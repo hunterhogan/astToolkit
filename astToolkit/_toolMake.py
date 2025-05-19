@@ -101,7 +101,7 @@ class Make:
 
     @staticmethod
     def ClassDef(name: str, bases: list[ast.expr]=[], list_keyword: list[ast.keyword]=[], body: list[ast.stmt]=[], decorator_list: list[ast.expr]=[], **keywordArguments: intORtype_params) -> ast.ClassDef:
-        return ast.ClassDef(name=name, bases=bases, keywords=list_keyword, body=body, decorator_list=decorator_list, **keywordArguments)
+        return ast.ClassDef(name=name, bases=bases, keywords=list_keyword, body=body, decorator_list=decorator_list, type_params=[], **keywordArguments)
 
     @staticmethod
     def Compare(left: ast.expr, ops: list[ast.cmpop], comparators: list[ast.expr], **keywordArguments: int) -> ast.Compare:
