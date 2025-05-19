@@ -375,7 +375,7 @@ def makeToolGrab() -> None:
 		list4ClassDefBody.append(create_ast_stmt())
 
 	list4ModuleBody: list[ast.stmt] = [
-			ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in ['NodeORattribute']], 0)
+			ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in ['个']], 0)
 			, ast.ImportFrom('astToolkit._astTypes', [ast.alias('*')], 0)
 			, ast.ImportFrom('collections.abc', [ast.alias('Callable'), ast.alias('Sequence')], 0)
 			, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('Literal')], 0)
@@ -397,11 +397,8 @@ def makeToolMake() -> None:
 
 		listCall_keywords: list[ast.keyword] = []
 		for tupleCall_keywords in dictionaryMethodElements['listTupleCall_keywords']:
-			argIdentifier, defaultValueNeedsEval, keywordValue = tupleCall_keywords
-			if defaultValueNeedsEval:
-				listCall_keywords.append(ast.keyword(argIdentifier, value=eval(keywordValue)))
-			else:
-				listCall_keywords.append(ast.keyword(argIdentifier, value=ast.Name(keywordValue)))
+			argIdentifier, keywordValue = tupleCall_keywords
+			listCall_keywords.append(ast.keyword(argIdentifier, value=eval(keywordValue)))
 		if kwarg is not None:
 			listCall_keywords.append(toolMakeFunctionDefReturnCall_keywords)
 
@@ -519,6 +516,7 @@ def makeToolMake() -> None:
 	list_aliasIdentifier = sorted(set([*setKeywordArgumentsAnnotationTypeAlias, *list_aliasIdentifier]), key=str.lower)
 	list4ModuleBody: list[ast.stmt] = [
 		ast.ImportFrom('astToolkit', [ast.alias(identifier) for identifier in list_aliasIdentifier], 0)
+		, ast.ImportFrom('collections.abc', [ast.alias('Sequence')], 0)
 		# , ast.ImportFrom('collections.abc', [ast.alias('Callable'), ast.alias('Iterable'), ast.alias('Sequence')], 0)
 		# , ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('Unpack')], 0)
 		, ast.ImportFrom('typing', [ast.alias('Any')], 0)
@@ -560,7 +558,7 @@ def make_astTypes() -> None:
 
 	astTypesModule = ast.Module(
 		body=[docstringWarning
-			, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('TypeAlias', 'typing_TypeAlias')], 0)
+			, ast.ImportFrom('typing', [ast.alias('Any'), ast.alias('TypeAlias', 'typing_TypeAlias'), ast.alias('TypeVar', 'typing_TypeVar')], 0)
 			, ast.Import([ast.alias('ast')])
 			, ast.Import([ast.alias('sys')])
 			, *listHandmade_astTypes

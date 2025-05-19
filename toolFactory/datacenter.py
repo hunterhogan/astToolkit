@@ -1,6 +1,6 @@
 from collections.abc import Sequence
 from toolFactory import pathFilenameDataframeAST, pythonVersionMinorMinimum
-from typing import cast, TypeAlias, TypedDict
+from typing import cast, NamedTuple, TypeAlias, TypedDict
 import pandas
 
 # TODO datacenter needs to do all data manipulation, not the toolFactory
@@ -12,6 +12,10 @@ Version: TypeAlias = int
 ListTypesASTformAsStr: TypeAlias = list[str]
 TupleTypesForVersion: TypeAlias = tuple[Version, ListTypesASTformAsStr]
 ListTypesByVersion: TypeAlias = list[TupleTypesForVersion]
+
+class Call_keywords(NamedTuple):
+	argIdentifier: str
+	keywordValue: str
 
 class DictionaryAstExprType(TypedDict):
 	attributeVersionMinorMinimum: int
@@ -26,7 +30,7 @@ class DictionaryMatchArgs(TypedDict):
 	kwarg: str
 	listDefaults: list[str]
 	listStr4FunctionDef_args: list[str]
-	listTupleCall_keywords: list[tuple[str, bool, str]]
+	listTupleCall_keywords: list[Call_keywords]
 
 class DictionaryClassDef(TypedDict):
 	classAs_astAttribute: str
@@ -111,10 +115,10 @@ def getElementsGrab(deprecated: bool = False, versionMinorMaximum: Version | Non
 
 	dataframe = dataframe[dataframe['attributeKind'] == '_field']
 
+	dataframe.loc[dataframe['list2Sequence'] == True, 'ast_exprType'] = dataframe['ast_exprType'].str.replace("'list'", "'Sequence'") # pyright: ignore[reportUnknownMemberType]  # noqa: E712
 	dataframe = dataframe[listElements]
 	dataframe = dataframe.drop_duplicates()
 	dataframe = dataframe.drop_duplicates(subset=['attribute', 'ast_exprType'], keep='first')
-
 	dataframe = dataframe.groupby(['attribute', 'attributeVersionMinorMinimum'])['ast_exprType'].aggregate(list).reset_index()
 	dataframe['ast_exprType'] = dataframe['ast_exprType'].apply(sorted, key=str.lower) # pyright: ignore[reportUnknownMemberType]
 	dataframe['listTypesByVersion'] = dataframe[['attributeVersionMinorMinimum', 'ast_exprType']].apply(tuple, axis=1) # pyright: ignore[reportUnknownMemberType]
@@ -127,6 +131,7 @@ def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = 
 	'match_args',
 	'attribute',
 	'attributeRename',
+	'list2Sequence',
 	'ast_arg',
 	'defaultValue',
 	'keywordArguments',
@@ -147,10 +152,10 @@ def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = 
 		version = cast(int, row['match_argsVersionMinorMinimum'])
 		listStr4FunctionDef_args: list[str] = []
 		listDefaults: list[str] = []
-		listTupleCall_keywords: list[tuple[str, bool, str]] = []
+		listTupleCall_keywords: list[Call_keywords] = []
 		for attributeTarget in listAttributes:
-			tupleCall_keywords: list[str | bool] = []
-			tupleCall_keywords.append(attributeTarget)
+			argIdentifier = attributeTarget
+			keywordValue = attributeTarget
 			matching_row = dataframe[
 				(dataframe['attribute'] == attributeTarget) &
 				(dataframe['ClassDefIdentifier'] == className) &
@@ -158,18 +163,19 @@ def getElementsMake(deprecated: bool = False, versionMinorMaximum: int | None = 
 			]
 			if not matching_row.empty:
 				if matching_row.iloc[0]['keywordArguments']:
-					tupleCall_keywords.append(True)
-					tupleCall_keywords.append(cast(str, matching_row.iloc[0]['defaultValue']))
+					keywordValue = cast(str, matching_row.iloc[0]['defaultValue'])
 				else:
-					listStr4FunctionDef_args.append(cast(str, matching_row.iloc[0]['ast_arg']))
-					tupleCall_keywords.append(False)
+					ast_arg = cast(str, matching_row.iloc[0]['ast_arg'])
 					if matching_row.iloc[0]['attributeRename'] != "No":
-						tupleCall_keywords.append(cast(str,matching_row.iloc[0]['attributeRename']))
-					else:
-						tupleCall_keywords.append(attributeTarget)
+						keywordValue = cast(str, matching_row.iloc[0]['attributeRename'])
+					keywordValue = f"ast.Name('{keywordValue}')"
+					if matching_row.iloc[0]['list2Sequence']:
+						keywordValue = f"ast.Call(ast.Name('list'), args=[{keywordValue}])"
+						ast_arg = ast_arg.replace("'list'", "'Sequence'")
 					if matching_row.iloc[0]['defaultValue'] != "No":
 						listDefaults.append(cast(str, matching_row.iloc[0]['defaultValue']))
-			listTupleCall_keywords.append(cast(tuple[str, bool, str], tuple(tupleCall_keywords)))
+					listStr4FunctionDef_args.append(ast_arg)
+			listTupleCall_keywords.append(Call_keywords(argIdentifier, keywordValue))
 
 		return pandas.Series([listStr4FunctionDef_args, listDefaults, listTupleCall_keywords],
 							index=['listStr4FunctionDef_args', 'listDefaults', 'listTupleCall_keywords'])

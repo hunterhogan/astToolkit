@@ -5,6 +5,8 @@ from typing import Generic, TypeVar as typing_TypeVar, TypedDict, Unpack
 pythonVersionMinorMinimum: int = 12
 
 listPylanceErrors: list[str] = ['annotation', 'arg', 'args', 'body', 'keys', 'name', 'names', 'op', 'orelse', 'pattern', 'returns', 'target', 'value',]
+listPylanceErrors.extend(['argtypes', 'bases', 'cases', 'comparators', 'decorator_list', 'defaults', 'elts', 'finalbody', 'generators', 'ifs', 'items',])
+listPylanceErrors.extend(['keywords', 'kw_defaults', 'kwd_patterns', 'ops', 'patterns', 'targets', 'type_params', 'values',])
 
 # filesystem and namespace ===============================================
 packageName: str = 'astToolkit'
@@ -35,7 +37,7 @@ def operatorJoinMethod(ast_operator: type[ast.operator], expressions: Iterable[a
 	listExpressions: list[ast.expr] = list(expressions)
 
 	if not listExpressions:
-		listExpressions.append(ast.Constant(value='', **keywordArguments))
+		listExpressions.append(ast.Constant('', **keywordArguments))
 
 	expressionsJoined: ast.expr = listExpressions[0]
 	for expression in listExpressions[1:]:
@@ -45,7 +47,7 @@ def operatorJoinMethod(ast_operator: type[ast.operator], expressions: Iterable[a
 
 """
 Usage examples:
-ImaIterable: Iterable[ast.expr] = [ast.Name(id='a'), ast.Name(id='b'), ast.Name(id='c')]
+ImaIterable: Iterable[ast.expr] = [ast.Name('a'), ast.Name('b'), ast.Name('c')]
 
 # Manual approach
 joinedBinOp: ast.expr | ast.BinOp = ImaIterable[0]
@@ -112,15 +114,18 @@ class Sub(ast.Sub):
 		return operatorJoinMethod(cls, expressions, **keywordArguments)
 
 # ww='''
-# key=lambda x: x.str.lower()
+# 木 = typing_TypeVar('木', bound = ast.AST, covariant = True)
+# 个 = typing_TypeVar('个', covariant = True)
+# 个return = typing_TypeVar('个return', covariant = True)
+
 # '''
 
 # print(ast.dump(ast.parse(ww, type_comments=True), indent=None))
 # from ast import *  # noqa: E402, F403
-# # ruff: noqa: F405
+# ruff: noqa: F405
 
 # rr='''
-# Assign(lineno=0,col_offset=0, targets=[Name(id='key', ctx=Store())], value=Lambda(args=arguments(args=[arg(arg='x', annotation=ast.Attribute(ast.Name('pandas'), 'Series'))]), body=Call(func=Attribute(value=Attribute(value=Name(id='x', ctx=Load()), attr='str', ctx=Load()), attr='lower', ctx=Load()))))
+# Assign(lineno=0,col_offset=0, [ast.Name('key', ast.Store())], value=Lambda(args=arguments(args=[arg('x', annotation=ast.Attribute(ast.Name('pandas'), 'Series'))]), body=Call(ast.Attribute(Attribute(ast.Name('x'), attr='str'), attr='lower'))))
 # '''
 
 # print(ast.unparse(ast.Module([eval(rr)])))
