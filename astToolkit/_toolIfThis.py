@@ -42,11 +42,11 @@ class IfThis:
 	@staticmethod
 	def is_keywordIdentifier(identifier: str) -> Callable[[ast.AST], TypeGuard[ast.keyword] | bool]:
 		"""see also `isArgumentIdentifier`"""
-		return lambda node: Be.keyword(node) and IfThis.isIdentifier(identifier)(DOT.arg(node))
+		return lambda node: Be.keyword(node) and node.arg is not None and IfThis.isIdentifier(identifier)(node.arg)
 
 	@staticmethod
 	def isArgumentIdentifier(identifier: str) -> Callable[[ast.AST], TypeGuard[ast.arg | ast.keyword] | bool]:
-		return lambda node: (Be.arg(node) or Be.keyword(node)) and IfThis.isIdentifier(identifier)(DOT.arg(node))
+		return lambda node: (Be.arg(node) or Be.keyword(node)) and node.arg is not None and IfThis.isIdentifier(identifier)(node.arg)
 
 	@staticmethod
 	def isAssignAndTargets0Is(targets0Predicate: Callable[[ast.AST], bool]) -> Callable[[ast.AST], TypeGuard[ast.AnnAssign] | bool]:
@@ -101,7 +101,7 @@ class IfThis:
 		return lambda node: Be.FunctionDef(node) and IfThis.isIdentifier(identifier)(DOT.name(node))
 
 	@staticmethod
-	def isIdentifier(identifier: str) -> Callable[[str | None], TypeGuard[str] | bool]:
+	def isIdentifier(identifier: str) -> Callable[[str], TypeGuard[str] | bool]:
 		return lambda node: node == identifier
 
 	@staticmethod
