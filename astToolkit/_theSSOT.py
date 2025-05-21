@@ -28,4 +28,4 @@ class PackageSettings:
 	pathPackage: Path = dataclasses.field(default_factory=getPathPackageINSTALLING, metadata={'evaluateWhen': 'installing'})
 	"""Absolute path to the installed package directory."""
 
-The = PackageSettings()
+packageSettings = PackageSettings()

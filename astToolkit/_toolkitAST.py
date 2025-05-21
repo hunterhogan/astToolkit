@@ -1,15 +1,12 @@
 from astToolkit import IfThis, IngredientsFunction, LedgerOfImports, NodeTourist, Then, str_nameDOTname
-from collections.abc import Iterable
 from inspect import getsource as inspect_getsource
 from os import PathLike
 from pathlib import Path, PurePath
 from types import ModuleType
 from typing import Any, Literal
-from typing import Generic, TypeVar as typing_TypeVar, TypedDict, Unpack
 from Z0Z_tools import raiseIfNone
 import ast
 import importlib
-import sys
 
 def astModuleToIngredientsFunction(astModule: ast.AST, identifierFunctionDef: str) -> IngredientsFunction:
 	"""
@@ -114,45 +111,3 @@ def parsePathFilename2astModule(pathFilename: PathLike[Any] | PurePath, mode: Li
 	"""
 	return ast.parse(Path(pathFilename).read_text(), mode)
 
-# Used for node end positions in constructor keyword arguments
-if sys.version_info >= (3, 13):
-	_EndPositionT = typing_TypeVar("_EndPositionT", int, int | None, default=int | None)
-else:
-	_EndPositionT = typing_TypeVar("_EndPositionT", int, int | None)
-
-# Corresponds to the names in the `_attributes` class variable which is non-empty in certain AST nodes
-class _Attributes(TypedDict, Generic[_EndPositionT], total=False):
-	lineno: int
-	col_offset: int
-	end_lineno: _EndPositionT
-	end_col_offset: _EndPositionT
-
-def operatorJoinMethod(ast_operator: type[ast.operator], expressions: Iterable[ast.expr], **keywordArguments: Unpack[_Attributes]) -> ast.expr:
-	listExpressions = list(expressions)
-
-	if not listExpressions:
-		listExpressions.append(ast.Constant(value='', **keywordArguments))
-
-	expressionsJoined: ast.expr = listExpressions[0]
-	for expression in listExpressions[1:]:
-		expressionsJoined = ast.BinOp(left=expressionsJoined, op=ast_operator(), right=expression, **keywordArguments)
-
-	return expressionsJoined
-
-for operatorSubclass in ast.operator.__subclasses__():
-	setattr(operatorSubclass, 'join', classmethod(operatorJoinMethod))
-
-"""
-Usage examples:
-ImaIterable: Iterable[ast.expr] = [ast.Name(id='a'), ast.Name(id='b'), ast.Name(id='c')]
-
-# Manual approach
-joinedBinOp: ast.expr | ast.BinOp = ImaIterable[0]
-for element in ImaIterable[1:]:
-	joinedBinOp = ast.BinOp(left=joinedBinOp, op=ast.BitOr(), right=element)
-# Result is equivalent to: a | b | c
-
-# Using the new join method
-joinedBinOp = ast.BitOr.join(ImaIterable)  # Creates the nested structure for a | b | c
-joinedAdd = ast.Add.join(ImaIterable)      # Creates the nested structure for a + b + c
-"""
