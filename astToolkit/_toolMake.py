@@ -53,7 +53,7 @@ class Make:
 
     @staticmethod
     def AsyncFunctionDef(name: str, args: ast.arguments=ast.arguments(), body: Sequence[ast.stmt]=[], decorator_list: Sequence[ast.expr]=[], returns: ast.expr | None=None, **keywordArguments: intORstrORtype_params) -> ast.AsyncFunctionDef:
-        return ast.AsyncFunctionDef(name=name, args=args, body=list(body), decorator_list=list(decorator_list), returns=returns, type_comment=None, **keywordArguments)
+        return ast.AsyncFunctionDef(name=name, args=args, body=list(body), decorator_list=list(decorator_list), returns=returns, type_comment=None, type_params=[], **keywordArguments)
 
     @staticmethod
     def AsyncWith(items: Sequence[ast.withitem], body: Sequence[ast.stmt], **keywordArguments: intORstr) -> ast.AsyncWith:
@@ -62,12 +62,12 @@ class Make:
     @staticmethod
     def Attribute(value: ast.expr, *attribute: str, context: ast.expr_context=ast.Load(), **keywordArguments: int) -> ast.Attribute:
         """
-	If two identifiers are joined by a dot '`.`', they are _usually_ an `ast.Attribute`, but see, for example, `ast.ImportFrom`.
+        If two identifiers are joined by a dot '`.`', they are _usually_ an `ast.Attribute`, but see, for example, `ast.ImportFrom`.
 
-	Parameters:
-		value: the part before the dot (e.g., `ast.Name`.)
-		attribute: an identifier after a dot '`.`'; you can pass multiple `attribute` and they will be chained together.
-	"""
+        Parameters:
+            value: the part before the dot (e.g., `ast.Name`.)
+            attribute: an identifier after a dot '`.`'; you can pass multiple `attribute` and they will be chained together.
+        """
 
         def addDOTattribute(chain: ast.expr, identifier: str, context: ast.expr_context, **keywordArguments: int) -> ast.Attribute:
             return ast.Attribute(value=chain, attr=identifier, ctx=context, **keywordArguments)
