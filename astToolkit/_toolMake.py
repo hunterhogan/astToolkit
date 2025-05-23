@@ -62,12 +62,12 @@ class Make:
     @staticmethod
     def Attribute(value: ast.expr, *attribute: str, context: ast.expr_context=ast.Load(), **keywordArguments: int) -> ast.Attribute:
         """
-        If two identifiers are joined by a dot '`.`', they are _usually_ an `ast.Attribute`, but see, for example, `ast.ImportFrom`.
+		If two identifiers are joined by a dot '`.`', they are _usually_ an `ast.Attribute`, but see, for example, `ast.ImportFrom`.
 
-        Parameters:
-            value: the part before the dot (e.g., `ast.Name`.)
-            attribute: an identifier after a dot '`.`'; you can pass multiple `attribute` and they will be chained together.
-        """
+		Parameters:
+			value: the part before the dot (e.g., `ast.Name`.)
+			attribute: an identifier after a dot '`.`'; you can pass multiple `attribute` and they will be chained together.
+		"""
 
         def addDOTattribute(chain: ast.expr, identifier: str, context: ast.expr_context, **keywordArguments: int) -> ast.Attribute:
             return ast.Attribute(value=chain, attr=identifier, ctx=context, **keywordArguments)
