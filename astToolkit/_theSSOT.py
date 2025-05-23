@@ -6,12 +6,12 @@ import dataclasses
 
 # TODO some of this can move to toolFactory because of the unusual nature of this package.
 try:
-	packageNamePACKAGING: str = tomli_load(Path("../pyproject.toml").open('rb'))["project"]["name"]
+	identifierPackagePACKAGING: str = tomli_load(Path("pyproject.toml").open('rb'))["project"]["name"]
 except Exception:
-	packageNamePACKAGING = "astToolkit"
+	identifierPackagePACKAGING = "astToolkit"
 
 def getPathPackageINSTALLING() -> Path:
-	pathPackage: Path = Path(inspect_getfile(importlib_import_module(packageNamePACKAGING)))
+	pathPackage: Path = Path(inspect_getfile(importlib_import_module(identifierPackagePACKAGING)))
 	if pathPackage.is_file():
 		pathPackage = pathPackage.parent
 	return pathPackage
@@ -22,7 +22,7 @@ class PackageSettings:
 	fileExtension: str = dataclasses.field(default='.py', metadata={'evaluateWhen': 'installing'})
 	"""Default file extension for generated code files."""
 
-	packageName: str = dataclasses.field(default = packageNamePACKAGING, metadata={'evaluateWhen': 'packaging'})
+	packageName: str = dataclasses.field(default = identifierPackagePACKAGING, metadata={'evaluateWhen': 'packaging'})
 	"""Name of this package, used for import paths and configuration."""
 
 	pathPackage: Path = dataclasses.field(default_factory=getPathPackageINSTALLING, metadata={'evaluateWhen': 'installing'})
