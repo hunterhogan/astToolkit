@@ -1,5 +1,5 @@
 """This file is generated automatically, so changes to this file will be lost."""
-from typing import Any, TypeAlias as typing_TypeAlias, TypeVar as typing_TypeVar
+from typing import Any, TypeAlias as typing_TypeAlias, TypedDict, TypeVar as typing_TypeVar
 import ast
 import sys
 intORstr: typing_TypeAlias = Any
@@ -8,6 +8,12 @@ intORtype_params: typing_TypeAlias = Any
 木 = typing_TypeVar('木', bound=ast.AST, covariant=True)
 个 = typing_TypeVar('个', covariant=True)
 个return = typing_TypeVar('个return', covariant=True)
+
+class ast_attributes(TypedDict, total=False):
+    lineno: int
+    col_offset: int
+    end_lineno: int | None
+    end_col_offset: int | None
 hasDOTannotation_expr: typing_TypeAlias = ast.AnnAssign
 hasDOTannotation_exprOrNone: typing_TypeAlias = ast.arg
 hasDOTannotation: typing_TypeAlias = hasDOTannotation_expr | hasDOTannotation_exprOrNone

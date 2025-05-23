@@ -22,9 +22,6 @@ def astModuleToIngredientsFunction(astModule: ast.AST, identifierFunctionDef: st
 	Returns:
 		ingredientsFunction: `IngredientsFunction` object containing the `ast.FunctionDef` and _all_ imports from the
 		source module.
-
-	Raises:
-		FREAKOUT: If the function definition is not found.
 	"""
 	astFunctionDef = raiseIfNone(extractFunctionDef(astModule, identifierFunctionDef))
 	return IngredientsFunction(astFunctionDef, LedgerOfImports(astModule))
@@ -74,10 +71,9 @@ def parseLogicalPath2astModule(logicalPathModule: str_nameDOTname, packageIdenti
 		The logical path to the module using dot notation (e.g., 'package.module').
 	packageIdentifierIfRelative : None
 		The package identifier to use if the module path is relative, defaults to None.
-	mode : Literal['exec']
-		The mode parameter for `ast.parse`. Default is `Literal['exec']`. Options are `Literal['exec']`, `"exec"` (which
-		is _not_ the same as `Literal['exec']`), `Literal['eval']`, `Literal['func_type']`, `Literal['single']`. See
-		`ast.parse` documentation for some details and much confusion.
+	mode : 'exec'
+		The mode parameter for `ast.parse`. Default is `'exec'`. Options are `'exec'`, `'eval'`, `'func_type'`, `'single'`. See
+		`ast.parse` documentation.
 
 	Returns
 	-------
@@ -99,10 +95,9 @@ def parsePathFilename2astModule(pathFilename: PathLike[Any] | PurePath, mode: Li
 	----------
 	pathFilename
 		The path to the file to be parsed. Can be a string path, PathLike object, or PurePath object.
-	mode : Literal['exec']
-		The mode parameter for `ast.parse`. Default is `Literal['exec']`. Options are `Literal['exec']`, `"exec"` (which
-		is _not_ the same as `Literal['exec']`), `Literal['eval']`, `Literal['func_type']`, `Literal['single']`. See
-		`ast.parse` documentation for some details and much confusion.
+	mode : 'exec'
+		The mode parameter for `ast.parse`. Default is `'exec'`. Options are `'exec'`, `'eval'`, `'func_type'`, `'single'`. See
+		`ast.parse` documentation.
 
 	Returns
 	-------

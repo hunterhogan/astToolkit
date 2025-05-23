@@ -28,6 +28,8 @@ from astToolkit._types import (
 	str_nameDOTname as str_nameDOTname,
 )
 
+from astToolkit._dumpFunctionDef import dump as dump
+
 from astToolkit._toolkitNodeVisitor import (
 	NodeChanger as NodeChanger,
 	NodeTourist as NodeTourist,

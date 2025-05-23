@@ -1,6 +1,5 @@
-from typing import Any, TypeAlias as typing_TypeAlias, TypeVar as typing_TypeVar
+from typing import TypeAlias as typing_TypeAlias
 import ast
-import sys
 
 # Type hints through TypeAlias or type "hints" through the identifier name.
 str_nameDOTname: typing_TypeAlias = str

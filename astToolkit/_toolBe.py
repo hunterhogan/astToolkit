@@ -1,7 +1,6 @@
 """This file is generated automatically, so changes to this file will be lost."""
 from typing import TypeGuard
 import ast
-import sys
 
 class Be:
     """
