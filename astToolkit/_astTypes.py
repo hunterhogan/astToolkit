@@ -20,6 +20,9 @@ class ast_attributes(_attributes, total=False):
 class ast_attributes_int(_attributes, total=False):
     end_lineno: int
     end_col_offset: int
+
+class ast_attributes_type_comment(ast_attributes, total=False):
+    type_comment: str | None
 hasDOTannotation_expr: typing_TypeAlias = ast.AnnAssign
 hasDOTannotation_exprOrNone: typing_TypeAlias = ast.arg
 hasDOTannotation: typing_TypeAlias = hasDOTannotation_expr | hasDOTannotation_exprOrNone
