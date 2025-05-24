@@ -39,9 +39,9 @@ class Add(ast.Add):
 		```
 		ast.BinOp(
 			left=ast.BinOp(
-            	left=ast.Name('Crosby')
-                , op=ast.BitOr()
-                , right=ast.Name('Stills'))
+				left=ast.Name('Crosby')
+				, op=ast.BitOr()
+				, right=ast.Name('Stills'))
 			, op=ast.BitOr()
 			, right=ast.Name('Nash')
 		)
@@ -83,9 +83,9 @@ class BitAnd(ast.BitAnd):
 		```
 		ast.BinOp(
 			left=ast.BinOp(
-            	left=ast.Name('Crosby')
-                , op=ast.BitOr()
-                , right=ast.Name('Stills'))
+				left=ast.Name('Crosby')
+				, op=ast.BitOr()
+				, right=ast.Name('Stills'))
 			, op=ast.BitOr()
 			, right=ast.Name('Nash')
 		)
@@ -127,9 +127,9 @@ class BitOr(ast.BitOr):
 		```
 		ast.BinOp(
 			left=ast.BinOp(
-            	left=ast.Name('Crosby')
-                , op=ast.BitOr()
-                , right=ast.Name('Stills'))
+				left=ast.Name('Crosby')
+				, op=ast.BitOr()
+				, right=ast.Name('Stills'))
 			, op=ast.BitOr()
 			, right=ast.Name('Nash')
 		)
@@ -171,9 +171,9 @@ class BitXor(ast.BitXor):
 		```
 		ast.BinOp(
 			left=ast.BinOp(
-            	left=ast.Name('Crosby')
-                , op=ast.BitOr()
-                , right=ast.Name('Stills'))
+				left=ast.Name('Crosby')
+				, op=ast.BitOr()
+				, right=ast.Name('Stills'))
 			, op=ast.BitOr()
 			, right=ast.Name('Nash')
 		)
@@ -215,9 +215,9 @@ class Div(ast.Div):
 		```
 		ast.BinOp(
 			left=ast.BinOp(
-            	left=ast.Name('Crosby')
-                , op=ast.BitOr()
-                , right=ast.Name('Stills'))
+				left=ast.Name('Crosby')
+				, op=ast.BitOr()
+				, right=ast.Name('Stills'))
 			, op=ast.BitOr()
 			, right=ast.Name('Nash')
 		)
@@ -259,9 +259,9 @@ class FloorDiv(ast.FloorDiv):
 		```
 		ast.BinOp(
 			left=ast.BinOp(
-            	left=ast.Name('Crosby')
-                , op=ast.BitOr()
-                , right=ast.Name('Stills'))
+				left=ast.Name('Crosby')
+				, op=ast.BitOr()
+				, right=ast.Name('Stills'))
 			, op=ast.BitOr()
 			, right=ast.Name('Nash')
 		)
@@ -303,9 +303,9 @@ class LShift(ast.LShift):
 		```
 		ast.BinOp(
 			left=ast.BinOp(
-            	left=ast.Name('Crosby')
-                , op=ast.BitOr()
-                , right=ast.Name('Stills'))
+				left=ast.Name('Crosby')
+				, op=ast.BitOr()
+				, right=ast.Name('Stills'))
 			, op=ast.BitOr()
 			, right=ast.Name('Nash')
 		)
@@ -347,9 +347,9 @@ class MatMult(ast.MatMult):
 		```
 		ast.BinOp(
 			left=ast.BinOp(
-            	left=ast.Name('Crosby')
-                , op=ast.BitOr()
-                , right=ast.Name('Stills'))
+				left=ast.Name('Crosby')
+				, op=ast.BitOr()
+				, right=ast.Name('Stills'))
 			, op=ast.BitOr()
 			, right=ast.Name('Nash')
 		)
@@ -391,9 +391,9 @@ class Mod(ast.Mod):
 		```
 		ast.BinOp(
 			left=ast.BinOp(
-            	left=ast.Name('Crosby')
-                , op=ast.BitOr()
-                , right=ast.Name('Stills'))
+				left=ast.Name('Crosby')
+				, op=ast.BitOr()
+				, right=ast.Name('Stills'))
 			, op=ast.BitOr()
 			, right=ast.Name('Nash')
 		)
@@ -435,9 +435,9 @@ class Mult(ast.Mult):
 		```
 		ast.BinOp(
 			left=ast.BinOp(
-            	left=ast.Name('Crosby')
-                , op=ast.BitOr()
-                , right=ast.Name('Stills'))
+				left=ast.Name('Crosby')
+				, op=ast.BitOr()
+				, right=ast.Name('Stills'))
 			, op=ast.BitOr()
 			, right=ast.Name('Nash')
 		)
@@ -479,9 +479,9 @@ class Pow(ast.Pow):
 		```
 		ast.BinOp(
 			left=ast.BinOp(
-            	left=ast.Name('Crosby')
-                , op=ast.BitOr()
-                , right=ast.Name('Stills'))
+				left=ast.Name('Crosby')
+				, op=ast.BitOr()
+				, right=ast.Name('Stills'))
 			, op=ast.BitOr()
 			, right=ast.Name('Nash')
 		)
@@ -523,9 +523,9 @@ class RShift(ast.RShift):
 		```
 		ast.BinOp(
 			left=ast.BinOp(
-            	left=ast.Name('Crosby')
-                , op=ast.BitOr()
-                , right=ast.Name('Stills'))
+				left=ast.Name('Crosby')
+				, op=ast.BitOr()
+				, right=ast.Name('Stills'))
 			, op=ast.BitOr()
 			, right=ast.Name('Nash')
 		)
@@ -567,9 +567,9 @@ class Sub(ast.Sub):
 		```
 		ast.BinOp(
 			left=ast.BinOp(
-            	left=ast.Name('Crosby')
-                , op=ast.BitOr()
-                , right=ast.Name('Stills'))
+				left=ast.Name('Crosby')
+				, op=ast.BitOr()
+				, right=ast.Name('Stills'))
 			, op=ast.BitOr()
 			, right=ast.Name('Nash')
 		)
