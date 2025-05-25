@@ -2,24 +2,24 @@
 # ruff: noqa: F403, F405
 """This file is generated automatically, so changes to this file will be lost."""
 from astToolkit._astTypes import *
-from collections.abc import Callable, Sequence
-from typing import Any, Literal, overload, TypeGuard
+from collections.abc import Callable
+from typing import overload, TypeGuard
 import ast
 
 class ClassIsAndAttribute:
     """
-	Create functions that verify AST nodes by type and attribute conditions.
+    Create functions that verify AST nodes by type and attribute conditions.
 
-	The ClassIsAndAttribute class provides static methods that generate conditional functions for determining if an AST
-	node is of a specific type AND its attribute meets a specified condition. These functions return TypeGuard-enabled
-	callables that can be used in conditional statements to narrow node types during code traversal and transformation.
+    The ClassIsAndAttribute class provides static methods that generate conditional functions for determining if an AST
+    node is of a specific type AND its attribute meets a specified condition. These functions return TypeGuard-enabled
+    callables that can be used in conditional statements to narrow node types during code traversal and transformation.
 
-	Each generated function performs two checks:
-	1. Verifies that the node is of the specified AST type
-	2. Tests if the specified attribute of the node meets a custom condition
+    Each generated function performs two checks:
+    1. Verifies that the node is of the specified AST type
+    2. Tests if the specified attribute of the node meets a custom condition
 
-	This enables complex filtering and targeting of AST nodes based on both their type and attribute contents.
-	"""
+    This enables complex filtering and targeting of AST nodes based on both their type and attribute contents.
+    """
 
     @staticmethod
     @overload
@@ -682,7 +682,7 @@ class ClassIsAndAttribute:
 
     @staticmethod
     @overload
-    def valueIs(astClass: type[hasDOTvalue_Any], attributeCondition: Callable[[Any], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTvalue_Any] | bool]:
+    def valueIs(astClass: type[hasDOTvalue_ScalarOrContainerOfScalar], attributeCondition: Callable[[ScalarOrContainerOfScalar], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTvalue_ScalarOrContainerOfScalar] | bool]:
         ...
 
     @staticmethod
@@ -701,7 +701,7 @@ class ClassIsAndAttribute:
         ...
 
     @staticmethod
-    def valueIs(astClass: type[hasDOTvalue], attributeCondition: Callable[[Any], bool] | Callable[[bool], bool] | Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTvalue] | bool]:
+    def valueIs(astClass: type[hasDOTvalue], attributeCondition: Callable[[ScalarOrContainerOfScalar], bool] | Callable[[bool], bool] | Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTvalue] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTvalue] | bool:
             return isinstance(node, astClass) and node.value is not None and attributeCondition(node.value)

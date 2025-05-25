@@ -1,22 +1,21 @@
 # ruff: noqa: F403, F405
 """This file is generated automatically, so changes to this file will be lost."""
 from astToolkit._astTypes import *
-from collections.abc import Sequence
-from typing import Any, Literal, overload
+from typing import overload
 import ast
 import sys
 
 class DOT:
     """
-	Access attributes and sub-nodes of AST elements via consistent accessor methods.
+    Access attributes and sub-nodes of AST elements via consistent accessor methods.
 
-	The DOT class provides static methods to access specific attributes of different types of AST nodes in a consistent
-	way. This simplifies attribute access across various node types and improves code readability by abstracting the
-	underlying AST structure details.
+    The DOT class provides static methods to access specific attributes of different types of AST nodes in a consistent
+    way. This simplifies attribute access across various node types and improves code readability by abstracting the
+    underlying AST structure details.
 
-	DOT is designed for safe, read-only access to node properties, unlike the grab class which is designed for modifying
-	node attributes.
-	"""
+    DOT is designed for safe, read-only access to node properties, unlike the grab class which is designed for modifying
+    node attributes.
+    """
 
     @staticmethod
     @overload
@@ -30,7 +29,7 @@ class DOT:
 
     @staticmethod
     def annotation(node: hasDOTannotation) -> ast.expr:
-        return node.annotation
+        return node.annotation # pyright: ignore[reportReturnType]
 
     @staticmethod
     @overload
@@ -44,7 +43,7 @@ class DOT:
 
     @staticmethod
     def arg(node: hasDOTarg) -> str:
-        return node.arg
+        return node.arg # pyright: ignore[reportReturnType]
 
     @staticmethod
     @overload
@@ -71,7 +70,7 @@ class DOT:
 
     @staticmethod
     def asname(node: hasDOTasname) -> str:
-        return node.asname
+        return node.asname # pyright: ignore[reportReturnType]
 
     @staticmethod
     def attr(node: hasDOTattr) -> str:
@@ -97,7 +96,7 @@ class DOT:
 
     @staticmethod
     def bound(node: hasDOTbound) -> ast.expr:
-        return node.bound
+        return node.bound # pyright: ignore[reportReturnType]
 
     @staticmethod
     def cases(node: hasDOTcases) -> list[ast.match_case]:
@@ -105,7 +104,7 @@ class DOT:
 
     @staticmethod
     def cause(node: hasDOTcause) -> ast.expr:
-        return node.cause
+        return node.cause # pyright: ignore[reportReturnType]
 
     @staticmethod
     def cls(node: hasDOTcls) -> ast.expr:
@@ -134,7 +133,7 @@ class DOT:
 
         @staticmethod
         def default_value(node: hasDOTdefault_value) -> ast.expr:
-            return node.default_value
+            return node.default_value # pyright: ignore[reportReturnType]
 
     @staticmethod
     def defaults(node: hasDOTdefaults) -> list[ast.expr]:
@@ -150,7 +149,7 @@ class DOT:
 
     @staticmethod
     def exc(node: hasDOTexc) -> ast.expr:
-        return node.exc
+        return node.exc # pyright: ignore[reportReturnType]
 
     @staticmethod
     def finalbody(node: hasDOTfinalbody) -> list[ast.stmt]:
@@ -158,7 +157,7 @@ class DOT:
 
     @staticmethod
     def format_spec(node: hasDOTformat_spec) -> ast.expr:
-        return node.format_spec
+        return node.format_spec # pyright: ignore[reportReturnType]
 
     @staticmethod
     def func(node: hasDOTfunc) -> ast.expr:
@@ -170,7 +169,7 @@ class DOT:
 
     @staticmethod
     def guard(node: hasDOTguard) -> ast.expr:
-        return node.guard
+        return node.guard # pyright: ignore[reportReturnType]
 
     @staticmethod
     def handlers(node: hasDOThandlers) -> list[ast.ExceptHandler]:
@@ -212,7 +211,7 @@ class DOT:
 
     @staticmethod
     def keys(node: hasDOTkeys) -> list[ast.expr]:
-        return node.keys
+        return node.keys # pyright: ignore[reportReturnType]
 
     @staticmethod
     def keywords(node: hasDOTkeywords) -> list[ast.keyword]:
@@ -220,15 +219,15 @@ class DOT:
 
     @staticmethod
     def kind(node: hasDOTkind) -> str:
-        return node.kind
+        return node.kind # pyright: ignore[reportReturnType]
 
     @staticmethod
     def kw_defaults(node: hasDOTkw_defaults) -> list[ast.expr]:
-        return node.kw_defaults
+        return node.kw_defaults # pyright: ignore[reportReturnType]
 
     @staticmethod
     def kwarg(node: hasDOTkwarg) -> ast.arg:
-        return node.kwarg
+        return node.kwarg # pyright: ignore[reportReturnType]
 
     @staticmethod
     def kwd_attrs(node: hasDOTkwd_attrs) -> list[str]:
@@ -256,15 +255,15 @@ class DOT:
 
     @staticmethod
     def lower(node: hasDOTlower) -> ast.expr:
-        return node.lower
+        return node.lower # pyright: ignore[reportReturnType]
 
     @staticmethod
     def module(node: hasDOTmodule) -> str:
-        return node.module
+        return node.module # pyright: ignore[reportReturnType]
 
     @staticmethod
     def msg(node: hasDOTmsg) -> ast.expr:
-        return node.msg
+        return node.msg # pyright: ignore[reportReturnType]
 
     @staticmethod
     @overload
@@ -283,7 +282,7 @@ class DOT:
 
     @staticmethod
     def name(node: hasDOTname) -> ast.Name | str:
-        return node.name
+        return node.name # pyright: ignore[reportReturnType]
 
     @staticmethod
     @overload
@@ -328,7 +327,7 @@ class DOT:
 
     @staticmethod
     def optional_vars(node: hasDOToptional_vars) -> ast.expr:
-        return node.optional_vars
+        return node.optional_vars # pyright: ignore[reportReturnType]
 
     @staticmethod
     @overload
@@ -356,7 +355,7 @@ class DOT:
 
     @staticmethod
     def pattern(node: hasDOTpattern) -> ast.pattern:
-        return node.pattern
+        return node.pattern # pyright: ignore[reportReturnType]
 
     @staticmethod
     def patterns(node: hasDOTpatterns) -> list[ast.pattern]:
@@ -368,7 +367,7 @@ class DOT:
 
     @staticmethod
     def rest(node: hasDOTrest) -> str:
-        return node.rest
+        return node.rest # pyright: ignore[reportReturnType]
 
     @staticmethod
     @overload
@@ -382,7 +381,7 @@ class DOT:
 
     @staticmethod
     def returns(node: hasDOTreturns) -> ast.expr:
-        return node.returns
+        return node.returns # pyright: ignore[reportReturnType]
 
     @staticmethod
     def right(node: hasDOTright) -> ast.expr:
@@ -398,7 +397,7 @@ class DOT:
 
     @staticmethod
     def step(node: hasDOTstep) -> ast.expr:
-        return node.step
+        return node.step # pyright: ignore[reportReturnType]
 
     @staticmethod
     def subject(node: hasDOTsubject) -> ast.expr:
@@ -437,11 +436,11 @@ class DOT:
 
     @staticmethod
     def type(node: hasDOTtype) -> ast.expr:
-        return node.type
+        return node.type # pyright: ignore[reportReturnType]
 
     @staticmethod
     def type_comment(node: hasDOTtype_comment) -> str:
-        return node.type_comment
+        return node.type_comment # pyright: ignore[reportReturnType]
 
     @staticmethod
     def type_ignores(node: hasDOTtype_ignores) -> list[ast.TypeIgnore]:
@@ -453,11 +452,11 @@ class DOT:
 
     @staticmethod
     def upper(node: hasDOTupper) -> ast.expr:
-        return node.upper
+        return node.upper # pyright: ignore[reportReturnType]
 
     @staticmethod
     @overload
-    def value(node: hasDOTvalue_Any) -> Any:
+    def value(node: hasDOTvalue_ScalarOrContainerOfScalar) -> ScalarOrContainerOfScalar:
         ...
 
     @staticmethod
@@ -476,7 +475,7 @@ class DOT:
         ...
 
     @staticmethod
-    def value(node: hasDOTvalue) -> Any | bool | ast.expr:
+    def value(node: hasDOTvalue) -> ScalarOrContainerOfScalar | bool | ast.expr:
         return node.value
 
     @staticmethod
@@ -485,4 +484,4 @@ class DOT:
 
     @staticmethod
     def vararg(node: hasDOTvararg) -> ast.arg:
-        return node.vararg
+        return node.vararg # pyright: ignore[reportReturnType]

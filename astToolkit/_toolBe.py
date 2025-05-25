@@ -4,19 +4,19 @@ import ast
 
 class Be:
     """
-	Provide type-guard functions for safely verifying AST node types during manipulation.
+    Provide type-guard functions for safely verifying AST node types during manipulation.
 
-	The be class contains static methods that perform runtime type verification of AST nodes, returning TypeGuard
-	results that enable static type checkers to narrow node types in conditional branches. These type-guards:
+    The be class contains static methods that perform runtime type verification of AST nodes, returning TypeGuard
+    results that enable static type checkers to narrow node types in conditional branches. These type-guards:
 
-	1. Improve code safety by preventing operations on incompatible node types.
-	2. Enable IDE tooling to provide better autocompletion and error detection.
-	3. Document expected node types in a way that is enforced by the type system.
-	4. Support pattern-matching workflows where node types must be verified before access.
+    1. Improve code safety by preventing operations on incompatible node types.
+    2. Enable IDE tooling to provide better autocompletion and error detection.
+    3. Document expected node types in a way that is enforced by the type system.
+    4. Support pattern-matching workflows where node types must be verified before access.
 
-	When used with conditional statements, these type-guards allow for precise, type-safe manipulation of AST nodes
-	while maintaining full static type checking capabilities, even in complex transformation scenarios.
-	"""
+    When used with conditional statements, these type-guards allow for precise, type-safe manipulation of AST nodes
+    while maintaining full static type checking capabilities, even in complex transformation scenarios.
+    """
 
     @staticmethod
     def Add(node: ast.AST) -> TypeGuard[ast.Add]:
@@ -52,7 +52,7 @@ class Be:
 
     @staticmethod
     def AST(node: ast.AST) -> TypeGuard[ast.AST]:
-        return isinstance(node, ast.AST)
+        return isinstance(node, ast.AST) # pyright: ignore[reportUnnecessaryIsInstance]
 
     @staticmethod
     def AsyncFor(node: ast.AST) -> TypeGuard[ast.AsyncFor]:

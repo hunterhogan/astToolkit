@@ -13,8 +13,6 @@ classifiers = [
 	"Operating System :: OS Independent",
 	"Programming Language :: Python",
 	"Programming Language :: Python :: 3",
-	"Programming Language :: Python :: 3.10",
-	"Programming Language :: Python :: 3.11",
 	"Programming Language :: Python :: 3.12",
 	"Programming Language :: Python :: 3.13",
 	"Typing :: Typed",
@@ -36,7 +34,7 @@ optional-dependencies = { testing = [
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.12"
 urls = { Donate = "https://www.patreon.com/integrated", Homepage = "https://github.com/hunterhogan/astToolkit", Issues = "https://github.com/hunterhogan/astToolkit/issues", Repository = "https://github.com/hunterhogan/astToolkit.git" }
-version = "0.3.4"
+version = "0.3.5"
 
 [tool.coverage]
 report = { exclude_lines = [
