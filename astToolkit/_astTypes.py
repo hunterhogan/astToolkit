@@ -1,9 +1,8 @@
 """This file is generated automatically, so changes to this file will be lost."""
 from types import EllipsisType, NotImplementedType
-from typing import Any, TypeAlias as typing_TypeAlias, TypedDict, TypeVar as typing_TypeVar
+from typing import Any, TypeAlias as typing_TypeAlias, TypeVar as typing_TypeVar, TypedDict
 import ast
 import sys
-
 intORstr: typing_TypeAlias = Any
 intORstrORtype_params: typing_TypeAlias = Any
 intORtype_params: typing_TypeAlias = Any
