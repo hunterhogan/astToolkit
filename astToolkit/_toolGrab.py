@@ -621,7 +621,7 @@ class Grab:
         return workhorse
 
     @staticmethod
-    def valueAttribute(action: Callable[[ast.expr], ast.expr] | Callable[[bool], bool] | Callable[[ScalarOrContainerOfScalar], ScalarOrContainerOfScalar]) -> Callable[[hasDOTvalue], hasDOTvalue]:
+    def valueAttribute(action: Callable[[ast.expr], ast.expr] | Callable[[bool], bool] | Callable[[ConstantValueType], ConstantValueType]) -> Callable[[hasDOTvalue], hasDOTvalue]:
 
         def workhorse(node: hasDOTvalue) -> hasDOTvalue:
             node.value = action(node.value) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]

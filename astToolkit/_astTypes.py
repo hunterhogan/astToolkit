@@ -1,13 +1,12 @@
 """This file is generated automatically, so changes to this file will be lost."""
-from types import EllipsisType, NotImplementedType
+from types import EllipsisType
 from typing import Any, TypeAlias as typing_TypeAlias, TypeVar as typing_TypeVar, TypedDict
 import ast
 import sys
 intORstr: typing_TypeAlias = Any
 intORstrORtype_params: typing_TypeAlias = Any
 intORtype_params: typing_TypeAlias = Any
-_Scalar: typing_TypeAlias = bool | bytes | complex | EllipsisType | float | int | None | NotImplementedType | range | str
-ScalarOrContainerOfScalar: typing_TypeAlias = _Scalar | frozenset['ScalarOrContainerOfScalar'] | tuple['ScalarOrContainerOfScalar', ...]
+ConstantValueType: typing_TypeAlias = bool | bytes | complex | EllipsisType | float | int | None | range | str
 木 = typing_TypeVar('木', bound=ast.AST, covariant=True)
 个 = typing_TypeVar('个', covariant=True)
 个return = typing_TypeVar('个return', covariant=True)
@@ -129,10 +128,10 @@ hasDOTtype_comment: typing_TypeAlias = ast.arg | ast.Assign | ast.AsyncFor | ast
 hasDOTtype_ignores: typing_TypeAlias = ast.Module
 hasDOTtype_params: typing_TypeAlias = ast.AsyncFunctionDef | ast.ClassDef | ast.FunctionDef | ast.TypeAlias
 hasDOTupper: typing_TypeAlias = ast.Slice
-hasDOTvalue_ScalarOrContainerOfScalar: typing_TypeAlias = ast.Constant
+hasDOTvalue_ConstantValueType: typing_TypeAlias = ast.Constant
 hasDOTvalue_boolOrNone: typing_TypeAlias = ast.MatchSingleton
 hasDOTvalue_expr: typing_TypeAlias = ast.Assign | ast.Attribute | ast.AugAssign | ast.Await | ast.DictComp | ast.Expr | ast.FormattedValue | ast.keyword | ast.MatchValue | ast.NamedExpr | ast.Starred | ast.Subscript | ast.TypeAlias | ast.YieldFrom
 hasDOTvalue_exprOrNone: typing_TypeAlias = ast.AnnAssign | ast.Return | ast.Yield
-hasDOTvalue: typing_TypeAlias = hasDOTvalue_ScalarOrContainerOfScalar | hasDOTvalue_boolOrNone | hasDOTvalue_expr | hasDOTvalue_exprOrNone
+hasDOTvalue: typing_TypeAlias = hasDOTvalue_ConstantValueType | hasDOTvalue_boolOrNone | hasDOTvalue_expr | hasDOTvalue_exprOrNone
 hasDOTvalues: typing_TypeAlias = ast.BoolOp | ast.Dict | ast.JoinedStr
 hasDOTvararg: typing_TypeAlias = ast.arguments

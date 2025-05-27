@@ -456,7 +456,7 @@ class DOT:
 
     @staticmethod
     @overload
-    def value(node: hasDOTvalue_ScalarOrContainerOfScalar) -> ScalarOrContainerOfScalar:
+    def value(node: hasDOTvalue_ConstantValueType) -> ConstantValueType:
         ...
 
     @staticmethod
@@ -475,7 +475,7 @@ class DOT:
         ...
 
     @staticmethod
-    def value(node: hasDOTvalue) -> ScalarOrContainerOfScalar | bool | ast.expr:
+    def value(node: hasDOTvalue) -> ConstantValueType | bool | ast.expr:
         return node.value
 
     @staticmethod

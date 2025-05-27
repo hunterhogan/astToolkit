@@ -1,6 +1,6 @@
 """This file is generated automatically, so changes to this file will be lost."""
 from astToolkit import (
-	ast_attributes, ast_attributes_int, ast_attributes_type_comment, ScalarOrContainerOfScalar,
+	ast_attributes, ast_attributes_int, ast_attributes_type_comment, ConstantValueType,
 	str_nameDOTname,
 )
 from collections.abc import Sequence
@@ -116,8 +116,8 @@ class Make:
         return ast.comprehension(target=target, iter=iter, ifs=list(ifs), is_async=is_async)
 
     @staticmethod
-    def Constant(value: ScalarOrContainerOfScalar, **keywordArguments: Unpack[ast_attributes_type_comment]) -> ast.Constant:
-        return ast.Constant(value=value, kind=None, **keywordArguments)
+    def Constant(value: ConstantValueType, **keywordArguments: Unpack[ast_attributes_type_comment]) -> ast.Constant:
+        return ast.Constant(value=value, kind=None, **keywordArguments) # pyright: ignore[reportArgumentType]
 
     @staticmethod
     def Continue(**keywordArguments: Unpack[ast_attributes]) -> ast.Continue:
