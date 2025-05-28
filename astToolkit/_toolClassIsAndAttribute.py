@@ -2,9 +2,10 @@
 # ruff: noqa: F403, F405
 """This file is generated automatically, so changes to this file will be lost."""
 from astToolkit._astTypes import *
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from typing import overload, TypeGuard
 import ast
+import sys
 
 class ClassIsAndAttribute:
     """
@@ -67,18 +68,18 @@ class ClassIsAndAttribute:
 
     @staticmethod
     @overload
-    def argsIs(astClass: type[hasDOTargs_list_expr], attributeCondition: Callable[[list[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTargs_list_expr] | bool]:
+    def argsIs(astClass: type[hasDOTargs_list_expr], attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTargs_list_expr] | bool]:
         ...
 
     @staticmethod
-    def argsIs(astClass: type[hasDOTargs], attributeCondition: Callable[[ast.arguments], bool] | Callable[[list[ast.arg]], bool] | Callable[[list[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTargs] | bool]:
+    def argsIs(astClass: type[hasDOTargs], attributeCondition: Callable[[ast.arguments], bool] | Callable[[Sequence[ast.expr]], bool] | Callable[[list[ast.arg]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTargs] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTargs] | bool:
             return isinstance(node, astClass) and attributeCondition(node.args)
         return workhorse
 
     @staticmethod
-    def argtypesIs(astClass: type[hasDOTargtypes], attributeCondition: Callable[[list[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTargtypes] | bool]:
+    def argtypesIs(astClass: type[hasDOTargtypes], attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTargtypes] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTargtypes] | bool:
             return isinstance(node, astClass) and attributeCondition(node.argtypes)
@@ -99,7 +100,7 @@ class ClassIsAndAttribute:
         return workhorse
 
     @staticmethod
-    def basesIs(astClass: type[hasDOTbases], attributeCondition: Callable[[list[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTbases] | bool]:
+    def basesIs(astClass: type[hasDOTbases], attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTbases] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTbases] | bool:
             return isinstance(node, astClass) and attributeCondition(node.bases)
@@ -112,11 +113,11 @@ class ClassIsAndAttribute:
 
     @staticmethod
     @overload
-    def bodyIs(astClass: type[hasDOTbody_list_stmt], attributeCondition: Callable[[list[ast.stmt]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTbody_list_stmt] | bool]:
+    def bodyIs(astClass: type[hasDOTbody_list_stmt], attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTbody_list_stmt] | bool]:
         ...
 
     @staticmethod
-    def bodyIs(astClass: type[hasDOTbody], attributeCondition: Callable[[ast.expr], bool] | Callable[[list[ast.stmt]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTbody] | bool]:
+    def bodyIs(astClass: type[hasDOTbody], attributeCondition: Callable[[ast.expr], bool] | Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTbody] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTbody] | bool:
             return isinstance(node, astClass) and attributeCondition(node.body)
@@ -130,7 +131,7 @@ class ClassIsAndAttribute:
         return workhorse
 
     @staticmethod
-    def casesIs(astClass: type[hasDOTcases], attributeCondition: Callable[[list[ast.match_case]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTcases] | bool]:
+    def casesIs(astClass: type[hasDOTcases], attributeCondition: Callable[[Sequence[ast.match_case]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTcases] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTcases] | bool:
             return isinstance(node, astClass) and attributeCondition(node.cases)
@@ -151,7 +152,7 @@ class ClassIsAndAttribute:
         return workhorse
 
     @staticmethod
-    def comparatorsIs(astClass: type[hasDOTcomparators], attributeCondition: Callable[[list[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTcomparators] | bool]:
+    def comparatorsIs(astClass: type[hasDOTcomparators], attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTcomparators] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTcomparators] | bool:
             return isinstance(node, astClass) and attributeCondition(node.comparators)
@@ -179,7 +180,7 @@ class ClassIsAndAttribute:
         return workhorse
 
     @staticmethod
-    def decorator_listIs(astClass: type[hasDOTdecorator_list], attributeCondition: Callable[[list[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTdecorator_list] | bool]:
+    def decorator_listIs(astClass: type[hasDOTdecorator_list], attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTdecorator_list] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTdecorator_list] | bool:
             return isinstance(node, astClass) and attributeCondition(node.decorator_list)
@@ -194,7 +195,7 @@ class ClassIsAndAttribute:
             return workhorse
 
     @staticmethod
-    def defaultsIs(astClass: type[hasDOTdefaults], attributeCondition: Callable[[list[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTdefaults] | bool]:
+    def defaultsIs(astClass: type[hasDOTdefaults], attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTdefaults] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTdefaults] | bool:
             return isinstance(node, astClass) and attributeCondition(node.defaults)
@@ -208,7 +209,7 @@ class ClassIsAndAttribute:
         return workhorse
 
     @staticmethod
-    def eltsIs(astClass: type[hasDOTelts], attributeCondition: Callable[[list[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTelts] | bool]:
+    def eltsIs(astClass: type[hasDOTelts], attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTelts] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTelts] | bool:
             return isinstance(node, astClass) and attributeCondition(node.elts)
@@ -222,7 +223,7 @@ class ClassIsAndAttribute:
         return workhorse
 
     @staticmethod
-    def finalbodyIs(astClass: type[hasDOTfinalbody], attributeCondition: Callable[[list[ast.stmt]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTfinalbody] | bool]:
+    def finalbodyIs(astClass: type[hasDOTfinalbody], attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTfinalbody] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTfinalbody] | bool:
             return isinstance(node, astClass) and attributeCondition(node.finalbody)
@@ -243,7 +244,7 @@ class ClassIsAndAttribute:
         return workhorse
 
     @staticmethod
-    def generatorsIs(astClass: type[hasDOTgenerators], attributeCondition: Callable[[list[ast.comprehension]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTgenerators] | bool]:
+    def generatorsIs(astClass: type[hasDOTgenerators], attributeCondition: Callable[[Sequence[ast.comprehension]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTgenerators] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTgenerators] | bool:
             return isinstance(node, astClass) and attributeCondition(node.generators)
@@ -271,7 +272,7 @@ class ClassIsAndAttribute:
         return workhorse
 
     @staticmethod
-    def ifsIs(astClass: type[hasDOTifs], attributeCondition: Callable[[list[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTifs] | bool]:
+    def ifsIs(astClass: type[hasDOTifs], attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTifs] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTifs] | bool:
             return isinstance(node, astClass) and attributeCondition(node.ifs)
@@ -285,7 +286,7 @@ class ClassIsAndAttribute:
         return workhorse
 
     @staticmethod
-    def itemsIs(astClass: type[hasDOTitems], attributeCondition: Callable[[list[ast.withitem]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTitems] | bool]:
+    def itemsIs(astClass: type[hasDOTitems], attributeCondition: Callable[[Sequence[ast.withitem]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTitems] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTitems] | bool:
             return isinstance(node, astClass) and attributeCondition(node.items)
@@ -307,23 +308,23 @@ class ClassIsAndAttribute:
 
     @staticmethod
     @overload
-    def keysIs(astClass: type[hasDOTkeys_list_expr], attributeCondition: Callable[[list[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTkeys_list_expr] | bool]:
+    def keysIs(astClass: type[hasDOTkeys_list_expr], attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTkeys_list_expr] | bool]:
         ...
 
     @staticmethod
     @overload
-    def keysIs(astClass: type[hasDOTkeys_list_exprOrNone], attributeCondition: Callable[[list[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTkeys_list_exprOrNone] | bool]:
+    def keysIs(astClass: type[hasDOTkeys_list_exprOrNone], attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTkeys_list_exprOrNone] | bool]:
         ...
 
     @staticmethod
-    def keysIs(astClass: type[hasDOTkeys], attributeCondition: Callable[[list[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTkeys] | bool]:
+    def keysIs(astClass: type[hasDOTkeys], attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTkeys] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTkeys] | bool:
             return isinstance(node, astClass) and node.keys != [None] and attributeCondition(node.keys)
         return workhorse
 
     @staticmethod
-    def keywordsIs(astClass: type[hasDOTkeywords], attributeCondition: Callable[[list[ast.keyword]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTkeywords] | bool]:
+    def keywordsIs(astClass: type[hasDOTkeywords], attributeCondition: Callable[[Sequence[ast.keyword]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTkeywords] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTkeywords] | bool:
             return isinstance(node, astClass) and attributeCondition(node.keywords)
@@ -337,7 +338,7 @@ class ClassIsAndAttribute:
         return workhorse
 
     @staticmethod
-    def kw_defaultsIs(astClass: type[hasDOTkw_defaults], attributeCondition: Callable[[list[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTkw_defaults] | bool]:
+    def kw_defaultsIs(astClass: type[hasDOTkw_defaults], attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTkw_defaults] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTkw_defaults] | bool:
             return isinstance(node, astClass) and node.kw_defaults != [None] and attributeCondition(node.kw_defaults)
@@ -358,7 +359,7 @@ class ClassIsAndAttribute:
         return workhorse
 
     @staticmethod
-    def kwd_patternsIs(astClass: type[hasDOTkwd_patterns], attributeCondition: Callable[[list[ast.pattern]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTkwd_patterns] | bool]:
+    def kwd_patternsIs(astClass: type[hasDOTkwd_patterns], attributeCondition: Callable[[Sequence[ast.pattern]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTkwd_patterns] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTkwd_patterns] | bool:
             return isinstance(node, astClass) and attributeCondition(node.kwd_patterns)
@@ -482,7 +483,7 @@ class ClassIsAndAttribute:
         return workhorse
 
     @staticmethod
-    def opsIs(astClass: type[hasDOTops], attributeCondition: Callable[[list[ast.cmpop]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTops] | bool]:
+    def opsIs(astClass: type[hasDOTops], attributeCondition: Callable[[Sequence[ast.cmpop]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTops] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTops] | bool:
             return isinstance(node, astClass) and attributeCondition(node.ops)
@@ -502,11 +503,11 @@ class ClassIsAndAttribute:
 
     @staticmethod
     @overload
-    def orelseIs(astClass: type[hasDOTorelse_list_stmt], attributeCondition: Callable[[list[ast.stmt]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTorelse_list_stmt] | bool]:
+    def orelseIs(astClass: type[hasDOTorelse_list_stmt], attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTorelse_list_stmt] | bool]:
         ...
 
     @staticmethod
-    def orelseIs(astClass: type[hasDOTorelse], attributeCondition: Callable[[ast.expr], bool] | Callable[[list[ast.stmt]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTorelse] | bool]:
+    def orelseIs(astClass: type[hasDOTorelse], attributeCondition: Callable[[ast.expr], bool] | Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTorelse] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTorelse] | bool:
             return isinstance(node, astClass) and attributeCondition(node.orelse)
@@ -530,7 +531,7 @@ class ClassIsAndAttribute:
         return workhorse
 
     @staticmethod
-    def patternsIs(astClass: type[hasDOTpatterns], attributeCondition: Callable[[list[ast.pattern]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTpatterns] | bool]:
+    def patternsIs(astClass: type[hasDOTpatterns], attributeCondition: Callable[[Sequence[ast.pattern]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTpatterns] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTpatterns] | bool:
             return isinstance(node, astClass) and attributeCondition(node.patterns)
@@ -611,11 +612,6 @@ class ClassIsAndAttribute:
 
     @staticmethod
     @overload
-    def targetIs(astClass: type[hasDOTtarget_expr], attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTtarget_expr] | bool]:
-        ...
-
-    @staticmethod
-    @overload
     def targetIs(astClass: type[hasDOTtarget_Name], attributeCondition: Callable[[ast.Name], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTtarget_Name] | bool]:
         ...
 
@@ -625,14 +621,19 @@ class ClassIsAndAttribute:
         ...
 
     @staticmethod
-    def targetIs(astClass: type[hasDOTtarget], attributeCondition: Callable[[ast.expr], bool] | Callable[[ast.Name], bool] | Callable[[ast.Name | ast.Attribute | ast.Subscript], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTtarget] | bool]:
+    @overload
+    def targetIs(astClass: type[hasDOTtarget_expr], attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTtarget_expr] | bool]:
+        ...
+
+    @staticmethod
+    def targetIs(astClass: type[hasDOTtarget], attributeCondition: Callable[[ast.Name], bool] | Callable[[ast.expr], bool] | Callable[[ast.Name | ast.Attribute | ast.Subscript], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTtarget] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTtarget] | bool:
             return isinstance(node, astClass) and attributeCondition(node.target)
         return workhorse
 
     @staticmethod
-    def targetsIs(astClass: type[hasDOTtargets], attributeCondition: Callable[[list[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTtargets] | bool]:
+    def targetsIs(astClass: type[hasDOTtargets], attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTtargets] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTtargets] | bool:
             return isinstance(node, astClass) and attributeCondition(node.targets)
@@ -667,7 +668,7 @@ class ClassIsAndAttribute:
         return workhorse
 
     @staticmethod
-    def type_paramsIs(astClass: type[hasDOTtype_params], attributeCondition: Callable[[list[ast.type_param]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTtype_params] | bool]:
+    def type_paramsIs(astClass: type[hasDOTtype_params], attributeCondition: Callable[[Sequence[ast.type_param]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTtype_params] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTtype_params] | bool:
             return isinstance(node, astClass) and attributeCondition(node.type_params)
@@ -701,14 +702,14 @@ class ClassIsAndAttribute:
         ...
 
     @staticmethod
-    def valueIs(astClass: type[hasDOTvalue], attributeCondition: Callable[[ConstantValueType], bool] | Callable[[bool], bool] | Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTvalue] | bool]:
+    def valueIs(astClass: type[hasDOTvalue], attributeCondition: Callable[[ast.expr], bool] | Callable[[ConstantValueType], bool] | Callable[[bool], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTvalue] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTvalue] | bool:
             return isinstance(node, astClass) and node.value is not None and attributeCondition(node.value)
         return workhorse
 
     @staticmethod
-    def valuesIs(astClass: type[hasDOTvalues], attributeCondition: Callable[[list[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTvalues] | bool]:
+    def valuesIs(astClass: type[hasDOTvalues], attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTvalues] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTvalues] | bool:
             return isinstance(node, astClass) and attributeCondition(node.values)
