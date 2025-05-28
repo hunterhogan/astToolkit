@@ -226,31 +226,31 @@ class Make:
         return ast.ListComp(elt=elt, generators=list(generators), **keywordArguments)
 
     @staticmethod
-    def Match(subject: ast.expr, cases: Sequence[ast.match_case], **keywordArguments: Unpack[ast_attributes]) -> ast.Match:
+    def Match(subject: ast.expr, cases: Sequence[ast.match_case]=[], **keywordArguments: Unpack[ast_attributes]) -> ast.Match:
         return ast.Match(subject=subject, cases=list(cases), **keywordArguments)
 
     @staticmethod
-    def match_case(pattern: ast.pattern, guard: ast.expr | None, body: Sequence[ast.stmt]) -> ast.match_case:
+    def match_case(pattern: ast.pattern, guard: ast.expr | None=None, body: Sequence[ast.stmt]=[]) -> ast.match_case:
         return ast.match_case(pattern=pattern, guard=guard, body=list(body))
 
     @staticmethod
-    def MatchAs(pattern: ast.pattern | None, name: str | None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchAs:
+    def MatchAs(pattern: ast.pattern | None=None, name: str | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchAs:
         return ast.MatchAs(pattern=pattern, name=name, **keywordArguments)
 
     @staticmethod
-    def MatchClass(cls: ast.expr, patterns: Sequence[ast.pattern], kwd_attrs: list[str], kwd_patterns: Sequence[ast.pattern], **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchClass: # pyright: ignore[reportSelfClsParameterName]
+    def MatchClass(cls: ast.expr, patterns: Sequence[ast.pattern]=[], kwd_attrs: list[str]=[], kwd_patterns: Sequence[ast.pattern]=[], **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchClass: # pyright: ignore[reportSelfClsParameterName]
         return ast.MatchClass(cls=cls, patterns=list(patterns), kwd_attrs=kwd_attrs, kwd_patterns=list(kwd_patterns), **keywordArguments)
 
     @staticmethod
-    def MatchMapping(keys: Sequence[ast.expr], patterns: Sequence[ast.pattern], rest: str | None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchMapping:
+    def MatchMapping(keys: Sequence[ast.expr]=[], patterns: Sequence[ast.pattern]=[], rest: str | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchMapping:
         return ast.MatchMapping(keys=list(keys), patterns=list(patterns), rest=rest, **keywordArguments)
 
     @staticmethod
-    def MatchOr(patterns: Sequence[ast.pattern], **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchOr:
+    def MatchOr(patterns: Sequence[ast.pattern]=[], **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchOr:
         return ast.MatchOr(patterns=list(patterns), **keywordArguments)
 
     @staticmethod
-    def MatchSequence(patterns: Sequence[ast.pattern], **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchSequence:
+    def MatchSequence(patterns: Sequence[ast.pattern]=[], **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchSequence:
         return ast.MatchSequence(patterns=list(patterns), **keywordArguments)
 
     @staticmethod
