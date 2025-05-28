@@ -24,19 +24,8 @@ code transformations while maintaining semantic integrity and performance charac
 """
 
 from astToolkit import (
-	Be,
-	ClassIsAndAttribute,
-	DOT,
-	Grab,
-	IfThis,
-	IngredientsFunction,
-	IngredientsModule,
-	Make,
-	NodeChanger,
-	NodeTourist,
-	Then,
-	个,
-	木,
+	Be, ClassIsAndAttribute, DOT, Grab, IfThis, IngredientsFunction, IngredientsModule, Make,
+	NodeChanger, NodeTourist, Then, 个, 木,
 )
 from autoflake import fix_code as autoflake_fix_code
 from collections.abc import Callable, Mapping, Sequence

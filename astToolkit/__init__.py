@@ -25,7 +25,7 @@ maintaining type safety and providing a declarative approach to code transformat
 from astToolkit._astTypes import *  # noqa: F403
 
 from astToolkit._types import (
-	str_nameDOTname as str_nameDOTname,
+	identifierDotAttribute as identifierDotAttribute,
 )
 
 # from astToolkit._dumpFunctionDef import dump as dump

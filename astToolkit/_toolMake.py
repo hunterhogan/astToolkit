@@ -1,7 +1,7 @@
 """This file is generated automatically, so changes to this file will be lost."""
 from astToolkit import (
 	ast_attributes, ast_attributes_int, ast_attributes_type_comment, ConstantValueType,
-	str_nameDOTname,
+	identifierDotAttribute,
 )
 from collections.abc import Sequence
 from typing import overload, Unpack
@@ -188,11 +188,11 @@ class Make:
         return ast.IfExp(test=test, body=body, orelse=orElse, **keywordArguments)
 
     @staticmethod
-    def Import(moduleWithLogicalPath: str_nameDOTname, asName: str | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Import:
+    def Import(moduleWithLogicalPath: identifierDotAttribute, asName: str | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Import:
         return ast.Import(names=[Make.alias(moduleWithLogicalPath, asName)], **keywordArguments)
 
     @staticmethod
-    def ImportFrom(module: str | None, list_alias: list[ast.alias], **keywordArguments: Unpack[ast_attributes]) -> ast.ImportFrom:
+    def ImportFrom(module: str, list_alias: list[ast.alias], **keywordArguments: Unpack[ast_attributes]) -> ast.ImportFrom:
         return ast.ImportFrom(module=module, names=list_alias, level=0, **keywordArguments)
 
     @staticmethod

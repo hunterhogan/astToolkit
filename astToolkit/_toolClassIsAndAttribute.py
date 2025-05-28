@@ -682,7 +682,7 @@ class ClassIsAndAttribute:
 
     @staticmethod
     @overload
-    def valueIs(astClass: type[hasDOTvalue_ScalarOrContainerOfScalar], attributeCondition: Callable[[ScalarOrContainerOfScalar], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTvalue_ScalarOrContainerOfScalar] | bool]:
+    def valueIs(astClass: type[hasDOTvalue_ConstantValueType], attributeCondition: Callable[[ConstantValueType], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTvalue_ConstantValueType] | bool]:
         ...
 
     @staticmethod
@@ -701,7 +701,7 @@ class ClassIsAndAttribute:
         ...
 
     @staticmethod
-    def valueIs(astClass: type[hasDOTvalue], attributeCondition: Callable[[ScalarOrContainerOfScalar], bool] | Callable[[bool], bool] | Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTvalue] | bool]:
+    def valueIs(astClass: type[hasDOTvalue], attributeCondition: Callable[[ConstantValueType], bool] | Callable[[bool], bool] | Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTvalue] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTvalue] | bool:
             return isinstance(node, astClass) and node.value is not None and attributeCondition(node.value)

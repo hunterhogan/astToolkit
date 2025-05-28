@@ -2,7 +2,7 @@ from typing import TypeAlias as typing_TypeAlias
 import ast
 
 # Type hints through TypeAlias or type "hints" through the identifier name.
-str_nameDOTname: typing_TypeAlias = str
+identifierDotAttribute: typing_TypeAlias = str
 
 # For my reference, all ast classes by subgroup:
 Ima_ast_boolop: typing_TypeAlias = ast.boolop | ast.And | ast.Or

@@ -1,4 +1,6 @@
-from astToolkit import IfThis, IngredientsFunction, LedgerOfImports, NodeTourist, Then, str_nameDOTname
+from astToolkit import (
+	identifierDotAttribute, IfThis, IngredientsFunction, LedgerOfImports, NodeTourist, Then,
+)
 from inspect import getsource as inspect_getsource
 from os import PathLike
 from pathlib import Path, PurePath
@@ -58,7 +60,7 @@ def extractFunctionDef(module: ast.AST, identifier: str) -> ast.FunctionDef | No
 	"""
 	return NodeTourist(IfThis.isFunctionDefIdentifier(identifier), Then.extractIt).captureLastMatch(module)
 
-def parseLogicalPath2astModule(logicalPathModule: str_nameDOTname, packageIdentifierIfRelative: str | None = None, mode: Literal['exec'] = 'exec') -> ast.Module:
+def parseLogicalPath2astModule(logicalPathModule: identifierDotAttribute, packageIdentifierIfRelative: str | None = None, mode: Literal['exec'] = 'exec') -> ast.Module:
 	"""
 	Parse a logical Python module path into an `ast.Module`.
 
