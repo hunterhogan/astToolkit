@@ -52,7 +52,7 @@ class Be:
 
     @staticmethod
     def AST(node: ast.AST) -> TypeGuard[ast.AST]:
-        return isinstance(node, ast.AST) # pyright: ignore[reportUnnecessaryIsInstance]
+        return isinstance(node, ast.AST)
 
     @staticmethod
     def AsyncFor(node: ast.AST) -> TypeGuard[ast.AsyncFor]:

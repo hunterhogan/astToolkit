@@ -1,8 +1,19 @@
 """This file is generated automatically, so changes to this file will be lost."""
 from astToolkit import ast_attributes, Make
-from collections.abc import Iterable
+from collections.abc import Iterable, Sequence
 from typing import Unpack
 import ast
+
+def boolopJoinMethod(ast_operator: type[ast.boolop], expressions: Sequence[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr | ast.BoolOp:
+    listExpressions: list[ast.expr] = list(expressions)
+    match len(listExpressions):
+        case 0:
+            expressionsJoined = Make.Constant('', **keywordArguments)
+        case 1:
+            expressionsJoined = listExpressions[0]
+        case _:
+            expressionsJoined = Make.BoolOp(ast_operator(), listExpressions, **keywordArguments)
+    return expressionsJoined
 
 def operatorJoinMethod(ast_operator: type[ast.operator], expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
     listExpressions: list[ast.expr] = list(expressions)
@@ -12,6 +23,86 @@ def operatorJoinMethod(ast_operator: type[ast.operator], expressions: Iterable[a
     for expression in listExpressions[1:]:
         expressionsJoined = ast.BinOp(left=expressionsJoined, op=ast_operator(), right=expression, **keywordArguments)
     return expressionsJoined
+
+class And(ast.And):
+    """Identical to the `ast` class but with a method, `join()`, that "joins" expressions using the `ast.BoolOp` class."""
+
+    @classmethod
+    def join(cls, expressions: Sequence[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
+        """
+        Create a single `ast.expr` from a sequence of `ast.expr` by forming an `ast.BoolOp`
+        that logically "joins" expressions using the `ast.BoolOp` subclass. Like str.join() but for AST expressions.
+
+        Parameters
+        ----------
+        expressions : Sequence[ast.expr]
+            Collection of expressions to join.
+        **keywordArguments : ast._attributes
+
+        Returns
+        -------
+        joinedExpression : ast.expr
+            Single expression representing the joined expressions.
+
+        Examples
+        --------
+        Instead of manually constructing ast.BoolOp structures:
+        ```
+        ast.BoolOp(
+            op=ast.And(),
+            values=[ast.Name('Lions'), ast.Name('tigers'), ast.Name('bears')]
+        )
+        ```
+
+        Simply use:
+        ```
+        astToolkit.And.join([ast.Name('Lions'), ast.Name('tigers'), ast.Name('bears')])
+        ```
+
+        Both produce the same AST structure but the join() method eliminates the manual construction.
+        Handles single expressions and empty sequences gracefully.
+        """
+        return boolopJoinMethod(cls, expressions, **keywordArguments)
+
+class Or(ast.Or):
+    """Identical to the `ast` class but with a method, `join()`, that "joins" expressions using the `ast.BoolOp` class."""
+
+    @classmethod
+    def join(cls, expressions: Sequence[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
+        """
+        Create a single `ast.expr` from a sequence of `ast.expr` by forming an `ast.BoolOp`
+        that logically "joins" expressions using the `ast.BoolOp` subclass. Like str.join() but for AST expressions.
+
+        Parameters
+        ----------
+        expressions : Sequence[ast.expr]
+            Collection of expressions to join.
+        **keywordArguments : ast._attributes
+
+        Returns
+        -------
+        joinedExpression : ast.expr
+            Single expression representing the joined expressions.
+
+        Examples
+        --------
+        Instead of manually constructing ast.BoolOp structures:
+        ```
+        ast.BoolOp(
+            op=ast.And(),
+            values=[ast.Name('Lions'), ast.Name('tigers'), ast.Name('bears')]
+        )
+        ```
+
+        Simply use:
+        ```
+        astToolkit.And.join([ast.Name('Lions'), ast.Name('tigers'), ast.Name('bears')])
+        ```
+
+        Both produce the same AST structure but the join() method eliminates the manual construction.
+        Handles single expressions and empty sequences gracefully.
+        """
+        return boolopJoinMethod(cls, expressions, **keywordArguments)
 
 class Add(ast.Add):
     """Identical to the `ast` class but with a method, `join()`, that "joins" expressions using the `ast.BinOp` class."""
