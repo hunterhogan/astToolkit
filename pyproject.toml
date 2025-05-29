@@ -50,6 +50,7 @@ optional-dependencies = { testing = [
   "pytest-cov",
   "pytest-xdist",
   "pyupgrade",
+  "setuptools-scm",
   "trove_classifiers",] }
 
 [build-system]
