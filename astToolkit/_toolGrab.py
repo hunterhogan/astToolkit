@@ -63,7 +63,7 @@ class Grab:
     def asnameAttribute(action: Callable[[str], str]) -> Callable[[hasDOTasname], hasDOTasname]:
 
         def workhorse(node: hasDOTasname) -> hasDOTasname:
-            node.asname = action(node.asname) # pyright: ignore[reportArgumentType]
+            node.asname = action(node.asname) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
             return node
         return workhorse
 
@@ -95,7 +95,7 @@ class Grab:
     def boundAttribute(action: Callable[[ast.expr], ast.expr]) -> Callable[[hasDOTbound], hasDOTbound]:
 
         def workhorse(node: hasDOTbound) -> hasDOTbound:
-            node.bound = action(node.bound) # pyright: ignore[reportArgumentType]
+            node.bound = action(node.bound) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
             return node
         return workhorse
 
@@ -111,7 +111,7 @@ class Grab:
     def causeAttribute(action: Callable[[ast.expr], ast.expr]) -> Callable[[hasDOTcause], hasDOTcause]:
 
         def workhorse(node: hasDOTcause) -> hasDOTcause:
-            node.cause = action(node.cause) # pyright: ignore[reportArgumentType]
+            node.cause = action(node.cause) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
             return node
         return workhorse
 
@@ -168,7 +168,7 @@ class Grab:
         def default_valueAttribute(action: Callable[[ast.expr], ast.expr]) -> Callable[[hasDOTdefault_value], hasDOTdefault_value]:
 
             def workhorse(node: hasDOTdefault_value) -> hasDOTdefault_value:
-                node.default_value = action(node.default_value) # pyright: ignore[reportArgumentType]
+                node.default_value = action(node.default_value) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
                 return node
             return workhorse
 
@@ -200,7 +200,7 @@ class Grab:
     def excAttribute(action: Callable[[ast.expr], ast.expr]) -> Callable[[hasDOTexc], hasDOTexc]:
 
         def workhorse(node: hasDOTexc) -> hasDOTexc:
-            node.exc = action(node.exc) # pyright: ignore[reportArgumentType]
+            node.exc = action(node.exc) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
             return node
         return workhorse
 
@@ -216,7 +216,7 @@ class Grab:
     def format_specAttribute(action: Callable[[ast.expr], ast.expr]) -> Callable[[hasDOTformat_spec], hasDOTformat_spec]:
 
         def workhorse(node: hasDOTformat_spec) -> hasDOTformat_spec:
-            node.format_spec = action(node.format_spec) # pyright: ignore[reportArgumentType]
+            node.format_spec = action(node.format_spec) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
             return node
         return workhorse
 
@@ -240,7 +240,7 @@ class Grab:
     def guardAttribute(action: Callable[[ast.expr], ast.expr]) -> Callable[[hasDOTguard], hasDOTguard]:
 
         def workhorse(node: hasDOTguard) -> hasDOTguard:
-            node.guard = action(node.guard) # pyright: ignore[reportArgumentType]
+            node.guard = action(node.guard) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
             return node
         return workhorse
 
@@ -320,7 +320,7 @@ class Grab:
     def kindAttribute(action: Callable[[str], str]) -> Callable[[hasDOTkind], hasDOTkind]:
 
         def workhorse(node: hasDOTkind) -> hasDOTkind:
-            node.kind = action(node.kind) # pyright: ignore[reportArgumentType]
+            node.kind = action(node.kind) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
             return node
         return workhorse
 
@@ -336,7 +336,7 @@ class Grab:
     def kwargAttribute(action: Callable[[ast.arg], ast.arg]) -> Callable[[hasDOTkwarg], hasDOTkwarg]:
 
         def workhorse(node: hasDOTkwarg) -> hasDOTkwarg:
-            node.kwarg = action(node.kwarg) # pyright: ignore[reportArgumentType]
+            node.kwarg = action(node.kwarg) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
             return node
         return workhorse
 
@@ -392,7 +392,7 @@ class Grab:
     def lowerAttribute(action: Callable[[ast.expr], ast.expr]) -> Callable[[hasDOTlower], hasDOTlower]:
 
         def workhorse(node: hasDOTlower) -> hasDOTlower:
-            node.lower = action(node.lower) # pyright: ignore[reportArgumentType]
+            node.lower = action(node.lower) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
             return node
         return workhorse
 
@@ -400,7 +400,7 @@ class Grab:
     def moduleAttribute(action: Callable[[str], str]) -> Callable[[hasDOTmodule], hasDOTmodule]:
 
         def workhorse(node: hasDOTmodule) -> hasDOTmodule:
-            node.module = action(node.module) # pyright: ignore[reportArgumentType]
+            node.module = action(node.module) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
             return node
         return workhorse
 
@@ -408,7 +408,7 @@ class Grab:
     def msgAttribute(action: Callable[[ast.expr], ast.expr]) -> Callable[[hasDOTmsg], hasDOTmsg]:
 
         def workhorse(node: hasDOTmsg) -> hasDOTmsg:
-            node.msg = action(node.msg) # pyright: ignore[reportArgumentType]
+            node.msg = action(node.msg) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
             return node
         return workhorse
 
@@ -456,7 +456,7 @@ class Grab:
     def optional_varsAttribute(action: Callable[[ast.expr], ast.expr]) -> Callable[[hasDOToptional_vars], hasDOToptional_vars]:
 
         def workhorse(node: hasDOToptional_vars) -> hasDOToptional_vars:
-            node.optional_vars = action(node.optional_vars) # pyright: ignore[reportArgumentType]
+            node.optional_vars = action(node.optional_vars) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
             return node
         return workhorse
 
@@ -496,7 +496,7 @@ class Grab:
     def restAttribute(action: Callable[[str], str]) -> Callable[[hasDOTrest], hasDOTrest]:
 
         def workhorse(node: hasDOTrest) -> hasDOTrest:
-            node.rest = action(node.rest) # pyright: ignore[reportArgumentType]
+            node.rest = action(node.rest) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
             return node
         return workhorse
 
@@ -536,7 +536,7 @@ class Grab:
     def stepAttribute(action: Callable[[ast.expr], ast.expr]) -> Callable[[hasDOTstep], hasDOTstep]:
 
         def workhorse(node: hasDOTstep) -> hasDOTstep:
-            node.step = action(node.step) # pyright: ignore[reportArgumentType]
+            node.step = action(node.step) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
             return node
         return workhorse
 
@@ -584,7 +584,7 @@ class Grab:
     def typeAttribute(action: Callable[[ast.expr], ast.expr]) -> Callable[[hasDOTtype], hasDOTtype]:
 
         def workhorse(node: hasDOTtype) -> hasDOTtype:
-            node.type = action(node.type) # pyright: ignore[reportArgumentType]
+            node.type = action(node.type) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
             return node
         return workhorse
 
@@ -592,7 +592,7 @@ class Grab:
     def type_commentAttribute(action: Callable[[str], str]) -> Callable[[hasDOTtype_comment], hasDOTtype_comment]:
 
         def workhorse(node: hasDOTtype_comment) -> hasDOTtype_comment:
-            node.type_comment = action(node.type_comment) # pyright: ignore[reportArgumentType]
+            node.type_comment = action(node.type_comment) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
             return node
         return workhorse
 
@@ -616,7 +616,7 @@ class Grab:
     def upperAttribute(action: Callable[[ast.expr], ast.expr]) -> Callable[[hasDOTupper], hasDOTupper]:
 
         def workhorse(node: hasDOTupper) -> hasDOTupper:
-            node.upper = action(node.upper) # pyright: ignore[reportArgumentType]
+            node.upper = action(node.upper) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
             return node
         return workhorse
 
@@ -640,6 +640,6 @@ class Grab:
     def varargAttribute(action: Callable[[ast.arg], ast.arg]) -> Callable[[hasDOTvararg], hasDOTvararg]:
 
         def workhorse(node: hasDOTvararg) -> hasDOTvararg:
-            node.vararg = action(node.vararg) # pyright: ignore[reportArgumentType]
+            node.vararg = action(node.vararg) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
             return node
         return workhorse

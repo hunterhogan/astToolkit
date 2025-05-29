@@ -1,6 +1,7 @@
 # ruff: noqa: F403, F405
 """This file is generated automatically, so changes to this file will be lost."""
 from astToolkit._astTypes import *
+from collections.abc import Sequence
 from typing import overload
 import ast
 import sys
@@ -57,15 +58,15 @@ class DOT:
 
     @staticmethod
     @overload
-    def args(node: hasDOTargs_list_expr) -> list[ast.expr]:
+    def args(node: hasDOTargs_list_expr) -> Sequence[ast.expr]:
         ...
 
     @staticmethod
-    def args(node: hasDOTargs) -> ast.arguments | list[ast.arg] | list[ast.expr]:
+    def args(node: hasDOTargs) -> ast.arguments | Sequence[ast.expr] | list[ast.arg]:
         return node.args
 
     @staticmethod
-    def argtypes(node: hasDOTargtypes) -> list[ast.expr]:
+    def argtypes(node: hasDOTargtypes) -> Sequence[ast.expr]:
         return node.argtypes
 
     @staticmethod
@@ -77,7 +78,7 @@ class DOT:
         return node.attr
 
     @staticmethod
-    def bases(node: hasDOTbases) -> list[ast.expr]:
+    def bases(node: hasDOTbases) -> Sequence[ast.expr]:
         return node.bases
 
     @staticmethod
@@ -87,11 +88,11 @@ class DOT:
 
     @staticmethod
     @overload
-    def body(node: hasDOTbody_list_stmt) -> list[ast.stmt]:
+    def body(node: hasDOTbody_list_stmt) -> Sequence[ast.stmt]:
         ...
 
     @staticmethod
-    def body(node: hasDOTbody) -> ast.expr | list[ast.stmt]:
+    def body(node: hasDOTbody) -> ast.expr | Sequence[ast.stmt]:
         return node.body
 
     @staticmethod
@@ -99,7 +100,7 @@ class DOT:
         return node.bound # pyright: ignore[reportReturnType]
 
     @staticmethod
-    def cases(node: hasDOTcases) -> list[ast.match_case]:
+    def cases(node: hasDOTcases) -> Sequence[ast.match_case]:
         return node.cases
 
     @staticmethod
@@ -111,7 +112,7 @@ class DOT:
         return node.cls
 
     @staticmethod
-    def comparators(node: hasDOTcomparators) -> list[ast.expr]:
+    def comparators(node: hasDOTcomparators) -> Sequence[ast.expr]:
         return node.comparators
 
     @staticmethod
@@ -127,7 +128,7 @@ class DOT:
         return node.ctx
 
     @staticmethod
-    def decorator_list(node: hasDOTdecorator_list) -> list[ast.expr]:
+    def decorator_list(node: hasDOTdecorator_list) -> Sequence[ast.expr]:
         return node.decorator_list
     if sys.version_info >= (3, 13):
 
@@ -136,7 +137,7 @@ class DOT:
             return node.default_value # pyright: ignore[reportReturnType]
 
     @staticmethod
-    def defaults(node: hasDOTdefaults) -> list[ast.expr]:
+    def defaults(node: hasDOTdefaults) -> Sequence[ast.expr]:
         return node.defaults
 
     @staticmethod
@@ -144,7 +145,7 @@ class DOT:
         return node.elt
 
     @staticmethod
-    def elts(node: hasDOTelts) -> list[ast.expr]:
+    def elts(node: hasDOTelts) -> Sequence[ast.expr]:
         return node.elts
 
     @staticmethod
@@ -152,7 +153,7 @@ class DOT:
         return node.exc # pyright: ignore[reportReturnType]
 
     @staticmethod
-    def finalbody(node: hasDOTfinalbody) -> list[ast.stmt]:
+    def finalbody(node: hasDOTfinalbody) -> Sequence[ast.stmt]:
         return node.finalbody
 
     @staticmethod
@@ -164,7 +165,7 @@ class DOT:
         return node.func
 
     @staticmethod
-    def generators(node: hasDOTgenerators) -> list[ast.comprehension]:
+    def generators(node: hasDOTgenerators) -> Sequence[ast.comprehension]:
         return node.generators
 
     @staticmethod
@@ -180,7 +181,7 @@ class DOT:
         return node.id
 
     @staticmethod
-    def ifs(node: hasDOTifs) -> list[ast.expr]:
+    def ifs(node: hasDOTifs) -> Sequence[ast.expr]:
         return node.ifs
 
     @staticmethod
@@ -188,7 +189,7 @@ class DOT:
         return node.is_async
 
     @staticmethod
-    def items(node: hasDOTitems) -> list[ast.withitem]:
+    def items(node: hasDOTitems) -> Sequence[ast.withitem]:
         return node.items
 
     @staticmethod
@@ -201,20 +202,20 @@ class DOT:
 
     @staticmethod
     @overload
-    def keys(node: hasDOTkeys_list_expr) -> list[ast.expr]:
+    def keys(node: hasDOTkeys_list_expr) -> Sequence[ast.expr]:
         ...
 
     @staticmethod
     @overload
-    def keys(node: hasDOTkeys_list_exprOrNone) -> list[ast.expr]:
+    def keys(node: hasDOTkeys_list_exprOrNone) -> Sequence[ast.expr]:
         ...
 
     @staticmethod
-    def keys(node: hasDOTkeys) -> list[ast.expr]:
+    def keys(node: hasDOTkeys) -> Sequence[ast.expr]:
         return node.keys # pyright: ignore[reportReturnType]
 
     @staticmethod
-    def keywords(node: hasDOTkeywords) -> list[ast.keyword]:
+    def keywords(node: hasDOTkeywords) -> Sequence[ast.keyword]:
         return node.keywords
 
     @staticmethod
@@ -222,7 +223,7 @@ class DOT:
         return node.kind # pyright: ignore[reportReturnType]
 
     @staticmethod
-    def kw_defaults(node: hasDOTkw_defaults) -> list[ast.expr]:
+    def kw_defaults(node: hasDOTkw_defaults) -> Sequence[ast.expr]:
         return node.kw_defaults # pyright: ignore[reportReturnType]
 
     @staticmethod
@@ -322,7 +323,7 @@ class DOT:
         return node.operand
 
     @staticmethod
-    def ops(node: hasDOTops) -> list[ast.cmpop]:
+    def ops(node: hasDOTops) -> Sequence[ast.cmpop]:
         return node.ops
 
     @staticmethod
@@ -336,11 +337,11 @@ class DOT:
 
     @staticmethod
     @overload
-    def orelse(node: hasDOTorelse_list_stmt) -> list[ast.stmt]:
+    def orelse(node: hasDOTorelse_list_stmt) -> Sequence[ast.stmt]:
         ...
 
     @staticmethod
-    def orelse(node: hasDOTorelse) -> ast.expr | list[ast.stmt]:
+    def orelse(node: hasDOTorelse) -> ast.expr | Sequence[ast.stmt]:
         return node.orelse
 
     @staticmethod
@@ -358,7 +359,7 @@ class DOT:
         return node.pattern # pyright: ignore[reportReturnType]
 
     @staticmethod
-    def patterns(node: hasDOTpatterns) -> list[ast.pattern]:
+    def patterns(node: hasDOTpatterns) -> Sequence[ast.pattern]:
         return node.patterns
 
     @staticmethod
@@ -409,11 +410,6 @@ class DOT:
 
     @staticmethod
     @overload
-    def target(node: hasDOTtarget_expr) -> ast.expr:
-        ...
-
-    @staticmethod
-    @overload
     def target(node: hasDOTtarget_Name) -> ast.Name:
         ...
 
@@ -423,11 +419,16 @@ class DOT:
         ...
 
     @staticmethod
-    def target(node: hasDOTtarget) -> ast.expr | ast.Name | (ast.Name | ast.Attribute | ast.Subscript):
+    @overload
+    def target(node: hasDOTtarget_expr) -> ast.expr:
+        ...
+
+    @staticmethod
+    def target(node: hasDOTtarget) -> ast.Name | ast.expr | (ast.Name | ast.Attribute | ast.Subscript):
         return node.target
 
     @staticmethod
-    def targets(node: hasDOTtargets) -> list[ast.expr]:
+    def targets(node: hasDOTtargets) -> Sequence[ast.expr]:
         return node.targets
 
     @staticmethod
@@ -447,7 +448,7 @@ class DOT:
         return node.type_ignores
 
     @staticmethod
-    def type_params(node: hasDOTtype_params) -> list[ast.type_param]:
+    def type_params(node: hasDOTtype_params) -> Sequence[ast.type_param]:
         return node.type_params
 
     @staticmethod
@@ -475,11 +476,11 @@ class DOT:
         ...
 
     @staticmethod
-    def value(node: hasDOTvalue) -> ConstantValueType | bool | ast.expr:
+    def value(node: hasDOTvalue) -> ast.expr | ConstantValueType | bool:
         return node.value
 
     @staticmethod
-    def values(node: hasDOTvalues) -> list[ast.expr]:
+    def values(node: hasDOTvalues) -> Sequence[ast.expr]:
         return node.values
 
     @staticmethod
