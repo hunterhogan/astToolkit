@@ -1,33 +1,21 @@
+from astToolkit import ast_attributes, Make
+from astToolkit._joinClassmethod import (
+	Add, BitAnd, BitOr, BitXor, Div, FloorDiv, LShift, MatMult, Mod, Mult, Pow, RShift, Sub,
+)
+from collections.abc import Callable
+from typing import cast
 import ast
 import pytest
-from collections.abc import Callable
-
-from astToolkit import Make
-from astToolkit._joinClassmethod import (
-    Add,
-    BitAnd,
-    BitOr,
-    BitXor,
-    Div,
-    FloorDiv,
-    LShift,
-    MatMult,
-    Mod,
-    Mult,
-    Pow,
-    RShift,
-    Sub,
-)
 
 constant_expression_5 = Make.Constant(5)
 constant_expression_7 = Make.Constant(7)
 constant_expression_11 = Make.Constant(11)
 
-keyword_arguments_set_A = {"lineno": 3, "col_offset": 8, "end_lineno": 3, "end_col_offset": 12}
-keyword_arguments_set_B = {"lineno": 17, "col_offset": 19, "end_lineno": 17, "end_col_offset": 25}
+keyword_arguments_set_A: ast_attributes = {"lineno": 3, "col_offset": 8, "end_lineno": 3, "end_col_offset": 12}
+keyword_arguments_set_B: ast_attributes = {"lineno": 17, "col_offset": 19, "end_lineno": 17, "end_col_offset": 25}
 
 
-def construct_expected_ast_node(ast_operator_type: type[ast.operator], input_expressions_iterable: list[ast.expr], keyword_arguments_for_operation: dict) -> ast.expr:
+def construct_expected_ast_node(ast_operator_type: type[ast.operator], input_expressions_iterable: list[ast.expr], keyword_arguments_for_operation: ast_attributes) -> ast.expr:
     processed_expressions_list = list(input_expressions_iterable)
     if not processed_expressions_list:
         return Make.Constant('', **keyword_arguments_for_operation)
@@ -59,8 +47,8 @@ list_join_implementation_and_ast_operator_pairs = [
     (Sub, ast.Sub),
 ]
 
-list_join_method_test_scenarios_params = []
-raw_scenarios = [
+list_join_method_test_scenarios_params: list[object] = []
+raw_scenarios: list[tuple[str, list[ast.expr], ast_attributes]] = [
     ("empty_list_no_kwargs", [], {}),
     ("empty_list_with_kwargs", [], keyword_arguments_set_A),
     ("single_expr_no_kwargs", [constant_expression_5], {}),
@@ -86,8 +74,8 @@ raw_scenarios = [
 
 for scenario_id, expressions, kwargs in raw_scenarios:
     # Create a builder that captures the specific expressions and kwargs for this scenario
-    builder = lambda op_type, bound_expressions=expressions, bound_kwargs=kwargs: \
-        construct_expected_ast_node(op_type, bound_expressions, bound_kwargs)
+    def builder(op_type: type[ast.operator], bound_expressions: list[ast.expr] = expressions, bound_kwargs: ast_attributes = kwargs):
+        return construct_expected_ast_node(op_type, bound_expressions, bound_kwargs)
     list_join_method_test_scenarios_params.append(
         pytest.param(scenario_id, expressions, kwargs, builder, id=scenario_id)
     )
@@ -100,11 +88,12 @@ def test_join_method(
     ast_operator_type: type[ast.operator],
     scenario_identifier: str,
     expressions_for_join_method: list[ast.expr],
-    keyword_arguments_for_join_method: dict,
-    expected_ast_constructor: Callable
+    keyword_arguments_for_join_method: ast_attributes,
+    expected_ast_constructor: Callable[[type[ast.operator]], ast.expr]
 
 ):
-    actual_ast_node = JoinImplementerClass.join(expressions_for_join_method, **keyword_arguments_for_join_method)
+    join_method = getattr(JoinImplementerClass, 'join')
+    actual_ast_node = cast(ast.expr, join_method(expressions_for_join_method, **keyword_arguments_for_join_method))
     expected_ast_node = expected_ast_constructor(ast_operator_type)
 
     dump_of_actual_ast_node = ast.dump(actual_ast_node)
