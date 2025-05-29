@@ -72,7 +72,7 @@ class ClassIsAndAttribute:
         ...
 
     @staticmethod
-    def argsIs(astClass: type[hasDOTargs], attributeCondition: Callable[[ast.arguments], bool] | Callable[[Sequence[ast.expr]], bool] | Callable[[list[ast.arg]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTargs] | bool]:
+    def argsIs(astClass: type[hasDOTargs], attributeCondition: Callable[[ast.arguments], bool] | Callable[[list[ast.arg]], bool] | Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTargs] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTargs] | bool:
             return isinstance(node, astClass) and attributeCondition(node.args)
@@ -626,7 +626,7 @@ class ClassIsAndAttribute:
         ...
 
     @staticmethod
-    def targetIs(astClass: type[hasDOTtarget], attributeCondition: Callable[[ast.Name], bool] | Callable[[ast.expr], bool] | Callable[[ast.Name | ast.Attribute | ast.Subscript], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTtarget] | bool]:
+    def targetIs(astClass: type[hasDOTtarget], attributeCondition: Callable[[ast.expr], bool] | Callable[[ast.Name], bool] | Callable[[ast.Name | ast.Attribute | ast.Subscript], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTtarget] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTtarget] | bool:
             return isinstance(node, astClass) and attributeCondition(node.target)
@@ -702,7 +702,7 @@ class ClassIsAndAttribute:
         ...
 
     @staticmethod
-    def valueIs(astClass: type[hasDOTvalue], attributeCondition: Callable[[ast.expr], bool] | Callable[[ConstantValueType], bool] | Callable[[bool], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTvalue] | bool]:
+    def valueIs(astClass: type[hasDOTvalue], attributeCondition: Callable[[ast.expr], bool] | Callable[[bool], bool] | Callable[[ConstantValueType], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTvalue] | bool]:
 
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTvalue] | bool:
             return isinstance(node, astClass) and node.value is not None and attributeCondition(node.value)

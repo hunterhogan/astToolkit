@@ -62,7 +62,7 @@ class DOT:
         ...
 
     @staticmethod
-    def args(node: hasDOTargs) -> ast.arguments | Sequence[ast.expr] | list[ast.arg]:
+    def args(node: hasDOTargs) -> ast.arguments | list[ast.arg] | Sequence[ast.expr]:
         return node.args
 
     @staticmethod
@@ -235,7 +235,7 @@ class DOT:
         return node.kwd_attrs
 
     @staticmethod
-    def kwd_patterns(node: hasDOTkwd_patterns) -> list[ast.pattern]:
+    def kwd_patterns(node: hasDOTkwd_patterns) -> Sequence[ast.pattern]:
         return node.kwd_patterns
 
     @staticmethod
@@ -424,7 +424,7 @@ class DOT:
         ...
 
     @staticmethod
-    def target(node: hasDOTtarget) -> ast.Name | ast.expr | (ast.Name | ast.Attribute | ast.Subscript):
+    def target(node: hasDOTtarget) -> ast.expr | ast.Name | (ast.Name | ast.Attribute | ast.Subscript):
         return node.target
 
     @staticmethod
