@@ -1,6 +1,6 @@
 [project]
 name = "astToolkit"
-version = "0.3.6"
+version = "0.3.7"
 description = "A powerfully composable, type-safe toolkit for Python abstract syntax tree (AST) manipulation, analysis, transformation, and code generation with a layered architecture designed for building sophisticated code processing assembly-lines."
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.12"
@@ -26,8 +26,7 @@ keywords = [
   "static-analysis",
   "type-safe",
   "typed-ast",
-  "visitor-pattern",
-]
+  "visitor-pattern",]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Environment :: Console",
@@ -42,8 +41,7 @@ classifiers = [
   "Topic :: Scientific/Engineering :: Information Analysis",
   "Topic :: Software Development :: Code Generators",
   "Topic :: Software Development :: Libraries :: Python Modules",
-  "Typing :: Typed",
-]
+  "Typing :: Typed",]
 urls = { Donate = "https://www.patreon.com/integrated", Homepage = "https://github.com/hunterhogan/astToolkit", Issues = "https://github.com/hunterhogan/astToolkit/issues", Repository = "https://github.com/hunterhogan/astToolkit.git" }
 dependencies = ["Z0Z_tools", "autoflake", "python_minifier", "tomli"]
 optional-dependencies = { testing = [
@@ -52,8 +50,7 @@ optional-dependencies = { testing = [
   "pytest-cov",
   "pytest-xdist",
   "pyupgrade",
-  "trove_classifiers",
-] }
+  "trove_classifiers",] }
 
 [build-system]
 requires = ["setuptools"]
@@ -69,8 +66,7 @@ run = { branch = true, concurrency = [
 ], data_file = "tests/coverage/.coverage", omit = [
   "tests/*",
 ], parallel = true, source = [
-  ".",
-] }
+  ".",] }
 xml = { output = "tests/coverage/coverage.xml" }
 
 [tool.pytest.ini_options]
