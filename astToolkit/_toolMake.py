@@ -4,7 +4,8 @@ from astToolkit import (
 	identifierDotAttribute,
 )
 from collections.abc import Sequence
-from typing import overload, Unpack
+from typing import overload
+from typing_extensions import Unpack
 import ast
 import sys
 
@@ -116,8 +117,8 @@ class Make:
         return ast.comprehension(target=target, iter=iter, ifs=list(ifs), is_async=is_async)
 
     @staticmethod
-    def Constant(value: ConstantValueType, **keywordArguments: Unpack[ast_attributes_type_comment]) -> ast.Constant:
-        return ast.Constant(value=value, kind=None, **keywordArguments) # pyright: ignore[reportArgumentType]
+    def Constant(value: ConstantValueType, kind: str | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Constant:
+        return ast.Constant(value=value, kind=kind, **keywordArguments) # pyright: ignore[reportArgumentType]
 
     @staticmethod
     def Continue(**keywordArguments: Unpack[ast_attributes]) -> ast.Continue:
@@ -188,12 +189,12 @@ class Make:
         return ast.IfExp(test=test, body=body, orelse=orElse, **keywordArguments)
 
     @staticmethod
-    def Import(moduleWithLogicalPath: identifierDotAttribute, asName: str | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Import:
-        return ast.Import(names=[Make.alias(moduleWithLogicalPath, asName)], **keywordArguments)
+    def Import(dotModule: identifierDotAttribute, asName: str | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Import:
+        return ast.Import(names=[Make.alias(dotModule, asName)], **keywordArguments)
 
     @staticmethod
-    def ImportFrom(module: str, list_alias: list[ast.alias], **keywordArguments: Unpack[ast_attributes]) -> ast.ImportFrom:
-        return ast.ImportFrom(module=module, names=list_alias, level=0, **keywordArguments)
+    def ImportFrom(module: str | None, list_alias: list[ast.alias], level: int=0, **keywordArguments: Unpack[ast_attributes]) -> ast.ImportFrom:
+        return ast.ImportFrom(module=module, names=list_alias, level=level, **keywordArguments)
 
     @staticmethod
     def Interactive(body: Sequence[ast.stmt]) -> ast.Interactive:
