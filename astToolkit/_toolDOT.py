@@ -476,7 +476,7 @@ class DOT:
         ...
 
     @staticmethod
-    def value(node: hasDOTvalue) -> ast.expr | ConstantValueType | bool:
+    def value(node: hasDOTvalue) -> ast.expr | bool | ConstantValueType:
         return node.value
 
     @staticmethod
