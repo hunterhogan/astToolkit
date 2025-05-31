@@ -1,6 +1,6 @@
 [project]
 name = "astToolkit"
-version = "0.4.0"
+version = "0.5.0"
 description = "A powerfully composable, type-safe toolkit for Python abstract syntax tree (AST) manipulation, analysis, transformation, and code generation with a layered architecture designed for building sophisticated code processing assembly-lines."
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.12"

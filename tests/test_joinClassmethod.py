@@ -1,7 +1,4 @@
 from astToolkit import ast_attributes, Make
-from astToolkit._joinClassmethod import (
-	Add, BitAnd, BitOr, BitXor, Div, FloorDiv, LShift, MatMult, Mod, Mult, Pow, RShift, Sub,
-)
 from collections.abc import Callable
 from typing import cast
 import ast
@@ -30,21 +27,19 @@ def construct_expected_ast_node(ast_operator_type: type[ast.operator], input_exp
         )
     return current_joined_expression
 
+listBoolOpIdentifiers: list[str] = sorted([subclass.__name__ for subclass in ast.boolop.__subclasses__()])
+listOperatorIdentifiers: list[str] = sorted([subclass.__name__ for subclass in ast.operator.__subclasses__()])
 
-list_join_implementation_and_ast_operator_pairs = [
-    (Add, ast.Add),
-    (BitAnd, ast.BitAnd),
-    (BitOr, ast.BitOr),
-    (BitXor, ast.BitXor),
-    (Div, ast.Div),
-    (FloorDiv, ast.FloorDiv),
-    (LShift, ast.LShift),
-    (MatMult, ast.MatMult),
-    (Mod, ast.Mod),
-    (Mult, ast.Mult),
-    (Pow, ast.Pow),
-    (RShift, ast.RShift),
-    (Sub, ast.Sub),
+listBoolOpJoinImplementationAndAstPairs = [
+    (Make.__dict__[identifier], ast.__dict__[identifier])
+    for identifier in listBoolOpIdentifiers
+    if identifier in Make.__dict__
+]
+
+listOperatorJoinImplementationAndAstPairs = [
+    (Make.__dict__[identifier], ast.__dict__[identifier])
+    for identifier in listOperatorIdentifiers
+    if identifier in Make.__dict__
 ]
 
 list_join_method_test_scenarios_params: list[object] = []
@@ -81,7 +76,7 @@ for scenario_id, expressions, kwargs in raw_scenarios:
     )
 
 
-@pytest.mark.parametrize("JoinImplementerClass, ast_operator_type", list_join_implementation_and_ast_operator_pairs)
+@pytest.mark.parametrize("JoinImplementerClass, ast_operator_type", listOperatorJoinImplementationAndAstPairs)
 @pytest.mark.parametrize("scenario_identifier, expressions_for_join_method, keyword_arguments_for_join_method, expected_ast_constructor", list_join_method_test_scenarios_params)
 def test_join_method(
     JoinImplementerClass: type,

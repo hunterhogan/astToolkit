@@ -2,7 +2,7 @@
 AST Toolkit for Python - A comprehensive utility library for AST manipulation and transformation
 
 The astToolkit package provides a powerful set of tools for working with Python's Abstract Syntax Tree (AST),
-enabling sophisticated code analysis, transformation, and generation. The toolkit is designed around a 
+enabling sophisticated code analysis, transformation, and generation. The toolkit is designed around a
 composable architecture with specialized modules for different aspects of AST manipulation:
 
 Core Components:
@@ -41,21 +41,6 @@ from astToolkit._toolClassIsAndAttribute import ClassIsAndAttribute as ClassIsAn
 from astToolkit._toolDOT import DOT as DOT
 from astToolkit._toolGrab import Grab as Grab
 from astToolkit._toolMake import Make as Make
-from astToolkit._joinClassmethod import (
-    Add as Add,
-    BitAnd as BitAnd,
-    BitOr as BitOr,
-    BitXor as BitXor,
-    Div as Div,
-    FloorDiv as FloorDiv,
-    LShift as LShift,
-    MatMult as MatMult,
-    Mod as Mod,
-	Mult as Mult,
-    Pow as Pow,
-    RShift as RShift,
-    Sub as Sub,
-)
 
 from astToolkit._toolIfThis import IfThis as IfThis
 from astToolkit._toolThen import Then as Then
