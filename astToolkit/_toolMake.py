@@ -1,5 +1,8 @@
 """This file is generated automatically, so changes to this file will be lost."""
-from astToolkit import ConstantValueType, ast_attributes, ast_attributes_int, ast_attributes_type_comment, identifierDotAttribute
+from astToolkit import (
+	ast_attributes, ast_attributes_int, ast_attributes_type_comment, ConstantValueType,
+	identifierDotAttribute,
+)
 from collections.abc import Iterable, Sequence
 from typing import overload
 from typing_extensions import Unpack

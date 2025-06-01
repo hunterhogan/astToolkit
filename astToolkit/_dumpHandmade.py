@@ -2,6 +2,18 @@ from ast import AST
 from astToolkit import ConstantValueType
 
 def dump(node: AST, annotate_fields: bool = True, include_attributes: bool = False, *, indent: int | str | None = None, show_empty: bool = False) -> str:
+    """Return a formatted string representation of an AST node.
+
+    Parameters:
+        node: The AST node to format
+        annotate_fields (True): Whether to include field names in the output
+        include_attributes (False): Whether to include node attributes in addition to fields
+        indent (None): String for indentation or number of spaces; `None` for single-line output
+        show_empty (False): Whether to include fields with empty list or `None` values
+
+    Returns:
+        formattedString: String representation of the AST node with specified formatting
+    """
     def _format(node: ConstantValueType | AST | list[AST] | list[str], level: int = 0) -> tuple[str, bool]:
         if indent_str is not None:
             level += 1

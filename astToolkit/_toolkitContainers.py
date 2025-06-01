@@ -1,21 +1,3 @@
-"""
-AST Container Classes for Python Code Generation and Transformation
-
-This module provides specialized container classes that organize AST nodes, imports, and program structure for code
-generation and transformation. These classes form the organizational backbone of the code generation system, enabling:
-
-1. Tracking and managing imports with LedgerOfImports.
-2. Packaging function definitions with their dependencies via IngredientsFunction.
-3. Structuring complete modules with IngredientsModule.
-
-Together, these container classes implement a component-based architecture for programmatic generation of
-high-performance code. They maintain a clean separation between structure and content, allowing transformations to be
-applied systematically while preserving relationships between code elements.
-
-The containers work in conjunction with transformation tools that manipulate the contained AST nodes to implement
-specific optimizations and transformations.
-"""
-
 from astToolkit import identifierDotAttribute, Make
 from collections import defaultdict
 from collections.abc import Sequence
@@ -30,12 +12,12 @@ class LedgerOfImports:
 	"""
 	Manage import dependencies when building Python modules programmatically.
 
-	Think of this as a smart notebook that keeps track of which Python libraries and modules 
-	your generated code needs to import. When you're building Python code from scratch or 
-	transforming existing code, you need to ensure all the necessary `import` and `from module import name` 
+	Think of this as a smart notebook that keeps track of which Python libraries and modules
+	your generated code needs to import. When you're building Python code from scratch or
+	transforming existing code, you need to ensure all the necessary `import` and `from module import name`
 	statements are included in the final result.
 
-	The Ledger stores information about import dependencies and can later generate the actual 
+	The Ledger stores information about import dependencies and can later generate the actual
 	import statements that should appear at the top of your Python file. It handles:
 
 	- Recording that your code needs `import ast` or `from collections import defaultdict`
@@ -45,7 +27,7 @@ class LedgerOfImports:
 	- Merging import requirements from multiple code components
 
 	This is especially useful when you're extracting functions from one module, transforming them,
-	and reassembling them into a new module - you need to track which imports the original 
+	and reassembling them into a new module - you need to track which imports the original
 	functions depended on and include them in the generated code.
 
 	Example workflow:
@@ -54,10 +36,10 @@ class LedgerOfImports:
 	3. Generate clean import statements for the final module
 	4. Write a complete, executable Python file
 	"""
-	
+
 	# 3 basic actions: add, remove, export
 	# Existing syntax for adding imports:
-		# ast.AST, walk. Wait, the logic in `addAst` is not necessary now that I have `walkThis`. No, no, walkThis is built on `addAst`. 
+		# ast.AST, walk. Wait, the logic in `addAst` is not necessary now that I have `walkThis`. No, no, walkThis is built on `addAst`.
 		# ast.Import | ast.ImportFrom
 		# str as parameters
 		# LedgerOfImports
@@ -73,19 +55,19 @@ class LedgerOfImports:
 	# The net effect will be to increase the options for the user to add or remove imports, while keeping the internal logic simple and consistent.
 	# Existing export options:
 		# list of ast.Import | ast.ImportFrom
-		# list of str representation of only the module names, e.g., `['collections.abc', 'ast']`: specifically for 
-		# use with `autoflake.fix_code(additional_imports=)`, which now seems like an overly specific use case. BUT, 
-		# I decided to not created methods for "remove all except" because existing tools like `autoflake` can remove 
+		# list of str representation of only the module names, e.g., `['collections.abc', 'ast']`: specifically for
+		# use with `autoflake.fix_code(additional_imports=)`, which now seems like an overly specific use case. BUT,
+		# I decided to not created methods for "remove all except" because existing tools like `autoflake` can remove
 		# unused imports. So, it's not really overly specific.
 
-	# TODO Think about how to resolving (`makeList_ast`) the ledger of imports and remove self-referential imports, 
+	# TODO Think about how to resolving (`makeList_ast`) the ledger of imports and remove self-referential imports,
 	# and I now understand why I have not yet done this: the ledger is ignorant of the package/module context in which it is used.
 	# idea: an optional property of the ledger such as `dotModule: identifierDotAttribute`, so the ledger "knows" the context in which it is used.
 	# Interestingly, because ast.Module does not have a `name` attribute, `IngredientsModule` does not have a `name` attribute either.
 	# I have been conflicted about how to handle that. I would _not_ want to duplicate information in the ledger and in `IngredientsModule`.
-	# But because `LedgerOfImports` is part of `IngredientsModule`, it might be a natural place to store the package, logical path, 
+	# But because `LedgerOfImports` is part of `IngredientsModule`, it might be a natural place to store the package, logical path,
 	# and module information for `IngredientsModule`. `LedgerOfImports` doesn't currently have sophisticated tools for handling logical paths,
-	# but that's in part because I hadn't realized the context problem before now. And between `LedgerOfImports` and `IngredientsModule`, 
+	# but that's in part because I hadn't realized the context problem before now. And between `LedgerOfImports` and `IngredientsModule`,
 	# that logic should be in `LedgerOfImports`, because it is the one that handles the imports.
 	# NOTE this feels like an issue that someone else has already solved.
 
@@ -108,15 +90,15 @@ class LedgerOfImports:
 		"""
 		Record import dependencies from an existing import statement node.
 
-		This method extracts import dependency information from AST nodes that represent 
-		import statements in parsed Python code. Use this when you have existing import 
+		This method extracts import dependency information from AST nodes that represent
+		import statements in parsed Python code. Use this when you have existing import
 		statements and want to capture their dependency information for later use.
 
 		Parameters:
-			astImport____: An AST node representing either `import module` or `from module import name` 
+			astImport____: An AST node representing either `import module` or `from module import name`
 				statements from parsed Python code.
 			type_ignores: Additional type ignore directives associated with this import.
-		
+
 		Raises:
 			ValueError: If the AST node is not an import statement type.
 		"""
@@ -125,7 +107,7 @@ class LedgerOfImports:
 				for alias in astImport____.names:
 					self._listImport.append(alias.name)
 			case ast.ImportFrom():
-				# TODO fix the mess created by `None` means '.'. I need a `str_nameDOTname` to replace '.', 
+				# TODO fix the mess created by `None` means '.'. I need a `str_nameDOTname` to replace '.',
 				# of course this involves the same package/module context problem as above.
 				if astImport____.module is None:
 					astImport____.module = '.'
@@ -139,9 +121,9 @@ class LedgerOfImports:
 	def addImport_asStr(self, dotModule: identifierDotAttribute, type_ignores: list[ast.TypeIgnore] | None = None) -> None:
 		"""
 		Record a dependency on a module that should be imported directly.
-		
+
 		This records that your generated code needs an `import module` statement.
-		For example, calling `addImport_asStr("ast")` records that the final code 
+		For example, calling `addImport_asStr("ast")` records that the final code
 		should include `import ast`.
 
 		Parameters:
@@ -155,9 +137,9 @@ class LedgerOfImports:
 	def addImportFrom_asStr(self, dotModule: identifierDotAttribute, name: str, asName: str | None = None, type_ignores: list[ast.TypeIgnore] | None = None) -> None:
 		"""
 		Record a dependency on a specific item from a module.
-		
+
 		This records that your generated code needs a `from module import name` statement.
-		For example, calling `addImportFrom_asStr("collections", "defaultdict")` records 
+		For example, calling `addImportFrom_asStr("collections", "defaultdict")` records
 		that the final code should include `from collections import defaultdict`.
 
 		Parameters:
@@ -173,8 +155,8 @@ class LedgerOfImports:
 	def exportListModuleIdentifiers(self) -> list[identifierDotAttribute]:
 		"""
 		Get a list of all module names that have recorded dependencies.
-		
-		Returns all module names that have been recorded for import, whether through 
+
+		Returns all module names that have been recorded for import, whether through
 		direct imports (`import module`) or from-imports (`from module import name`).
 		This is useful for tools like autoflake that need to know which modules
 		should be preserved during import optimization.
@@ -190,16 +172,16 @@ class LedgerOfImports:
 	def makeList_ast(self) -> list[ast.ImportFrom | ast.Import]:
 		"""
 		Generate the actual import statement nodes for the final Python module.
-		
-		This converts all recorded import dependencies into the AST nodes that represent 
-		import statements in Python code. The generated statements will appear at the top 
-		of your final Python file when the module is written. Import statements are 
+
+		This converts all recorded import dependencies into the AST nodes that represent
+		import statements in Python code. The generated statements will appear at the top
+		of your final Python file when the module is written. Import statements are
 		automatically sorted and deduplicated.
 
 		Returns:
 			listImportFrom:
 			List of AST nodes representing import statements, ready to be placed in a Python module.
-			These nodes can be converted to Python source code like "import ast" and 
+			These nodes can be converted to Python source code like "import ast" and
 			"from collections import defaultdict".
 		"""
 		listImportFrom: list[ast.ImportFrom] = []
@@ -215,9 +197,9 @@ class LedgerOfImports:
 	def removeImportFromModule(self, dotModule: identifierDotAttribute) -> None:
 		"""
 		Remove all recorded dependencies on a specific module.
-		
-		This removes all import dependency records for the specified module, whether from 
-		direct imports or from-imports. After calling this method, no import statements 
+
+		This removes all import dependency records for the specified module, whether from
+		direct imports or from-imports. After calling this method, no import statements
 		related to this module will be generated in the final code.
 
 		Parameters:
@@ -227,9 +209,9 @@ class LedgerOfImports:
 	def removeImportFrom(self, dotModule: identifierDotAttribute, name: str | None, asName: str | None = None) -> None:
 		"""
 		Remove specific import dependency records from a module.
-		
-		This provides fine-grained control over which import dependencies to remove. 
-		You can remove all dependencies from a module, specific items, or items with 
+
+		This provides fine-grained control over which import dependencies to remove.
+		You can remove all dependencies from a module, specific items, or items with
 		specific aliases.
 
 		Parameters:
@@ -239,7 +221,7 @@ class LedgerOfImports:
 
 		Removal behavior:
 		- name=None, asName=None: Remove all dependency records for the module
-		- name="item", asName=None: Remove records for importing "item" without an alias  
+		- name="item", asName=None: Remove records for importing "item" without an alias
 		- name="item", asName="alias": Remove records for importing "item as alias"
 		- name=None, asName="alias": Remove any record that uses "alias" as the imported name
 		"""
@@ -260,9 +242,9 @@ class LedgerOfImports:
 	def update(self, *fromLedger: 'LedgerOfImports') -> None:
 		"""
 		Merge import dependencies from other Ledgers into this one.
-		
-		This combines import dependency records from multiple sources, which is useful when 
-		assembling code from different modules or functions. Duplicate dependencies are 
+
+		This combines import dependency records from multiple sources, which is useful when
+		assembling code from different modules or functions. Duplicate dependencies are
 		automatically handled - the same import will only be recorded once.
 
 		Parameters:
@@ -277,9 +259,9 @@ class LedgerOfImports:
 	def walkThis(self, walkThis: ast.AST, type_ignores: list[ast.TypeIgnore] | None = None) -> None:
 		"""
 		Automatically discover and record import dependencies from existing code.
-		
-		This method analyzes parsed Python code (AST nodes) and automatically records 
-		any import statements it finds. This is the easiest way to capture import 
+
+		This method analyzes parsed Python code (AST nodes) and automatically records
+		any import statements it finds. This is the easiest way to capture import
 		dependencies when working with existing code that you want to transform or extract.
 
 		Parameters:
@@ -329,7 +311,7 @@ class IngredientsFunction:
 	imports: LedgerOfImports = dataclasses.field(default_factory=LedgerOfImports)
 	type_ignores: list[ast.TypeIgnore] = dataclasses.field(default_factory=lambda: list[ast.TypeIgnore]())
 
-# I am ambivalent about `IngredientsModule`. I've created some useful methods, but I feel like there is a better paradigm. For 
+# I am ambivalent about `IngredientsModule`. I've created some useful methods, but I feel like there is a better paradigm. For
 # example, I dislike OOP so much that I was completely blind to the need to treat `ast.ClassDef` the same as `ast.FunctionDef`.
 # I could retrofit ClassDef, but I think it would better for me to find a better paradigm for managing various "lego blocks" of abstracted Python code.
 @dataclasses.dataclass
@@ -337,18 +319,18 @@ class IngredientsModule:
 	"""
 	Build complete Python modules programmatically from organized components.
 
-	When you need to generate Python code automatically - whether extracting functions from 
-	existing modules, combining code from multiple sources, or building entirely new modules - 
+	When you need to generate Python code automatically - whether extracting functions from
+	existing modules, combining code from multiple sources, or building entirely new modules -
 	IngredientsModule provides the organizational structure to assemble all the pieces correctly.
 
 	Think of this as a blueprint for a Python file that lets you systematically organize:
 	- Import statements from all your code components
-	- Setup code that runs when the module is loaded  
+	- Setup code that runs when the module is loaded
 	- Function definitions with their dependencies properly tracked
-	- Cleanup or configuration code 
+	- Cleanup or configuration code
 	- Script entry point code for when the module is executed directly
 
-	The class maintains the logical structure of a Python module while allowing you to 
+	The class maintains the logical structure of a Python module while allowing you to
 	modify, transform, and reorganize the components before generating the final code.
 	This is especially useful for:
 
@@ -357,11 +339,11 @@ class IngredientsModule:
 	- Refactoring tools that reorganize existing codebases
 	- Research workflows that programmatically modify and test code variants
 
-	When you're ready, the organized components can be converted into executable Python 
-	source code and written to files. The generated modules will have clean import 
+	When you're ready, the organized components can be converted into executable Python
+	source code and written to files. The generated modules will have clean import
 	statements, proper organization, and all necessary dependencies.
 	Parameters:
-		ingredientsFunction: Optional function(s) to include in the module. Can be a single 
+		ingredientsFunction: Optional function(s) to include in the module. Can be a single
 			IngredientsFunction or a sequence of them. They will be added to listIngredientsFunctions.
 	"""
 	ingredientsFunction: dataclasses.InitVar[Sequence[IngredientsFunction] | IngredientsFunction | None] = None
@@ -377,52 +359,52 @@ class IngredientsModule:
 	imports: LedgerOfImports = dataclasses.field(default_factory=LedgerOfImports)
 	"""
 	Manages import dependencies for the entire module.
-	
-	This tracks all the import statements (like 'import ast' or 'from collections import defaultdict') 
-	that the generated module will need. The ledger automatically consolidates imports from all 
+
+	This tracks all the import statements (like 'import ast' or 'from collections import defaultdict')
+	that the generated module will need. The ledger automatically consolidates imports from all
 	functions and components, eliminating duplicates and organizing them properly.
-	
+
 	Modify this using LedgerOfImports methods like addImport_asStr() and addImportFrom_asStr().
 	"""
 	prologue: ast.Module = Make.Module([])
 	"""
 	Code that runs immediately when the module is imported.
-	
-	This contains statements that execute right after the import statements, before any 
-	function definitions. Use this for module-level setup, configuration, or initialization 
-	code. Warning: This code runs whenever someone imports your module, not just when 
+
+	This contains statements that execute right after the import statements, before any
+	function definitions. Use this for module-level setup, configuration, or initialization
+	code. Warning: This code runs whenever someone imports your module, not just when
 	they run it as a script.
-	
+
 	Add statements using appendPrologue().
 	"""
 	listIngredientsFunctions: list[IngredientsFunction] = dataclasses.field(default_factory=lambda: list[IngredientsFunction]())
 	"""
 	The function definitions that form the core of this module.
-	
-	Each IngredientsFunction contains a function definition along with its import dependencies 
-	and other metadata. These functions will appear in the middle section of the generated 
+
+	Each IngredientsFunction contains a function definition along with its import dependencies
+	and other metadata. These functions will appear in the middle section of the generated
 	module, after prologue code and before epilogue code.
-	
+
 	Add functions using appendIngredientsFunction().
 	"""
 	epilogue: ast.Module = Make.Module([])
 	"""
 	Code that runs after all function definitions are loaded.
-	
-	This contains statements that execute after the function definitions but before any 
-	script entry point code. Use this for module-level configuration that depends on 
+
+	This contains statements that execute after the function definitions but before any
+	script entry point code. Use this for module-level configuration that depends on
 	the functions being defined, or for setting up module-level variables.
-	
+
 	Add statements using appendEpilogue().
 	"""
 	launcher: ast.Module = Make.Module([])
 	"""
 	Script entry point code that runs when the module is executed directly.
-	
-	This should contain the main logic for when someone runs your module as a script 
-	(e.g., 'python mymodule.py'). The code here will be automatically wrapped in 
+
+	This should contain the main logic for when someone runs your module as a script
+	(e.g., 'python mymodule.py'). The code here will be automatically wrapped in
 	'if __name__ == "__main__":' when the module is generated.
-	
+
 	Add statements using appendLauncher().
 	"""
 
@@ -460,11 +442,11 @@ class IngredientsModule:
 	def appendPrologue(self, astModule: ast.Module | None = None, statement: Sequence[ast.stmt] | ast.stmt | None = None, type_ignores: list[ast.TypeIgnore] | None = None) -> None:
 		"""
 		Add setup code that runs when the module is imported.
-		
+
 		Use this to add statements that should execute immediately after the import statements,
 		before any function definitions. This is useful for module-level initialization,
 		configuration setup, or global variable definitions that your functions will need.
-		
+
 		Warning: Code added here runs every time someone imports your module, not just when
 		they run it as a script. For script-only code, use appendLauncher() instead.
 
@@ -478,7 +460,7 @@ class IngredientsModule:
 	def appendEpilogue(self, astModule: ast.Module | None = None, statement: Sequence[ast.stmt] | ast.stmt | None = None, type_ignores: list[ast.TypeIgnore] | None = None) -> None:
 		"""
 		Add cleanup code that runs after all functions are defined.
-		
+
 		Use this to add statements that should execute after all function definitions have
 		been processed, but before any script entry point code. This is useful for
 		module-level configuration that depends on the functions being available, or for
@@ -494,7 +476,7 @@ class IngredientsModule:
 	def appendLauncher(self, astModule: ast.Module | None = None, statement: Sequence[ast.stmt] | ast.stmt | None = None, type_ignores: list[ast.TypeIgnore] | None = None) -> None:
 		"""
 		Add script entry point code that runs only when the module is executed directly.
-		
+
 		Use this to add the main logic for when someone runs your generated module as a script
 		(e.g., 'python mymodule.py'). The code you add here will be automatically wrapped in
 		'if __name__ == "__main__":' in the final generated module, so it only runs when the
@@ -510,16 +492,16 @@ class IngredientsModule:
 	def appendIngredientsFunction(self, *ingredientsFunction: IngredientsFunction) -> None:
 		"""
 		Add function definitions to this module.
-		
-		Each IngredientsFunction contains a complete function definition along with its 
-		import dependencies and metadata. The functions will be placed in the generated 
+
+		Each IngredientsFunction contains a complete function definition along with its
+		import dependencies and metadata. The functions will be placed in the generated
 		module after any prologue code and before any epilogue code.
-		
+
 		When multiple functions are added, they maintain the order in which they were added.
 		Import dependencies from all functions are automatically consolidated at the module level.
 
 		Parameters:
-			*ingredientsFunction: One or more IngredientsFunction objects containing the 
+			*ingredientsFunction: One or more IngredientsFunction objects containing the
 				function definitions to add to this module.
 		"""
 		for allegedIngredientsFunction in ingredientsFunction:
@@ -528,7 +510,7 @@ class IngredientsModule:
 	def removeImportFromModule(self, dotModule: identifierDotAttribute) -> None:
 		"""
 		Remove all import dependencies for a specific module across this entire module.
-		
+
 		This removes all recorded import dependencies for the specified module from both
 		the module-level imports and from all individual functions. Use this when you know
 		a particular module is no longer needed anywhere in the generated code.
@@ -541,13 +523,13 @@ class IngredientsModule:
 	def removeImportFrom(self, dotModule: identifierDotAttribute, name: str | None, asName: str | None = None) -> None:
 		"""
 		Remove specific import dependencies across this module and all its functions.
-		
+
 		This method provides fine-grained control over which import dependencies to remove
-		from both the module-level imports and all individual function imports. This ensures 
-		consistent import management across the entire generated module. You can remove all 
+		from both the module-level imports and all individual function imports. This ensures
+		consistent import management across the entire generated module. You can remove all
 		dependencies from a module, specific items, or items with specific aliases.
-		
-		Note: This removal is not permanent - import dependencies can be added again later 
+
+		Note: This removal is not permanent - import dependencies can be added again later
 		if needed.
 
 		Parameters:
@@ -557,8 +539,8 @@ class IngredientsModule:
 
 		Removal behavior:
 		- name=None, asName=None: Remove all dependency records for the module
-		- name="item", asName=None: Remove records for importing "item" without an alias  
-		- name="item", asName="alias": Remove records for importing "item as alias"		
+		- name="item", asName=None: Remove records for importing "item" without an alias
+		- name="item", asName="alias": Remove records for importing "item as alias"
 		- name=None, asName="alias": Remove any record that uses "alias" as the imported name
 		"""
 		self.imports.removeImportFrom(dotModule, name, asName)
@@ -585,14 +567,14 @@ class IngredientsModule:
 	def body(self) -> list[ast.stmt]:
 		"""
 		Get the complete sequence of statements that will form the generated Python module.
-		
+
 		This property assembles all the components of your module in the correct order:
 		1. Import statements (consolidated from all functions and module-level imports)
 		2. Prologue code (module-level setup that runs on import)
 		3. Function definitions (all the functions you've added)
 		4. Epilogue code (module-level code that runs after functions are defined)
 		5. Launcher code (script entry point, automatically wrapped in if __name__ == "__main__")
-		
+
 		The returned list represents the complete body of statements for an executable Python module.
 		This is typically used internally when converting the IngredientsModule to actual Python source code.
 
@@ -613,11 +595,11 @@ class IngredientsModule:
 	def type_ignores(self) -> list[ast.TypeIgnore]:
 		"""
 		Get all type ignore directives that should be included in the generated module.
-		
-		This consolidates type ignore directives from all components (module-level, individual 
-		functions, prologue, epilogue, and launcher code) into a single list. Type ignores are 
+
+		This consolidates type ignore directives from all components (module-level, individual
+		functions, prologue, epilogue, and launcher code) into a single list. Type ignores are
 		used to suppress specific type checking warnings in the generated code.
-		
+
 		This is typically used internally when creating the final Python module structure.
 
 		Returns:

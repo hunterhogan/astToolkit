@@ -1,12 +1,11 @@
 """This file is generated automatically, so changes to this file will be lost."""
 from types import EllipsisType
-from typing import Any, TypeAlias as typing_TypeAlias, TypeVar as typing_TypeVar, TypedDict
+from typing import TypeAlias as typing_TypeAlias, TypedDict, TypeVar as typing_TypeVar
 import ast
 import sys
-intORstr: typing_TypeAlias = Any
-intORstrORtype_params: typing_TypeAlias = Any
-intORtype_params: typing_TypeAlias = Any
+
 ConstantValueType: typing_TypeAlias = bool | bytes | complex | EllipsisType | float | int | None | range | str
+identifierDotAttribute: typing_TypeAlias = str
 木 = typing_TypeVar('木', bound=ast.AST, covariant=True)
 个 = typing_TypeVar('个', covariant=True)
 个return = typing_TypeVar('个return', covariant=True)
