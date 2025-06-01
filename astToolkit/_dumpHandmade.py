@@ -1,37 +1,21 @@
-from ast import AST, Constant, MatchSingleton
+from ast import AST
+from astToolkit import ConstantValueType
 
-def dump(
-    node, annotate_fields=True, include_attributes=False,
-    *,
-    indent=None, show_empty=False,
-):
-    """
-    Return a formatted dump of the tree in node.  This is mainly useful for
-    debugging purposes.  If annotate_fields is true (by default),
-    the returned string will show the names and the values for fields.
-    If annotate_fields is false, the result string will be more compact by
-    omitting unambiguous field names.  Attributes such as line
-    numbers and column offsets are not dumped by default.  If this is wanted,
-    include_attributes can be set to true.  If indent is a non-negative
-    integer or string, then the tree will be pretty-printed with that indent
-    level. None (the default) selects the single line representation.
-    If show_empty is False, then empty lists and fields that are None
-    will be omitted from the output for better readability.
-    """
-    def _format(node, level=0):
+def dump(node: AST, annotate_fields: bool = True, include_attributes: bool = False, *, indent: int | str | None = None, show_empty: bool = False) -> str:
+    def _format(node: ConstantValueType | AST | list[AST] | list[str], level: int = 0) -> tuple[str, bool]:
         if indent_str is not None:
             level += 1
-            prefix = '\n' + indent_str * level
-            sep = ',\n' + indent_str * level
+            prefix: str = '\n' + indent_str * level
+            sep: str = ',\n' + indent_str * level
         else:
             prefix = ''
             sep = ', '
         if isinstance(node, AST):
-            cls = type(node)
-            args = []
-            args_buffer = []
-            allsimple = True
-            keywords = annotate_fields
+            cls: type[AST] = type(node)
+            args: list[str] = []
+            args_buffer: list[str] = []
+            allsimple: bool = True
+            keywords: bool = annotate_fields
             for name in node._fields:
                 try:
                     value = getattr(node, name)
@@ -43,18 +27,16 @@ def dump(
                         args.append('%s=%s' % (name, value))
                     keywords = True
                     continue
-                elif (
-                    not show_empty
-                    and (value is None or value == [])
-                    # Special cases:
-                    # `Constant(value=None)` and `MatchSingleton(value=None)`
-                    and not isinstance(node, (Constant, MatchSingleton))
-                ):
-                    args_buffer.append(repr(value))
-                    continue
-                elif not keywords:
-                    args.extend(args_buffer)
-                    args_buffer = []
+                if not show_empty:
+                    if value == []:
+                        field_type = cls._field_types.get(name, object)
+                        if getattr(field_type, '__origin__', ...) is list:
+                            if not keywords:
+                                args_buffer.append(repr(value))
+                            continue
+                    if not keywords:
+                        args.extend(args_buffer)
+                        args_buffer = []
                 value_formatted, simple = _format(value, level)
                 allsimple = allsimple and simple
                 if keywords:
@@ -78,7 +60,7 @@ def dump(
         elif isinstance(node, list):
             if not node:
                 return ('[]', True)
-            return '[%s%s]' % (prefix, sep.join(_format(x, level)[0] for x in node)), False
+            return ('[%s%s]' % (prefix, sep.join(_format(x, level)[0] for x in node)), False)
         return (repr(node), True)
 
     if not isinstance(node, AST):

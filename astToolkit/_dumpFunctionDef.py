@@ -38,12 +38,16 @@ def dump(node, annotate_fields=True, include_attributes=False, *, indent=None, s
                 if value is None and getattr(cls, name, ...) is None:
                     keywords = True
                     continue
-                if not show_empty and (value is None or value == []) and (not isinstance(node, (Constant, MatchSingleton))):
-                    args_buffer.append(repr(value))
-                    continue
-                elif not keywords:
-                    args.extend(args_buffer)
-                    args_buffer = []
+                if not show_empty:
+                    if value == []:
+                        field_type = cls._field_types.get(name, object)
+                        if getattr(field_type, '__origin__', ...) is list:
+                            if not keywords:
+                                args_buffer.append(repr(value))
+                            continue
+                    if not keywords:
+                        args.extend(args_buffer)
+                        args_buffer = []
                 value, simple = _format(value, level)
                 allsimple = allsimple and simple
                 if keywords:
