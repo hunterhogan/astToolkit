@@ -907,16 +907,17 @@ class Make:
         Handles single expressions and empty sequences gracefully.
         """
             return Make._boolopJoinMethod(cls, expressions, **keywordArguments)
-    if sys.version_info >= (3, 13):
+    match sys.version_info:
+        case version if version >= (3, 13):
 
-        @staticmethod
-        def ParamSpec(name: str, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.ParamSpec:
-            return ast.ParamSpec(name=name, default_value=default_value, **keywordArguments)
-    else:
+            @staticmethod
+            def ParamSpec(name: str, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.ParamSpec: # pyright: ignore[reportRedeclaration]
+                return ast.ParamSpec(name=name, default_value=default_value, **keywordArguments)
+        case _:
 
-        @staticmethod
-        def ParamSpec(name: str, **keywordArguments: Unpack[ast_attributes_int]) -> ast.ParamSpec:
-            return ast.ParamSpec(name=name, **keywordArguments)
+            @staticmethod
+            def ParamSpec(name: str, **keywordArguments: Unpack[ast_attributes_int]) -> ast.ParamSpec:
+                return ast.ParamSpec(name=name, **keywordArguments)
 
     @staticmethod
     def Pass(**keywordArguments: Unpack[ast_attributes]) -> ast.Pass:
@@ -1131,26 +1132,28 @@ class Make:
     @staticmethod
     def TypeIgnore(lineno: int, tag: str) -> ast.TypeIgnore:
         return ast.TypeIgnore(lineno=lineno, tag=tag)
-    if sys.version_info >= (3, 13):
+    match sys.version_info:
+        case version if version >= (3, 13):
 
-        @staticmethod
-        def TypeVar(name: str, bound: ast.expr | None=None, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVar:
-            return ast.TypeVar(name=name, bound=bound, default_value=default_value, **keywordArguments)
-    else:
+            @staticmethod
+            def TypeVar(name: str, bound: ast.expr | None=None, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVar: # pyright: ignore[reportRedeclaration]
+                return ast.TypeVar(name=name, bound=bound, default_value=default_value, **keywordArguments)
+        case _:
 
-        @staticmethod
-        def TypeVar(name: str, bound: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVar:
-            return ast.TypeVar(name=name, bound=bound, **keywordArguments)
-    if sys.version_info >= (3, 13):
+            @staticmethod
+            def TypeVar(name: str, bound: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVar:
+                return ast.TypeVar(name=name, bound=bound, **keywordArguments)
+    match sys.version_info:
+        case version if version >= (3, 13):
 
-        @staticmethod
-        def TypeVarTuple(name: str, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVarTuple:
-            return ast.TypeVarTuple(name=name, default_value=default_value, **keywordArguments)
-    else:
+            @staticmethod
+            def TypeVarTuple(name: str, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVarTuple: # pyright: ignore[reportRedeclaration]
+                return ast.TypeVarTuple(name=name, default_value=default_value, **keywordArguments)
+        case _:
 
-        @staticmethod
-        def TypeVarTuple(name: str, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVarTuple:
-            return ast.TypeVarTuple(name=name, **keywordArguments)
+            @staticmethod
+            def TypeVarTuple(name: str, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVarTuple:
+                return ast.TypeVarTuple(name=name, **keywordArguments)
 
     @staticmethod
     def UAdd() -> ast.UAdd:
