@@ -1,3 +1,4 @@
+# pyright: reportMatchNotExhaustive=false
 """This file is generated automatically, so changes to this file will be lost."""
 from astToolkit import (
 	ConstantValueType, hasDOTannotation, hasDOTarg, hasDOTargs, hasDOTargtypes, hasDOTasname,
@@ -173,15 +174,16 @@ class Grab:
             node.decorator_list = action(node.decorator_list) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
             return node
         return workhorse
-    if sys.version_info >= (3, 13):
+    match sys.version_info:
+        case version if version >= (3, 13):
 
-        @staticmethod
-        def default_valueAttribute(action: Callable[[ast.expr], ast.expr]) -> Callable[[hasDOTdefault_value], hasDOTdefault_value]:
+            @staticmethod
+            def default_valueAttribute(action: Callable[[ast.expr], ast.expr]) -> Callable[[hasDOTdefault_value], hasDOTdefault_value]:
 
-            def workhorse(node: hasDOTdefault_value) -> hasDOTdefault_value:
-                node.default_value = action(node.default_value) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
-                return node
-            return workhorse
+                def workhorse(node: hasDOTdefault_value) -> hasDOTdefault_value:
+                    node.default_value = action(node.default_value) # pyright: ignore[reportArgumentType, reportAttributeAccessIssue]
+                    return node
+                return workhorse
 
     @staticmethod
     def defaultsAttribute(action: Callable[[Sequence[ast.expr]], Sequence[ast.expr]]) -> Callable[[hasDOTdefaults], hasDOTdefaults]:

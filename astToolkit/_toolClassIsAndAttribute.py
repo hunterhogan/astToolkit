@@ -635,17 +635,17 @@ class ClassIsAndAttribute:
 
     @staticmethod
     @overload
+    def targetIs(astClass: type[hasDOTtarget_expr], attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTtarget_expr] | bool]:
+        ...
+
+    @staticmethod
+    @overload
     def targetIs(astClass: type[hasDOTtarget_Name], attributeCondition: Callable[[ast.Name], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTtarget_Name] | bool]:
         ...
 
     @staticmethod
     @overload
     def targetIs(astClass: type[hasDOTtarget_NameOrAttributeOrSubscript], attributeCondition: Callable[[ast.Name | ast.Attribute | ast.Subscript], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTtarget_NameOrAttributeOrSubscript] | bool]:
-        ...
-
-    @staticmethod
-    @overload
-    def targetIs(astClass: type[hasDOTtarget_expr], attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTtarget_expr] | bool]:
         ...
 
     @staticmethod
@@ -706,12 +706,12 @@ class ClassIsAndAttribute:
 
     @staticmethod
     @overload
-    def valueIs(astClass: type[hasDOTvalue_ConstantValueType], attributeCondition: Callable[[ConstantValueType], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTvalue_ConstantValueType] | bool]:
+    def valueIs(astClass: type[hasDOTvalue_boolOrNone], attributeCondition: Callable[[bool], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTvalue_boolOrNone] | bool]:
         ...
 
     @staticmethod
     @overload
-    def valueIs(astClass: type[hasDOTvalue_boolOrNone], attributeCondition: Callable[[bool], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTvalue_boolOrNone] | bool]:
+    def valueIs(astClass: type[hasDOTvalue_ConstantValueType], attributeCondition: Callable[[ConstantValueType], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTvalue_ConstantValueType] | bool]:
         ...
 
     @staticmethod
