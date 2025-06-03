@@ -1,4 +1,5 @@
 # pyright: reportReturnType=false
+# pyright: reportMatchNotExhaustive=false
 """This file is generated automatically, so changes to this file will be lost."""
 from astToolkit import (
 	ConstantValueType, hasDOTannotation, hasDOTannotation_expr, hasDOTannotation_exprOrNone, hasDOTarg,
@@ -152,11 +153,12 @@ class DOT:
     @staticmethod
     def decorator_list(node: hasDOTdecorator_list) -> Sequence[ast.expr]:
         return node.decorator_list
-    if sys.version_info >= (3, 13):
+    match sys.version_info:
+        case version if version >= (3, 13):
 
-        @staticmethod
-        def default_value(node: hasDOTdefault_value) -> ast.expr:
-            return node.default_value
+            @staticmethod
+            def default_value(node: hasDOTdefault_value) -> ast.expr:
+                return node.default_value
 
     @staticmethod
     def defaults(node: hasDOTdefaults) -> Sequence[ast.expr]:

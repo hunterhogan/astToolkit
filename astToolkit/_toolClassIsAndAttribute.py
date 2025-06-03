@@ -1,3 +1,4 @@
+# pyright: reportMatchNotExhaustive=false
 # pyright: reportArgumentType=false
 """This file is generated automatically, so changes to this file will be lost."""
 from astToolkit import (
@@ -206,14 +207,15 @@ class ClassIsAndAttribute:
         def workhorse(node: ast.AST) -> TypeGuard[hasDOTdecorator_list] | bool:
             return isinstance(node, astClass) and attributeCondition(node.decorator_list)
         return workhorse
-    if sys.version_info >= (3, 13):
+    match sys.version_info:
+        case version if version >= (3, 13):
 
-        @staticmethod
-        def default_valueIs(astClass: type[hasDOTdefault_value], attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTdefault_value] | bool]:
+            @staticmethod
+            def default_valueIs(astClass: type[hasDOTdefault_value], attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTdefault_value] | bool]:
 
-            def workhorse(node: ast.AST) -> TypeGuard[hasDOTdefault_value] | bool:
-                return isinstance(node, astClass) and node.default_value is not None and attributeCondition(node.default_value)
-            return workhorse
+                def workhorse(node: ast.AST) -> TypeGuard[hasDOTdefault_value] | bool:
+                    return isinstance(node, astClass) and node.default_value is not None and attributeCondition(node.default_value)
+                return workhorse
 
     @staticmethod
     def defaultsIs(astClass: type[hasDOTdefaults], attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeGuard[hasDOTdefaults] | bool]:
