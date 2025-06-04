@@ -1,6 +1,7 @@
 from astToolkit import Be, DOT
 from collections.abc import Callable
-from typing import Any, cast, TypeIs
+from typing import Any, cast
+from typing_extensions import TypeIs
 import ast
 
 class IfThis:

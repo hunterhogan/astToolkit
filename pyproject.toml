@@ -50,7 +50,7 @@ dependencies = [
   "autoflake",
   "python_minifier",
   "tomli",
-  "typing-extensions",
+  "typing-extensions>=4.10.0",
 ]
 optional-dependencies = { testing = [
   "mypy",

@@ -1,9 +1,10 @@
 """This file is generated automatically, so changes to this file will be lost."""
-from typing import TypeIs
+from typing_extensions import TypeIs
 import ast
 
 class Be:
     """Type guard functions for safe AST node identification and type narrowing.
+    (AI generated docstring)
 
     Provides static methods that perform runtime type checking for all AST node types
     while enabling compile-time type narrowing through `TypeIs` annotations. Forms

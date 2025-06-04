@@ -25,7 +25,8 @@ from astToolkit import (
 	hasDOTvararg,
 )
 from collections.abc import Callable, Sequence
-from typing import overload, TypeIs
+from typing import overload
+from typing_extensions import TypeIs
 import ast
 import sys
 
