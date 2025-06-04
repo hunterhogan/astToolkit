@@ -16,7 +16,7 @@ Don't use it for simple text-based code manipulation—use regex or string opera
 astToolkit implements a layered architecture designed for composability and type safety:
 
 1. **Core "Atomic" Classes** - The foundation of the system:
-   - `Be`: Type guards that return `TypeGuard[ast.NodeType]` for safe type narrowing.
+   - `Be`: Type guards that return `TypeIs[ast.NodeType]` for safe type narrowing.
    - `DOT`: Read-only accessors that retrieve node attributes with proper typing.
    - `Grab`: Transformation functions that modify specific attributes while preserving node structure.
    - `Make`: Factory methods that create properly configured AST nodes with consistent interfaces.
@@ -149,7 +149,7 @@ class IfThis(astToolkit_IfThis):
   def isAttributeNamespaceIdentifierGreaterThan0(
       namespace: str,
       identifier: str
-      ) -> Callable[[ast.AST], TypeGuard[ast.Compare] | bool]:
+      ) -> Callable[[ast.AST], TypeIs[ast.Compare] | bool]:
 
     return lambda node: (
         Be.Compare(node)
@@ -161,7 +161,7 @@ class IfThis(astToolkit_IfThis):
   def isWhileAttributeNamespaceIdentifierGreaterThan0(
       namespace: str,
       identifier: str
-      ) -> Callable[[ast.AST], TypeGuard[ast.While] | bool]:
+      ) -> Callable[[ast.AST], TypeIs[ast.While] | bool]:
 
     return lambda node: (
         Be.While(node)
@@ -249,7 +249,7 @@ To create specialized patterns for your codebase, extend the core classes:
 ```python
 from astToolkit import str, Be, IfThis as astToolkit_IfThis
 from collections.abc import Callable
-from typing import TypeGuard
+from typing import TypeIs
 import ast
 
 class IfThis(astToolkit_IfThis):
@@ -257,7 +257,7 @@ class IfThis(astToolkit_IfThis):
     def isAttributeNamespaceIdentifierGreaterThan0(
         namespace: str,
         identifier: str
-    ) -> Callable[[ast.AST], TypeGuard[ast.Compare] | bool]:
+    ) -> Callable[[ast.AST], TypeIs[ast.Compare] | bool]:
         """Find comparisons like 'state.counter > 0'"""
         return lambda node: (
             Be.Compare(node)
@@ -270,7 +270,7 @@ class IfThis(astToolkit_IfThis):
     def isWhileAttributeNamespaceIdentifierGreaterThan0(
         namespace: str,
         identifier: str
-    ) -> Callable[[ast.AST], TypeGuard[ast.While] | bool]:
+    ) -> Callable[[ast.AST], TypeIs[ast.While] | bool]:
         """Find while loops like 'while state.counter > 0:'"""
         return lambda node: (
             Be.While(node)

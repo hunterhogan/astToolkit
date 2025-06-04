@@ -1,3 +1,4 @@
+# pyright: reportMatchNotExhaustive=false
 """This file is generated automatically, so changes to this file will be lost."""
 from types import EllipsisType
 from typing import TypeAlias as typing_TypeAlias, TypedDict, TypeVar as typing_TypeVar

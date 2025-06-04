@@ -29,7 +29,7 @@ code.
 """
 from astToolkit import 个return, 木
 from collections.abc import Callable
-from typing import Any, cast, Generic, TypeGuard
+from typing import Any, cast, Generic, TypeIs
 import ast
 
 # TODO Identify the logic that narrows the type and can help the user during static type checking.
@@ -49,8 +49,8 @@ class NodeTourist(ast.NodeVisitor, Generic[木, 个return]):
 	safety when working with specific AST node types and return values.
 
 	Parameters:
-		findThis: Predicate function that tests AST nodes. Can return either a `TypeGuard` for type narrowing or a
-		simple boolean. When using `TypeGuard`, the type checker can safely narrow the node type for the action
+		findThis: Predicate function that tests AST nodes. Can return either a `TypeIs` for type narrowing or a
+		simple boolean. When using `TypeIs`, the type checker can safely narrow the node type for the action
 		function.
 		doThat: Action function that operates on nodes matching the predicate. Receives the matched node with
 		properly narrowed typing and returns the extracted information.
@@ -70,7 +70,7 @@ class NodeTourist(ast.NodeVisitor, Generic[木, 个return]):
 		foundFunction = specificFunction.captureLastMatch(astModule)
 		```
 	"""
-	def __init__(self, findThis: Callable[[ast.AST], TypeGuard[木] | bool], doThat: Callable[[木], 个return]) -> None:
+	def __init__(self, findThis: Callable[[ast.AST], TypeIs[木] | bool], doThat: Callable[[木], 个return]) -> None:
 		self.findThis = findThis
 		self.doThat = doThat
 		self.nodeCaptured: 个return | None = None
@@ -110,7 +110,7 @@ class NodeChanger(ast.NodeTransformer):
 	"""
 	Destructive AST transformer that selectively modifies nodes matching predicate conditions.
 	(AI generated docstring)
-	
+
 	`NodeChanger` implements the antecedent-action pattern for targeted AST transformation. It extends Python's
 	`ast.NodeTransformer` to provide precise control over which nodes are modified during tree traversal. The
 	transformer applies predicate functions to identify target nodes and executes action functions to perform
