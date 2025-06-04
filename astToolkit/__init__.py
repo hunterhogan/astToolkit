@@ -1,3 +1,5 @@
+import sys
+
 from astToolkit._astTypes import (
 	ast_attributes as ast_attributes, ast_attributes_int as ast_attributes_int,
 	ast_attributes_type_comment as ast_attributes_type_comment, ConstantValueType as ConstantValueType,
@@ -12,7 +14,7 @@ from astToolkit._astTypes import (
 	hasDOTcases as hasDOTcases, hasDOTcause as hasDOTcause, hasDOTcls as hasDOTcls,
 	hasDOTcomparators as hasDOTcomparators, hasDOTcontext_expr as hasDOTcontext_expr,
 	hasDOTconversion as hasDOTconversion, hasDOTctx as hasDOTctx,
-	hasDOTdecorator_list as hasDOTdecorator_list, hasDOTdefault_value as hasDOTdefault_value,
+	hasDOTdecorator_list as hasDOTdecorator_list,
 	hasDOTdefaults as hasDOTdefaults, hasDOTelt as hasDOTelt, hasDOTelts as hasDOTelts,
 	hasDOTexc as hasDOTexc, hasDOTfinalbody as hasDOTfinalbody, hasDOTformat_spec as hasDOTformat_spec,
 	hasDOTfunc as hasDOTfunc, hasDOTgenerators as hasDOTgenerators, hasDOTguard as hasDOTguard,
@@ -50,6 +52,8 @@ from astToolkit._astTypes import (
 	hasDOTvalues as hasDOTvalues, hasDOTvararg as hasDOTvararg,
 	identifierDotAttribute as identifierDotAttribute, 个 as 个, 个return as 个return, 木 as 木,
 )
+if sys.version_info >= (3, 13):
+	from astToolkit._astTypes import hasDOTdefault_value as hasDOTdefault_value
 
 # from astToolkit._dumpFunctionDef import dump as dump
 from astToolkit._dumpHandmade import dump as dump

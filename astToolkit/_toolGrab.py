@@ -4,19 +4,22 @@ from astToolkit import (
 	ConstantValueType, hasDOTannotation, hasDOTarg, hasDOTargs, hasDOTargtypes, hasDOTasname,
 	hasDOTattr, hasDOTbases, hasDOTbody, hasDOTbound, hasDOTcases, hasDOTcause, hasDOTcls,
 	hasDOTcomparators, hasDOTcontext_expr, hasDOTconversion, hasDOTctx, hasDOTdecorator_list,
-	hasDOTdefault_value, hasDOTdefaults, hasDOTelt, hasDOTelts, hasDOTexc, hasDOTfinalbody,
-	hasDOTformat_spec, hasDOTfunc, hasDOTgenerators, hasDOTguard, hasDOThandlers, hasDOTid, hasDOTifs,
-	hasDOTis_async, hasDOTitems, hasDOTiter, hasDOTkey, hasDOTkeys, hasDOTkeywords, hasDOTkind,
-	hasDOTkw_defaults, hasDOTkwarg, hasDOTkwd_attrs, hasDOTkwd_patterns, hasDOTkwonlyargs, hasDOTleft,
-	hasDOTlevel, hasDOTlineno, hasDOTlower, hasDOTmodule, hasDOTmsg, hasDOTname, hasDOTnames, hasDOTop,
-	hasDOToperand, hasDOTops, hasDOToptional_vars, hasDOTorelse, hasDOTpattern, hasDOTpatterns,
-	hasDOTposonlyargs, hasDOTrest, hasDOTreturns, hasDOTright, hasDOTsimple, hasDOTslice, hasDOTstep,
-	hasDOTsubject, hasDOTtag, hasDOTtarget, hasDOTtargets, hasDOTtest, hasDOTtype, hasDOTtype_comment,
-	hasDOTtype_ignores, hasDOTtype_params, hasDOTupper, hasDOTvalue, hasDOTvalues, hasDOTvararg, 个,
+	hasDOTdefaults, hasDOTelt, hasDOTelts, hasDOTexc, hasDOTfinalbody, hasDOTformat_spec, hasDOTfunc,
+	hasDOTgenerators, hasDOTguard, hasDOThandlers, hasDOTid, hasDOTifs, hasDOTis_async, hasDOTitems,
+	hasDOTiter, hasDOTkey, hasDOTkeys, hasDOTkeywords, hasDOTkind, hasDOTkw_defaults, hasDOTkwarg,
+	hasDOTkwd_attrs, hasDOTkwd_patterns, hasDOTkwonlyargs, hasDOTleft, hasDOTlevel, hasDOTlineno,
+	hasDOTlower, hasDOTmodule, hasDOTmsg, hasDOTname, hasDOTnames, hasDOTop, hasDOToperand, hasDOTops,
+	hasDOToptional_vars, hasDOTorelse, hasDOTpattern, hasDOTpatterns, hasDOTposonlyargs, hasDOTrest,
+	hasDOTreturns, hasDOTright, hasDOTsimple, hasDOTslice, hasDOTstep, hasDOTsubject, hasDOTtag,
+	hasDOTtarget, hasDOTtargets, hasDOTtest, hasDOTtype, hasDOTtype_comment, hasDOTtype_ignores,
+	hasDOTtype_params, hasDOTupper, hasDOTvalue, hasDOTvalues, hasDOTvararg, 个,
 )
 from collections.abc import Callable, Sequence
 import ast
 import sys
+
+if sys.version_info >= (3, 13):
+    from astToolkit import hasDOTdefault_value as hasDOTdefault_value
 
 class Grab:
     """
