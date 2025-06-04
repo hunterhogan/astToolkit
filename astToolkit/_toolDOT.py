@@ -434,17 +434,17 @@ class DOT:
 
     @staticmethod
     @overload
+    def target(node: hasDOTtarget_expr) -> ast.expr:
+        ...
+
+    @staticmethod
+    @overload
     def target(node: hasDOTtarget_Name) -> ast.Name:
         ...
 
     @staticmethod
     @overload
     def target(node: hasDOTtarget_NameOrAttributeOrSubscript) -> ast.Name | ast.Attribute | ast.Subscript:
-        ...
-
-    @staticmethod
-    @overload
-    def target(node: hasDOTtarget_expr) -> ast.expr:
         ...
 
     @staticmethod
@@ -481,12 +481,12 @@ class DOT:
 
     @staticmethod
     @overload
-    def value(node: hasDOTvalue_ConstantValueType) -> ConstantValueType:
+    def value(node: hasDOTvalue_boolOrNone) -> bool:
         ...
 
     @staticmethod
     @overload
-    def value(node: hasDOTvalue_boolOrNone) -> bool:
+    def value(node: hasDOTvalue_ConstantValueType) -> ConstantValueType:
         ...
 
     @staticmethod
