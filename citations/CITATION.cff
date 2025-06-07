@@ -1,17 +1,18 @@
-abstract: astToolkit provides a comprehensive set of utilities for manipulating, analyzing,
-  and transforming Python Abstract Syntax Trees. It offers type-safe operations, code
-  generation tools, and traversal utilities for working with Python AST nodes.
+abstract: astToolkit provides a comprehensive set of utilities for manipulating,
+  analyzing, and transforming Python Abstract Syntax Trees. It offers type-safe 
+  operations, code generation tools, and traversal utilities for working with 
+  Python AST nodes.
 authors:
 - given-names: Hunter
   family-names: Hogan
   email: HunterHogan@pm.me
 cff-version: 1.2.0
-commit: c652428ce026df5bff925e5823f8f3c454cb626c
-date-released: '2025-06-06'
+commit: c0b4996198b62be03bb14b59f9cd2000747fae6d
+date-released: '2025-06-07'
 identifiers:
 - type: url
-  value: https://github.com/hunterhogan/astToolkit/releases/tag/0.5.2
-  description: The URL for astToolkit 0.5.2.
+  value: https://github.com/hunterhogan/astToolkit/releases/tag/0.5.3
+  description: The URL for astToolkit 0.5.3.
 keywords:
 - abstract syntax tree
 - ast
@@ -36,9 +37,9 @@ keywords:
 license: CC-BY-NC-4.0
 message: Cite this software with the metadata in this file.
 repository: https://github.com/hunterhogan/astToolkit.git
-repository-artifact: https://pypi.org/project/asttoolkit/0.5.2/
-repository-code: https://github.com/hunterhogan/astToolkit/releases/tag/0.5.2
+repository-artifact: https://pypi.org/project/asttoolkit/0.5.3/
+repository-code: https://github.com/hunterhogan/astToolkit/releases/tag/0.5.3
 title: astToolkit
 type: software
 url: https://github.com/hunterhogan/astToolkit
-version: 0.5.2
+version: 0.5.3
