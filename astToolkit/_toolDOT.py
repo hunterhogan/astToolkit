@@ -1,4 +1,3 @@
-# pyright: reportReturnType=false
 # pyright: reportMatchNotExhaustive=false
 """This file is generated automatically, so changes to this file will be lost."""
 from astToolkit import (
@@ -51,11 +50,11 @@ class DOT:
 
     @staticmethod
     @overload
-    def annotation(node: hasDOTannotation_exprOrNone) -> ast.expr:
+    def annotation(node: hasDOTannotation_exprOrNone) -> ast.expr | None:
         ...
 
     @staticmethod
-    def annotation(node: hasDOTannotation) -> ast.expr:
+    def annotation(node: hasDOTannotation) -> ast.expr | (ast.expr | None):
         return node.annotation
 
     @staticmethod
@@ -65,11 +64,11 @@ class DOT:
 
     @staticmethod
     @overload
-    def arg(node: hasDOTarg_strOrNone) -> str:
+    def arg(node: hasDOTarg_strOrNone) -> str | None:
         ...
 
     @staticmethod
-    def arg(node: hasDOTarg) -> str:
+    def arg(node: hasDOTarg) -> str | (str | None):
         return node.arg
 
     @staticmethod
@@ -96,7 +95,7 @@ class DOT:
         return node.argtypes
 
     @staticmethod
-    def asname(node: hasDOTasname) -> str:
+    def asname(node: hasDOTasname) -> str | None:
         return node.asname
 
     @staticmethod
@@ -122,7 +121,7 @@ class DOT:
         return node.body
 
     @staticmethod
-    def bound(node: hasDOTbound) -> ast.expr:
+    def bound(node: hasDOTbound) -> ast.expr | None:
         return node.bound
 
     @staticmethod
@@ -130,7 +129,7 @@ class DOT:
         return node.cases
 
     @staticmethod
-    def cause(node: hasDOTcause) -> ast.expr:
+    def cause(node: hasDOTcause) -> ast.expr | None:
         return node.cause
 
     @staticmethod
@@ -160,7 +159,7 @@ class DOT:
         case version if version >= (3, 13):
 
             @staticmethod
-            def default_value(node: hasDOTdefault_value) -> ast.expr:
+            def default_value(node: hasDOTdefault_value) -> ast.expr | None:
                 return node.default_value
 
     @staticmethod
@@ -176,7 +175,7 @@ class DOT:
         return node.elts
 
     @staticmethod
-    def exc(node: hasDOTexc) -> ast.expr:
+    def exc(node: hasDOTexc) -> ast.expr | None:
         return node.exc
 
     @staticmethod
@@ -184,7 +183,7 @@ class DOT:
         return node.finalbody
 
     @staticmethod
-    def format_spec(node: hasDOTformat_spec) -> ast.expr:
+    def format_spec(node: hasDOTformat_spec) -> ast.expr | None:
         return node.format_spec
 
     @staticmethod
@@ -196,7 +195,7 @@ class DOT:
         return node.generators
 
     @staticmethod
-    def guard(node: hasDOTguard) -> ast.expr:
+    def guard(node: hasDOTguard) -> ast.expr | None:
         return node.guard
 
     @staticmethod
@@ -234,11 +233,11 @@ class DOT:
 
     @staticmethod
     @overload
-    def keys(node: hasDOTkeys_list_exprOrNone) -> Sequence[ast.expr]:
+    def keys(node: hasDOTkeys_list_exprOrNone) -> Sequence[ast.expr | None]:
         ...
 
     @staticmethod
-    def keys(node: hasDOTkeys) -> Sequence[ast.expr]:
+    def keys(node: hasDOTkeys) -> Sequence[ast.expr | None] | Sequence[ast.expr]:
         return node.keys
 
     @staticmethod
@@ -246,15 +245,15 @@ class DOT:
         return node.keywords
 
     @staticmethod
-    def kind(node: hasDOTkind) -> str:
+    def kind(node: hasDOTkind) -> str | None:
         return node.kind
 
     @staticmethod
-    def kw_defaults(node: hasDOTkw_defaults) -> Sequence[ast.expr]:
+    def kw_defaults(node: hasDOTkw_defaults) -> Sequence[ast.expr | None]:
         return node.kw_defaults
 
     @staticmethod
-    def kwarg(node: hasDOTkwarg) -> ast.arg:
+    def kwarg(node: hasDOTkwarg) -> ast.arg | None:
         return node.kwarg
 
     @staticmethod
@@ -282,15 +281,15 @@ class DOT:
         return node.lineno
 
     @staticmethod
-    def lower(node: hasDOTlower) -> ast.expr:
+    def lower(node: hasDOTlower) -> ast.expr | None:
         return node.lower
 
     @staticmethod
-    def module(node: hasDOTmodule) -> str:
+    def module(node: hasDOTmodule) -> str | None:
         return node.module
 
     @staticmethod
-    def msg(node: hasDOTmsg) -> ast.expr:
+    def msg(node: hasDOTmsg) -> ast.expr | None:
         return node.msg
 
     @staticmethod
@@ -305,11 +304,11 @@ class DOT:
 
     @staticmethod
     @overload
-    def name(node: hasDOTname_strOrNone) -> str:
+    def name(node: hasDOTname_strOrNone) -> str | None:
         ...
 
     @staticmethod
-    def name(node: hasDOTname) -> ast.Name | str:
+    def name(node: hasDOTname) -> ast.Name | str | (str | None):
         return node.name
 
     @staticmethod
@@ -354,7 +353,7 @@ class DOT:
         return node.ops
 
     @staticmethod
-    def optional_vars(node: hasDOToptional_vars) -> ast.expr:
+    def optional_vars(node: hasDOToptional_vars) -> ast.expr | None:
         return node.optional_vars
 
     @staticmethod
@@ -378,11 +377,11 @@ class DOT:
 
     @staticmethod
     @overload
-    def pattern(node: hasDOTpattern_patternOrNone) -> ast.pattern:
+    def pattern(node: hasDOTpattern_patternOrNone) -> ast.pattern | None:
         ...
 
     @staticmethod
-    def pattern(node: hasDOTpattern) -> ast.pattern:
+    def pattern(node: hasDOTpattern) -> ast.pattern | (ast.pattern | None):
         return node.pattern
 
     @staticmethod
@@ -394,7 +393,7 @@ class DOT:
         return node.posonlyargs
 
     @staticmethod
-    def rest(node: hasDOTrest) -> str:
+    def rest(node: hasDOTrest) -> str | None:
         return node.rest
 
     @staticmethod
@@ -404,11 +403,11 @@ class DOT:
 
     @staticmethod
     @overload
-    def returns(node: hasDOTreturns_exprOrNone) -> ast.expr:
+    def returns(node: hasDOTreturns_exprOrNone) -> ast.expr | None:
         ...
 
     @staticmethod
-    def returns(node: hasDOTreturns) -> ast.expr:
+    def returns(node: hasDOTreturns) -> ast.expr | (ast.expr | None):
         return node.returns
 
     @staticmethod
@@ -424,7 +423,7 @@ class DOT:
         return node.slice
 
     @staticmethod
-    def step(node: hasDOTstep) -> ast.expr:
+    def step(node: hasDOTstep) -> ast.expr | None:
         return node.step
 
     @staticmethod
@@ -463,11 +462,11 @@ class DOT:
         return node.test
 
     @staticmethod
-    def type(node: hasDOTtype) -> ast.expr:
+    def type(node: hasDOTtype) -> ast.expr | None:
         return node.type
 
     @staticmethod
-    def type_comment(node: hasDOTtype_comment) -> str:
+    def type_comment(node: hasDOTtype_comment) -> str | None:
         return node.type_comment
 
     @staticmethod
@@ -479,12 +478,12 @@ class DOT:
         return node.type_params
 
     @staticmethod
-    def upper(node: hasDOTupper) -> ast.expr:
+    def upper(node: hasDOTupper) -> ast.expr | None:
         return node.upper
 
     @staticmethod
     @overload
-    def value(node: hasDOTvalue_boolOrNone) -> bool:
+    def value(node: hasDOTvalue_boolOrNone) -> bool | None:
         ...
 
     @staticmethod
@@ -499,11 +498,11 @@ class DOT:
 
     @staticmethod
     @overload
-    def value(node: hasDOTvalue_exprOrNone) -> ast.expr:
+    def value(node: hasDOTvalue_exprOrNone) -> ast.expr | None:
         ...
 
     @staticmethod
-    def value(node: hasDOTvalue) -> ast.expr | bool | ConstantValueType:
+    def value(node: hasDOTvalue) -> ast.expr | (ast.expr | None) | (bool | None) | ConstantValueType:
         return node.value
 
     @staticmethod
@@ -511,5 +510,5 @@ class DOT:
         return node.values
 
     @staticmethod
-    def vararg(node: hasDOTvararg) -> ast.arg:
+    def vararg(node: hasDOTvararg) -> ast.arg | None:
         return node.vararg

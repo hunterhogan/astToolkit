@@ -133,12 +133,12 @@ class Be:
         return isinstance(node, ast.BitXor)
 
     @staticmethod
-    def BoolOp(node: ast.AST) -> TypeIs[ast.BoolOp]:
-        return isinstance(node, ast.BoolOp)
-
-    @staticmethod
     def boolop(node: ast.AST) -> TypeIs[ast.boolop]:
         return isinstance(node, ast.boolop)
+
+    @staticmethod
+    def BoolOp(node: ast.AST) -> TypeIs[ast.BoolOp]:
+        return isinstance(node, ast.BoolOp)
 
     @staticmethod
     def Break(node: ast.AST) -> TypeIs[ast.Break]:
@@ -197,20 +197,20 @@ class Be:
         return isinstance(node, ast.Eq)
 
     @staticmethod
-    def ExceptHandler(node: ast.AST) -> TypeIs[ast.ExceptHandler]:
-        return isinstance(node, ast.ExceptHandler)
-
-    @staticmethod
     def excepthandler(node: ast.AST) -> TypeIs[ast.excepthandler]:
         return isinstance(node, ast.excepthandler)
 
     @staticmethod
-    def Expr(node: ast.AST) -> TypeIs[ast.Expr]:
-        return isinstance(node, ast.Expr)
+    def ExceptHandler(node: ast.AST) -> TypeIs[ast.ExceptHandler]:
+        return isinstance(node, ast.ExceptHandler)
 
     @staticmethod
     def expr(node: ast.AST) -> TypeIs[ast.expr]:
         return isinstance(node, ast.expr)
+
+    @staticmethod
+    def Expr(node: ast.AST) -> TypeIs[ast.Expr]:
+        return isinstance(node, ast.Expr)
 
     @staticmethod
     def expr_context(node: ast.AST) -> TypeIs[ast.expr_context]:
@@ -373,12 +373,12 @@ class Be:
         return isinstance(node, ast.MatMult)
 
     @staticmethod
-    def Mod(node: ast.AST) -> TypeIs[ast.Mod]:
-        return isinstance(node, ast.Mod)
-
-    @staticmethod
     def mod(node: ast.AST) -> TypeIs[ast.mod]:
         return isinstance(node, ast.mod)
+
+    @staticmethod
+    def Mod(node: ast.AST) -> TypeIs[ast.Mod]:
+        return isinstance(node, ast.Mod)
 
     @staticmethod
     def Module(node: ast.AST) -> TypeIs[ast.Module]:
@@ -521,12 +521,12 @@ class Be:
         return isinstance(node, ast.UAdd)
 
     @staticmethod
-    def UnaryOp(node: ast.AST) -> TypeIs[ast.UnaryOp]:
-        return isinstance(node, ast.UnaryOp)
-
-    @staticmethod
     def unaryop(node: ast.AST) -> TypeIs[ast.unaryop]:
         return isinstance(node, ast.unaryop)
+
+    @staticmethod
+    def UnaryOp(node: ast.AST) -> TypeIs[ast.UnaryOp]:
+        return isinstance(node, ast.UnaryOp)
 
     @staticmethod
     def USub(node: ast.AST) -> TypeIs[ast.USub]:
