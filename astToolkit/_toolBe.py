@@ -3,27 +3,26 @@ from typing_extensions import TypeIs
 import ast
 
 class Be:
-    """Type guard functions for safe AST node identification and type narrowing.
-    (AI generated docstring)
+    """A comprehensive suite of functions for AST class identification and type narrowing.
 
-    Provides static methods that perform runtime type checking for all AST node types
-    while enabling compile-time type narrowing through `TypeIs` annotations. Forms
-    the foundation of type-safe AST analysis and transformation throughout the toolkit.
+    `class` `Be` has a method for each `ast.AST` subclass, also called "node type", to perform type
+    checking while enabling compile-time type narrowing through `TypeIs` annotations. This tool
+    forms the foundation of type-safe AST analysis and transformation throughout astToolkit.
 
-    Each method takes an `ast.AST` node and returns a `TypeIs` that confirms both
-    runtime type safety and enables static type checkers to narrow the node type in
-    conditional contexts. This eliminates the need for unsafe casting while providing
-    comprehensive coverage of Python's AST node hierarchy.
+    Each method takes an `ast.AST` node and returns a `TypeIs` that confirms both runtime type
+    safety and enables static type checkers to narrow the node type in conditional contexts. This
+    eliminates the need for unsafe casting while providing comprehensive coverage of Python's AST
+    node hierarchy.
 
-    Methods correspond directly to Python AST node types, following the naming convention
-    of the AST classes themselves. Coverage includes expression nodes (`Add`, `Call`,
-    `Name`), statement nodes (`Assign`, `FunctionDef`, `Return`), operator nodes
-    (`And`, `Or`, `Not`), and structural nodes (`Module`, `arguments`, `keyword`).
+    Methods correspond directly to Python AST node types, following the naming convention of the AST
+    classes themselves. Coverage includes expression nodes (`Add`, `Call`, `Name`), statement nodes
+    (`Assign`, `FunctionDef`, `Return`), operator nodes (`And`, `Or`, `Not`), and structural nodes
+    (`Module`, `arguments`, `keyword`).
 
-    The class serves as the primary type-checking component in the antecedent-action
-    pattern, where predicates identify target nodes and actions specify operations.
-    Type guards from this class are commonly used as building blocks in `IfThis`
-    predicates and directly as `findThis` parameters in visitor classes.
+    The `class` is the primary type-checker in the antecedent-action pattern, where
+    predicates identify target nodes and actions, uh... act on nodes and their attributes. Type guards from this class are
+    commonly used as building blocks in `IfThis` predicates and directly as `findThis` parameters in
+    visitor classes.
 
     Parameters:
 
@@ -37,18 +36,24 @@ class Be:
 
         Type-safe node processing with automatic type narrowing:
 
+        ```python
             if Be.FunctionDef(node):
-                functionName = node.name  # Type-safe access to name attribute
-                parameterCount = len(node.args.args)
+                functionName = node.name  # Type-safe access to name attribute parameterCount =
+                len(node.args.args)
+        ```
 
-        Building complex predicates for visitor patterns:
+        Using type guards in visitor patterns:
 
+        ```python
             NodeTourist(Be.Return, Then.extractIt(DOT.value)).visit(functionNode)
+        ```
 
-        Combining type guards in conditional logic:
+        Type-safe access to attributes of specific node types:
 
+        ```python
             if Be.Call(node) and Be.Name(node.func):
                 callableName = node.func.id  # Type-safe access to function name
+        ```
     """
 
     @staticmethod
@@ -128,12 +133,12 @@ class Be:
         return isinstance(node, ast.BitXor)
 
     @staticmethod
-    def boolop(node: ast.AST) -> TypeIs[ast.boolop]:
-        return isinstance(node, ast.boolop)
-
-    @staticmethod
     def BoolOp(node: ast.AST) -> TypeIs[ast.BoolOp]:
         return isinstance(node, ast.BoolOp)
+
+    @staticmethod
+    def boolop(node: ast.AST) -> TypeIs[ast.boolop]:
+        return isinstance(node, ast.boolop)
 
     @staticmethod
     def Break(node: ast.AST) -> TypeIs[ast.Break]:
@@ -192,20 +197,20 @@ class Be:
         return isinstance(node, ast.Eq)
 
     @staticmethod
-    def excepthandler(node: ast.AST) -> TypeIs[ast.excepthandler]:
-        return isinstance(node, ast.excepthandler)
-
-    @staticmethod
     def ExceptHandler(node: ast.AST) -> TypeIs[ast.ExceptHandler]:
         return isinstance(node, ast.ExceptHandler)
 
     @staticmethod
-    def expr(node: ast.AST) -> TypeIs[ast.expr]:
-        return isinstance(node, ast.expr)
+    def excepthandler(node: ast.AST) -> TypeIs[ast.excepthandler]:
+        return isinstance(node, ast.excepthandler)
 
     @staticmethod
     def Expr(node: ast.AST) -> TypeIs[ast.Expr]:
         return isinstance(node, ast.Expr)
+
+    @staticmethod
+    def expr(node: ast.AST) -> TypeIs[ast.expr]:
+        return isinstance(node, ast.expr)
 
     @staticmethod
     def expr_context(node: ast.AST) -> TypeIs[ast.expr_context]:
@@ -368,12 +373,12 @@ class Be:
         return isinstance(node, ast.MatMult)
 
     @staticmethod
-    def mod(node: ast.AST) -> TypeIs[ast.mod]:
-        return isinstance(node, ast.mod)
-
-    @staticmethod
     def Mod(node: ast.AST) -> TypeIs[ast.Mod]:
         return isinstance(node, ast.Mod)
+
+    @staticmethod
+    def mod(node: ast.AST) -> TypeIs[ast.mod]:
+        return isinstance(node, ast.mod)
 
     @staticmethod
     def Module(node: ast.AST) -> TypeIs[ast.Module]:
@@ -516,12 +521,12 @@ class Be:
         return isinstance(node, ast.UAdd)
 
     @staticmethod
-    def unaryop(node: ast.AST) -> TypeIs[ast.unaryop]:
-        return isinstance(node, ast.unaryop)
-
-    @staticmethod
     def UnaryOp(node: ast.AST) -> TypeIs[ast.UnaryOp]:
         return isinstance(node, ast.UnaryOp)
+
+    @staticmethod
+    def unaryop(node: ast.AST) -> TypeIs[ast.unaryop]:
+        return isinstance(node, ast.unaryop)
 
     @staticmethod
     def USub(node: ast.AST) -> TypeIs[ast.USub]:

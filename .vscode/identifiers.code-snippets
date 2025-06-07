@@ -20,13 +20,45 @@
 	// 	],
 	// 	"description": "Log output to console"
 	// },
-	"木": {
+	"本": {
 		"scope": "markdown,plaintext,python",
-		"prefix": "mu",
+		"prefix": "ben",
 		"body": [
-			"木"
+			"本"
 		],
-		"description": "木 (mù): tree, short for abstract syntax tree (AST)"
+		"description": "本 (běn): module (mod)"
+	},
+	"比符": {
+		"scope": "markdown,plaintext,python",
+		"prefix": "bifu",
+		"body": [
+			"比符"
+		],
+		"description": "比符 (bǐfú): comparison operator (cmpop)"
+	},
+	"布尔符": {
+		"scope": "markdown,plaintext,python",
+		"prefix": "buerfu",
+		"body": [
+			"布尔符"
+		],
+		"description": "布尔符 (bùěrfú): boolean operator (boolop)"
+	},
+	"常": {
+		"scope": "markdown,plaintext,python",
+		"prefix": "chang",
+		"body": [
+			"常"
+		],
+		"description": "常 (cháng): constant (Constant)"
+	},
+	"二符": {
+		"scope": "markdown,plaintext,python",
+		"prefix": "erfu",
+		"body": [
+			"二符"
+		],
+		"description": "二符 (èrfú): binary operator (operator)"
 	},
 	"个": {
 		"scope": "markdown,plaintext,python",
@@ -35,5 +67,77 @@
 			"个"
 		],
 		"description": "个 (gè): generic measure word"
+	},
+	"工": {
+		"scope": "markdown,plaintext,python",
+		"prefix": "gong",
+		"body": [
+			"工"
+		],
+		"description": "工 (gōng): expression (expr)"
+	},
+	"工位": {
+		"scope": "markdown,plaintext,python",
+		"prefix": "gongwei",
+		"body": [
+			"工位"
+		],
+		"description": "工位 (gōngwèi): expression context (expr_context)"
+	},
+	"忽": {
+		"scope": "markdown,plaintext,python",
+		"prefix": "hu",
+		"body": [
+			"忽"
+		],
+		"description": "忽 (hū): ignore (type_ignore)"
+	},
+	"口": {
+		"scope": "markdown,plaintext,python",
+		"prefix": "kou",
+		"body": [
+			"口"
+		],
+		"description": "口 (kǒu): statement (stmt)"
+	},
+	"拦": {
+		"scope": "markdown,plaintext,python",
+		"prefix": "lan",
+		"body": [
+			"拦"
+		],
+		"description": "拦 (lán): exception handler (excepthandler)"
+	},
+	"俪": {
+		"scope": "markdown,plaintext,python",
+		"prefix": "li",
+		"body": [
+			"俪"
+		],
+		"description": "俪 (lì): pattern (pattern)"
+	},
+	"木": {
+		"scope": "markdown,plaintext,python",
+		"prefix": "mu",
+		"body": [
+			"木"
+		],
+		"description": "木 (mù): tree, short for abstract syntax tree (AST)"
+	},
+	"形": {
+		"scope": "markdown,plaintext,python",
+		"prefix": "xing",
+		"body": [
+			"形"
+		],
+		"description": "形 (xíng): type parameter (type_param)"
+	},
+	"一符": {
+		"scope": "markdown,plaintext,python",
+		"prefix": "yifu",
+		"body": [
+			"一符"
+		],
+		"description": "一符 (yīfú): unary operator (unaryop)"
 	},
 }

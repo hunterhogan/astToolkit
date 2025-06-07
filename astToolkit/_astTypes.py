@@ -7,9 +7,22 @@ import sys
 
 ConstantValueType: typing_TypeAlias = bool | bytes | complex | EllipsisType | float | int | None | range | str
 identifierDotAttribute: typing_TypeAlias = str
-木 = typing_TypeVar('木', bound=ast.AST, covariant=True)
 个 = typing_TypeVar('个', covariant=True)
 个return = typing_TypeVar('个return', covariant=True)
+木 = typing_TypeVar('木', bound=ast.AST, covariant=True)
+布尔符 = typing_TypeVar('布尔符', bound=ast.boolop, covariant=True)
+比符 = typing_TypeVar('比符', bound=ast.cmpop, covariant=True)
+常 = typing_TypeVar('常', bound=ast.Constant, covariant=True)
+拦 = typing_TypeVar('拦', bound=ast.excepthandler, covariant=True)
+工位 = typing_TypeVar('工位', bound=ast.expr_context, covariant=True)
+工 = typing_TypeVar('工', bound=ast.expr, covariant=True)
+本 = typing_TypeVar('本', bound=ast.mod, covariant=True)
+二符 = typing_TypeVar('二符', bound=ast.operator, covariant=True)
+俪 = typing_TypeVar('俪', bound=ast.pattern, covariant=True)
+口 = typing_TypeVar('口', bound=ast.stmt, covariant=True)
+忽 = typing_TypeVar('忽', bound=ast.type_ignore, covariant=True)
+形 = typing_TypeVar('形', bound=ast.type_param, covariant=True)
+一符 = typing_TypeVar('一符', bound=ast.unaryop, covariant=True)
 
 class _attributes(TypedDict, total=False):
     lineno: int

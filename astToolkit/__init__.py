@@ -14,9 +14,9 @@ from astToolkit._astTypes import (
 	hasDOTcases as hasDOTcases, hasDOTcause as hasDOTcause, hasDOTcls as hasDOTcls,
 	hasDOTcomparators as hasDOTcomparators, hasDOTcontext_expr as hasDOTcontext_expr,
 	hasDOTconversion as hasDOTconversion, hasDOTctx as hasDOTctx,
-	hasDOTdecorator_list as hasDOTdecorator_list,
-	hasDOTdefaults as hasDOTdefaults, hasDOTelt as hasDOTelt, hasDOTelts as hasDOTelts,
-	hasDOTexc as hasDOTexc, hasDOTfinalbody as hasDOTfinalbody, hasDOTformat_spec as hasDOTformat_spec,
+	hasDOTdecorator_list as hasDOTdecorator_list, hasDOTdefaults as hasDOTdefaults,
+	hasDOTelt as hasDOTelt, hasDOTelts as hasDOTelts, hasDOTexc as hasDOTexc,
+	hasDOTfinalbody as hasDOTfinalbody, hasDOTformat_spec as hasDOTformat_spec,
 	hasDOTfunc as hasDOTfunc, hasDOTgenerators as hasDOTgenerators, hasDOTguard as hasDOTguard,
 	hasDOThandlers as hasDOThandlers, hasDOTid as hasDOTid, hasDOTifs as hasDOTifs,
 	hasDOTis_async as hasDOTis_async, hasDOTitems as hasDOTitems, hasDOTiter as hasDOTiter,
@@ -50,8 +50,11 @@ from astToolkit._astTypes import (
 	hasDOTvalue_ConstantValueType as hasDOTvalue_ConstantValueType,
 	hasDOTvalue_expr as hasDOTvalue_expr, hasDOTvalue_exprOrNone as hasDOTvalue_exprOrNone,
 	hasDOTvalues as hasDOTvalues, hasDOTvararg as hasDOTvararg,
-	identifierDotAttribute as identifierDotAttribute, 个 as 个, 个return as 个return, 木 as 木,
+	identifierDotAttribute as identifierDotAttribute, 一符 as 一符, 个 as 个, 个return as 个return, 二符 as 二符,
+	俪 as 俪, 口 as 口, 工 as 工, 工位 as 工位, 布尔符 as 布尔符, 常 as 常, 形 as 形, 忽 as 忽, 拦 as 拦, 木 as 木, 本 as 本,
+	比符 as 比符,
 )
+
 if sys.version_info >= (3, 13):
 	from astToolkit._astTypes import hasDOTdefault_value as hasDOTdefault_value
 
