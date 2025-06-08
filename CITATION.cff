@@ -7,8 +7,8 @@ authors:
   family-names: Hogan
   email: HunterHogan@pm.me
 cff-version: 1.2.0
-commit: 0bc6519699ff6d9dc6e393b0e1685c032e1352f2
-date-released: '2025-06-07'
+commit: 1b9f4609330c9a98235a0fa84b6a22313c4529dc
+date-released: '2025-06-08'
 identifiers:
 - type: url
   value: https://github.com/hunterhogan/astToolkit/releases/tag/0.5.3
