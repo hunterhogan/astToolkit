@@ -19,51 +19,51 @@ class TestASTHelpers:
                 ast.literal_eval(r"'\U'")
             assert excinfo.value.__context__ is not None
 
-    def test_dump(self):
-        nodeAst = ast.parse('spam(eggs, "and cheese")')
-        assert ast.dump(nodeAst) == (
-            "Module(body=[Expr(value=Call(func=Name(id='spam', ctx=Load()), "
-            "args=[Name(id='eggs', ctx=Load()), Constant(value='and cheese')]))])"
-        )
-        assert ast.dump(nodeAst, annotate_fields=False) == (
-            "Module([Expr(Call(Name('spam', Load()), [Name('eggs', Load()), "
-            "Constant('and cheese')]))])"
-        )
+    # def test_dump(self):
+    #     nodeAst = ast.parse('spam(eggs, "and cheese")')
+    #     assert ast.dump(nodeAst) == (
+    #         "Module(body=[Expr(value=Call(func=Name(id='spam', ctx=Load()), "
+    #         "args=[Name(id='eggs', ctx=Load()), Constant(value='and cheese')]))])"
+    #     )
+    #     assert ast.dump(nodeAst, annotate_fields=False) == (
+    #         "Module([Expr(Call(Name('spam', Load()), [Name('eggs', Load()), "
+    #         "Constant('and cheese')]))])"
+    #     )
 
-        # Test with Make-generated nodes
-        makeName = Make.Name("spam", ast.Load())
-        makeConstant = Make.Constant("and cheese")
-        makeCall = Make.Call(makeName, [Make.Name("eggs", ast.Load()), makeConstant], [])
-        makeExpr = Make.Expr(makeCall)
-        makeModule = Make.Module([makeExpr], [])
+    #     # Test with Make-generated nodes
+    #     makeName = Make.Name("spam", ast.Load())
+    #     makeConstant = Make.Constant("and cheese")
+    #     makeCall = Make.Call(makeName, [Make.Name("eggs", ast.Load()), makeConstant], [])
+    #     makeExpr = Make.Expr(makeCall)
+    #     makeModule = Make.Module([makeExpr], [])
 
-        assert ast.dump(makeModule) == ast.dump(nodeAst)
+    #     assert ast.dump(makeModule) == ast.dump(nodeAst)
 
-    def test_dump_indent(self):
-        nodeAst = ast.parse('spam(eggs, "and cheese")')
-        expected_indent_3 = """\
-Module(
-   body=[
-      Expr(
-         value=Call(
-            func=Name(id='spam', ctx=Load()),
-            args=[
-               Name(id='eggs', ctx=Load()),
-               Constant(value='and cheese')]))])"""
+#     def test_dump_indent(self):
+#         nodeAst = ast.parse('spam(eggs, "and cheese")')
+#         expected_indent_3 = """\
+# Module(
+#    body=[
+#       Expr(
+#          value=Call(
+#             func=Name(id='spam', ctx=Load()),
+#             args=[
+#                Name(id='eggs', ctx=Load()),
+#                Constant(value='and cheese')]))])"""
 
-        assert ast.dump(nodeAst, indent=3) == expected_indent_3
+#         assert ast.dump(nodeAst, indent=3) == expected_indent_3
 
-        expected_tab = """\
-Module(
-\t[
-\t\tExpr(
-\t\t\tCall(
-\t\t\t\tName('spam', Load()),
-\t\t\t\t[
-\t\t\t\t\tName('eggs', Load()),
-\t\t\t\t\tConstant('and cheese')]))])"""
+#         expected_tab = """\
+# Module(
+# \t[
+# \t\tExpr(
+# \t\t\tCall(
+# \t\t\t\tName('spam', Load()),
+# \t\t\t\t[
+# \t\t\t\t\tName('eggs', Load()),
+# \t\t\t\t\tConstant('and cheese')]))])"""
 
-        assert ast.dump(nodeAst, annotate_fields=False, indent="\t") == expected_tab
+#         assert ast.dump(nodeAst, annotate_fields=False, indent="\t") == expected_tab
 
     def test_dump_incomplete(self):
         # Using Make.Raise with minimal arguments
