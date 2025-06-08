@@ -1,28 +1,26 @@
-# pyright: reportMatchNotExhaustive=false
-# pyright: reportArgumentType=false
 """This file is generated automatically, so changes to this file will be lost."""
 from astToolkit import (
-	ConstantValueType, hasDOTannotation, hasDOTannotation_expr, hasDOTannotation_exprOrNone, hasDOTarg,
-	hasDOTarg_str, hasDOTarg_strOrNone, hasDOTargs, hasDOTargs_arguments, hasDOTargs_list_arg,
-	hasDOTargs_list_expr, hasDOTargtypes, hasDOTasname, hasDOTattr, hasDOTbases, hasDOTbody,
-	hasDOTbody_expr, hasDOTbody_list_stmt, hasDOTbound, hasDOTcases, hasDOTcause, hasDOTcls,
-	hasDOTcomparators, hasDOTcontext_expr, hasDOTconversion, hasDOTctx, hasDOTdecorator_list,
-	hasDOTdefaults, hasDOTelt, hasDOTelts, hasDOTexc, hasDOTfinalbody, hasDOTformat_spec, hasDOTfunc,
-	hasDOTgenerators, hasDOTguard, hasDOThandlers, hasDOTid, hasDOTifs, hasDOTis_async, hasDOTitems,
-	hasDOTiter, hasDOTkey, hasDOTkeys, hasDOTkeys_list_expr, hasDOTkeys_list_exprOrNone,
-	hasDOTkeywords, hasDOTkind, hasDOTkw_defaults, hasDOTkwarg, hasDOTkwd_attrs, hasDOTkwd_patterns,
-	hasDOTkwonlyargs, hasDOTleft, hasDOTlevel, hasDOTlineno, hasDOTlower, hasDOTmodule, hasDOTmsg,
-	hasDOTname, hasDOTname_Name, hasDOTname_str, hasDOTname_strOrNone, hasDOTnames,
-	hasDOTnames_list_alias, hasDOTnames_list_str, hasDOTop, hasDOTop_boolop, hasDOTop_operator,
-	hasDOTop_unaryop, hasDOToperand, hasDOTops, hasDOToptional_vars, hasDOTorelse, hasDOTorelse_expr,
-	hasDOTorelse_list_stmt, hasDOTpattern, hasDOTpattern_pattern, hasDOTpattern_patternOrNone,
-	hasDOTpatterns, hasDOTposonlyargs, hasDOTrest, hasDOTreturns, hasDOTreturns_expr,
-	hasDOTreturns_exprOrNone, hasDOTright, hasDOTsimple, hasDOTslice, hasDOTstep, hasDOTsubject,
-	hasDOTtag, hasDOTtarget, hasDOTtarget_expr, hasDOTtarget_Name,
-	hasDOTtarget_NameOrAttributeOrSubscript, hasDOTtargets, hasDOTtest, hasDOTtype, hasDOTtype_comment,
-	hasDOTtype_ignores, hasDOTtype_params, hasDOTupper, hasDOTvalue, hasDOTvalue_boolOrNone,
-	hasDOTvalue_ConstantValueType, hasDOTvalue_expr, hasDOTvalue_exprOrNone, hasDOTvalues,
-	hasDOTvararg,
+	Be, ConstantValueType, hasDOTannotation, hasDOTannotation_expr, hasDOTannotation_exprOrNone,
+	hasDOTarg, hasDOTarg_str, hasDOTarg_strOrNone, hasDOTargs, hasDOTargs_arguments,
+	hasDOTargs_list_arg, hasDOTargs_list_expr, hasDOTargtypes, hasDOTasname, hasDOTattr, hasDOTbases,
+	hasDOTbody, hasDOTbody_expr, hasDOTbody_list_stmt, hasDOTbound, hasDOTcases, hasDOTcause,
+	hasDOTcls, hasDOTcomparators, hasDOTcontext_expr, hasDOTconversion, hasDOTctx,
+	hasDOTdecorator_list, hasDOTdefaults, hasDOTelt, hasDOTelts, hasDOTexc, hasDOTfinalbody,
+	hasDOTformat_spec, hasDOTfunc, hasDOTgenerators, hasDOTguard, hasDOThandlers, hasDOTid, hasDOTifs,
+	hasDOTis_async, hasDOTitems, hasDOTiter, hasDOTkey, hasDOTkeys, hasDOTkeys_list_expr,
+	hasDOTkeys_list_exprOrNone, hasDOTkeywords, hasDOTkind, hasDOTkw_defaults, hasDOTkwarg,
+	hasDOTkwd_attrs, hasDOTkwd_patterns, hasDOTkwonlyargs, hasDOTleft, hasDOTlevel, hasDOTlineno,
+	hasDOTlower, hasDOTmodule, hasDOTmsg, hasDOTname, hasDOTname_Name, hasDOTname_str,
+	hasDOTname_strOrNone, hasDOTnames, hasDOTnames_list_alias, hasDOTnames_list_str, hasDOTop,
+	hasDOTop_boolop, hasDOTop_operator, hasDOTop_unaryop, hasDOToperand, hasDOTops,
+	hasDOToptional_vars, hasDOTorelse, hasDOTorelse_expr, hasDOTorelse_list_stmt, hasDOTpattern,
+	hasDOTpattern_pattern, hasDOTpattern_patternOrNone, hasDOTpatterns, hasDOTposonlyargs, hasDOTrest,
+	hasDOTreturns, hasDOTreturns_expr, hasDOTreturns_exprOrNone, hasDOTright, hasDOTsimple,
+	hasDOTslice, hasDOTstep, hasDOTsubject, hasDOTtag, hasDOTtarget, hasDOTtarget_expr,
+	hasDOTtarget_Name, hasDOTtarget_NameOrAttributeOrSubscript, hasDOTtargets, hasDOTtest, hasDOTtype,
+	hasDOTtype_comment, hasDOTtype_ignores, hasDOTtype_params, hasDOTupper, hasDOTvalue,
+	hasDOTvalue_boolOrNone, hasDOTvalue_ConstantValueType, hasDOTvalue_expr, hasDOTvalue_exprOrNone,
+	hasDOTvalues, hasDOTvararg,
 )
 from collections.abc import Callable, Sequence
 from typing import overload
@@ -99,7 +97,6 @@ class ClassIsAndAttribute:
 
     @staticmethod
     def argsIs(astClass: type[hasDOTargs], attributeCondition: Callable[[ast.arguments], bool] | Callable[[list[ast.arg]], bool] | Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeIs[hasDOTargs] | bool]:
-
         def workhorse(node: ast.AST) -> TypeIs[hasDOTargs] | bool:
             return isinstance(node, astClass) and attributeCondition(node.args)
         return workhorse
@@ -145,8 +142,18 @@ class ClassIsAndAttribute:
     @staticmethod
     def bodyIs(astClass: type[hasDOTbody], attributeCondition: Callable[[ast.expr], bool] | Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[hasDOTbody] | bool]:
 
+        # @overload
+        # def workhorse(node: hasDOTbody_expr) -> TypeIs[hasDOTbody_expr] | bool:...
+        # @overload
+        # def workhorse(node: hasDOTbody_list_stmt) -> TypeIs[hasDOTbody_list_stmt] | bool:...
+        # @overload
+        # def workhorse(node: ast.AST) -> TypeIs[hasDOTbody] | bool:...
         def workhorse(node: ast.AST) -> TypeIs[hasDOTbody] | bool:
             return isinstance(node, astClass) and attributeCondition(node.body)
+            # if isinstance(node, astClass):
+            #     if astClass in (hasDOTbody_expr,):
+            #         attributeCondition(node.body)
+            #     return
         return workhorse
 
     @staticmethod
@@ -340,14 +347,25 @@ class ClassIsAndAttribute:
 
     @staticmethod
     @overload
-    def keysIs(astClass: type[hasDOTkeys_list_exprOrNone], attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeIs[hasDOTkeys_list_exprOrNone] | bool]:
+    def keysIs(astClass: type[hasDOTkeys_list_exprOrNone], attributeCondition: Callable[[Sequence[ast.expr | None]], bool]) -> Callable[[ast.AST], TypeIs[hasDOTkeys_list_exprOrNone] | bool]:
         ...
 
     @staticmethod
-    def keysIs(astClass: type[hasDOTkeys], attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeIs[hasDOTkeys] | bool]:
+    def keysIs(astClass: type[hasDOTkeys], attributeCondition: Callable[[Sequence[ast.expr]], bool] | Callable[[Sequence[ast.expr | None]], bool]) -> Callable[[hasDOTkeys_list_expr], TypeIs[hasDOTkeys_list_expr] | bool] | Callable[[hasDOTkeys_list_exprOrNone], TypeIs[hasDOTkeys_list_exprOrNone] | bool] | Callable[[ast.AST], bool]:
 
-        def workhorse(node: ast.AST) -> TypeIs[hasDOTkeys] | bool:
-            return isinstance(node, astClass) and node.keys != [None] and attributeCondition(node.keys)
+        @overload
+        def workhorse(node: hasDOTkeys_list_expr) -> TypeIs[hasDOTkeys_list_expr] | bool:...
+        @overload
+        def workhorse(node: hasDOTkeys_list_exprOrNone) -> TypeIs[hasDOTkeys_list_exprOrNone] | bool:...
+        @overload
+        def workhorse(node: ast.AST) -> bool:...
+        def workhorse(node: ast.AST) -> (TypeIs[hasDOTkeys_list_expr] | bool) | (TypeIs[hasDOTkeys_list_exprOrNone] | bool) | bool:
+            if isinstance(node, astClass):
+                if node.keys != [None] and node.keys != []:
+                    assert node.keys is not list[None]
+                    assert node.keys is not list[ast.expr | None]
+                    return attributeCondition(node.keys)
+            return False
         return workhorse
 
     @staticmethod
@@ -457,10 +475,18 @@ class ClassIsAndAttribute:
         ...
 
     @staticmethod
-    def nameIs(astClass: type[hasDOTname], attributeCondition: Callable[[ast.Name], bool] | Callable[[str], bool]) -> Callable[[ast.AST], TypeIs[hasDOTname] | bool]:
+    def nameIs(astClass: type[hasDOTname], attributeCondition: Callable[[ast.Name], bool] | Callable[[str], bool]) -> Callable[[ast.AST], TypeIs[hasDOTname_Name] | bool] | Callable[[ast.AST], TypeIs[hasDOTname_str] | bool] | Callable[[ast.AST], TypeIs[hasDOTname_strOrNone] | bool] | bool:
 
-        def workhorse(node: ast.AST) -> TypeIs[hasDOTname] | bool:
-            return isinstance(node, astClass) and node.name is not None and attributeCondition(node.name)
+        @overload
+        def workhorse(node: hasDOTname_Name) -> TypeIs[hasDOTname_Name] | bool:...
+        @overload
+        def workhorse(node: hasDOTname_str) -> TypeIs[hasDOTname_str] | bool:...
+        @overload
+        def workhorse(node: hasDOTname_strOrNone) -> TypeIs[hasDOTname_strOrNone] | bool:...
+        @overload
+        def workhorse(node: ast.AST) -> bool:...
+        def workhorse(node: ast.AST) -> (TypeIs[hasDOTname_Name] | bool) | (TypeIs[hasDOTname_str] | bool) | (TypeIs[hasDOTname_strOrNone] | bool) | bool:
+            return isinstance(node, astClass) and node.name is not None and astClass in (hasDOTname_Name, hasDOTname_str, hasDOTname_strOrNone) and attributeCondition(node.name)
         return workhorse
 
     @staticmethod
