@@ -44,7 +44,7 @@ class LedgerOfImports:
 		# str as parameters
 		# LedgerOfImports
 	# New syntax for adding imports:
-		# str represention, including multiline strings, of an import statement, e.g., `"from collections.abc import Sequence"`
+		# str representation, including multiline strings, of an import statement, e.g., `"from collections.abc import Sequence"`
 		# Iterable[ast.AST] (includes ast.Import | ast.ImportFrom)
 		# Iterable[str representation]
 	# In general, the public method will, at most, convert the input in some way

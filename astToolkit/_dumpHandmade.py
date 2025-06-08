@@ -41,7 +41,7 @@ def dump(node: AST, annotate_fields: bool = True, include_attributes: bool = Fal
                     continue
                 if not show_empty:
                     if value == []:
-                        field_type = cls._field_types.get(name, object)
+                        field_type: ConstantValueType | AST | list[AST] | list[str] = cls._field_types.get(name, object)
                         if getattr(field_type, '__origin__', ...) is list:
                             if not keywords:
                                 args_buffer.append(repr(value))

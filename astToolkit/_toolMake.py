@@ -26,7 +26,7 @@ class Make:
 
     Common AST attributes accessible through `**keywordArguments`:
 
-        col_offset (0): Position information specifying the column where an AST object begins.
+        col_offset: Position information specifying the column where an AST object begins.
         end_col_offset (None): Position information specifying the column where an AST object ends.
         end_lineno (None): Position information specifying the line number where an AST object ends.
         level (0): Module import depth level that controls relative vs absolute imports. Default 0 indicates absolute import.
@@ -41,39 +41,39 @@ class Make:
     @staticmethod
     def _boolopJoinMethod(ast_operator: type[ast.boolop], expressions: Sequence[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr | ast.BoolOp:
         """
-        Single `ast.expr` from a sequence of `ast.expr` by forming an `ast.BoolOp` that logically "joins" expressions using the `ast.BoolOp` subclass.
+            Single `ast.expr` from a sequence of `ast.expr` by forming an `ast.BoolOp` that logically "joins" expressions using the `ast.BoolOp` subclass.
 
-        Like str.join() but for AST expressions.
+            Like str.join() but for AST expressions.
 
-        Parameters
-        ----------
-        expressions : Sequence[ast.expr]
-            Collection of expressions to join.
-        **keywordArguments : ast._attributes
+            Parameters
+            ----------
+            expressions : Sequence[ast.expr]
+                Collection of expressions to join.
+            **keywordArguments : ast._attributes
 
-        Returns
-        -------
-        joinedExpression : ast.expr
-            Single expression representing the joined expressions.
+            Returns
+            -------
+            joinedExpression : ast.expr
+                Single expression representing the joined expressions.
 
-        Examples
-        --------
-        Instead of manually constructing ast.BoolOp structures:
-        ```
-        ast.BoolOp(
-            op=ast.And(),
-            values=[ast.Name('Lions'), ast.Name('tigers'), ast.Name('bears')]
-        )
-        ```
+            Examples
+            --------
+            Instead of manually constructing ast.BoolOp structures:
+            ```
+            ast.BoolOp(
+                op=ast.And(),
+                values=[ast.Name('Lions'), ast.Name('tigers'), ast.Name('bears')]
+            )
+            ```
 
-        Simply use:
-        ```
-        astToolkit.And.join([ast.Name('Lions'), ast.Name('tigers'), ast.Name('bears')])
-        ```
+            Simply use:
+            ```
+            astToolkit.And.join([ast.Name('Lions'), ast.Name('tigers'), ast.Name('bears')])
+            ```
 
-        Both produce the same AST structure but the join() method eliminates the manual construction.
-        Handles single expressions and empty sequences gracefully.
-        """
+            Both produce the same AST structure but the join() method eliminates the manual construction.
+            Handles single expressions and empty sequences gracefully.
+            """
         listExpressions: list[ast.expr] = list(expressions)
         match len(listExpressions):
             case 0:
@@ -87,43 +87,43 @@ class Make:
     @staticmethod
     def _operatorJoinMethod(ast_operator: type[ast.operator], expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
         """
-        Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
+            Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
 
-        Like str.join() but for AST expressions.
+            Like str.join() but for AST expressions.
 
-        Parameters
-        ----------
-        expressions : Iterable[ast.expr]
-            Collection of expressions to join.
-        **keywordArguments : ast._attributes
+            Parameters
+            ----------
+            expressions : Iterable[ast.expr]
+                Collection of expressions to join.
+            **keywordArguments : ast._attributes
 
-        Returns
-        -------
-        joinedExpression : ast.expr
-            Single expression representing the joined expressions.
+            Returns
+            -------
+            joinedExpression : ast.expr
+                Single expression representing the joined expressions.
 
-        Examples
-        --------
-        Instead of manually constructing nested ast.BinOp structures:
-        ```
-        ast.BinOp(
-            left=ast.BinOp(
-                left=ast.Name('Crosby')
+            Examples
+            --------
+            Instead of manually constructing nested ast.BinOp structures:
+            ```
+            ast.BinOp(
+                left=ast.BinOp(
+                    left=ast.Name('Crosby')
+                    , op=ast.BitOr()
+                    , right=ast.Name('Stills'))
                 , op=ast.BitOr()
-                , right=ast.Name('Stills'))
-            , op=ast.BitOr()
-            , right=ast.Name('Nash')
-        )
-        ```
+                , right=ast.Name('Nash')
+            )
+            ```
 
-        Simply use:
-        ```
-        astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
-        ```
+            Simply use:
+            ```
+            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
+            ```
 
-        Both produce the same AST structure but the join() method eliminates the manual nesting.
-        Handles single expressions and empty iterables gracefully.
-        """
+            Both produce the same AST structure but the join() method eliminates the manual nesting.
+            Handles single expressions and empty iterables gracefully.
+            """
         listExpressions: list[ast.expr] = list(expressions)
         if not listExpressions:
             listExpressions.append(Make.Constant('', **keywordArguments))
@@ -138,43 +138,43 @@ class Make:
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
             """
-        Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
+            Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
 
-        Like str.join() but for AST expressions.
+            Like str.join() but for AST expressions.
 
-        Parameters
-        ----------
-        expressions : Iterable[ast.expr]
-            Collection of expressions to join.
-        **keywordArguments : ast._attributes
+            Parameters
+            ----------
+            expressions : Iterable[ast.expr]
+                Collection of expressions to join.
+            **keywordArguments : ast._attributes
 
-        Returns
-        -------
-        joinedExpression : ast.expr
-            Single expression representing the joined expressions.
+            Returns
+            -------
+            joinedExpression : ast.expr
+                Single expression representing the joined expressions.
 
-        Examples
-        --------
-        Instead of manually constructing nested ast.BinOp structures:
-        ```
-        ast.BinOp(
-            left=ast.BinOp(
-                left=ast.Name('Crosby')
+            Examples
+            --------
+            Instead of manually constructing nested ast.BinOp structures:
+            ```
+            ast.BinOp(
+                left=ast.BinOp(
+                    left=ast.Name('Crosby')
+                    , op=ast.BitOr()
+                    , right=ast.Name('Stills'))
                 , op=ast.BitOr()
-                , right=ast.Name('Stills'))
-            , op=ast.BitOr()
-            , right=ast.Name('Nash')
-        )
-        ```
+                , right=ast.Name('Nash')
+            )
+            ```
 
-        Simply use:
-        ```
-        astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
-        ```
+            Simply use:
+            ```
+            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
+            ```
 
-        Both produce the same AST structure but the join() method eliminates the manual nesting.
-        Handles single expressions and empty iterables gracefully.
-        """
+            Both produce the same AST structure but the join() method eliminates the manual nesting.
+            Handles single expressions and empty iterables gracefully.
+            """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
@@ -205,39 +205,39 @@ class Make:
         @classmethod
         def join(cls, expressions: Sequence[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
             """
-        Single `ast.expr` from a sequence of `ast.expr` by forming an `ast.BoolOp` that logically "joins" expressions using the `ast.BoolOp` subclass.
+            Single `ast.expr` from a sequence of `ast.expr` by forming an `ast.BoolOp` that logically "joins" expressions using the `ast.BoolOp` subclass.
 
-        Like str.join() but for AST expressions.
+            Like str.join() but for AST expressions.
 
-        Parameters
-        ----------
-        expressions : Sequence[ast.expr]
-            Collection of expressions to join.
-        **keywordArguments : ast._attributes
+            Parameters
+            ----------
+            expressions : Sequence[ast.expr]
+                Collection of expressions to join.
+            **keywordArguments : ast._attributes
 
-        Returns
-        -------
-        joinedExpression : ast.expr
-            Single expression representing the joined expressions.
+            Returns
+            -------
+            joinedExpression : ast.expr
+                Single expression representing the joined expressions.
 
-        Examples
-        --------
-        Instead of manually constructing ast.BoolOp structures:
-        ```
-        ast.BoolOp(
-            op=ast.And(),
-            values=[ast.Name('Lions'), ast.Name('tigers'), ast.Name('bears')]
-        )
-        ```
+            Examples
+            --------
+            Instead of manually constructing ast.BoolOp structures:
+            ```
+            ast.BoolOp(
+                op=ast.And(),
+                values=[ast.Name('Lions'), ast.Name('tigers'), ast.Name('bears')]
+            )
+            ```
 
-        Simply use:
-        ```
-        astToolkit.And.join([ast.Name('Lions'), ast.Name('tigers'), ast.Name('bears')])
-        ```
+            Simply use:
+            ```
+            astToolkit.And.join([ast.Name('Lions'), ast.Name('tigers'), ast.Name('bears')])
+            ```
 
-        Both produce the same AST structure but the join() method eliminates the manual construction.
-        Handles single expressions and empty sequences gracefully.
-        """
+            Both produce the same AST structure but the join() method eliminates the manual construction.
+            Handles single expressions and empty sequences gracefully.
+            """
             return Make._boolopJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
@@ -539,43 +539,43 @@ class Make:
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
             """
-        Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
+            Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
 
-        Like str.join() but for AST expressions.
+            Like str.join() but for AST expressions.
 
-        Parameters
-        ----------
-        expressions : Iterable[ast.expr]
-            Collection of expressions to join.
-        **keywordArguments : ast._attributes
+            Parameters
+            ----------
+            expressions : Iterable[ast.expr]
+                Collection of expressions to join.
+            **keywordArguments : ast._attributes
 
-        Returns
-        -------
-        joinedExpression : ast.expr
-            Single expression representing the joined expressions.
+            Returns
+            -------
+            joinedExpression : ast.expr
+                Single expression representing the joined expressions.
 
-        Examples
-        --------
-        Instead of manually constructing nested ast.BinOp structures:
-        ```
-        ast.BinOp(
-            left=ast.BinOp(
-                left=ast.Name('Crosby')
+            Examples
+            --------
+            Instead of manually constructing nested ast.BinOp structures:
+            ```
+            ast.BinOp(
+                left=ast.BinOp(
+                    left=ast.Name('Crosby')
+                    , op=ast.BitOr()
+                    , right=ast.Name('Stills'))
                 , op=ast.BitOr()
-                , right=ast.Name('Stills'))
-            , op=ast.BitOr()
-            , right=ast.Name('Nash')
-        )
-        ```
+                , right=ast.Name('Nash')
+            )
+            ```
 
-        Simply use:
-        ```
-        astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
-        ```
+            Simply use:
+            ```
+            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
+            ```
 
-        Both produce the same AST structure but the join() method eliminates the manual nesting.
-        Handles single expressions and empty iterables gracefully.
-        """
+            Both produce the same AST structure but the join() method eliminates the manual nesting.
+            Handles single expressions and empty iterables gracefully.
+            """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     class BitOr(ast.BitOr):
@@ -584,43 +584,43 @@ class Make:
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
             """
-        Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
+            Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
 
-        Like str.join() but for AST expressions.
+            Like str.join() but for AST expressions.
 
-        Parameters
-        ----------
-        expressions : Iterable[ast.expr]
-            Collection of expressions to join.
-        **keywordArguments : ast._attributes
+            Parameters
+            ----------
+            expressions : Iterable[ast.expr]
+                Collection of expressions to join.
+            **keywordArguments : ast._attributes
 
-        Returns
-        -------
-        joinedExpression : ast.expr
-            Single expression representing the joined expressions.
+            Returns
+            -------
+            joinedExpression : ast.expr
+                Single expression representing the joined expressions.
 
-        Examples
-        --------
-        Instead of manually constructing nested ast.BinOp structures:
-        ```
-        ast.BinOp(
-            left=ast.BinOp(
-                left=ast.Name('Crosby')
+            Examples
+            --------
+            Instead of manually constructing nested ast.BinOp structures:
+            ```
+            ast.BinOp(
+                left=ast.BinOp(
+                    left=ast.Name('Crosby')
+                    , op=ast.BitOr()
+                    , right=ast.Name('Stills'))
                 , op=ast.BitOr()
-                , right=ast.Name('Stills'))
-            , op=ast.BitOr()
-            , right=ast.Name('Nash')
-        )
-        ```
+                , right=ast.Name('Nash')
+            )
+            ```
 
-        Simply use:
-        ```
-        astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
-        ```
+            Simply use:
+            ```
+            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
+            ```
 
-        Both produce the same AST structure but the join() method eliminates the manual nesting.
-        Handles single expressions and empty iterables gracefully.
-        """
+            Both produce the same AST structure but the join() method eliminates the manual nesting.
+            Handles single expressions and empty iterables gracefully.
+            """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     class BitXor(ast.BitXor):
@@ -629,43 +629,43 @@ class Make:
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
             """
-        Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
+            Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
 
-        Like str.join() but for AST expressions.
+            Like str.join() but for AST expressions.
 
-        Parameters
-        ----------
-        expressions : Iterable[ast.expr]
-            Collection of expressions to join.
-        **keywordArguments : ast._attributes
+            Parameters
+            ----------
+            expressions : Iterable[ast.expr]
+                Collection of expressions to join.
+            **keywordArguments : ast._attributes
 
-        Returns
-        -------
-        joinedExpression : ast.expr
-            Single expression representing the joined expressions.
+            Returns
+            -------
+            joinedExpression : ast.expr
+                Single expression representing the joined expressions.
 
-        Examples
-        --------
-        Instead of manually constructing nested ast.BinOp structures:
-        ```
-        ast.BinOp(
-            left=ast.BinOp(
-                left=ast.Name('Crosby')
+            Examples
+            --------
+            Instead of manually constructing nested ast.BinOp structures:
+            ```
+            ast.BinOp(
+                left=ast.BinOp(
+                    left=ast.Name('Crosby')
+                    , op=ast.BitOr()
+                    , right=ast.Name('Stills'))
                 , op=ast.BitOr()
-                , right=ast.Name('Stills'))
-            , op=ast.BitOr()
-            , right=ast.Name('Nash')
-        )
-        ```
+                , right=ast.Name('Nash')
+            )
+            ```
 
-        Simply use:
-        ```
-        astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
-        ```
+            Simply use:
+            ```
+            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
+            ```
 
-        Both produce the same AST structure but the join() method eliminates the manual nesting.
-        Handles single expressions and empty iterables gracefully.
-        """
+            Both produce the same AST structure but the join() method eliminates the manual nesting.
+            Handles single expressions and empty iterables gracefully.
+            """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
@@ -997,43 +997,43 @@ class Make:
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
             """
-        Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
+            Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
 
-        Like str.join() but for AST expressions.
+            Like str.join() but for AST expressions.
 
-        Parameters
-        ----------
-        expressions : Iterable[ast.expr]
-            Collection of expressions to join.
-        **keywordArguments : ast._attributes
+            Parameters
+            ----------
+            expressions : Iterable[ast.expr]
+                Collection of expressions to join.
+            **keywordArguments : ast._attributes
 
-        Returns
-        -------
-        joinedExpression : ast.expr
-            Single expression representing the joined expressions.
+            Returns
+            -------
+            joinedExpression : ast.expr
+                Single expression representing the joined expressions.
 
-        Examples
-        --------
-        Instead of manually constructing nested ast.BinOp structures:
-        ```
-        ast.BinOp(
-            left=ast.BinOp(
-                left=ast.Name('Crosby')
+            Examples
+            --------
+            Instead of manually constructing nested ast.BinOp structures:
+            ```
+            ast.BinOp(
+                left=ast.BinOp(
+                    left=ast.Name('Crosby')
+                    , op=ast.BitOr()
+                    , right=ast.Name('Stills'))
                 , op=ast.BitOr()
-                , right=ast.Name('Stills'))
-            , op=ast.BitOr()
-            , right=ast.Name('Nash')
-        )
-        ```
+                , right=ast.Name('Nash')
+            )
+            ```
 
-        Simply use:
-        ```
-        astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
-        ```
+            Simply use:
+            ```
+            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
+            ```
 
-        Both produce the same AST structure but the join() method eliminates the manual nesting.
-        Handles single expressions and empty iterables gracefully.
-        """
+            Both produce the same AST structure but the join() method eliminates the manual nesting.
+            Handles single expressions and empty iterables gracefully.
+            """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
@@ -1170,43 +1170,43 @@ class Make:
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
             """
-        Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
+            Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
 
-        Like str.join() but for AST expressions.
+            Like str.join() but for AST expressions.
 
-        Parameters
-        ----------
-        expressions : Iterable[ast.expr]
-            Collection of expressions to join.
-        **keywordArguments : ast._attributes
+            Parameters
+            ----------
+            expressions : Iterable[ast.expr]
+                Collection of expressions to join.
+            **keywordArguments : ast._attributes
 
-        Returns
-        -------
-        joinedExpression : ast.expr
-            Single expression representing the joined expressions.
+            Returns
+            -------
+            joinedExpression : ast.expr
+                Single expression representing the joined expressions.
 
-        Examples
-        --------
-        Instead of manually constructing nested ast.BinOp structures:
-        ```
-        ast.BinOp(
-            left=ast.BinOp(
-                left=ast.Name('Crosby')
+            Examples
+            --------
+            Instead of manually constructing nested ast.BinOp structures:
+            ```
+            ast.BinOp(
+                left=ast.BinOp(
+                    left=ast.Name('Crosby')
+                    , op=ast.BitOr()
+                    , right=ast.Name('Stills'))
                 , op=ast.BitOr()
-                , right=ast.Name('Stills'))
-            , op=ast.BitOr()
-            , right=ast.Name('Nash')
-        )
-        ```
+                , right=ast.Name('Nash')
+            )
+            ```
 
-        Simply use:
-        ```
-        astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
-        ```
+            Simply use:
+            ```
+            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
+            ```
 
-        Both produce the same AST structure but the join() method eliminates the manual nesting.
-        Handles single expressions and empty iterables gracefully.
-        """
+            Both produce the same AST structure but the join() method eliminates the manual nesting.
+            Handles single expressions and empty iterables gracefully.
+            """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
@@ -1779,43 +1779,43 @@ class Make:
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
             """
-        Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
+            Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
 
-        Like str.join() but for AST expressions.
+            Like str.join() but for AST expressions.
 
-        Parameters
-        ----------
-        expressions : Iterable[ast.expr]
-            Collection of expressions to join.
-        **keywordArguments : ast._attributes
+            Parameters
+            ----------
+            expressions : Iterable[ast.expr]
+                Collection of expressions to join.
+            **keywordArguments : ast._attributes
 
-        Returns
-        -------
-        joinedExpression : ast.expr
-            Single expression representing the joined expressions.
+            Returns
+            -------
+            joinedExpression : ast.expr
+                Single expression representing the joined expressions.
 
-        Examples
-        --------
-        Instead of manually constructing nested ast.BinOp structures:
-        ```
-        ast.BinOp(
-            left=ast.BinOp(
-                left=ast.Name('Crosby')
+            Examples
+            --------
+            Instead of manually constructing nested ast.BinOp structures:
+            ```
+            ast.BinOp(
+                left=ast.BinOp(
+                    left=ast.Name('Crosby')
+                    , op=ast.BitOr()
+                    , right=ast.Name('Stills'))
                 , op=ast.BitOr()
-                , right=ast.Name('Stills'))
-            , op=ast.BitOr()
-            , right=ast.Name('Nash')
-        )
-        ```
+                , right=ast.Name('Nash')
+            )
+            ```
 
-        Simply use:
-        ```
-        astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
-        ```
+            Simply use:
+            ```
+            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
+            ```
 
-        Both produce the same AST structure but the join() method eliminates the manual nesting.
-        Handles single expressions and empty iterables gracefully.
-        """
+            Both produce the same AST structure but the join() method eliminates the manual nesting.
+            Handles single expressions and empty iterables gracefully.
+            """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
@@ -2073,43 +2073,43 @@ class Make:
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
             """
-        Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
+            Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
 
-        Like str.join() but for AST expressions.
+            Like str.join() but for AST expressions.
 
-        Parameters
-        ----------
-        expressions : Iterable[ast.expr]
-            Collection of expressions to join.
-        **keywordArguments : ast._attributes
+            Parameters
+            ----------
+            expressions : Iterable[ast.expr]
+                Collection of expressions to join.
+            **keywordArguments : ast._attributes
 
-        Returns
-        -------
-        joinedExpression : ast.expr
-            Single expression representing the joined expressions.
+            Returns
+            -------
+            joinedExpression : ast.expr
+                Single expression representing the joined expressions.
 
-        Examples
-        --------
-        Instead of manually constructing nested ast.BinOp structures:
-        ```
-        ast.BinOp(
-            left=ast.BinOp(
-                left=ast.Name('Crosby')
+            Examples
+            --------
+            Instead of manually constructing nested ast.BinOp structures:
+            ```
+            ast.BinOp(
+                left=ast.BinOp(
+                    left=ast.Name('Crosby')
+                    , op=ast.BitOr()
+                    , right=ast.Name('Stills'))
                 , op=ast.BitOr()
-                , right=ast.Name('Stills'))
-            , op=ast.BitOr()
-            , right=ast.Name('Nash')
-        )
-        ```
+                , right=ast.Name('Nash')
+            )
+            ```
 
-        Simply use:
-        ```
-        astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
-        ```
+            Simply use:
+            ```
+            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
+            ```
 
-        Both produce the same AST structure but the join() method eliminates the manual nesting.
-        Handles single expressions and empty iterables gracefully.
-        """
+            Both produce the same AST structure but the join() method eliminates the manual nesting.
+            Handles single expressions and empty iterables gracefully.
+            """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
@@ -2134,43 +2134,43 @@ class Make:
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
             """
-        Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
+            Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
 
-        Like str.join() but for AST expressions.
+            Like str.join() but for AST expressions.
 
-        Parameters
-        ----------
-        expressions : Iterable[ast.expr]
-            Collection of expressions to join.
-        **keywordArguments : ast._attributes
+            Parameters
+            ----------
+            expressions : Iterable[ast.expr]
+                Collection of expressions to join.
+            **keywordArguments : ast._attributes
 
-        Returns
-        -------
-        joinedExpression : ast.expr
-            Single expression representing the joined expressions.
+            Returns
+            -------
+            joinedExpression : ast.expr
+                Single expression representing the joined expressions.
 
-        Examples
-        --------
-        Instead of manually constructing nested ast.BinOp structures:
-        ```
-        ast.BinOp(
-            left=ast.BinOp(
-                left=ast.Name('Crosby')
+            Examples
+            --------
+            Instead of manually constructing nested ast.BinOp structures:
+            ```
+            ast.BinOp(
+                left=ast.BinOp(
+                    left=ast.Name('Crosby')
+                    , op=ast.BitOr()
+                    , right=ast.Name('Stills'))
                 , op=ast.BitOr()
-                , right=ast.Name('Stills'))
-            , op=ast.BitOr()
-            , right=ast.Name('Nash')
-        )
-        ```
+                , right=ast.Name('Nash')
+            )
+            ```
 
-        Simply use:
-        ```
-        astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
-        ```
+            Simply use:
+            ```
+            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
+            ```
 
-        Both produce the same AST structure but the join() method eliminates the manual nesting.
-        Handles single expressions and empty iterables gracefully.
-        """
+            Both produce the same AST structure but the join() method eliminates the manual nesting.
+            Handles single expressions and empty iterables gracefully.
+            """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
@@ -2209,43 +2209,43 @@ class Make:
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
             """
-        Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
+            Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
 
-        Like str.join() but for AST expressions.
+            Like str.join() but for AST expressions.
 
-        Parameters
-        ----------
-        expressions : Iterable[ast.expr]
-            Collection of expressions to join.
-        **keywordArguments : ast._attributes
+            Parameters
+            ----------
+            expressions : Iterable[ast.expr]
+                Collection of expressions to join.
+            **keywordArguments : ast._attributes
 
-        Returns
-        -------
-        joinedExpression : ast.expr
-            Single expression representing the joined expressions.
+            Returns
+            -------
+            joinedExpression : ast.expr
+                Single expression representing the joined expressions.
 
-        Examples
-        --------
-        Instead of manually constructing nested ast.BinOp structures:
-        ```
-        ast.BinOp(
-            left=ast.BinOp(
-                left=ast.Name('Crosby')
+            Examples
+            --------
+            Instead of manually constructing nested ast.BinOp structures:
+            ```
+            ast.BinOp(
+                left=ast.BinOp(
+                    left=ast.Name('Crosby')
+                    , op=ast.BitOr()
+                    , right=ast.Name('Stills'))
                 , op=ast.BitOr()
-                , right=ast.Name('Stills'))
-            , op=ast.BitOr()
-            , right=ast.Name('Nash')
-        )
-        ```
+                , right=ast.Name('Nash')
+            )
+            ```
 
-        Simply use:
-        ```
-        astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
-        ```
+            Simply use:
+            ```
+            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
+            ```
 
-        Both produce the same AST structure but the join() method eliminates the manual nesting.
-        Handles single expressions and empty iterables gracefully.
-        """
+            Both produce the same AST structure but the join() method eliminates the manual nesting.
+            Handles single expressions and empty iterables gracefully.
+            """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
@@ -2391,45 +2391,45 @@ class Make:
         @classmethod
         def join(cls, expressions: Sequence[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
             """
-        Single `ast.expr` from a sequence of `ast.expr` by forming an `ast.BoolOp` that logically "joins" expressions using the `ast.BoolOp` subclass.
+            Single `ast.expr` from a sequence of `ast.expr` by forming an `ast.BoolOp` that logically "joins" expressions using the `ast.BoolOp` subclass.
 
-        Like str.join() but for AST expressions.
+            Like str.join() but for AST expressions.
 
-        Parameters
-        ----------
-        expressions : Sequence[ast.expr]
-            Collection of expressions to join.
-        **keywordArguments : ast._attributes
+            Parameters
+            ----------
+            expressions : Sequence[ast.expr]
+                Collection of expressions to join.
+            **keywordArguments : ast._attributes
 
-        Returns
-        -------
-        joinedExpression : ast.expr
-            Single expression representing the joined expressions.
+            Returns
+            -------
+            joinedExpression : ast.expr
+                Single expression representing the joined expressions.
 
-        Examples
-        --------
-        Instead of manually constructing ast.BoolOp structures:
-        ```
-        ast.BoolOp(
-            op=ast.And(),
-            values=[ast.Name('Lions'), ast.Name('tigers'), ast.Name('bears')]
-        )
-        ```
+            Examples
+            --------
+            Instead of manually constructing ast.BoolOp structures:
+            ```
+            ast.BoolOp(
+                op=ast.And(),
+                values=[ast.Name('Lions'), ast.Name('tigers'), ast.Name('bears')]
+            )
+            ```
 
-        Simply use:
-        ```
-        astToolkit.And.join([ast.Name('Lions'), ast.Name('tigers'), ast.Name('bears')])
-        ```
+            Simply use:
+            ```
+            astToolkit.And.join([ast.Name('Lions'), ast.Name('tigers'), ast.Name('bears')])
+            ```
 
-        Both produce the same AST structure but the join() method eliminates the manual construction.
-        Handles single expressions and empty sequences gracefully.
-        """
+            Both produce the same AST structure but the join() method eliminates the manual construction.
+            Handles single expressions and empty sequences gracefully.
+            """
             return Make._boolopJoinMethod(cls, expressions, **keywordArguments)
     match sys.version_info:
         case version if version >= (3, 13):
 
             @staticmethod
-            def ParamSpec(name: str, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.ParamSpec: # pyright: ignore[reportRedeclaration]
+            def ParamSpec(name: str, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.ParamSpec:
                 """
         Parameter specification type parameter for generic callable types (**Param**eter **Spec**ification).
         (AI generated docstring)
@@ -2504,43 +2504,43 @@ class Make:
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
             """
-        Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
+            Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
 
-        Like str.join() but for AST expressions.
+            Like str.join() but for AST expressions.
 
-        Parameters
-        ----------
-        expressions : Iterable[ast.expr]
-            Collection of expressions to join.
-        **keywordArguments : ast._attributes
+            Parameters
+            ----------
+            expressions : Iterable[ast.expr]
+                Collection of expressions to join.
+            **keywordArguments : ast._attributes
 
-        Returns
-        -------
-        joinedExpression : ast.expr
-            Single expression representing the joined expressions.
+            Returns
+            -------
+            joinedExpression : ast.expr
+                Single expression representing the joined expressions.
 
-        Examples
-        --------
-        Instead of manually constructing nested ast.BinOp structures:
-        ```
-        ast.BinOp(
-            left=ast.BinOp(
-                left=ast.Name('Crosby')
+            Examples
+            --------
+            Instead of manually constructing nested ast.BinOp structures:
+            ```
+            ast.BinOp(
+                left=ast.BinOp(
+                    left=ast.Name('Crosby')
+                    , op=ast.BitOr()
+                    , right=ast.Name('Stills'))
                 , op=ast.BitOr()
-                , right=ast.Name('Stills'))
-            , op=ast.BitOr()
-            , right=ast.Name('Nash')
-        )
-        ```
+                , right=ast.Name('Nash')
+            )
+            ```
 
-        Simply use:
-        ```
-        astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
-        ```
+            Simply use:
+            ```
+            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
+            ```
 
-        Both produce the same AST structure but the join() method eliminates the manual nesting.
-        Handles single expressions and empty iterables gracefully.
-        """
+            Both produce the same AST structure but the join() method eliminates the manual nesting.
+            Handles single expressions and empty iterables gracefully.
+            """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
@@ -2585,43 +2585,43 @@ class Make:
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
             """
-        Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
+            Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
 
-        Like str.join() but for AST expressions.
+            Like str.join() but for AST expressions.
 
-        Parameters
-        ----------
-        expressions : Iterable[ast.expr]
-            Collection of expressions to join.
-        **keywordArguments : ast._attributes
+            Parameters
+            ----------
+            expressions : Iterable[ast.expr]
+                Collection of expressions to join.
+            **keywordArguments : ast._attributes
 
-        Returns
-        -------
-        joinedExpression : ast.expr
-            Single expression representing the joined expressions.
+            Returns
+            -------
+            joinedExpression : ast.expr
+                Single expression representing the joined expressions.
 
-        Examples
-        --------
-        Instead of manually constructing nested ast.BinOp structures:
-        ```
-        ast.BinOp(
-            left=ast.BinOp(
-                left=ast.Name('Crosby')
+            Examples
+            --------
+            Instead of manually constructing nested ast.BinOp structures:
+            ```
+            ast.BinOp(
+                left=ast.BinOp(
+                    left=ast.Name('Crosby')
+                    , op=ast.BitOr()
+                    , right=ast.Name('Stills'))
                 , op=ast.BitOr()
-                , right=ast.Name('Stills'))
-            , op=ast.BitOr()
-            , right=ast.Name('Nash')
-        )
-        ```
+                , right=ast.Name('Nash')
+            )
+            ```
 
-        Simply use:
-        ```
-        astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
-        ```
+            Simply use:
+            ```
+            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
+            ```
 
-        Both produce the same AST structure but the join() method eliminates the manual nesting.
-        Handles single expressions and empty iterables gracefully.
-        """
+            Both produce the same AST structure but the join() method eliminates the manual nesting.
+            Handles single expressions and empty iterables gracefully.
+            """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
@@ -2756,43 +2756,43 @@ class Make:
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
             """
-        Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
+            Single `ast.expr` from a collection of `ast.expr` by forming nested `ast.BinOp` that are logically "joined" using the `ast.operator` subclass.
 
-        Like str.join() but for AST expressions.
+            Like str.join() but for AST expressions.
 
-        Parameters
-        ----------
-        expressions : Iterable[ast.expr]
-            Collection of expressions to join.
-        **keywordArguments : ast._attributes
+            Parameters
+            ----------
+            expressions : Iterable[ast.expr]
+                Collection of expressions to join.
+            **keywordArguments : ast._attributes
 
-        Returns
-        -------
-        joinedExpression : ast.expr
-            Single expression representing the joined expressions.
+            Returns
+            -------
+            joinedExpression : ast.expr
+                Single expression representing the joined expressions.
 
-        Examples
-        --------
-        Instead of manually constructing nested ast.BinOp structures:
-        ```
-        ast.BinOp(
-            left=ast.BinOp(
-                left=ast.Name('Crosby')
+            Examples
+            --------
+            Instead of manually constructing nested ast.BinOp structures:
+            ```
+            ast.BinOp(
+                left=ast.BinOp(
+                    left=ast.Name('Crosby')
+                    , op=ast.BitOr()
+                    , right=ast.Name('Stills'))
                 , op=ast.BitOr()
-                , right=ast.Name('Stills'))
-            , op=ast.BitOr()
-            , right=ast.Name('Nash')
-        )
-        ```
+                , right=ast.Name('Nash')
+            )
+            ```
 
-        Simply use:
-        ```
-        astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
-        ```
+            Simply use:
+            ```
+            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'), ast.Name('Nash')])
+            ```
 
-        Both produce the same AST structure but the join() method eliminates the manual nesting.
-        Handles single expressions and empty iterables gracefully.
-        """
+            Both produce the same AST structure but the join() method eliminates the manual nesting.
+            Handles single expressions and empty iterables gracefully.
+            """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
@@ -2982,7 +2982,7 @@ class Make:
         case version if version >= (3, 13):
 
             @staticmethod
-            def TypeVar(name: str, bound: ast.expr | None=None, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVar: # pyright: ignore[reportRedeclaration]
+            def TypeVar(name: str, bound: ast.expr | None=None, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVar:
                 """
         Type variable parameter for generic types with optional bounds and defaults (**Type** **Var**iable).
         (AI generated docstring)
@@ -3027,7 +3027,7 @@ class Make:
         case version if version >= (3, 13):
 
             @staticmethod
-            def TypeVarTuple(name: str, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVarTuple: # pyright: ignore[reportRedeclaration]
+            def TypeVarTuple(name: str, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVarTuple:
                 """
         Type variable tuple for variadic generic types (**Type** **Var**iable **Tuple**).
         (AI generated docstring)
