@@ -1,17 +1,14 @@
-# pyright: reportMatchNotExhaustive=false
 """This file is generated automatically, so changes to this file will be lost."""
 from astToolkit import (
-	ConstantValueType, hasDOTannotation, hasDOTarg, hasDOTargs, hasDOTargtypes, hasDOTasname,
-	hasDOTattr, hasDOTbases, hasDOTbody, hasDOTbound, hasDOTcases, hasDOTcause, hasDOTcls,
-	hasDOTcomparators, hasDOTcontext_expr, hasDOTconversion, hasDOTctx, hasDOTdecorator_list,
-	hasDOTdefaults, hasDOTelt, hasDOTelts, hasDOTexc, hasDOTfinalbody, hasDOTformat_spec, hasDOTfunc,
-	hasDOTgenerators, hasDOTguard, hasDOThandlers, hasDOTid, hasDOTifs, hasDOTis_async, hasDOTitems,
-	hasDOTiter, hasDOTkey, hasDOTkeys, hasDOTkeywords, hasDOTkind, hasDOTkw_defaults, hasDOTkwarg,
-	hasDOTkwd_attrs, hasDOTkwd_patterns, hasDOTkwonlyargs, hasDOTleft, hasDOTlevel, hasDOTlineno,
-	hasDOTlower, hasDOTmodule, hasDOTmsg, hasDOTname, hasDOTnames, hasDOTop, hasDOToperand, hasDOTops,
-	hasDOToptional_vars, hasDOTorelse, hasDOTpattern, hasDOTpatterns, hasDOTposonlyargs, hasDOTrest,
-	hasDOTreturns, hasDOTright, hasDOTsimple, hasDOTslice, hasDOTstep, hasDOTsubject, hasDOTtag,
-	hasDOTtarget, hasDOTtargets, hasDOTtest, hasDOTtype, hasDOTtype_comment, hasDOTtype_ignores,
+	ConstantValueType, hasDOTannotation, hasDOTarg, hasDOTargs, hasDOTargtypes, hasDOTasname, hasDOTattr, hasDOTbases,
+	hasDOTbody, hasDOTbound, hasDOTcases, hasDOTcause, hasDOTcls, hasDOTcomparators, hasDOTcontext_expr, hasDOTconversion,
+	hasDOTctx, hasDOTdecorator_list, hasDOTdefaults, hasDOTelt, hasDOTelts, hasDOTexc, hasDOTfinalbody, hasDOTformat_spec,
+	hasDOTfunc, hasDOTgenerators, hasDOTguard, hasDOThandlers, hasDOTid, hasDOTifs, hasDOTis_async, hasDOTitems,
+	hasDOTiter, hasDOTkey, hasDOTkeys, hasDOTkeywords, hasDOTkind, hasDOTkw_defaults, hasDOTkwarg, hasDOTkwd_attrs,
+	hasDOTkwd_patterns, hasDOTkwonlyargs, hasDOTleft, hasDOTlevel, hasDOTlineno, hasDOTlower, hasDOTmodule, hasDOTmsg,
+	hasDOTname, hasDOTnames, hasDOTop, hasDOToperand, hasDOTops, hasDOToptional_vars, hasDOTorelse, hasDOTpattern,
+	hasDOTpatterns, hasDOTposonlyargs, hasDOTrest, hasDOTreturns, hasDOTright, hasDOTsimple, hasDOTslice, hasDOTstep,
+	hasDOTsubject, hasDOTtag, hasDOTtarget, hasDOTtargets, hasDOTtest, hasDOTtype, hasDOTtype_comment, hasDOTtype_ignores,
 	hasDOTtype_params, hasDOTupper, hasDOTvalue, hasDOTvalues, hasDOTvararg,
 )
 from collections.abc import Callable, Sequence
@@ -155,15 +152,14 @@ class ClassIsAndAttribute:
         def workhorse(node: ast.AST) -> TypeIs[hasDOTdecorator_list] | bool:
             return isinstance(node, astClass) and attributeCondition(node.decorator_list)
         return workhorse
-    match sys.version_info:
-        case version if version >= (3, 13):
+    if sys.version_info >= (3, 13):
 
-            @staticmethod
-            def default_valueIs(astClass: type[hasDOTdefault_value], attributeCondition: Callable[[ast.expr | None], bool]) -> Callable[[ast.AST], TypeIs[hasDOTdefault_value] | bool]:
+        @staticmethod
+        def default_valueIs(astClass: type[hasDOTdefault_value], attributeCondition: Callable[[ast.expr | None], bool]) -> Callable[[ast.AST], TypeIs[hasDOTdefault_value] | bool]:
 
-                def workhorse(node: ast.AST) -> TypeIs[hasDOTdefault_value] | bool:
-                    return isinstance(node, astClass) and node.default_value is not None and attributeCondition(node.default_value)
-                return workhorse
+            def workhorse(node: ast.AST) -> TypeIs[hasDOTdefault_value] | bool:
+                return isinstance(node, astClass) and node.default_value is not None and attributeCondition(node.default_value)
+            return workhorse
 
     @staticmethod
     def defaultsIs(astClass: type[hasDOTdefaults], attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeIs[hasDOTdefaults] | bool]:

@@ -1,7 +1,6 @@
 """This file is generated automatically, so changes to this file will be lost."""
 from astToolkit import (
-	ast_attributes, ast_attributes_int, ast_attributes_type_comment, ConstantValueType,
-	identifierDotAttribute,
+	ast_attributes, ast_attributes_int, ast_attributes_type_comment, ConstantValueType, identifierDotAttribute,
 )
 from collections.abc import Iterable, Sequence
 from typing import overload
@@ -2425,12 +2424,11 @@ class Make:
             Handles single expressions and empty sequences gracefully.
             """
             return Make._boolopJoinMethod(cls, expressions, **keywordArguments)
-    match sys.version_info:
-        case version if version >= (3, 13):
+    if sys.version_info >= (3, 13):
 
-            @staticmethod
-            def ParamSpec(name: str, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.ParamSpec:
-                """
+        @staticmethod
+        def ParamSpec(name: str, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.ParamSpec:
+            """
         Parameter specification type parameter for generic callable types (**Param**eter **Spec**ification).
         (AI generated docstring)
 
@@ -2446,12 +2444,12 @@ class Make:
             parameterSpecification: ast.ParamSpec
             AST object representing a parameter specification type parameter.
         """
-                return ast.ParamSpec(name=name, default_value=default_value, **keywordArguments)
-        case _:
+            return ast.ParamSpec(name=name, default_value=default_value, **keywordArguments)
+    else:
 
-            @staticmethod
-            def ParamSpec(name: str, **keywordArguments: Unpack[ast_attributes_int]) -> ast.ParamSpec:
-                """
+        @staticmethod
+        def ParamSpec(name: str, **keywordArguments: Unpack[ast_attributes_int]) -> ast.ParamSpec:
+            """
         Parameter specification type parameter for generic callable types (**Param**eter **Spec**ification).
         (AI generated docstring)
 
@@ -2467,7 +2465,7 @@ class Make:
             parameterSpecification: ast.ParamSpec
             AST object representing a parameter specification type parameter.
         """
-                return ast.ParamSpec(name=name, **keywordArguments)
+            return ast.ParamSpec(name=name, **keywordArguments)
 
     @staticmethod
     def Pass(**keywordArguments: Unpack[ast_attributes]) -> ast.Pass:
@@ -2978,12 +2976,11 @@ class Make:
             taggedIgnore = Make.TypeIgnore(15, '[assignment]')
         """
         return ast.TypeIgnore(lineno=lineno, tag=tag)
-    match sys.version_info:
-        case version if version >= (3, 13):
+    if sys.version_info >= (3, 13):
 
-            @staticmethod
-            def TypeVar(name: str, bound: ast.expr | None=None, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVar:
-                """
+        @staticmethod
+        def TypeVar(name: str, bound: ast.expr | None=None, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVar:
+            """
         Type variable parameter for generic types with optional bounds and defaults (**Type** **Var**iable).
         (AI generated docstring)
 
@@ -3000,12 +2997,12 @@ class Make:
             typeVariable: ast.TypeVar
             AST object representing a type variable with optional constraints.
         """
-                return ast.TypeVar(name=name, bound=bound, default_value=default_value, **keywordArguments)
-        case _:
+            return ast.TypeVar(name=name, bound=bound, default_value=default_value, **keywordArguments)
+    else:
 
-            @staticmethod
-            def TypeVar(name: str, bound: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVar:
-                """
+        @staticmethod
+        def TypeVar(name: str, bound: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVar:
+            """
         Type variable parameter for generic types with optional bounds and defaults (**Type** **Var**iable).
         (AI generated docstring)
 
@@ -3022,13 +3019,12 @@ class Make:
             typeVariable: ast.TypeVar
             AST object representing a type variable with optional constraints.
         """
-                return ast.TypeVar(name=name, bound=bound, **keywordArguments)
-    match sys.version_info:
-        case version if version >= (3, 13):
+            return ast.TypeVar(name=name, bound=bound, **keywordArguments)
+    if sys.version_info >= (3, 13):
 
-            @staticmethod
-            def TypeVarTuple(name: str, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVarTuple:
-                """
+        @staticmethod
+        def TypeVarTuple(name: str, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVarTuple:
+            """
         Type variable tuple for variadic generic types (**Type** **Var**iable **Tuple**).
         (AI generated docstring)
 
@@ -3044,12 +3040,12 @@ class Make:
             typeVariableTuple: ast.TypeVarTuple
             AST object representing a variadic type variable.
         """
-                return ast.TypeVarTuple(name=name, default_value=default_value, **keywordArguments)
-        case _:
+            return ast.TypeVarTuple(name=name, default_value=default_value, **keywordArguments)
+    else:
 
-            @staticmethod
-            def TypeVarTuple(name: str, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVarTuple:
-                """
+        @staticmethod
+        def TypeVarTuple(name: str, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVarTuple:
+            """
         Type variable tuple for variadic generic types (**Type** **Var**iable **Tuple**).
         (AI generated docstring)
 
@@ -3065,7 +3061,7 @@ class Make:
             typeVariableTuple: ast.TypeVarTuple
             AST object representing a variadic type variable.
         """
-                return ast.TypeVarTuple(name=name, **keywordArguments)
+            return ast.TypeVarTuple(name=name, **keywordArguments)
 
     @staticmethod
     def UAdd() -> ast.UAdd:

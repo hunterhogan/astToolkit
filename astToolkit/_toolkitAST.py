@@ -1,6 +1,4 @@
-from astToolkit import (
-	identifierDotAttribute, IfThis, IngredientsFunction, LedgerOfImports, NodeTourist, Then,
-)
+from astToolkit import identifierDotAttribute, IfThis, IngredientsFunction, LedgerOfImports, NodeTourist, Then
 from inspect import getsource as inspect_getsource
 from os import PathLike
 from pathlib import Path, PurePath

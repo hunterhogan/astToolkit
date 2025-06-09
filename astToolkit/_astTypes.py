@@ -1,4 +1,3 @@
-# pyright: reportMatchNotExhaustive=false
 """This file is generated automatically, so changes to this file will be lost."""
 from types import EllipsisType
 from typing import TypeAlias as typing_TypeAlias, TypedDict, TypeVar as typing_TypeVar
@@ -64,9 +63,8 @@ hasDOTcontext_expr: typing_TypeAlias = ast.withitem
 hasDOTconversion: typing_TypeAlias = ast.FormattedValue
 hasDOTctx: typing_TypeAlias = ast.Attribute | ast.List | ast.Name | ast.Starred | ast.Subscript | ast.Tuple
 hasDOTdecorator_list: typing_TypeAlias = ast.AsyncFunctionDef | ast.ClassDef | ast.FunctionDef
-match sys.version_info:
-    case version if version >= (3, 13):
-        hasDOTdefault_value: typing_TypeAlias = ast.ParamSpec | ast.TypeVar | ast.TypeVarTuple
+if sys.version_info >= (3, 13):
+    hasDOTdefault_value: typing_TypeAlias = ast.ParamSpec | ast.TypeVar | ast.TypeVarTuple
 hasDOTdefaults: typing_TypeAlias = ast.arguments
 hasDOTelt: typing_TypeAlias = ast.GeneratorExp | ast.ListComp | ast.SetComp
 hasDOTelts: typing_TypeAlias = ast.List | ast.Set | ast.Tuple

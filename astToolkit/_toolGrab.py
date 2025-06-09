@@ -1,19 +1,15 @@
-# pyright: reportMatchNotExhaustive=false
 """This file is generated automatically, so changes to this file will be lost."""
 from astToolkit import (
-	ConstantValueType, hasDOTannotation, hasDOTarg, hasDOTargs, hasDOTargtypes, hasDOTasname,
-	hasDOTattr, hasDOTbases, hasDOTbody, hasDOTbound, hasDOTcases, hasDOTcause, hasDOTcls,
-	hasDOTcomparators, hasDOTcontext_expr, hasDOTconversion, hasDOTctx, hasDOTdecorator_list,
-	hasDOTdefaults, hasDOTelt, hasDOTelts, hasDOTexc, hasDOTfinalbody, hasDOTformat_spec, hasDOTfunc,
-	hasDOTgenerators, hasDOTguard, hasDOThandlers, hasDOTid, hasDOTifs, hasDOTis_async, hasDOTitems,
-	hasDOTiter, hasDOTkey, hasDOTkeys, hasDOTkeywords, hasDOTkind, hasDOTkw_defaults, hasDOTkwarg,
-	hasDOTkwd_attrs, hasDOTkwd_patterns, hasDOTkwonlyargs, hasDOTleft, hasDOTlevel, hasDOTlineno,
-	hasDOTlower, hasDOTmodule, hasDOTmsg, hasDOTname, hasDOTnames, hasDOTop, hasDOToperand, hasDOTops,
-	hasDOToptional_vars, hasDOTorelse, hasDOTpattern, hasDOTpatterns, hasDOTposonlyargs, hasDOTrest,
-	hasDOTreturns, hasDOTright, hasDOTsimple, hasDOTslice, hasDOTstep, hasDOTsubject, hasDOTtag,
-	hasDOTtarget, hasDOTtargets, hasDOTtest, hasDOTtype, hasDOTtype_comment, hasDOTtype_ignores,
-	hasDOTtype_params, hasDOTupper, hasDOTvalue, hasDOTvalues, hasDOTvararg, 一符, 个, 二符, 俪, 口, 工, 工位,
-	布尔符, 形, 比符,
+	ConstantValueType, hasDOTannotation, hasDOTarg, hasDOTargs, hasDOTargtypes, hasDOTasname, hasDOTattr, hasDOTbases,
+	hasDOTbody, hasDOTbound, hasDOTcases, hasDOTcause, hasDOTcls, hasDOTcomparators, hasDOTcontext_expr, hasDOTconversion,
+	hasDOTctx, hasDOTdecorator_list, hasDOTdefaults, hasDOTelt, hasDOTelts, hasDOTexc, hasDOTfinalbody, hasDOTformat_spec,
+	hasDOTfunc, hasDOTgenerators, hasDOTguard, hasDOThandlers, hasDOTid, hasDOTifs, hasDOTis_async, hasDOTitems,
+	hasDOTiter, hasDOTkey, hasDOTkeys, hasDOTkeywords, hasDOTkind, hasDOTkw_defaults, hasDOTkwarg, hasDOTkwd_attrs,
+	hasDOTkwd_patterns, hasDOTkwonlyargs, hasDOTleft, hasDOTlevel, hasDOTlineno, hasDOTlower, hasDOTmodule, hasDOTmsg,
+	hasDOTname, hasDOTnames, hasDOTop, hasDOToperand, hasDOTops, hasDOToptional_vars, hasDOTorelse, hasDOTpattern,
+	hasDOTpatterns, hasDOTposonlyargs, hasDOTrest, hasDOTreturns, hasDOTright, hasDOTsimple, hasDOTslice, hasDOTstep,
+	hasDOTsubject, hasDOTtag, hasDOTtarget, hasDOTtargets, hasDOTtest, hasDOTtype, hasDOTtype_comment, hasDOTtype_ignores,
+	hasDOTtype_params, hasDOTupper, hasDOTvalue, hasDOTvalues, hasDOTvararg, 一符, 个, 二符, 俪, 口, 工, 工位, 布尔符, 形, 比符,
 )
 from collections.abc import Callable, Sequence
 from typing import Any
@@ -179,16 +175,15 @@ class Grab:
             setattr(node, 'decorator_list', action(getattr(node, 'decorator_list')))
             return node
         return workhorse
-    match sys.version_info:
-        case version if version >= (3, 13):
+    if sys.version_info >= (3, 13):
 
-            @staticmethod
-            def default_valueAttribute(action: Callable[[工 | None], 工 | None]) -> Callable[[hasDOTdefault_value], hasDOTdefault_value]:
+        @staticmethod
+        def default_valueAttribute(action: Callable[[工 | None], 工 | None]) -> Callable[[hasDOTdefault_value], hasDOTdefault_value]:
 
-                def workhorse(node: hasDOTdefault_value) -> hasDOTdefault_value:
-                    setattr(node, 'default_value', action(getattr(node, 'default_value')))
-                    return node
-                return workhorse
+            def workhorse(node: hasDOTdefault_value) -> hasDOTdefault_value:
+                setattr(node, 'default_value', action(getattr(node, 'default_value')))
+                return node
+            return workhorse
 
     @staticmethod
     def defaultsAttribute(action: Callable[[list[工]], list[工]]) -> Callable[[hasDOTdefaults], hasDOTdefaults]:

@@ -1,26 +1,21 @@
-# pyright: reportMatchNotExhaustive=false
 """This file is generated automatically, so changes to this file will be lost."""
 from astToolkit import (
-	ConstantValueType, hasDOTannotation, hasDOTannotation_expr, hasDOTannotation_exprOrNone, hasDOTarg,
-	hasDOTarg_str, hasDOTarg_strOrNone, hasDOTargs, hasDOTargs_arguments, hasDOTargs_list_arg,
-	hasDOTargs_list_expr, hasDOTargtypes, hasDOTasname, hasDOTattr, hasDOTbases, hasDOTbody,
-	hasDOTbody_expr, hasDOTbody_list_stmt, hasDOTbound, hasDOTcases, hasDOTcause, hasDOTcls,
-	hasDOTcomparators, hasDOTcontext_expr, hasDOTconversion, hasDOTctx, hasDOTdecorator_list,
-	hasDOTdefaults, hasDOTelt, hasDOTelts, hasDOTexc, hasDOTfinalbody, hasDOTformat_spec, hasDOTfunc,
-	hasDOTgenerators, hasDOTguard, hasDOThandlers, hasDOTid, hasDOTifs, hasDOTis_async, hasDOTitems,
-	hasDOTiter, hasDOTkey, hasDOTkeys, hasDOTkeys_list_expr, hasDOTkeys_list_exprOrNone,
-	hasDOTkeywords, hasDOTkind, hasDOTkw_defaults, hasDOTkwarg, hasDOTkwd_attrs, hasDOTkwd_patterns,
-	hasDOTkwonlyargs, hasDOTleft, hasDOTlevel, hasDOTlineno, hasDOTlower, hasDOTmodule, hasDOTmsg,
-	hasDOTname, hasDOTname_Name, hasDOTname_str, hasDOTname_strOrNone, hasDOTnames,
-	hasDOTnames_list_alias, hasDOTnames_list_str, hasDOTop, hasDOTop_boolop, hasDOTop_operator,
-	hasDOTop_unaryop, hasDOToperand, hasDOTops, hasDOToptional_vars, hasDOTorelse, hasDOTorelse_expr,
-	hasDOTorelse_list_stmt, hasDOTpattern, hasDOTpattern_pattern, hasDOTpattern_patternOrNone,
-	hasDOTpatterns, hasDOTposonlyargs, hasDOTrest, hasDOTreturns, hasDOTreturns_expr,
-	hasDOTreturns_exprOrNone, hasDOTright, hasDOTsimple, hasDOTslice, hasDOTstep, hasDOTsubject,
-	hasDOTtag, hasDOTtarget, hasDOTtarget_expr, hasDOTtarget_Name,
-	hasDOTtarget_NameOrAttributeOrSubscript, hasDOTtargets, hasDOTtest, hasDOTtype, hasDOTtype_comment,
-	hasDOTtype_ignores, hasDOTtype_params, hasDOTupper, hasDOTvalue, hasDOTvalue_boolOrNone,
-	hasDOTvalue_ConstantValueType, hasDOTvalue_expr, hasDOTvalue_exprOrNone, hasDOTvalues,
+	ConstantValueType, hasDOTannotation, hasDOTannotation_expr, hasDOTannotation_exprOrNone, hasDOTarg, hasDOTarg_str,
+	hasDOTarg_strOrNone, hasDOTargs, hasDOTargs_arguments, hasDOTargs_list_arg, hasDOTargs_list_expr, hasDOTargtypes,
+	hasDOTasname, hasDOTattr, hasDOTbases, hasDOTbody, hasDOTbody_expr, hasDOTbody_list_stmt, hasDOTbound, hasDOTcases,
+	hasDOTcause, hasDOTcls, hasDOTcomparators, hasDOTcontext_expr, hasDOTconversion, hasDOTctx, hasDOTdecorator_list,
+	hasDOTdefaults, hasDOTelt, hasDOTelts, hasDOTexc, hasDOTfinalbody, hasDOTformat_spec, hasDOTfunc, hasDOTgenerators,
+	hasDOTguard, hasDOThandlers, hasDOTid, hasDOTifs, hasDOTis_async, hasDOTitems, hasDOTiter, hasDOTkey, hasDOTkeys,
+	hasDOTkeys_list_expr, hasDOTkeys_list_exprOrNone, hasDOTkeywords, hasDOTkind, hasDOTkw_defaults, hasDOTkwarg,
+	hasDOTkwd_attrs, hasDOTkwd_patterns, hasDOTkwonlyargs, hasDOTleft, hasDOTlevel, hasDOTlineno, hasDOTlower,
+	hasDOTmodule, hasDOTmsg, hasDOTname, hasDOTname_Name, hasDOTname_str, hasDOTname_strOrNone, hasDOTnames,
+	hasDOTnames_list_alias, hasDOTnames_list_str, hasDOTop, hasDOTop_boolop, hasDOTop_operator, hasDOTop_unaryop,
+	hasDOToperand, hasDOTops, hasDOToptional_vars, hasDOTorelse, hasDOTorelse_expr, hasDOTorelse_list_stmt, hasDOTpattern,
+	hasDOTpattern_pattern, hasDOTpattern_patternOrNone, hasDOTpatterns, hasDOTposonlyargs, hasDOTrest, hasDOTreturns,
+	hasDOTreturns_expr, hasDOTreturns_exprOrNone, hasDOTright, hasDOTsimple, hasDOTslice, hasDOTstep, hasDOTsubject,
+	hasDOTtag, hasDOTtarget, hasDOTtarget_expr, hasDOTtarget_Name, hasDOTtarget_NameOrAttributeOrSubscript, hasDOTtargets,
+	hasDOTtest, hasDOTtype, hasDOTtype_comment, hasDOTtype_ignores, hasDOTtype_params, hasDOTupper, hasDOTvalue,
+	hasDOTvalue_boolOrNone, hasDOTvalue_ConstantValueType, hasDOTvalue_expr, hasDOTvalue_exprOrNone, hasDOTvalues,
 	hasDOTvararg,
 )
 from collections.abc import Sequence
@@ -155,12 +150,11 @@ class DOT:
     @staticmethod
     def decorator_list(node: hasDOTdecorator_list) -> Sequence[ast.expr]:
         return node.decorator_list
-    match sys.version_info:
-        case version if version >= (3, 13):
+    if sys.version_info >= (3, 13):
 
-            @staticmethod
-            def default_value(node: hasDOTdefault_value) -> ast.expr | None:
-                return node.default_value
+        @staticmethod
+        def default_value(node: hasDOTdefault_value) -> ast.expr | None:
+            return node.default_value
 
     @staticmethod
     def defaults(node: hasDOTdefaults) -> Sequence[ast.expr]:
