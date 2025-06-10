@@ -1,12 +1,11 @@
+from astToolkit import Make
+from test.test_ast.snippets import exec_tests
+from test.test_ast.utils import to_tuple
 import ast
 import copy
 import pickle
 import pytest
 import textwrap
-from astToolkit import Make
-from test.test_ast.utils import to_tuple
-from test.test_ast.snippets import exec_tests
-
 
 class TestCopy:
     """Test copying and pickling AST nodes."""
@@ -83,11 +82,10 @@ class TestCopy:
     #     """Test copying nodes with complex nested structures."""
     #     # Create a function definition with Make
     #     argA = Make.arg("a", Make.Name("int", ast.Load()))
-    #     argB = Make.arg("b", Make.Name("str", ast.Load()), Make.Constant("default"))
+    #     argB = Make.arg("b", Make.Name("str", ast.Load()))
     #     argumentsNode = Make.arguments([argA], [], [], [argB], [Make.Constant("default")], None, [])
 
-    #     returnStmt = Make.Return(Make.BinOp(Make.Name("a", ast.Load()), ast.Add(),
-    #                                        Make.Constant(1)))
+    #     returnStmt = Make.Return(Make.BinOp(Make.Name("a", ast.Load()), ast.Add(), Make.Constant(1)))
     #     functionDef = Make.FunctionDef("testFunction", argumentsNode, [returnStmt], [], None)
     #     moduleNode = Make.Module([functionDef], [])
 

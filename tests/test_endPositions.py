@@ -1,9 +1,7 @@
+from astToolkit import Make
+from textwrap import dedent
 import ast
 import pytest
-from textwrap import dedent
-
-from astToolkit import Make
-
 
 class TestEndPositions:
     """Tests for end position of AST nodes.

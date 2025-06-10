@@ -3,11 +3,10 @@ Tests for astToolkit.Make.Constant() method and related functionality.
 Converted and adapted from CPython's ast module tests.
 """
 
+from astToolkit import Make
 import ast
 import dis
 import pytest
-from astToolkit import Make
-
 
 class TestConstant:
     """Tests for the Make.Constant node factory method."""

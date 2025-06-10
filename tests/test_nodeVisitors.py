@@ -1,10 +1,8 @@
-import ast
-import warnings
+from astToolkit import Make, NodeChanger, NodeTourist
 from textwrap import dedent
-
+import ast
 import pytest
-from astToolkit import Make, NodeTourist, NodeChanger
-
+import warnings
 
 class TestNodeVisitors:
     """

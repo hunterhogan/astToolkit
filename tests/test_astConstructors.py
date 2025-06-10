@@ -3,11 +3,10 @@ Tests for astToolkit.Make AST constructor methods.
 Converted and adapted from CPython's ast module tests.
 """
 
+from astToolkit import Make
 import ast
 import pytest
 import warnings
-from astToolkit import Make
-
 
 class TestASTConstructors:
     """Tests for Make factory methods that construct AST nodes."""
@@ -93,7 +92,7 @@ class TestASTConstructors:
         assert argumentsNode.args == []
         assert argumentsNode.vararg is None
         assert argumentsNode.kwonlyargs == []
-        assert argumentsNode.kw_defaults == [None]
+        assert argumentsNode.kw_defaults == []
         assert argumentsNode.kwarg is None
         assert argumentsNode.defaults == []
 

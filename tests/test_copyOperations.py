@@ -5,7 +5,25 @@ import pickle
 import pytest
 import textwrap
 
-# from astToolkit._toolkitContainers import _toTuple
+def to_tuple(t):
+    """
+    Convert an AST node to a tuple representation for comparison.
+    Adapted from CPython's test.test_ast.utils.to_tuple.
+    """
+    if t is None or isinstance(t, (str, int, complex, float, bytes)) or t is Ellipsis:
+        return t
+    elif isinstance(t, list):
+        return [to_tuple(e) for e in t]
+    result = [t.__class__.__name__]
+    if hasattr(t, 'lineno') and hasattr(t, 'col_offset'):
+        result.append((t.lineno, t.col_offset))
+        if hasattr(t, 'end_lineno') and hasattr(t, 'end_col_offset'):
+            result[-1] += (t.end_lineno, t.end_col_offset)
+    if t._fields is None:
+        return tuple(result)
+    for f in t._fields:
+        result.append(to_tuple(getattr(t, f)))
+    return tuple(result)
 
 
 class TestCopyOperations:
@@ -23,37 +41,37 @@ class TestCopyOperations:
             "[x for x in range(10)]",
         ]
 
-    #     for protocol in range(pickle.HIGHEST_PROTOCOL + 1):
-    #         for code in testCodes:
-    #             tree = ast.parse(code)
-    #             pickledTree = pickle.loads(pickle.dumps(tree, protocol))
-    #             assert _toTuple(pickledTree) == _toTuple(tree)
+        for protocol in range(pickle.HIGHEST_PROTOCOL + 1):
+            for code in testCodes:
+                tree = ast.parse(code)
+                pickledTree = pickle.loads(pickle.dumps(tree, protocol))
+                assert to_tuple(pickledTree) == to_tuple(tree)
 
-    # def testPicklingWithMakeNodes(self):
-    #     # Test pickling nodes created with Make
-    #     constantNode = Make.Constant(42)
-    #     nameNode = Make.Name("x", ast.Load())
-    #     binaryOperationNode = Make.BinOp(constantNode, ast.Add(), nameNode)
+    def testPicklingWithMakeNodes(self):
+        # Test pickling nodes created with Make
+        constantNode = Make.Constant(42)
+        nameNode = Make.Name("x", ast.Load())
+        binaryOperationNode = Make.BinOp(constantNode, ast.Add(), nameNode)
 
-    #     for protocol in range(pickle.HIGHEST_PROTOCOL + 1):
-    #         pickledConstant = pickle.loads(pickle.dumps(constantNode, protocol))
-    #         pickledName = pickle.loads(pickle.dumps(nameNode, protocol))
-    #         pickledBinaryOperation = pickle.loads(pickle.dumps(binaryOperationNode, protocol))
+        for protocol in range(pickle.HIGHEST_PROTOCOL + 1):
+            pickledConstant = pickle.loads(pickle.dumps(constantNode, protocol))
+            pickledName = pickle.loads(pickle.dumps(nameNode, protocol))
+            pickledBinaryOperation = pickle.loads(pickle.dumps(binaryOperationNode, protocol))
 
-    #         assert _toTuple(pickledConstant) == _toTuple(constantNode)
-    #         assert _toTuple(pickledName) == _toTuple(nameNode)
-    #         assert _toTuple(pickledBinaryOperation) == _toTuple(binaryOperationNode)
+            assert to_tuple(pickledConstant) == to_tuple(constantNode)
+            assert to_tuple(pickledName) == to_tuple(nameNode)
+            assert to_tuple(pickledBinaryOperation) == to_tuple(binaryOperationNode)
 
-    # def testCopySimpleNodes(self):
-    #     # Test basic copy operations
-    #     originalConstant = Make.Constant(42)
-    #     copiedConstant = copy.copy(originalConstant)
-    #     deepCopiedConstant = copy.deepcopy(originalConstant)
+    def testCopySimpleNodes(self):
+        # Test basic copy operations
+        originalConstant = Make.Constant(42)
+        copiedConstant = copy.copy(originalConstant)
+        deepCopiedConstant = copy.deepcopy(originalConstant)
 
-    #     assert originalConstant.value == copiedConstant.value
-    #     assert originalConstant.value == deepCopiedConstant.value
-    #     assert _toTuple(originalConstant) == _toTuple(copiedConstant)
-    #     assert _toTuple(originalConstant) == _toTuple(deepCopiedConstant)
+        assert originalConstant.value == copiedConstant.value
+        assert originalConstant.value == deepCopiedConstant.value
+        assert to_tuple(originalConstant) == to_tuple(copiedConstant)
+        assert to_tuple(originalConstant) == to_tuple(deepCopiedConstant)
 
     def testCopyComplexNodes(self):
         # Test copying complex AST structures
@@ -79,7 +97,7 @@ class TestCopyOperations:
 
         assert functionDefinition.name == copiedFunction.name
         assert functionDefinition.name == deepCopiedFunction.name
-        # assert _toTuple(functionDefinition) == _toTuple(deepCopiedFunction)
+        assert to_tuple(functionDefinition) == to_tuple(deepCopiedFunction)
 
     def testCopyWithComplexStructure(self):
         # Test copying a more complex AST structure
@@ -97,7 +115,7 @@ print(result)        """
         copiedTree = copy.copy(originalTree)
         deepCopiedTree = copy.deepcopy(originalTree)
 
-        # assert _toTuple(originalTree) == _toTuple(deepCopiedTree)
+        assert to_tuple(originalTree) == to_tuple(deepCopiedTree)
         # copy.copy may share some child nodes, but structure should be similar
         assert isinstance(copiedTree, type(originalTree))
         assert len(originalTree.body) == len(copiedTree.body)
@@ -119,7 +137,7 @@ print(result)        """
         )
 
         deepCopiedExpression = copy.deepcopy(nestedExpression)
-        # assert _toTuple(nestedExpression) == _toTuple(deepCopiedExpression)
+        assert to_tuple(nestedExpression) == to_tuple(deepCopiedExpression)
 
         # Verify that changes to the copy don't affect the original
         if hasattr(deepCopiedExpression.left, 'left'):
@@ -141,8 +159,8 @@ print(result)        """
         copiedList = copy.deepcopy(listNode)
         copiedTuple = copy.deepcopy(tupleNode)
 
-        # assert _toTuple(listNode) == _toTuple(copiedList)
-        # assert _toTuple(tupleNode) == _toTuple(copiedTuple)
+        assert to_tuple(listNode) == to_tuple(copiedList)
+        assert to_tuple(tupleNode) == to_tuple(copiedTuple)
 
         # Verify lists are properly copied
         assert len(listNode.elts) == len(copiedList.elts)
@@ -175,4 +193,4 @@ print(result)        """
         copiedAssignment = copy.deepcopy(assignmentNode)
 
         assert assignmentNode.type_comment == copiedAssignment.type_comment
-        # assert _toTuple(assignmentNode) == _toTuple(copiedAssignment)
+        assert to_tuple(assignmentNode) == to_tuple(copiedAssignment)
