@@ -3,6 +3,14 @@ import ast
 import pytest
 import sys
 
+# Conditional imports for version-specific AST classes
+if sys.version_info >= (3, 11):
+    from ast import TryStar
+else:
+    # Create dummy class for older Python versions
+    class TryStar:
+        pass
+
 class TestASTValidation:
     """
     Tests adapted from CPython's ASTValidatorTests to validate that Make factory methods

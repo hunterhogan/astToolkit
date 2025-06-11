@@ -3,6 +3,44 @@ import ast
 import pytest
 import sys
 
+# Conditional imports for version-specific AST classes
+if sys.version_info >= (3, 10):
+    from ast import Match, match_case, pattern
+    from ast import MatchAs, MatchClass, MatchMapping, MatchOr, MatchSequence, MatchSingleton, MatchStar, MatchValue
+else:
+    # Create dummy classes for older Python versions
+    class Match:
+        pass
+    class match_case:
+        pass
+    class pattern:
+        pass
+    class MatchAs:
+        pass
+    class MatchClass:
+        pass
+    class MatchMapping:
+        pass
+    class MatchOr:
+        pass
+    class MatchSequence:
+        pass
+    class MatchSingleton:
+        pass
+    class MatchStar:
+        pass
+    class MatchValue:
+        pass
+
+if sys.version_info >= (3, 12):
+    from ast import type_param, TypeAlias
+else:
+    # Create dummy classes for older Python versions
+    class type_param:
+        pass
+    class TypeAlias:
+        pass
+
 class TestASTHelpers:
     maxDiff = None
 
@@ -19,6 +57,7 @@ class TestASTHelpers:
                 ast.literal_eval(r"'\U'")
             assert excinfo.value.__context__ is not None
 
+    @pytest.mark.skipif(sys.version_info < (3, 13), reason="AST structure differs in Python < 3.13")
     def test_dump(self):
         nodeAst = ast.parse('spam(eggs, "and cheese")')
         assert ast.dump(nodeAst) == (
@@ -38,6 +77,7 @@ class TestASTHelpers:
         makeModule = Make.Module([makeExpr], [])
         assert ast.dump(makeModule) == ast.dump(nodeAst)
 
+    @pytest.mark.skipif(sys.version_info < (3, 13), reason="AST structure differs in Python < 3.13")
     def test_dump_with_indent(self):
         nodeAst = ast.parse('spam(eggs, "and cheese")')
         expected_indent_3 = """\
@@ -75,6 +115,7 @@ Module(
         assert ast.dump(makeRaiseWithExc) == "Raise(exc=Name(id='e', ctx=Load()))"
         assert ast.dump(makeRaiseWithExc, annotate_fields=False) == "Raise(Name('e', Load()))"
 
+    @pytest.mark.skipif(sys.version_info < (3, 13), reason="AST structure differs in Python < 3.13")
     def test_dump_show_empty(self):
         def check_node(nodeInstance, emptyExpected, fullExpected, **kwargs):
             assert dump(nodeInstance, show_empty=False, **kwargs) == emptyExpected

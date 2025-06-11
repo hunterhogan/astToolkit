@@ -92,7 +92,7 @@ class TestASTConstructors:
         assert argumentsNode.args == []
         assert argumentsNode.vararg is None
         assert argumentsNode.kwonlyargs == []
-        assert argumentsNode.kw_defaults == []
+        assert argumentsNode.kw_defaults == [None]
         assert argumentsNode.kwarg is None
         assert argumentsNode.defaults == []
 
