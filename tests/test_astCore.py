@@ -1,6 +1,7 @@
 from astToolkit import Make
 import ast
 import pytest
+import sys
 
 class TestASTCore:
     """Tests for core AST functionality and node behavior."""
@@ -283,8 +284,7 @@ except* Exception: ...
         samplesTypeParameters = [
             "type X = int",
             "class X[T]: pass",
-            "def f[T](): pass",
-        ]
+            "def f[T](): pass",        ]
         for sample in samplesTypeParameters:
             ast.parse(sample)
             with pytest.raises(SyntaxError):
@@ -292,6 +292,9 @@ except* Exception: ...
 
     def testTypeParametersDefaultFeatureVersion(self):
         """Test type parameters with defaults feature version."""
+        if sys.version_info < (3, 13):
+            pytest.skip("Type parameter defaults require Python 3.13+")
+
         samplesTypeParametersDefault = [
             "type X[*Ts=int] = int",
             "class X[T=int]: pass",
@@ -327,12 +330,11 @@ class TestASTValidationAndCompilation:
         for attributes in testCases:
             treeModule = ast.Module(body=[
                 ast.Import(names=[aliasNode], **attributes)
-            ], type_ignores=[])
-
-            # This used to crash:
+            ], type_ignores=[])            # This used to crash:
             compile(treeModule, "<string>", "exec")
-              # This also must not crash:
-            ast.parse(treeModule, optimize=2)
+            # This also must not crash:
+            if sys.version_info >= (3, 13):
+                ast.parse(treeModule, optimize=2)
 
     def testInvalidSum(self):
         """Test invalid AST sum types."""
@@ -414,6 +416,9 @@ class TestASTOptimizationLevels:
 
     def testOptimizationLevelsDebug(self):
         """Test __debug__ optimization at different levels."""
+        if sys.version_info < (3, 13):
+            pytest.skip("AST optimization requires Python 3.13+")
+
         codeDebug = "__debug__"
 
         # Test non-optimized (default)

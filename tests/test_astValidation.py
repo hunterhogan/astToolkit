@@ -1,6 +1,7 @@
 from astToolkit import Make
 import ast
 import pytest
+import sys
 
 class TestASTValidation:
     """
@@ -337,14 +338,15 @@ class TestASTValidation:
             body=[Make.Pass()],
             returns=Make.Name("returnType", ast.Store())
         )
-        self.validateStatement(functionWithBadReturn, "must have Load context")
-
-        # Valid function should compile
+        self.validateStatement(functionWithBadReturn, "must have Load context")        # Valid function should compile
         validFunction = Make.FunctionDef("testFunction", argumentsEmpty, body=[Make.Pass()])
         self.validateStatement(validFunction)
 
     def test_tryStarValidation(self):
         """Test TryStar statement validation."""
+        if sys.version_info < (3, 11):
+            pytest.skip("TryStar requires Python 3.11+")
+
         passStatement = Make.Pass()
 
         # Empty body should fail

@@ -1,6 +1,7 @@
 from astToolkit import dump, Make
 import ast
 import pytest
+import sys
 
 class TestASTHelpers:
     maxDiff = None
@@ -480,69 +481,69 @@ Module(
 
         check_node(
             ast.LtE(),
-            emptyExpected="ast.LtE()",
-            fullExpected="ast.LtE()"
+            emptyExpected="ast.LtE()",            fullExpected="ast.LtE()"
         )
 
-        check_node(
-            ast.match_case(pattern=ast.MatchValue(value=ast.Constant(value=None))),
-            emptyExpected="ast.match_case(pattern=ast.MatchValue(value=ast.Constant(value=None)))",
-            fullExpected="ast.match_case(pattern=ast.MatchValue(value=ast.Constant(value=None, kind=None)), guard=None, body=[])"
-        )
+        if sys.version_info >= (3, 10):
+            check_node(
+                ast.match_case(pattern=ast.MatchValue(value=ast.Constant(value=None))),
+                emptyExpected="ast.match_case(pattern=ast.MatchValue(value=ast.Constant(value=None)))",
+                fullExpected="ast.match_case(pattern=ast.MatchValue(value=ast.Constant(value=None, kind=None)), guard=None, body=[])"
+            )
 
-        check_node(
-            ast.Match(subject=ast.Constant(value=None)),
-            emptyExpected="ast.Match(subject=ast.Constant(value=None))",
-            fullExpected="ast.Match(subject=ast.Constant(value=None, kind=None), cases=[])"
-        )
+            check_node(
+                ast.Match(subject=ast.Constant(value=None)),
+                emptyExpected="ast.Match(subject=ast.Constant(value=None))",
+                fullExpected="ast.Match(subject=ast.Constant(value=None, kind=None), cases=[])"
+            )
 
-        check_node(
-            ast.MatchAs(),
-            emptyExpected="ast.MatchAs()",
-            fullExpected="ast.MatchAs(pattern=None, name=None)"
-        )
+            check_node(
+                ast.MatchAs(),
+                emptyExpected="ast.MatchAs()",
+                fullExpected="ast.MatchAs(pattern=None, name=None)"
+            )
 
-        check_node(
-            ast.MatchClass(cls=ast.Name(id='cls', ctx=ast.Load())),
-            emptyExpected="ast.MatchClass(cls=ast.Name(id='cls', ctx=ast.Load()))",
-            fullExpected="ast.MatchClass(cls=ast.Name(id='cls', ctx=ast.Load()), patterns=[], kwd_attrs=[], kwd_patterns=[])"
-        )
+            check_node(
+                ast.MatchClass(cls=ast.Name(id='cls', ctx=ast.Load())),
+                emptyExpected="ast.MatchClass(cls=ast.Name(id='cls', ctx=ast.Load()))",
+                fullExpected="ast.MatchClass(cls=ast.Name(id='cls', ctx=ast.Load()), patterns=[], kwd_attrs=[], kwd_patterns=[])"
+            )
 
-        check_node(
-            ast.MatchMapping(),
-            emptyExpected="ast.MatchMapping()",
-            fullExpected="ast.MatchMapping(keys=[], patterns=[], rest=None)"
-        )
+            check_node(
+                ast.MatchMapping(),
+                emptyExpected="ast.MatchMapping()",
+                fullExpected="ast.MatchMapping(keys=[], patterns=[], rest=None)"
+            )
 
-        check_node(
-            ast.MatchOr(),
-            emptyExpected="ast.MatchOr()",
-            fullExpected="ast.MatchOr(patterns=[])"
-        )
+            check_node(
+                ast.MatchOr(),
+                emptyExpected="ast.MatchOr()",
+                fullExpected="ast.MatchOr(patterns=[])"
+            )
 
-        check_node(
-            ast.MatchSequence(),
-            emptyExpected="ast.MatchSequence()",
-            fullExpected="ast.MatchSequence(patterns=[])"
-        )
+            check_node(
+                ast.MatchSequence(),
+                emptyExpected="ast.MatchSequence()",
+                fullExpected="ast.MatchSequence(patterns=[])"
+            )
 
-        check_node(
-            ast.MatchSingleton(value=None),
-            emptyExpected="ast.MatchSingleton(value=None)",
-            fullExpected="ast.MatchSingleton(value=None)"
-        )
+            check_node(
+                ast.MatchSingleton(value=None),
+                emptyExpected="ast.MatchSingleton(value=None)",
+                fullExpected="ast.MatchSingleton(value=None)"
+            )
 
-        check_node(
-            ast.MatchStar(),
-            emptyExpected="ast.MatchStar()",
-            fullExpected="ast.MatchStar(name=None)"
-        )
+            check_node(
+                ast.MatchStar(),
+                emptyExpected="ast.MatchStar()",
+                fullExpected="ast.MatchStar(name=None)"
+            )
 
-        check_node(
-            ast.MatchValue(value=ast.Constant(value=None)),
-            emptyExpected="ast.MatchValue(value=ast.Constant(value=None))",
-            fullExpected="ast.MatchValue(value=ast.Constant(value=None, kind=None))"
-        )
+            check_node(
+                ast.MatchValue(value=ast.Constant(value=None)),
+                emptyExpected="ast.MatchValue(value=ast.Constant(value=None))",
+                fullExpected="ast.MatchValue(value=ast.Constant(value=None, kind=None))"
+            )
 
         check_node(
             ast.MatMult(),
@@ -715,14 +716,14 @@ Module(
         check_node(
             ast.Try(),
             emptyExpected="ast.Try()",
-            fullExpected="ast.Try(body=[], handlers=[], orelse=[], finalbody=[])"
-        )
+            fullExpected="ast.Try(body=[], handlers=[], orelse=[], finalbody=[])"        )
 
-        check_node(
-            ast.TryStar(),
-            emptyExpected="ast.TryStar()",
-            fullExpected="ast.TryStar(body=[], handlers=[], orelse=[], finalbody=[])"
-        )
+        if sys.version_info >= (3, 11):
+            check_node(
+                ast.TryStar(),
+                emptyExpected="ast.TryStar()",
+                fullExpected="ast.TryStar(body=[], handlers=[], orelse=[], finalbody=[])"
+            )
 
         check_node(
             ast.Tuple(ctx=ast.Load()),
