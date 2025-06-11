@@ -23,7 +23,7 @@ def astModuleToIngredientsFunction(astModule: ast.AST, identifierFunctionDef: st
 		ingredientsFunction: `IngredientsFunction` object containing the `ast.FunctionDef` and _all_ imports from the
 		source module.
 	"""
-	astFunctionDef = raiseIfNone(extractFunctionDef(astModule, identifierFunctionDef))
+	astFunctionDef: ast.FunctionDef = raiseIfNone(extractFunctionDef(astModule, identifierFunctionDef))
 	return IngredientsFunction(astFunctionDef, LedgerOfImports(astModule))
 
 def extractClassDef(module: ast.AST, identifier: str) -> ast.ClassDef | None:

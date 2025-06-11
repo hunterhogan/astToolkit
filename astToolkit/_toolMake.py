@@ -26,11 +26,11 @@ class Make:
     Common AST attributes accessible through `**keywordArguments`:
 
         col_offset: Position information specifying the column where an AST object begins.
-        end_col_offset (None): Position information specifying the column where an AST object ends.
-        end_lineno (None): Position information specifying the line number where an AST object ends.
-        level (0): Module import depth level that controls relative vs absolute imports. Default 0 indicates absolute import.
-        lineno: Position information manually specifying the line number where an AST object begins.
-        type_comment (None): Optional string with the type annotation as a comment or `# type: ignore`.
+        end_col_offset, ***end*** col***umn offset***, (None): Position information specifying the column where an AST object ends.
+        end_lineno, end line _**n**umer**o**_ (_Latin_ "number"), (None): Position information specifying the line number where an AST object ends.
+        level, relative import level, (0): Module import depth level that controls relative vs absolute imports. Default 0 indicates absolute import.
+        lineno, line _**n**umer**o**_ (_Latin_ "number"): Position information manually specifying the line number where an AST object begins.
+        type_comment, a `type` annotation in a comment, (None): Optional string with the type annotation as a comment or `# type: ignore`.
 
     The Make class supports the antecedent-action pattern where factory methods serve as actions
     combined with predicates from `Be`, `IfThis`, and `ClassIsAndAttribute` classes through visitor
@@ -188,7 +188,7 @@ class Make:
 
         Parameters:
             name: The actual module, class, or function name being imported.
-            asName (None): Optional alias name to use instead of the original name.
+            asName (None): Optional ***a***lia***s*** name to use instead of the original name.
                 This corresponds to `ast.alias.asname`.
 
         Returns
@@ -294,7 +294,7 @@ class Make:
 
         Parameters:
             posonlyargs ([]): List of positional-only parameters (before /).
-            list_arg ([]): List of regular positional parameters. This corresponds to `ast.arguments.args`.
+            list_arg ([]): list of ast.***arg***ument . This corresponds to `ast.arguments.args`.
             vararg (None): Single parameter for *args variadic arguments.
             kwonlyargs ([]): List of keyword-only parameters (after * or *args).
             kw_defaults ([None]): Default values for keyword-only parameters; None indicates required.
@@ -310,6 +310,7 @@ class Make:
     @staticmethod
     def Assert(test: ast.expr, msg: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Assert:
         """Create an `ast.Assert` node for assertion statements.
+        (AI generated docstring)
 
         The `Assert` node represents an `assert` statement that evaluates a test
         expression and optionally raises `AssertionError` with a message if the
@@ -317,7 +318,7 @@ class Make:
 
         Parameters
             test: Expression to evaluate for truthiness
-            msg (None): Optional expression for the assertion error message
+            msg (None): Optional expression for the assertion error ***m***e***s***sa***g***e
 
         Returns
             nodeAssert: The constructed assertion node
@@ -711,6 +712,7 @@ class Make:
     @staticmethod
     def Break(**keywordArguments: Unpack[ast_attributes]) -> ast.Break:
         """Create an `ast.Break` node for break statements.
+        (AI generated docstring)
 
         The `Break` node represents a `break` statement that terminates the
         nearest enclosing loop. Can only be used within loop constructs.
@@ -755,7 +757,7 @@ class Make:
         Parameters:
             name: Class name as string identifier.
             bases ([]): List of base class expressions for inheritance.
-            list_keyword ([]): List of keyword arguments including metaclass specifications. This corresponds to `ast.ClassDef.keywords`.
+            list_keyword ([]): list of ast.***keyword*** including metaclass specifications. This corresponds to `ast.ClassDef.keywords`.
             body ([]): List of statements forming the class body.
             decorator_list ([]): List of decorator expressions applied to class.
             type_params ([]): List of type parameters for generic classes (Python 3.12+).
@@ -781,20 +783,18 @@ class Make:
     @staticmethod
     def cmpop() -> ast.cmpop:
         """
-        Abstract ***c***o***mp***arison ***op***erator `object` for use in AST construction.
-        (AI generated docstring)
+        `class` `ast.cmpop`, ***c***o***mp***arison ***op***erator, is the parent (or "base") class of all comparison operator classes used in `ast.Compare`.
 
-        Class `ast.cmpop` is the base for all comparison operators in Python's AST.
-        It serves as the abstract parent for specific comparison operators: `ast.Eq`, `ast.NotEq`,
-        `ast.Lt`, `ast.LtE`, `ast.Gt`, `ast.GtE`, `ast.Is`, `ast.IsNot`, `ast.In`, `ast.NotIn`.
-        This factory method makes a generic comparison operator `object` that can be used
-        in the antecedent-action pattern with visitor classes.
+        It is the abstract parent for: `ast.Eq`, `ast.NotEq`, `ast.Lt`, `ast.LtE`, `ast.Gt`,
+        `ast.GtE`, `ast.Is`, `ast.IsNot`, `ast.In`, `ast.NotIn`. This factory method makes a generic
+        comparison operator `object` that can be used in the antecedent-action pattern with visitor
+        classes.
 
         Returns
         -------
         comparisonOperator: ast.cmpop
-            Abstract comparison operator `object` that serves as the base `class` for all
-            Python comparison operators in AST structures.
+            Abstract comparison operator `object` that serves as the base `class` for all Python
+            comparison operators in AST structures.
         """
         return ast.cmpop()
 
@@ -887,6 +887,7 @@ class Make:
     @staticmethod
     def Continue(**keywordArguments: Unpack[ast_attributes]) -> ast.Continue:
         """Create an `ast.Continue` node for continue statements.
+        (AI generated docstring)
 
         The `Continue` node represents a `continue` statement that skips the
         remainder of the current iteration and continues with the next iteration
@@ -920,6 +921,7 @@ class Make:
     @staticmethod
     def Delete(targets: Sequence[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.Delete:
         """Create an `ast.Delete` node for deletion statements.
+        (AI generated docstring)
 
         The `Delete` node represents a `del` statement that removes references
         to objects. Can delete variables, attributes, subscripts, or slices.
@@ -1118,6 +1120,7 @@ class Make:
     @staticmethod
     def Expr(value: ast.expr, **keywordArguments: Unpack[ast_attributes]) -> ast.Expr:
         """Create an `ast.Expr` node for expression statements.
+        (AI generated docstring)
 
         The `Expr` node represents a statement that consists of a single expression
         whose value is discarded. This is used for expressions evaluated for their
@@ -1150,6 +1153,7 @@ class Make:
     @staticmethod
     def Expression(body: ast.expr) -> ast.Expression:
         """Create an `ast.Expression` node for expression-only modules.
+        (AI generated docstring)
 
         The `Expression` node represents a module that contains only a single
         expression. This is used in contexts where only an expression is expected,
@@ -1296,6 +1300,7 @@ class Make:
     @staticmethod
     def FunctionType(argtypes: Sequence[ast.expr], returns: ast.expr) -> ast.FunctionType:
         """Create an `ast.FunctionType` node for function type annotations.
+        (AI generated docstring)
 
         The `FunctionType` node represents function type annotations of the form
         `(arg_types) -> return_type`. This is used in type annotations and
@@ -1348,6 +1353,7 @@ class Make:
     @staticmethod
     def Global(names: list[str], **keywordArguments: Unpack[ast_attributes]) -> ast.Global:
         """Create an `ast.Global` node for global declarations.
+        (AI generated docstring)
 
         The `Global` node represents a `global` statement that declares variables
         as referring to global scope rather than local scope. This affects variable
@@ -1535,6 +1541,7 @@ class Make:
     @staticmethod
     def Interactive(body: Sequence[ast.stmt]) -> ast.Interactive:
         """Create an `ast.Interactive` node for interactive mode modules.
+        (AI generated docstring)
 
         The `Interactive` node represents a module intended for interactive
         execution, such as in the Python REPL. Unlike regular modules, interactive
@@ -1893,7 +1900,6 @@ class Make:
     @staticmethod
     def MatchAs(pattern: ast.pattern | None=None, name: str | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchAs:
         """Create an `ast.MatchAs` node representing a capture pattern or wildcard.
-
         (AI generated docstring)
 
         The `ast.MatchAs` node represents match patterns that capture values or
@@ -1916,7 +1922,6 @@ class Make:
     @staticmethod
     def MatchClass(cls: ast.expr, patterns: Sequence[ast.pattern]=[], kwd_attrs: list[str]=[], kwd_patterns: Sequence[ast.pattern]=[], **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchClass: # pyright: ignore[reportSelfClsParameterName]
         """Create an `ast.MatchClass` node for matching class instances.
-
         (AI generated docstring)
 
         The `ast.MatchClass` node represents patterns that match instances of a
@@ -1943,7 +1948,6 @@ class Make:
     @staticmethod
     def MatchMapping(keys: Sequence[ast.expr]=[], patterns: Sequence[ast.pattern]=[], rest: str | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchMapping:
         """Create an `ast.MatchMapping` node for matching dictionary-like objects.
-
         (AI generated docstring)
 
         The `ast.MatchMapping` node represents patterns that match mapping objects
@@ -1967,7 +1971,6 @@ class Make:
     @staticmethod
     def MatchOr(patterns: Sequence[ast.pattern]=[], **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchOr:
         """Create an `ast.MatchOr` node for alternative pattern matching.
-
         (AI generated docstring)
 
         The `ast.MatchOr` node represents or-patterns that match if any of the
@@ -1986,7 +1989,6 @@ class Make:
     @staticmethod
     def MatchSequence(patterns: Sequence[ast.pattern]=[], **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchSequence:
         """Create an `ast.MatchSequence` node for matching sequences.
-
         (AI generated docstring)
 
         The `ast.MatchSequence` node represents patterns that match sequence objects
@@ -2007,7 +2009,6 @@ class Make:
     @staticmethod
     def MatchSingleton(value: bool | None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchSingleton:
         """Create an `ast.MatchSingleton` node for matching singleton values.
-
         (AI generated docstring)
 
         The `ast.MatchSingleton` node represents patterns that match singleton
@@ -2028,7 +2029,6 @@ class Make:
     @staticmethod
     def MatchStar(name: str | None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchStar:
         """Create an `ast.MatchStar` node for capturing sequence remainder.
-
         (AI generated docstring)
 
         The `ast.MatchStar` node represents star patterns that capture remaining
@@ -2048,7 +2048,6 @@ class Make:
     @staticmethod
     def MatchValue(value: ast.expr, **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchValue:
         """Create an `ast.MatchValue` node for matching literal values.
-
         (AI generated docstring)
 
         The `ast.MatchValue` node represents patterns that match by equality
@@ -2114,6 +2113,7 @@ class Make:
     @staticmethod
     def mod() -> ast.mod:
         """Create an appropriate `ast.mod` node based on the body content.
+        (AI generated docstring)
 
         The `mod` method creates the appropriate module type node based on the
         provided body. This is a convenience method that determines whether to
@@ -2303,6 +2303,7 @@ class Make:
     @staticmethod
     def Nonlocal(names: list[str], **keywordArguments: Unpack[ast_attributes]) -> ast.Nonlocal:
         """Create an `ast.Nonlocal` node for nonlocal declarations.
+        (AI generated docstring)
 
         The `Nonlocal` node represents a `nonlocal` statement that declares
         variables as referring to the nearest enclosing scope that is not global.
@@ -2371,6 +2372,7 @@ class Make:
     @staticmethod
     def operator() -> ast.operator:
         """Create an `ast.operator` node for arithmetic and bitwise operations.
+        (AI generated docstring)
 
         The `operator` method creates operator nodes used in binary operations,
         unary operations, and comparison operations. These represent the specific
@@ -2470,6 +2472,7 @@ class Make:
     @staticmethod
     def Pass(**keywordArguments: Unpack[ast_attributes]) -> ast.Pass:
         """Create an `ast.Pass` node for pass statements.
+        (AI generated docstring)
 
         The `Pass` node represents a `pass` statement, which is a null operation
         that does nothing when executed. It serves as syntactic placeholder where
@@ -2483,7 +2486,6 @@ class Make:
     @staticmethod
     def pattern(**keywordArguments: Unpack[ast_attributes_int]) -> ast.pattern:
         """Create a base `ast.pattern` node.
-
         (AI generated docstring)
 
         Creates a generic `ast.pattern` node that serves as the abstract base
@@ -2544,13 +2546,14 @@ class Make:
     @staticmethod
     def Raise(exc: ast.expr | None=None, cause: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Raise:
         """Create an `ast.Raise` node for raise statements.
+        (AI generated docstring)
 
         The `Raise` node represents a `raise` statement that raises an exception.
         Can re-raise the current exception, raise a new exception, or raise with
         an explicit cause chain.
 
         Parameters
-            exc (None): Optional expression for the exception to raise
+            exc (None): Optional expression for the ***exc***eption to raise
             cause (None): Optional expression for the exception cause
 
         Returns
@@ -2714,6 +2717,7 @@ class Make:
     @staticmethod
     def stmt(**keywordArguments: Unpack[ast_attributes]) -> ast.stmt:
         """Create a statement node of the specified type.
+        (AI generated docstring)
 
         The `stmt` method provides a generic interface for creating any statement
         node type. This is a convenience method that delegates to the appropriate
@@ -2889,13 +2893,14 @@ class Make:
     @staticmethod
     def type_ignore() -> ast.type_ignore:
         """Create an `ast.type_ignore` node for type checker ignore comments.
+        (AI generated docstring)
 
         The `type_ignore` node represents type checker ignore directives that
         suppress type checking warnings for specific lines. This is used with
         comments like `# type: ignore`.
 
         Parameters
-            lineno: Line number where the ignore directive applies
+            lineno, line _**n**umer**o**_ (_Latin_ "number"): Line number where the ignore directive applies
             tag: Tag identifying the specific type ignore directive
 
         Returns
@@ -2961,7 +2966,7 @@ class Make:
         Includes optional tags for categorizing different types of ignores.
 
         Parameters:
-            lineno: Line number where the ignore comment appears.
+            lineno, line _**n**umer**o**_ (_Latin_ "number"): Line number where the ignore comment appears.
             tag: Optional string tag for categorizing the ignore (e.g., '[assignment]').
 
         Returns:
