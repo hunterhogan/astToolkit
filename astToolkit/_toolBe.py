@@ -119,7 +119,7 @@ class Be:
 
     @staticmethod
     def AST(node: ast.AST) -> TypeIs[ast.AST]:
-        """`Be.AST` matches any of `class` `ast.AST` | `ast._NoParent` | `ast.alias` | `ast.arg` | `ast.arguments` | `ast.boolop` | `ast.cmpop` | `ast.comprehension` | `ast.excepthandler` | `ast.Exec` | `ast.expr_context` | `ast.expr` | `ast.keyword` | `ast.match_case` | `ast.mod` | `ast.NodeList` | `ast.operator` | `ast.pattern` | `ast.slice` | `ast.stmt` | `ast.type_ignore` | `ast.type_param` | `ast.unaryop` | `ast.withitem`.
+        """`Be.AST`, Abstract Syntax Tree, matches any of `class` `ast.AST` | `ast._NoParent` | `ast.alias` | `ast.arg` | `ast.arguments` | `ast.boolop` | `ast.cmpop` | `ast.comprehension` | `ast.excepthandler` | `ast.Exec` | `ast.expr_context` | `ast.expr` | `ast.keyword` | `ast.match_case` | `ast.mod` | `ast.NodeList` | `ast.operator` | `ast.pattern` | `ast.slice` | `ast.stmt` | `ast.type_ignore` | `ast.type_param` | `ast.unaryop` | `ast.withitem`.
         It is a subclass of `ast.object`."""
         return isinstance(node, ast.AST)
 
@@ -859,7 +859,7 @@ class Be:
 
     @staticmethod
     def type_ignore(node: ast.AST) -> TypeIs[ast.type_ignore]:
-        """`Be.type_ignore`, this type error, you ignore it, matches any of `class` `ast.type_ignore` | `ast.TypeIgnore`.
+        """`Be.type_ignore`, this `type` error, you ignore it, matches any of `class` `ast.type_ignore` | `ast.TypeIgnore`.
         It is a subclass of `ast.AST`."""
         return isinstance(node, ast.type_ignore)
 
@@ -878,7 +878,7 @@ class Be:
 
     @staticmethod
     def TypeIgnore(node: ast.AST) -> TypeIs[ast.TypeIgnore]:
-        """`Be.TypeIgnore`, this type error, you ignore it, matches `class` `ast.TypeIgnore`.
+        """`Be.TypeIgnore`, this Type (`type`) error, Ignore it, matches `class` `ast.TypeIgnore`.
         It has attributes `lineno`, `tag`.
         This `class` is associated with Python delimiters ':'.
         It is a subclass of `ast.type_ignore`."""
