@@ -120,7 +120,7 @@ class DOT:
         return node.bound
 
     @staticmethod
-    def cases(node: hasDOTcases) -> Sequence[ast.match_case]:
+    def cases(node: hasDOTcases) -> list[ast.match_case]:
         return node.cases
 
     @staticmethod
@@ -185,7 +185,7 @@ class DOT:
         return node.func
 
     @staticmethod
-    def generators(node: hasDOTgenerators) -> Sequence[ast.comprehension]:
+    def generators(node: hasDOTgenerators) -> list[ast.comprehension]:
         return node.generators
 
     @staticmethod
@@ -209,7 +209,7 @@ class DOT:
         return node.is_async
 
     @staticmethod
-    def items(node: hasDOTitems) -> Sequence[ast.withitem]:
+    def items(node: hasDOTitems) -> list[ast.withitem]:
         return node.items
 
     @staticmethod
@@ -235,7 +235,7 @@ class DOT:
         return node.keys
 
     @staticmethod
-    def keywords(node: hasDOTkeywords) -> Sequence[ast.keyword]:
+    def keywords(node: hasDOTkeywords) -> list[ast.keyword]:
         return node.keywords
 
     @staticmethod

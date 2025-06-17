@@ -468,7 +468,7 @@ class Make:
         return ast.AsyncFunctionDef(name=name, args=argumentSpecification, body=list(body), decorator_list=list(decorator_list), returns=returns, type_params=list(type_params), **keywordArguments)
 
     @staticmethod
-    def AsyncWith(items: Sequence[ast.withitem], body: Sequence[ast.stmt], **keywordArguments: Unpack[ast_attributes_type_comment]) -> ast.AsyncWith:
+    def AsyncWith(items: list[ast.withitem], body: Sequence[ast.stmt], **keywordArguments: Unpack[ast_attributes_type_comment]) -> ast.AsyncWith:
         """
         Asynchronous context manager AST `object` for async resource management.
         (AI generated docstring)
@@ -490,7 +490,7 @@ class Make:
         asyncWithStatement : ast.AsyncWith
             AST `object` representing an asynchronous context manager statement.
         """
-        return ast.AsyncWith(items=list(items), body=list(body), **keywordArguments)
+        return ast.AsyncWith(items=items, body=list(body), **keywordArguments)
 
     @staticmethod
     def Attribute(value: ast.expr, *attribute: str, context: ast.expr_context=ast.Load(), **keywordArguments: Unpack[ast_attributes]) -> ast.Attribute:
@@ -807,7 +807,7 @@ class Make:
         return ast.Break(**keywordArguments)
 
     @staticmethod
-    def Call(callee: ast.expr, listParameters: Sequence[ast.expr]=[], list_keyword: Sequence[ast.keyword]=[], **keywordArguments: Unpack[ast_attributes]) -> ast.Call:
+    def Call(callee: ast.expr, listParameters: Sequence[ast.expr]=[], list_keyword: list[ast.keyword]=[], **keywordArguments: Unpack[ast_attributes]) -> ast.Call:
         """Function call AST `object` representing function invocation with arguments.
         (AI generated docstring)
 
@@ -829,10 +829,10 @@ class Make:
         functionCall : ast.Call
             AST `object` representing a function call with specified arguments.
         """
-        return ast.Call(func=callee, args=list(listParameters), keywords=list(list_keyword), **keywordArguments)
+        return ast.Call(func=callee, args=list(listParameters), keywords=list_keyword, **keywordArguments)
 
     @staticmethod
-    def ClassDef(name: str, bases: Sequence[ast.expr]=[], list_keyword: Sequence[ast.keyword]=[], body: Sequence[ast.stmt]=[], decorator_list: Sequence[ast.expr]=[], type_params: Sequence[ast.type_param]=[], **keywordArguments: Unpack[ast_attributes]) -> ast.ClassDef:
+    def ClassDef(name: str, bases: Sequence[ast.expr]=[], list_keyword: list[ast.keyword]=[], body: Sequence[ast.stmt]=[], decorator_list: Sequence[ast.expr]=[], type_params: Sequence[ast.type_param]=[], **keywordArguments: Unpack[ast_attributes]) -> ast.ClassDef:
         """
         Class definition AST object for `class` declarations with inheritance and metadata.
         (AI generated docstring)
@@ -874,7 +874,7 @@ class Make:
             body=[Make.Pass()]
         )
         """
-        return ast.ClassDef(name=name, bases=list(bases), keywords=list(list_keyword), body=list(body), decorator_list=list(decorator_list), type_params=list(type_params), **keywordArguments)
+        return ast.ClassDef(name=name, bases=list(bases), keywords=list_keyword, body=list(body), decorator_list=list(decorator_list), type_params=list(type_params), **keywordArguments)
 
     @staticmethod
     def cmpop() -> ast.cmpop:
@@ -1079,7 +1079,7 @@ class Make:
         return ast.Dict(keys=list(keys), values=list(values), **keywordArguments)
 
     @staticmethod
-    def DictComp(key: ast.expr, value: ast.expr, generators: Sequence[ast.comprehension], **keywordArguments: Unpack[ast_attributes]) -> ast.DictComp:
+    def DictComp(key: ast.expr, value: ast.expr, generators: list[ast.comprehension], **keywordArguments: Unpack[ast_attributes]) -> ast.DictComp:
         """Dictionary comprehension AST `object` for dynamic dictionary construction.
         (AI generated docstring)
 
@@ -1116,7 +1116,7 @@ class Make:
         )
         ```
         """
-        return ast.DictComp(key=key, value=value, generators=list(generators), **keywordArguments)
+        return ast.DictComp(key=key, value=value, generators=generators, **keywordArguments)
 
     class Div(ast.Div):
         """Identical to the `ast` (abstract syntax tree) class but with a method,
@@ -1488,7 +1488,7 @@ class Make:
         return ast.FunctionType(argtypes=list(argtypes), returns=returns)
 
     @staticmethod
-    def GeneratorExp(element: ast.expr, generators: Sequence[ast.comprehension], **keywordArguments: Unpack[ast_attributes]) -> ast.GeneratorExp:
+    def GeneratorExp(element: ast.expr, generators: list[ast.comprehension], **keywordArguments: Unpack[ast_attributes]) -> ast.GeneratorExp:
         """Generator expression object for memory-efficient iteration.
 
         The `ast.GeneratorExp` (Generator ***Exp***ression) object represents generator
@@ -1507,7 +1507,7 @@ class Make:
         generatorExpression : ast.GeneratorExp
             AST object representing a generator expression for lazy evaluation.
         """
-        return ast.GeneratorExp(elt=element, generators=list(generators), **keywordArguments)
+        return ast.GeneratorExp(elt=element, generators=generators, **keywordArguments)
 
     @staticmethod
     def Global(names: list[str], **keywordArguments: Unpack[ast_attributes]) -> ast.Global:
@@ -1943,7 +1943,7 @@ class Make:
         return ast.List(elts=list(listElements), ctx=context, **keywordArguments)
 
     @staticmethod
-    def ListComp(element: ast.expr, generators: Sequence[ast.comprehension], **keywordArguments: Unpack[ast_attributes]) -> ast.ListComp:
+    def ListComp(element: ast.expr, generators: list[ast.comprehension], **keywordArguments: Unpack[ast_attributes]) -> ast.ListComp:
         """List comprehension AST `object` for dynamic list construction.
         (AI generated docstring)
 
@@ -1963,7 +1963,7 @@ class Make:
         listComprehension : ast.ListComp
             AST `object` representing a list comprehension expression.
         """
-        return ast.ListComp(elt=element, generators=list(generators), **keywordArguments)
+        return ast.ListComp(elt=element, generators=generators, **keywordArguments)
 
     @staticmethod
     def Load() -> ast.Load:
@@ -2064,7 +2064,7 @@ class Make:
         return ast.LtE()
 
     @staticmethod
-    def Match(subject: ast.expr, cases: Sequence[ast.match_case]=[], **keywordArguments: Unpack[ast_attributes]) -> ast.Match:
+    def Match(subject: ast.expr, cases: list[ast.match_case]=[], **keywordArguments: Unpack[ast_attributes]) -> ast.Match:
         """
         Match statement AST object for pattern matching with multiple cases.
         (AI generated docstring)
@@ -2085,7 +2085,7 @@ class Make:
         matchStatement : ast.Match
             AST object representing a complete pattern matching statement.
         """
-        return ast.Match(subject=subject, cases=list(cases), **keywordArguments)
+        return ast.Match(subject=subject, cases=cases, **keywordArguments)
 
     @staticmethod
     def match_case(pattern: ast.pattern, guard: ast.expr | None=None, body: Sequence[ast.stmt]=[]) -> ast.match_case:
@@ -2948,7 +2948,7 @@ class Make:
         return ast.Set(elts=list(listElements), **keywordArguments)
 
     @staticmethod
-    def SetComp(element: ast.expr, generators: Sequence[ast.comprehension], **keywordArguments: Unpack[ast_attributes]) -> ast.SetComp:
+    def SetComp(element: ast.expr, generators: list[ast.comprehension], **keywordArguments: Unpack[ast_attributes]) -> ast.SetComp:
         """Set comprehension AST `object` for dynamic set construction.
         (AI generated docstring)
 
@@ -2968,7 +2968,7 @@ class Make:
         setComprehension : ast.SetComp
             AST `object` representing a set comprehension expression.
         """
-        return ast.SetComp(elt=element, generators=list(generators), **keywordArguments)
+        return ast.SetComp(elt=element, generators=generators, **keywordArguments)
 
     @staticmethod
     def Slice(lower: ast.expr | None=None, upper: ast.expr | None=None, step: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Slice:
@@ -3533,7 +3533,7 @@ class Make:
         return ast.While(test=test, body=list(body), orelse=list(orElse), **keywordArguments)
 
     @staticmethod
-    def With(items: Sequence[ast.withitem], body: Sequence[ast.stmt], **keywordArguments: Unpack[ast_attributes_type_comment]) -> ast.With:
+    def With(items: list[ast.withitem], body: Sequence[ast.stmt], **keywordArguments: Unpack[ast_attributes_type_comment]) -> ast.With:
         """
         Context manager statement AST `object` for resource management and cleanup.
         (AI generated docstring)
@@ -3555,7 +3555,7 @@ class Make:
         withStatement : ast.With
             AST `object` representing a context manager statement for resource management.
         """
-        return ast.With(items=list(items), body=list(body), **keywordArguments)
+        return ast.With(items=items, body=list(body), **keywordArguments)
 
     @staticmethod
     def withitem(context_expr: ast.expr, optional_vars: ast.expr | None=None) -> ast.withitem:

@@ -7,7 +7,7 @@ import sys
 ConstantValueType: typing_TypeAlias = bool | bytes | complex | EllipsisType | float | int | None | range | str
 identifierDotAttribute: typing_TypeAlias = str
 个 = typing_TypeVar('个', covariant=True)
-个return = typing_TypeVar('个return', covariant=True)
+归个 = typing_TypeVar('归个', covariant=True)
 木 = typing_TypeVar('木', bound=ast.AST, covariant=True)
 布尔符 = typing_TypeVar('布尔符', bound=ast.boolop, covariant=True)
 比符 = typing_TypeVar('比符', bound=ast.cmpop, covariant=True)

@@ -26,7 +26,7 @@
 		"body": [
 			"本"
 		],
-		"description": "本 (běn): module (mod)"
+		"description": "本 (běn): module"
 	},
 	"比符": {
 		"scope": "markdown,plaintext,python",
@@ -50,7 +50,7 @@
 		"body": [
 			"常"
 		],
-		"description": "常 (cháng): constant (Constant)"
+		"description": "常 (cháng): constant"
 	},
 	"二符": {
 		"scope": "markdown,plaintext,python",
@@ -58,7 +58,7 @@
 		"body": [
 			"二符"
 		],
-		"description": "二符 (èrfú): binary operator (operator)"
+		"description": "二符 (èrfú): binary operator"
 	},
 	"个": {
 		"scope": "markdown,plaintext,python",
@@ -84,13 +84,21 @@
 		],
 		"description": "工位 (gōngwèi): expression context (expr_context)"
 	},
+	"归": {
+		"scope": "markdown,plaintext,python",
+		"prefix": "gui",
+		"body": [
+			"归"
+		],
+		"description": "归 (guī): return"
+	},
 	"忽": {
 		"scope": "markdown,plaintext,python",
 		"prefix": "hu",
 		"body": [
 			"忽"
 		],
-		"description": "忽 (hū): ignore (type_ignore)"
+		"description": "忽 (hū): ignore"
 	},
 	"口": {
 		"scope": "markdown,plaintext,python",
@@ -106,7 +114,7 @@
 		"body": [
 			"拦"
 		],
-		"description": "拦 (lán): exception handler (excepthandler)"
+		"description": "拦 (lán): exception handler"
 	},
 	"俪": {
 		"scope": "markdown,plaintext,python",
@@ -114,7 +122,7 @@
 		"body": [
 			"俪"
 		],
-		"description": "俪 (lì): pattern (pattern)"
+		"description": "俪 (lì): pattern"
 	},
 	"木": {
 		"scope": "markdown,plaintext,python",
@@ -124,13 +132,21 @@
 		],
 		"description": "木 (mù): tree, short for abstract syntax tree (AST)"
 	},
+	"是": {
+		"scope": "markdown,plaintext,python",
+		"prefix": "shi",
+		"body": [
+			"是"
+		],
+		"description": "是 (shì): is, to be"
+	},
 	"形": {
 		"scope": "markdown,plaintext,python",
 		"prefix": "xing",
 		"body": [
 			"形"
 		],
-		"description": "形 (xíng): type parameter (type_param)"
+		"description": "形 (xíng): type parameter"
 	},
 	"一符": {
 		"scope": "markdown,plaintext,python",
@@ -138,6 +154,6 @@
 		"body": [
 			"一符"
 		],
-		"description": "一符 (yīfú): unary operator (unaryop)"
+		"description": "一符 (yīfú): unary operator"
 	},
 }

@@ -211,7 +211,7 @@ def inlineFunctionDef(identifierToInline: str, module: ast.Module) -> ast.Functi
 						for astFunctionDef in dictionary4Inlining.values():
 							inliner.visit(astFunctionDef)
 					else:
-						inliner = NodeChanger(ClassIsAndAttribute.valueIs(ast.Assign, IfThis.isCallIdentifier(identifier)),Then.replaceWith(FunctionDefTarget.body[0:-1]))
+						inliner = NodeChanger(ClassIsAndAttribute.valueIs(ast.Assign, IfThis.isCallIdentifier(identifier)), Then.replaceWith(FunctionDefTarget.body[0:-1]))
 						for astFunctionDef in dictionary4Inlining.values():
 							inliner.visit(astFunctionDef)
 
@@ -221,7 +221,7 @@ def inlineFunctionDef(identifierToInline: str, module: ast.Module) -> ast.Functi
 			inliner = NodeChanger(IfThis.isCallIdentifier(identifier), Then.replaceWith(replacement))
 			inliner.visit(FunctionDefToInline)
 		else:
-			inliner = NodeChanger(ClassIsAndAttribute.valueIs(ast.Assign, IfThis.isCallIdentifier(identifier)),Then.replaceWith(FunctionDefTarget.body[0:-1]))
+			inliner = NodeChanger(ClassIsAndAttribute.valueIs(ast.Assign, IfThis.isCallIdentifier(identifier)), Then.replaceWith(FunctionDefTarget.body[0:-1]))
 			inliner.visit(FunctionDefToInline)
 	ast.fix_missing_locations(FunctionDefToInline)
 	return FunctionDefToInline

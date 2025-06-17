@@ -28,16 +28,13 @@ seamlessly with astToolkit's type system and atomic classes to create composable
 code.
 """
 
-from astToolkit import 个return, 木
+from astToolkit import 归个, 木
 from collections.abc import Callable
-from typing import Any, cast, Generic
+from typing import cast, Generic
 from typing_extensions import TypeIs
 import ast
 
-# TODO Identify the logic that narrows the type and can help the user during static type checking.
-
-
-class NodeTourist(ast.NodeVisitor, Generic[木, 个return]):
+class NodeTourist(ast.NodeVisitor, Generic[木, 归个]):
     """
     Read-only AST visitor that extracts information from nodes matching predicate conditions.
     (AI generated docstring)
@@ -74,22 +71,17 @@ class NodeTourist(ast.NodeVisitor, Generic[木, 个return]):
             ```
     """
 
-    def __init__(
-        self,
-        findThis: Callable[[ast.AST], TypeIs[木] | bool],
-        doThat: Callable[[木], 个return],
-    ) -> None:
+    def __init__(self, findThis: Callable[[ast.AST], TypeIs[木] | bool], doThat: Callable[[木], 归个]) -> None:
         self.findThis = findThis
         self.doThat = doThat
-        self.nodeCaptured: 个return | None = None
+        self.nodeCaptured: 归个 | None = None
 
-    def visit(self, node: ast.AST) -> None:
+    def visit(self, node: ast.AST):
         if self.findThis(node):
-            node = cast(木, node)
-            self.nodeCaptured = self.doThat(node)
+            self.nodeCaptured = self.doThat(cast(木, node))
         self.generic_visit(node)
 
-    def captureLastMatch(self, node: ast.AST) -> 个return | None:
+    def captureLastMatch(self, node: ast.AST) -> 归个 | None:
         """
         Visit an AST tree and return the result from the last matching node.
         (AI generated docstring)
@@ -114,8 +106,7 @@ class NodeTourist(ast.NodeVisitor, Generic[木, 个return]):
         self.visit(node)
         return self.nodeCaptured
 
-
-class NodeChanger(ast.NodeTransformer):
+class NodeChanger(ast.NodeTransformer, Generic[木, 归个]):
     """
     Destructive AST transformer that selectively modifies nodes matching predicate conditions.
     (AI generated docstring)
@@ -158,13 +149,11 @@ class NodeChanger(ast.NodeTransformer):
             ```
     """
 
-    def __init__(
-        self, findThis: Callable[..., Any], doThat: Callable[..., Any]
-    ) -> None:
+    def __init__(self, findThis: Callable[[ast.AST], TypeIs[木] | bool], doThat: Callable[[木], 归个]) -> None:
         self.findThis = findThis
         self.doThat = doThat
 
-    def visit(self, node: ast.AST) -> ast.AST:
+    def visit(self, node: ast.AST):
         if self.findThis(node):
-            return self.doThat(node)
+            return self.doThat(cast(木, node))
         return super().visit(node)
