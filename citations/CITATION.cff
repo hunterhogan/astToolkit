@@ -7,12 +7,12 @@ authors:
   family-names: Hogan
   email: HunterHogan@pm.me
 cff-version: 1.2.0
-commit: 01667665be94e59479874d5b911f10a82012962a
-date-released: '2025-06-17'
+commit: 25aec3bf4b9771eeb7d3f9286b81606b7a99dedf
+date-released: '2025-06-18'
 identifiers:
 - type: url
-  value: https://github.com/hunterhogan/astToolkit/releases/tag/0.5.6
-  description: The URL for astToolkit 0.5.6.
+  value: https://github.com/hunterhogan/astToolkit/releases/tag/0.5.7
+  description: The URL for astToolkit 0.5.7.
 keywords:
 - abstract syntax tree
 - ast
@@ -37,9 +37,9 @@ keywords:
 license: CC-BY-NC-4.0
 message: Cite this software with the metadata in this file.
 repository: https://github.com/hunterhogan/astToolkit.git
-repository-artifact: https://pypi.org/project/asttoolkit/0.5.6/
-repository-code: https://github.com/hunterhogan/astToolkit/releases/tag/0.5.6
+repository-artifact: https://pypi.org/project/asttoolkit/0.5.7/
+repository-code: https://github.com/hunterhogan/astToolkit/releases/tag/0.5.7
 title: astToolkit
 type: software
 url: https://github.com/hunterhogan/astToolkit
-version: 0.5.6
+version: 0.5.7
