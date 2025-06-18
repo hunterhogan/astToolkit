@@ -67,8 +67,8 @@ def dump(node: AST, annotate_fields: bool = True, include_attributes: bool = Fal
                     allsimple = allsimple and simple
                     args.append('%s=%s' % (name_attributes, value_attributes_formatted))
             if allsimple and len(args) <= 3:
-                return ('%s(%s)' % (f"{node.__class__.__module__}.{node.__class__.__name__}", ', '.join(args)), not args)
-            return ('%s(%s%s)' % (f"{node.__class__.__module__}.{node.__class__.__name__}", prefix, sep.join(args)), False)
+                return ('%s(%s)' % (f"ast.{node.__class__.__name__}", ', '.join(args)), not args)
+            return ('%s(%s%s)' % (f"ast.{node.__class__.__name__}", prefix, sep.join(args)), False)
         elif isinstance(node, list):
             if not node:
                 return ('[]', True)

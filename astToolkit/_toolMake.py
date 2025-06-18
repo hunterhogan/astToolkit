@@ -945,7 +945,7 @@ class Make:
         return ast.Compare(left=left, ops=list(ops), comparators=list(comparators), **keywordArguments)
 
     @staticmethod
-    def comprehension(target: ast.expr, iter: ast.expr, ifs: Sequence[ast.expr], is_async: int) -> ast.comprehension:
+    def comprehension(target: ast.expr, iter: ast.expr, ifs: Sequence[ast.expr], is_async: int=0) -> ast.comprehension:
         """
         Comprehension clause AST object for `for` clauses in list/set/dict comprehensions.
         (AI generated docstring)
@@ -2256,7 +2256,7 @@ class Make:
         return ast.MatchSingleton(value=value, **keywordArguments)
 
     @staticmethod
-    def MatchStar(name: str | None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchStar:
+    def MatchStar(name: str | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchStar:
         """Create an `ast.MatchStar` (Match Star) node for capturing sequence remainder.
         (AI generated docstring)
 
@@ -2266,7 +2266,7 @@ class Make:
 
         Parameters
         ----------
-        name : str | None
+        name : str | None = None
             Optional identifier to bind the remaining sequence elements. When `None`, the remaining elements are matched but not captured.
 
         Returns
