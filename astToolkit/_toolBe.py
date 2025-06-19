@@ -1,4 +1,6 @@
 """This file is generated automatically, so changes to this file will be lost."""
+from astToolkit import ConstantValueType
+from collections.abc import Callable, Sequence
 from typing_extensions import TypeIs
 import ast
 
@@ -63,13 +65,25 @@ class Be:
         It is a subclass of `ast.operator`."""
         return isinstance(node, ast.Add)
 
-    @staticmethod
-    def alias(node: ast.AST) -> TypeIs[ast.alias]:
-        """`Be.alias` matches `class` `ast.alias`.
-        It has attributes `name`, `asname`.
-        This `class` is associated with Python keywords `as`.
-        It is a subclass of `ast.AST`."""
-        return isinstance(node, ast.alias)
+    class _alias:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.alias]:
+            return isinstance(node, ast.alias)
+
+        @staticmethod
+        def nameIs(attributeCondition: Callable[[str], bool]) -> Callable[[ast.AST], TypeIs[ast.alias] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.alias] | bool:
+                return isinstance(node, ast.alias) and attributeCondition(node.name)
+            return workhorse
+
+        @staticmethod
+        def asnameIs(attributeCondition: Callable[[str | None], bool]) -> Callable[[ast.AST], TypeIs[ast.alias] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.alias] | bool:
+                return isinstance(node, ast.alias) and attributeCondition(node.asname)
+            return workhorse
+    alias = _alias()
 
     @staticmethod
     def And(node: ast.AST) -> TypeIs[ast.And]:
@@ -78,44 +92,168 @@ class Be:
         It is a subclass of `ast.boolop`."""
         return isinstance(node, ast.And)
 
-    @staticmethod
-    def AnnAssign(node: ast.AST) -> TypeIs[ast.AnnAssign]:
-        """`Be.AnnAssign`, ***Ann***otated ***Assign***ment, matches `class` `ast.AnnAssign`.
-        It has attributes `target`, `annotation`, `value`, `simple`.
-        This `class` is associated with Python delimiters ':, ='.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.AnnAssign)
+    class _AnnAssign:
 
-    @staticmethod
-    def arg(node: ast.AST) -> TypeIs[ast.arg]:
-        """`Be.arg`, ***arg***ument, matches `class` `ast.arg`.
-        It has attributes `arg`, `annotation`, `type_comment`.
-        It is a subclass of `ast.AST`."""
-        return isinstance(node, ast.arg)
+        def __call__(self, node: ast.AST) -> TypeIs[ast.AnnAssign]:
+            return isinstance(node, ast.AnnAssign)
 
-    @staticmethod
-    def arguments(node: ast.AST) -> TypeIs[ast.arguments]:
-        """`Be.arguments` matches `class` `ast.arguments`.
-        It has attributes `posonlyargs`, `args`, `vararg`, `kwonlyargs`, `kw_defaults`, `kwarg`, `defaults`.
-        This `class` is associated with Python delimiters ','.
-        It is a subclass of `ast.AST`."""
-        return isinstance(node, ast.arguments)
+        @staticmethod
+        def targetIs(attributeCondition: Callable[[ast.Name | ast.Attribute | ast.Subscript], bool]) -> Callable[[ast.AST], TypeIs[ast.AnnAssign] | bool]:
 
-    @staticmethod
-    def Assert(node: ast.AST) -> TypeIs[ast.Assert]:
-        """`Be.Assert` matches `class` `ast.Assert`.
-        It has attributes `test`, `msg`.
-        This `class` is associated with Python keywords `assert`.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.Assert)
+            def workhorse(node: ast.AST) -> TypeIs[ast.AnnAssign] | bool:
+                return isinstance(node, ast.AnnAssign) and attributeCondition(node.target)
+            return workhorse
 
-    @staticmethod
-    def Assign(node: ast.AST) -> TypeIs[ast.Assign]:
-        """`Be.Assign` matches `class` `ast.Assign`.
-        It has attributes `targets`, `value`, `type_comment`.
-        This `class` is associated with Python delimiters '='.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.Assign)
+        @staticmethod
+        def annotationIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.AnnAssign] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.AnnAssign] | bool:
+                return isinstance(node, ast.AnnAssign) and attributeCondition(node.annotation)
+            return workhorse
+
+        @staticmethod
+        def valueIs(attributeCondition: Callable[[ast.expr | None], bool]) -> Callable[[ast.AST], TypeIs[ast.AnnAssign] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.AnnAssign] | bool:
+                return isinstance(node, ast.AnnAssign) and attributeCondition(node.value)
+            return workhorse
+
+        @staticmethod
+        def simpleIs(attributeCondition: Callable[[int], bool]) -> Callable[[ast.AST], TypeIs[ast.AnnAssign] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.AnnAssign] | bool:
+                return isinstance(node, ast.AnnAssign) and attributeCondition(node.simple)
+            return workhorse
+    AnnAssign = _AnnAssign()
+
+    class _arg:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.arg]:
+            return isinstance(node, ast.arg)
+
+        @staticmethod
+        def argIs(attributeCondition: Callable[[str], bool]) -> Callable[[ast.AST], TypeIs[ast.arg] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.arg] | bool:
+                return isinstance(node, ast.arg) and attributeCondition(node.arg)
+            return workhorse
+
+        @staticmethod
+        def annotationIs(attributeCondition: Callable[[ast.expr | None], bool]) -> Callable[[ast.AST], TypeIs[ast.arg] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.arg] | bool:
+                return isinstance(node, ast.arg) and attributeCondition(node.annotation)
+            return workhorse
+
+        @staticmethod
+        def type_commentIs(attributeCondition: Callable[[str | None], bool]) -> Callable[[ast.AST], TypeIs[ast.arg] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.arg] | bool:
+                return isinstance(node, ast.arg) and attributeCondition(node.type_comment)
+            return workhorse
+    arg = _arg()
+
+    class _arguments:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.arguments]:
+            return isinstance(node, ast.arguments)
+
+        @staticmethod
+        def posonlyargsIs(attributeCondition: Callable[[list[ast.arg]], bool]) -> Callable[[ast.AST], TypeIs[ast.arguments] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.arguments] | bool:
+                return isinstance(node, ast.arguments) and attributeCondition(node.posonlyargs)
+            return workhorse
+
+        @staticmethod
+        def argsIs(attributeCondition: Callable[[list[ast.arg]], bool]) -> Callable[[ast.AST], TypeIs[ast.arguments] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.arguments] | bool:
+                return isinstance(node, ast.arguments) and attributeCondition(node.args)
+            return workhorse
+
+        @staticmethod
+        def varargIs(attributeCondition: Callable[[ast.arg | None], bool]) -> Callable[[ast.AST], TypeIs[ast.arguments] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.arguments] | bool:
+                return isinstance(node, ast.arguments) and attributeCondition(node.vararg)
+            return workhorse
+
+        @staticmethod
+        def kwonlyargsIs(attributeCondition: Callable[[list[ast.arg]], bool]) -> Callable[[ast.AST], TypeIs[ast.arguments] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.arguments] | bool:
+                return isinstance(node, ast.arguments) and attributeCondition(node.kwonlyargs)
+            return workhorse
+
+        @staticmethod
+        def kw_defaultsIs(attributeCondition: Callable[[Sequence[ast.expr | None]], bool]) -> Callable[[ast.AST], TypeIs[ast.arguments] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.arguments] | bool:
+                return isinstance(node, ast.arguments) and attributeCondition(node.kw_defaults)
+            return workhorse
+
+        @staticmethod
+        def kwargIs(attributeCondition: Callable[[ast.arg | None], bool]) -> Callable[[ast.AST], TypeIs[ast.arguments] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.arguments] | bool:
+                return isinstance(node, ast.arguments) and attributeCondition(node.kwarg)
+            return workhorse
+
+        @staticmethod
+        def defaultsIs(attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeIs[ast.arguments] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.arguments] | bool:
+                return isinstance(node, ast.arguments) and attributeCondition(node.defaults)
+            return workhorse
+    arguments = _arguments()
+
+    class _Assert:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Assert]:
+            return isinstance(node, ast.Assert)
+
+        @staticmethod
+        def testIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.Assert] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Assert] | bool:
+                return isinstance(node, ast.Assert) and attributeCondition(node.test)
+            return workhorse
+
+        @staticmethod
+        def msgIs(attributeCondition: Callable[[ast.expr | None], bool]) -> Callable[[ast.AST], TypeIs[ast.Assert] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Assert] | bool:
+                return isinstance(node, ast.Assert) and attributeCondition(node.msg)
+            return workhorse
+    Assert = _Assert()
+
+    class _Assign:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Assign]:
+            return isinstance(node, ast.Assign)
+
+        @staticmethod
+        def targetsIs(attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeIs[ast.Assign] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Assign] | bool:
+                return isinstance(node, ast.Assign) and attributeCondition(node.targets)
+            return workhorse
+
+        @staticmethod
+        def valueIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.Assign] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Assign] | bool:
+                return isinstance(node, ast.Assign) and attributeCondition(node.value)
+            return workhorse
+
+        @staticmethod
+        def type_commentIs(attributeCondition: Callable[[str | None], bool]) -> Callable[[ast.AST], TypeIs[ast.Assign] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Assign] | bool:
+                return isinstance(node, ast.Assign) and attributeCondition(node.type_comment)
+            return workhorse
+    Assign = _Assign()
 
     @staticmethod
     def AST(node: ast.AST) -> TypeIs[ast.AST]:
@@ -123,60 +261,222 @@ class Be:
         It is a subclass of `ast.object`."""
         return isinstance(node, ast.AST)
 
-    @staticmethod
-    def AsyncFor(node: ast.AST) -> TypeIs[ast.AsyncFor]:
-        """`Be.AsyncFor`, ***Async***hronous For loop, matches `class` `ast.AsyncFor`.
-        It has attributes `target`, `iter`, `body`, `orelse`, `type_comment`.
-        This `class` is associated with Python keywords `async for` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.AsyncFor)
+    class _AsyncFor:
 
-    @staticmethod
-    def AsyncFunctionDef(node: ast.AST) -> TypeIs[ast.AsyncFunctionDef]:
-        """`Be.AsyncFunctionDef`, ***Async***hronous Function ***Def***inition, matches `class` `ast.AsyncFunctionDef`.
-        It has attributes `name`, `args`, `body`, `decorator_list`, `returns`, `type_comment`, `type_params`.
-        This `class` is associated with Python keywords `async def` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.AsyncFunctionDef)
+        def __call__(self, node: ast.AST) -> TypeIs[ast.AsyncFor]:
+            return isinstance(node, ast.AsyncFor)
 
-    @staticmethod
-    def AsyncWith(node: ast.AST) -> TypeIs[ast.AsyncWith]:
-        """`Be.AsyncWith`, ***Async***hronous With statement, matches `class` `ast.AsyncWith`.
-        It has attributes `items`, `body`, `type_comment`.
-        This `class` is associated with Python keywords `async with` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.AsyncWith)
+        @staticmethod
+        def targetIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.AsyncFor] | bool]:
 
-    @staticmethod
-    def Attribute(node: ast.AST) -> TypeIs[ast.Attribute]:
-        """`Be.Attribute` matches `class` `ast.Attribute`.
-        It has attributes `value`, `attr`, `ctx`.
-        This `class` is associated with Python delimiters '.'.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.Attribute)
+            def workhorse(node: ast.AST) -> TypeIs[ast.AsyncFor] | bool:
+                return isinstance(node, ast.AsyncFor) and attributeCondition(node.target)
+            return workhorse
 
-    @staticmethod
-    def AugAssign(node: ast.AST) -> TypeIs[ast.AugAssign]:
-        """`Be.AugAssign`, ***Aug***mented ***Assign***ment, matches `class` `ast.AugAssign`.
-        It has attributes `target`, `op`, `value`.
-        This `class` is associated with Python delimiters '+=, -=, *=, /=, //=, %=, **=, |=, &=, ^=, <<=, >>='.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.AugAssign)
+        @staticmethod
+        def iterIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.AsyncFor] | bool]:
 
-    @staticmethod
-    def Await(node: ast.AST) -> TypeIs[ast.Await]:
-        """`Be.Await`, ***Await*** the asynchronous operation, matches `class` `ast.Await`.
-        It has attributes `value`.
-        This `class` is associated with Python keywords `await`.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.Await)
+            def workhorse(node: ast.AST) -> TypeIs[ast.AsyncFor] | bool:
+                return isinstance(node, ast.AsyncFor) and attributeCondition(node.iter)
+            return workhorse
 
-    @staticmethod
-    def BinOp(node: ast.AST) -> TypeIs[ast.BinOp]:
-        """`Be.BinOp`, ***Bin***ary ***Op***eration, matches `class` `ast.BinOp`.
-        It has attributes `left`, `op`, `right`.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.BinOp)
+        @staticmethod
+        def bodyIs(attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[ast.AsyncFor] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.AsyncFor] | bool:
+                return isinstance(node, ast.AsyncFor) and attributeCondition(node.body)
+            return workhorse
+
+        @staticmethod
+        def orelseIs(attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[ast.AsyncFor] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.AsyncFor] | bool:
+                return isinstance(node, ast.AsyncFor) and attributeCondition(node.orelse)
+            return workhorse
+
+        @staticmethod
+        def type_commentIs(attributeCondition: Callable[[str | None], bool]) -> Callable[[ast.AST], TypeIs[ast.AsyncFor] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.AsyncFor] | bool:
+                return isinstance(node, ast.AsyncFor) and attributeCondition(node.type_comment)
+            return workhorse
+    AsyncFor = _AsyncFor()
+
+    class _AsyncFunctionDef:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.AsyncFunctionDef]:
+            return isinstance(node, ast.AsyncFunctionDef)
+
+        @staticmethod
+        def nameIs(attributeCondition: Callable[[str], bool]) -> Callable[[ast.AST], TypeIs[ast.AsyncFunctionDef] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.AsyncFunctionDef] | bool:
+                return isinstance(node, ast.AsyncFunctionDef) and attributeCondition(node.name)
+            return workhorse
+
+        @staticmethod
+        def argsIs(attributeCondition: Callable[[ast.arguments], bool]) -> Callable[[ast.AST], TypeIs[ast.AsyncFunctionDef] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.AsyncFunctionDef] | bool:
+                return isinstance(node, ast.AsyncFunctionDef) and attributeCondition(node.args)
+            return workhorse
+
+        @staticmethod
+        def bodyIs(attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[ast.AsyncFunctionDef] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.AsyncFunctionDef] | bool:
+                return isinstance(node, ast.AsyncFunctionDef) and attributeCondition(node.body)
+            return workhorse
+
+        @staticmethod
+        def decorator_listIs(attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeIs[ast.AsyncFunctionDef] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.AsyncFunctionDef] | bool:
+                return isinstance(node, ast.AsyncFunctionDef) and attributeCondition(node.decorator_list)
+            return workhorse
+
+        @staticmethod
+        def returnsIs(attributeCondition: Callable[[ast.expr | None], bool]) -> Callable[[ast.AST], TypeIs[ast.AsyncFunctionDef] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.AsyncFunctionDef] | bool:
+                return isinstance(node, ast.AsyncFunctionDef) and attributeCondition(node.returns)
+            return workhorse
+
+        @staticmethod
+        def type_commentIs(attributeCondition: Callable[[str | None], bool]) -> Callable[[ast.AST], TypeIs[ast.AsyncFunctionDef] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.AsyncFunctionDef] | bool:
+                return isinstance(node, ast.AsyncFunctionDef) and attributeCondition(node.type_comment)
+            return workhorse
+
+        @staticmethod
+        def type_paramsIs(attributeCondition: Callable[[Sequence[ast.type_param]], bool]) -> Callable[[ast.AST], TypeIs[ast.AsyncFunctionDef] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.AsyncFunctionDef] | bool:
+                return isinstance(node, ast.AsyncFunctionDef) and attributeCondition(node.type_params)
+            return workhorse
+    AsyncFunctionDef = _AsyncFunctionDef()
+
+    class _AsyncWith:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.AsyncWith]:
+            return isinstance(node, ast.AsyncWith)
+
+        @staticmethod
+        def itemsIs(attributeCondition: Callable[[list[ast.withitem]], bool]) -> Callable[[ast.AST], TypeIs[ast.AsyncWith] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.AsyncWith] | bool:
+                return isinstance(node, ast.AsyncWith) and attributeCondition(node.items)
+            return workhorse
+
+        @staticmethod
+        def bodyIs(attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[ast.AsyncWith] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.AsyncWith] | bool:
+                return isinstance(node, ast.AsyncWith) and attributeCondition(node.body)
+            return workhorse
+
+        @staticmethod
+        def type_commentIs(attributeCondition: Callable[[str | None], bool]) -> Callable[[ast.AST], TypeIs[ast.AsyncWith] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.AsyncWith] | bool:
+                return isinstance(node, ast.AsyncWith) and attributeCondition(node.type_comment)
+            return workhorse
+    AsyncWith = _AsyncWith()
+
+    class _Attribute:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Attribute]:
+            return isinstance(node, ast.Attribute)
+
+        @staticmethod
+        def valueIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.Attribute] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Attribute] | bool:
+                return isinstance(node, ast.Attribute) and attributeCondition(node.value)
+            return workhorse
+
+        @staticmethod
+        def attrIs(attributeCondition: Callable[[str], bool]) -> Callable[[ast.AST], TypeIs[ast.Attribute] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Attribute] | bool:
+                return isinstance(node, ast.Attribute) and attributeCondition(node.attr)
+            return workhorse
+
+        @staticmethod
+        def ctxIs(attributeCondition: Callable[[ast.expr_context], bool]) -> Callable[[ast.AST], TypeIs[ast.Attribute] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Attribute] | bool:
+                return isinstance(node, ast.Attribute) and attributeCondition(node.ctx)
+            return workhorse
+    Attribute = _Attribute()
+
+    class _AugAssign:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.AugAssign]:
+            return isinstance(node, ast.AugAssign)
+
+        @staticmethod
+        def targetIs(attributeCondition: Callable[[ast.Name | ast.Attribute | ast.Subscript], bool]) -> Callable[[ast.AST], TypeIs[ast.AugAssign] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.AugAssign] | bool:
+                return isinstance(node, ast.AugAssign) and attributeCondition(node.target)
+            return workhorse
+
+        @staticmethod
+        def opIs(attributeCondition: Callable[[ast.operator], bool]) -> Callable[[ast.AST], TypeIs[ast.AugAssign] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.AugAssign] | bool:
+                return isinstance(node, ast.AugAssign) and attributeCondition(node.op)
+            return workhorse
+
+        @staticmethod
+        def valueIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.AugAssign] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.AugAssign] | bool:
+                return isinstance(node, ast.AugAssign) and attributeCondition(node.value)
+            return workhorse
+    AugAssign = _AugAssign()
+
+    class _Await:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Await]:
+            return isinstance(node, ast.Await)
+
+        @staticmethod
+        def valueIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.Await] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Await] | bool:
+                return isinstance(node, ast.Await) and attributeCondition(node.value)
+            return workhorse
+    Await = _Await()
+
+    class _BinOp:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.BinOp]:
+            return isinstance(node, ast.BinOp)
+
+        @staticmethod
+        def leftIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.BinOp] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.BinOp] | bool:
+                return isinstance(node, ast.BinOp) and attributeCondition(node.left)
+            return workhorse
+
+        @staticmethod
+        def opIs(attributeCondition: Callable[[ast.operator], bool]) -> Callable[[ast.AST], TypeIs[ast.BinOp] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.BinOp] | bool:
+                return isinstance(node, ast.BinOp) and attributeCondition(node.op)
+            return workhorse
+
+        @staticmethod
+        def rightIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.BinOp] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.BinOp] | bool:
+                return isinstance(node, ast.BinOp) and attributeCondition(node.right)
+            return workhorse
+    BinOp = _BinOp()
 
     @staticmethod
     def BitAnd(node: ast.AST) -> TypeIs[ast.BitAnd]:
@@ -205,12 +505,25 @@ class Be:
         It is a subclass of `ast.AST`."""
         return isinstance(node, ast.boolop)
 
-    @staticmethod
-    def BoolOp(node: ast.AST) -> TypeIs[ast.BoolOp]:
-        """`Be.BoolOp`, ***Bool***ean ***Op***eration, matches `class` `ast.BoolOp`.
-        It has attributes `op`, `values`.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.BoolOp)
+    class _BoolOp:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.BoolOp]:
+            return isinstance(node, ast.BoolOp)
+
+        @staticmethod
+        def opIs(attributeCondition: Callable[[ast.boolop], bool]) -> Callable[[ast.AST], TypeIs[ast.BoolOp] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.BoolOp] | bool:
+                return isinstance(node, ast.BoolOp) and attributeCondition(node.op)
+            return workhorse
+
+        @staticmethod
+        def valuesIs(attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeIs[ast.BoolOp] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.BoolOp] | bool:
+                return isinstance(node, ast.BoolOp) and attributeCondition(node.values)
+            return workhorse
+    BoolOp = _BoolOp()
 
     @staticmethod
     def Break(node: ast.AST) -> TypeIs[ast.Break]:
@@ -219,21 +532,80 @@ class Be:
         It is a subclass of `ast.stmt`."""
         return isinstance(node, ast.Break)
 
-    @staticmethod
-    def Call(node: ast.AST) -> TypeIs[ast.Call]:
-        """`Be.Call` matches `class` `ast.Call`.
-        It has attributes `func`, `args`, `keywords`.
-        This `class` is associated with Python delimiters '()'.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.Call)
+    class _Call:
 
-    @staticmethod
-    def ClassDef(node: ast.AST) -> TypeIs[ast.ClassDef]:
-        """`Be.ClassDef`, ***Class*** ***Def***inition, matches `class` `ast.ClassDef`.
-        It has attributes `name`, `bases`, `keywords`, `body`, `decorator_list`, `type_params`.
-        This `class` is associated with Python keywords `class` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.ClassDef)
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Call]:
+            return isinstance(node, ast.Call)
+
+        @staticmethod
+        def funcIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.Call] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Call] | bool:
+                return isinstance(node, ast.Call) and attributeCondition(node.func)
+            return workhorse
+
+        @staticmethod
+        def argsIs(attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeIs[ast.Call] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Call] | bool:
+                return isinstance(node, ast.Call) and attributeCondition(node.args)
+            return workhorse
+
+        @staticmethod
+        def keywordsIs(attributeCondition: Callable[[list[ast.keyword]], bool]) -> Callable[[ast.AST], TypeIs[ast.Call] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Call] | bool:
+                return isinstance(node, ast.Call) and attributeCondition(node.keywords)
+            return workhorse
+    Call = _Call()
+
+    class _ClassDef:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.ClassDef]:
+            return isinstance(node, ast.ClassDef)
+
+        @staticmethod
+        def nameIs(attributeCondition: Callable[[str], bool]) -> Callable[[ast.AST], TypeIs[ast.ClassDef] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.ClassDef] | bool:
+                return isinstance(node, ast.ClassDef) and attributeCondition(node.name)
+            return workhorse
+
+        @staticmethod
+        def basesIs(attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeIs[ast.ClassDef] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.ClassDef] | bool:
+                return isinstance(node, ast.ClassDef) and attributeCondition(node.bases)
+            return workhorse
+
+        @staticmethod
+        def keywordsIs(attributeCondition: Callable[[list[ast.keyword]], bool]) -> Callable[[ast.AST], TypeIs[ast.ClassDef] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.ClassDef] | bool:
+                return isinstance(node, ast.ClassDef) and attributeCondition(node.keywords)
+            return workhorse
+
+        @staticmethod
+        def bodyIs(attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[ast.ClassDef] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.ClassDef] | bool:
+                return isinstance(node, ast.ClassDef) and attributeCondition(node.body)
+            return workhorse
+
+        @staticmethod
+        def decorator_listIs(attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeIs[ast.ClassDef] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.ClassDef] | bool:
+                return isinstance(node, ast.ClassDef) and attributeCondition(node.decorator_list)
+            return workhorse
+
+        @staticmethod
+        def type_paramsIs(attributeCondition: Callable[[Sequence[ast.type_param]], bool]) -> Callable[[ast.AST], TypeIs[ast.ClassDef] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.ClassDef] | bool:
+                return isinstance(node, ast.ClassDef) and attributeCondition(node.type_params)
+            return workhorse
+    ClassDef = _ClassDef()
 
     @staticmethod
     def cmpop(node: ast.AST) -> TypeIs[ast.cmpop]:
@@ -241,26 +613,86 @@ class Be:
         It is a subclass of `ast.AST`."""
         return isinstance(node, ast.cmpop)
 
-    @staticmethod
-    def Compare(node: ast.AST) -> TypeIs[ast.Compare]:
-        """`Be.Compare` matches `class` `ast.Compare`.
-        It has attributes `left`, `ops`, `comparators`.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.Compare)
+    class _Compare:
 
-    @staticmethod
-    def comprehension(node: ast.AST) -> TypeIs[ast.comprehension]:
-        """`Be.comprehension` matches `class` `ast.comprehension`.
-        It has attributes `target`, `iter`, `ifs`, `is_async`.
-        It is a subclass of `ast.AST`."""
-        return isinstance(node, ast.comprehension)
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Compare]:
+            return isinstance(node, ast.Compare)
 
-    @staticmethod
-    def Constant(node: ast.AST) -> TypeIs[ast.Constant]:
-        """`Be.Constant` matches any of `class` `ast.Constant` | `ast.Bytes` | `ast.Bytes` | `ast.Ellipsis` | `ast.Ellipsis` | `ast.NameConstant` | `ast.NameConstant` | `ast.Num` | `ast.Num` | `ast.Str` | `ast.Str`.
-        It has attributes `value`, `kind`.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.Constant)
+        @staticmethod
+        def leftIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.Compare] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Compare] | bool:
+                return isinstance(node, ast.Compare) and attributeCondition(node.left)
+            return workhorse
+
+        @staticmethod
+        def opsIs(attributeCondition: Callable[[Sequence[ast.cmpop]], bool]) -> Callable[[ast.AST], TypeIs[ast.Compare] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Compare] | bool:
+                return isinstance(node, ast.Compare) and attributeCondition(node.ops)
+            return workhorse
+
+        @staticmethod
+        def comparatorsIs(attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeIs[ast.Compare] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Compare] | bool:
+                return isinstance(node, ast.Compare) and attributeCondition(node.comparators)
+            return workhorse
+    Compare = _Compare()
+
+    class _comprehension:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.comprehension]:
+            return isinstance(node, ast.comprehension)
+
+        @staticmethod
+        def targetIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.comprehension] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.comprehension] | bool:
+                return isinstance(node, ast.comprehension) and attributeCondition(node.target)
+            return workhorse
+
+        @staticmethod
+        def iterIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.comprehension] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.comprehension] | bool:
+                return isinstance(node, ast.comprehension) and attributeCondition(node.iter)
+            return workhorse
+
+        @staticmethod
+        def ifsIs(attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeIs[ast.comprehension] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.comprehension] | bool:
+                return isinstance(node, ast.comprehension) and attributeCondition(node.ifs)
+            return workhorse
+
+        @staticmethod
+        def is_asyncIs(attributeCondition: Callable[[int], bool]) -> Callable[[ast.AST], TypeIs[ast.comprehension] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.comprehension] | bool:
+                return isinstance(node, ast.comprehension) and attributeCondition(node.is_async)
+            return workhorse
+    comprehension = _comprehension()
+
+    class _Constant:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Constant]:
+            return isinstance(node, ast.Constant)
+
+        @staticmethod
+        def valueIs(attributeCondition: Callable[[ConstantValueType], bool]) -> Callable[[ast.AST], TypeIs[ast.Constant] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Constant] | bool:
+                return isinstance(node, ast.Constant) and attributeCondition(node.value)
+            return workhorse
+
+        @staticmethod
+        def kindIs(attributeCondition: Callable[[str | None], bool]) -> Callable[[ast.AST], TypeIs[ast.Constant] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Constant] | bool:
+                return isinstance(node, ast.Constant) and attributeCondition(node.kind)
+            return workhorse
+    Constant = _Constant()
 
     @staticmethod
     def Continue(node: ast.AST) -> TypeIs[ast.Continue]:
@@ -275,29 +707,65 @@ class Be:
         It is a subclass of `ast.expr_context`."""
         return isinstance(node, ast.Del)
 
-    @staticmethod
-    def Delete(node: ast.AST) -> TypeIs[ast.Delete]:
-        """`Be.Delete` matches `class` `ast.Delete`.
-        It has attributes `targets`.
-        This `class` is associated with Python keywords `del`.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.Delete)
+    class _Delete:
 
-    @staticmethod
-    def Dict(node: ast.AST) -> TypeIs[ast.Dict]:
-        """`Be.Dict`, ***Dict***ionary, matches `class` `ast.Dict`.
-        It has attributes `keys`, `values`.
-        This `class` is associated with Python delimiters '{}'.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.Dict)
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Delete]:
+            return isinstance(node, ast.Delete)
 
-    @staticmethod
-    def DictComp(node: ast.AST) -> TypeIs[ast.DictComp]:
-        """`Be.DictComp`, ***Dict***ionary ***c***o***mp***rehension, matches `class` `ast.DictComp`.
-        It has attributes `key`, `value`, `generators`.
-        This `class` is associated with Python delimiters '{}'.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.DictComp)
+        @staticmethod
+        def targetsIs(attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeIs[ast.Delete] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Delete] | bool:
+                return isinstance(node, ast.Delete) and attributeCondition(node.targets)
+            return workhorse
+    Delete = _Delete()
+
+    class _Dict:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Dict]:
+            return isinstance(node, ast.Dict)
+
+        @staticmethod
+        def keysIs(attributeCondition: Callable[[Sequence[ast.expr | None]], bool]) -> Callable[[ast.AST], TypeIs[ast.Dict] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Dict] | bool:
+                return isinstance(node, ast.Dict) and attributeCondition(node.keys)
+            return workhorse
+
+        @staticmethod
+        def valuesIs(attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeIs[ast.Dict] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Dict] | bool:
+                return isinstance(node, ast.Dict) and attributeCondition(node.values)
+            return workhorse
+    Dict = _Dict()
+
+    class _DictComp:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.DictComp]:
+            return isinstance(node, ast.DictComp)
+
+        @staticmethod
+        def keyIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.DictComp] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.DictComp] | bool:
+                return isinstance(node, ast.DictComp) and attributeCondition(node.key)
+            return workhorse
+
+        @staticmethod
+        def valueIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.DictComp] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.DictComp] | bool:
+                return isinstance(node, ast.DictComp) and attributeCondition(node.value)
+            return workhorse
+
+        @staticmethod
+        def generatorsIs(attributeCondition: Callable[[list[ast.comprehension]], bool]) -> Callable[[ast.AST], TypeIs[ast.DictComp] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.DictComp] | bool:
+                return isinstance(node, ast.DictComp) and attributeCondition(node.generators)
+            return workhorse
+    DictComp = _DictComp()
 
     @staticmethod
     def Div(node: ast.AST) -> TypeIs[ast.Div]:
@@ -319,13 +787,32 @@ class Be:
         It is a subclass of `ast.AST`."""
         return isinstance(node, ast.excepthandler)
 
-    @staticmethod
-    def ExceptHandler(node: ast.AST) -> TypeIs[ast.ExceptHandler]:
-        """`Be.ExceptHandler`, ***Except***ion ***Handler***, matches `class` `ast.ExceptHandler`.
-        It has attributes `type`, `name`, `body`.
-        This `class` is associated with Python keywords `except`.
-        It is a subclass of `ast.excepthandler`."""
-        return isinstance(node, ast.ExceptHandler)
+    class _ExceptHandler:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.ExceptHandler]:
+            return isinstance(node, ast.ExceptHandler)
+
+        @staticmethod
+        def typeIs(attributeCondition: Callable[[ast.expr | None], bool]) -> Callable[[ast.AST], TypeIs[ast.ExceptHandler] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.ExceptHandler] | bool:
+                return isinstance(node, ast.ExceptHandler) and attributeCondition(node.type)
+            return workhorse
+
+        @staticmethod
+        def nameIs(attributeCondition: Callable[[str | None], bool]) -> Callable[[ast.AST], TypeIs[ast.ExceptHandler] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.ExceptHandler] | bool:
+                return isinstance(node, ast.ExceptHandler) and attributeCondition(node.name)
+            return workhorse
+
+        @staticmethod
+        def bodyIs(attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[ast.ExceptHandler] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.ExceptHandler] | bool:
+                return isinstance(node, ast.ExceptHandler) and attributeCondition(node.body)
+            return workhorse
+    ExceptHandler = _ExceptHandler()
 
     @staticmethod
     def expr(node: ast.AST) -> TypeIs[ast.expr]:
@@ -333,12 +820,18 @@ class Be:
         It is a subclass of `ast.AST`."""
         return isinstance(node, ast.expr)
 
-    @staticmethod
-    def Expr(node: ast.AST) -> TypeIs[ast.Expr]:
-        """`Be.Expr`, ***Expr***ession, matches `class` `ast.Expr`.
-        It has attributes `value`.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.Expr)
+    class _Expr:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Expr]:
+            return isinstance(node, ast.Expr)
+
+        @staticmethod
+        def valueIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.Expr] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Expr] | bool:
+                return isinstance(node, ast.Expr) and attributeCondition(node.value)
+            return workhorse
+    Expr = _Expr()
 
     @staticmethod
     def expr_context(node: ast.AST) -> TypeIs[ast.expr_context]:
@@ -346,12 +839,18 @@ class Be:
         It is a subclass of `ast.AST`."""
         return isinstance(node, ast.expr_context)
 
-    @staticmethod
-    def Expression(node: ast.AST) -> TypeIs[ast.Expression]:
-        """`Be.Expression` matches `class` `ast.Expression`.
-        It has attributes `body`.
-        It is a subclass of `ast.mod`."""
-        return isinstance(node, ast.Expression)
+    class _Expression:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Expression]:
+            return isinstance(node, ast.Expression)
+
+        @staticmethod
+        def bodyIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.Expression] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Expression] | bool:
+                return isinstance(node, ast.Expression) and attributeCondition(node.body)
+            return workhorse
+    Expression = _Expression()
 
     @staticmethod
     def FloorDiv(node: ast.AST) -> TypeIs[ast.FloorDiv]:
@@ -360,51 +859,181 @@ class Be:
         It is a subclass of `ast.operator`."""
         return isinstance(node, ast.FloorDiv)
 
-    @staticmethod
-    def For(node: ast.AST) -> TypeIs[ast.For]:
-        """`Be.For` matches `class` `ast.For`.
-        It has attributes `target`, `iter`, `body`, `orelse`, `type_comment`.
-        This `class` is associated with Python keywords `for` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.For)
+    class _For:
 
-    @staticmethod
-    def FormattedValue(node: ast.AST) -> TypeIs[ast.FormattedValue]:
-        """`Be.FormattedValue` matches `class` `ast.FormattedValue`.
-        It has attributes `value`, `conversion`, `format_spec`.
-        This `class` is associated with Python delimiters '{}'.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.FormattedValue)
+        def __call__(self, node: ast.AST) -> TypeIs[ast.For]:
+            return isinstance(node, ast.For)
 
-    @staticmethod
-    def FunctionDef(node: ast.AST) -> TypeIs[ast.FunctionDef]:
-        """`Be.FunctionDef`, Function ***Def***inition, matches `class` `ast.FunctionDef`.
-        It has attributes `name`, `args`, `body`, `decorator_list`, `returns`, `type_comment`, `type_params`.
-        This `class` is associated with Python keywords `def` and Python delimiters '()'.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.FunctionDef)
+        @staticmethod
+        def targetIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.For] | bool]:
 
-    @staticmethod
-    def FunctionType(node: ast.AST) -> TypeIs[ast.FunctionType]:
-        """`Be.FunctionType`, Function Type, matches `class` `ast.FunctionType`.
-        It has attributes `argtypes`, `returns`.
-        It is a subclass of `ast.mod`."""
-        return isinstance(node, ast.FunctionType)
+            def workhorse(node: ast.AST) -> TypeIs[ast.For] | bool:
+                return isinstance(node, ast.For) and attributeCondition(node.target)
+            return workhorse
 
-    @staticmethod
-    def GeneratorExp(node: ast.AST) -> TypeIs[ast.GeneratorExp]:
-        """`Be.GeneratorExp`, Generator ***Exp***ression, matches `class` `ast.GeneratorExp`.
-        It has attributes `elt`, `generators`.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.GeneratorExp)
+        @staticmethod
+        def iterIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.For] | bool]:
 
-    @staticmethod
-    def Global(node: ast.AST) -> TypeIs[ast.Global]:
-        """`Be.Global` matches `class` `ast.Global`.
-        It has attributes `names`.
-        This `class` is associated with Python keywords `global`.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.Global)
+            def workhorse(node: ast.AST) -> TypeIs[ast.For] | bool:
+                return isinstance(node, ast.For) and attributeCondition(node.iter)
+            return workhorse
+
+        @staticmethod
+        def bodyIs(attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[ast.For] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.For] | bool:
+                return isinstance(node, ast.For) and attributeCondition(node.body)
+            return workhorse
+
+        @staticmethod
+        def orelseIs(attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[ast.For] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.For] | bool:
+                return isinstance(node, ast.For) and attributeCondition(node.orelse)
+            return workhorse
+
+        @staticmethod
+        def type_commentIs(attributeCondition: Callable[[str | None], bool]) -> Callable[[ast.AST], TypeIs[ast.For] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.For] | bool:
+                return isinstance(node, ast.For) and attributeCondition(node.type_comment)
+            return workhorse
+    For = _For()
+
+    class _FormattedValue:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.FormattedValue]:
+            return isinstance(node, ast.FormattedValue)
+
+        @staticmethod
+        def valueIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.FormattedValue] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.FormattedValue] | bool:
+                return isinstance(node, ast.FormattedValue) and attributeCondition(node.value)
+            return workhorse
+
+        @staticmethod
+        def conversionIs(attributeCondition: Callable[[int], bool]) -> Callable[[ast.AST], TypeIs[ast.FormattedValue] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.FormattedValue] | bool:
+                return isinstance(node, ast.FormattedValue) and attributeCondition(node.conversion)
+            return workhorse
+
+        @staticmethod
+        def format_specIs(attributeCondition: Callable[[ast.expr | None], bool]) -> Callable[[ast.AST], TypeIs[ast.FormattedValue] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.FormattedValue] | bool:
+                return isinstance(node, ast.FormattedValue) and attributeCondition(node.format_spec)
+            return workhorse
+    FormattedValue = _FormattedValue()
+
+    class _FunctionDef:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.FunctionDef]:
+            return isinstance(node, ast.FunctionDef)
+
+        @staticmethod
+        def nameIs(attributeCondition: Callable[[str], bool]) -> Callable[[ast.AST], TypeIs[ast.FunctionDef] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.FunctionDef] | bool:
+                return isinstance(node, ast.FunctionDef) and attributeCondition(node.name)
+            return workhorse
+
+        @staticmethod
+        def argsIs(attributeCondition: Callable[[ast.arguments], bool]) -> Callable[[ast.AST], TypeIs[ast.FunctionDef] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.FunctionDef] | bool:
+                return isinstance(node, ast.FunctionDef) and attributeCondition(node.args)
+            return workhorse
+
+        @staticmethod
+        def bodyIs(attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[ast.FunctionDef] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.FunctionDef] | bool:
+                return isinstance(node, ast.FunctionDef) and attributeCondition(node.body)
+            return workhorse
+
+        @staticmethod
+        def decorator_listIs(attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeIs[ast.FunctionDef] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.FunctionDef] | bool:
+                return isinstance(node, ast.FunctionDef) and attributeCondition(node.decorator_list)
+            return workhorse
+
+        @staticmethod
+        def returnsIs(attributeCondition: Callable[[ast.expr | None], bool]) -> Callable[[ast.AST], TypeIs[ast.FunctionDef] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.FunctionDef] | bool:
+                return isinstance(node, ast.FunctionDef) and attributeCondition(node.returns)
+            return workhorse
+
+        @staticmethod
+        def type_commentIs(attributeCondition: Callable[[str | None], bool]) -> Callable[[ast.AST], TypeIs[ast.FunctionDef] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.FunctionDef] | bool:
+                return isinstance(node, ast.FunctionDef) and attributeCondition(node.type_comment)
+            return workhorse
+
+        @staticmethod
+        def type_paramsIs(attributeCondition: Callable[[Sequence[ast.type_param]], bool]) -> Callable[[ast.AST], TypeIs[ast.FunctionDef] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.FunctionDef] | bool:
+                return isinstance(node, ast.FunctionDef) and attributeCondition(node.type_params)
+            return workhorse
+    FunctionDef = _FunctionDef()
+
+    class _FunctionType:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.FunctionType]:
+            return isinstance(node, ast.FunctionType)
+
+        @staticmethod
+        def argtypesIs(attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeIs[ast.FunctionType] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.FunctionType] | bool:
+                return isinstance(node, ast.FunctionType) and attributeCondition(node.argtypes)
+            return workhorse
+
+        @staticmethod
+        def returnsIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.FunctionType] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.FunctionType] | bool:
+                return isinstance(node, ast.FunctionType) and attributeCondition(node.returns)
+            return workhorse
+    FunctionType = _FunctionType()
+
+    class _GeneratorExp:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.GeneratorExp]:
+            return isinstance(node, ast.GeneratorExp)
+
+        @staticmethod
+        def eltIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.GeneratorExp] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.GeneratorExp] | bool:
+                return isinstance(node, ast.GeneratorExp) and attributeCondition(node.elt)
+            return workhorse
+
+        @staticmethod
+        def generatorsIs(attributeCondition: Callable[[list[ast.comprehension]], bool]) -> Callable[[ast.AST], TypeIs[ast.GeneratorExp] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.GeneratorExp] | bool:
+                return isinstance(node, ast.GeneratorExp) and attributeCondition(node.generators)
+            return workhorse
+    GeneratorExp = _GeneratorExp()
+
+    class _Global:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Global]:
+            return isinstance(node, ast.Global)
+
+        @staticmethod
+        def namesIs(attributeCondition: Callable[[list[str]], bool]) -> Callable[[ast.AST], TypeIs[ast.Global] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Global] | bool:
+                return isinstance(node, ast.Global) and attributeCondition(node.names)
+            return workhorse
+    Global = _Global()
 
     @staticmethod
     def Gt(node: ast.AST) -> TypeIs[ast.Gt]:
@@ -420,37 +1049,99 @@ class Be:
         It is a subclass of `ast.cmpop`."""
         return isinstance(node, ast.GtE)
 
-    @staticmethod
-    def If(node: ast.AST) -> TypeIs[ast.If]:
-        """`Be.If` matches `class` `ast.If`.
-        It has attributes `test`, `body`, `orelse`.
-        This `class` is associated with Python keywords `if` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.If)
+    class _If:
 
-    @staticmethod
-    def IfExp(node: ast.AST) -> TypeIs[ast.IfExp]:
-        """`Be.IfExp`, If ***Exp***ression, matches `class` `ast.IfExp`.
-        It has attributes `test`, `body`, `orelse`.
-        This `class` is associated with Python keywords `if`.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.IfExp)
+        def __call__(self, node: ast.AST) -> TypeIs[ast.If]:
+            return isinstance(node, ast.If)
 
-    @staticmethod
-    def Import(node: ast.AST) -> TypeIs[ast.Import]:
-        """`Be.Import` matches `class` `ast.Import`.
-        It has attributes `names`.
-        This `class` is associated with Python keywords `import`.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.Import)
+        @staticmethod
+        def testIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.If] | bool]:
 
-    @staticmethod
-    def ImportFrom(node: ast.AST) -> TypeIs[ast.ImportFrom]:
-        """`Be.ImportFrom` matches `class` `ast.ImportFrom`.
-        It has attributes `module`, `names`, `level`.
-        This `class` is associated with Python keywords `import`.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.ImportFrom)
+            def workhorse(node: ast.AST) -> TypeIs[ast.If] | bool:
+                return isinstance(node, ast.If) and attributeCondition(node.test)
+            return workhorse
+
+        @staticmethod
+        def bodyIs(attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[ast.If] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.If] | bool:
+                return isinstance(node, ast.If) and attributeCondition(node.body)
+            return workhorse
+
+        @staticmethod
+        def orelseIs(attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[ast.If] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.If] | bool:
+                return isinstance(node, ast.If) and attributeCondition(node.orelse)
+            return workhorse
+    If = _If()
+
+    class _IfExp:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.IfExp]:
+            return isinstance(node, ast.IfExp)
+
+        @staticmethod
+        def testIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.IfExp] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.IfExp] | bool:
+                return isinstance(node, ast.IfExp) and attributeCondition(node.test)
+            return workhorse
+
+        @staticmethod
+        def bodyIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.IfExp] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.IfExp] | bool:
+                return isinstance(node, ast.IfExp) and attributeCondition(node.body)
+            return workhorse
+
+        @staticmethod
+        def orelseIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.IfExp] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.IfExp] | bool:
+                return isinstance(node, ast.IfExp) and attributeCondition(node.orelse)
+            return workhorse
+    IfExp = _IfExp()
+
+    class _Import:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Import]:
+            return isinstance(node, ast.Import)
+
+        @staticmethod
+        def namesIs(attributeCondition: Callable[[list[ast.alias]], bool]) -> Callable[[ast.AST], TypeIs[ast.Import] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Import] | bool:
+                return isinstance(node, ast.Import) and attributeCondition(node.names)
+            return workhorse
+    Import = _Import()
+
+    class _ImportFrom:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.ImportFrom]:
+            return isinstance(node, ast.ImportFrom)
+
+        @staticmethod
+        def moduleIs(attributeCondition: Callable[[str | None], bool]) -> Callable[[ast.AST], TypeIs[ast.ImportFrom] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.ImportFrom] | bool:
+                return isinstance(node, ast.ImportFrom) and attributeCondition(node.module)
+            return workhorse
+
+        @staticmethod
+        def namesIs(attributeCondition: Callable[[list[ast.alias]], bool]) -> Callable[[ast.AST], TypeIs[ast.ImportFrom] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.ImportFrom] | bool:
+                return isinstance(node, ast.ImportFrom) and attributeCondition(node.names)
+            return workhorse
+
+        @staticmethod
+        def levelIs(attributeCondition: Callable[[int], bool]) -> Callable[[ast.AST], TypeIs[ast.ImportFrom] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.ImportFrom] | bool:
+                return isinstance(node, ast.ImportFrom) and attributeCondition(node.level)
+            return workhorse
+    ImportFrom = _ImportFrom()
 
     @staticmethod
     def In(node: ast.AST) -> TypeIs[ast.In]:
@@ -459,12 +1150,18 @@ class Be:
         It is a subclass of `ast.cmpop`."""
         return isinstance(node, ast.In)
 
-    @staticmethod
-    def Interactive(node: ast.AST) -> TypeIs[ast.Interactive]:
-        """`Be.Interactive`, Interactive mode, matches `class` `ast.Interactive`.
-        It has attributes `body`.
-        It is a subclass of `ast.mod`."""
-        return isinstance(node, ast.Interactive)
+    class _Interactive:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Interactive]:
+            return isinstance(node, ast.Interactive)
+
+        @staticmethod
+        def bodyIs(attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[ast.Interactive] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Interactive] | bool:
+                return isinstance(node, ast.Interactive) and attributeCondition(node.body)
+            return workhorse
+    Interactive = _Interactive()
 
     @staticmethod
     def Invert(node: ast.AST) -> TypeIs[ast.Invert]:
@@ -487,44 +1184,98 @@ class Be:
         It is a subclass of `ast.cmpop`."""
         return isinstance(node, ast.IsNot)
 
-    @staticmethod
-    def JoinedStr(node: ast.AST) -> TypeIs[ast.JoinedStr]:
-        """`Be.JoinedStr`, Joined ***Str***ing, matches `class` `ast.JoinedStr`.
-        It has attributes `values`.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.JoinedStr)
+    class _JoinedStr:
 
-    @staticmethod
-    def keyword(node: ast.AST) -> TypeIs[ast.keyword]:
-        """`Be.keyword` matches `class` `ast.keyword`.
-        It has attributes `arg`, `value`.
-        This `class` is associated with Python delimiters '='.
-        It is a subclass of `ast.AST`."""
-        return isinstance(node, ast.keyword)
+        def __call__(self, node: ast.AST) -> TypeIs[ast.JoinedStr]:
+            return isinstance(node, ast.JoinedStr)
 
-    @staticmethod
-    def Lambda(node: ast.AST) -> TypeIs[ast.Lambda]:
-        """`Be.Lambda`, Lambda function, matches `class` `ast.Lambda`.
-        It has attributes `args`, `body`.
-        This `class` is associated with Python keywords `lambda` and Python delimiters ':'.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.Lambda)
+        @staticmethod
+        def valuesIs(attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeIs[ast.JoinedStr] | bool]:
 
-    @staticmethod
-    def List(node: ast.AST) -> TypeIs[ast.List]:
-        """`Be.List` matches `class` `ast.List`.
-        It has attributes `elts`, `ctx`.
-        This `class` is associated with Python delimiters '[]'.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.List)
+            def workhorse(node: ast.AST) -> TypeIs[ast.JoinedStr] | bool:
+                return isinstance(node, ast.JoinedStr) and attributeCondition(node.values)
+            return workhorse
+    JoinedStr = _JoinedStr()
 
-    @staticmethod
-    def ListComp(node: ast.AST) -> TypeIs[ast.ListComp]:
-        """`Be.ListComp`, List ***c***o***mp***rehension, matches `class` `ast.ListComp`.
-        It has attributes `elt`, `generators`.
-        This `class` is associated with Python delimiters '[]'.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.ListComp)
+    class _keyword:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.keyword]:
+            return isinstance(node, ast.keyword)
+
+        @staticmethod
+        def argIs(attributeCondition: Callable[[str | None], bool]) -> Callable[[ast.AST], TypeIs[ast.keyword] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.keyword] | bool:
+                return isinstance(node, ast.keyword) and attributeCondition(node.arg)
+            return workhorse
+
+        @staticmethod
+        def valueIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.keyword] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.keyword] | bool:
+                return isinstance(node, ast.keyword) and attributeCondition(node.value)
+            return workhorse
+    keyword = _keyword()
+
+    class _Lambda:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Lambda]:
+            return isinstance(node, ast.Lambda)
+
+        @staticmethod
+        def argsIs(attributeCondition: Callable[[ast.arguments], bool]) -> Callable[[ast.AST], TypeIs[ast.Lambda] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Lambda] | bool:
+                return isinstance(node, ast.Lambda) and attributeCondition(node.args)
+            return workhorse
+
+        @staticmethod
+        def bodyIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.Lambda] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Lambda] | bool:
+                return isinstance(node, ast.Lambda) and attributeCondition(node.body)
+            return workhorse
+    Lambda = _Lambda()
+
+    class _List:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.List]:
+            return isinstance(node, ast.List)
+
+        @staticmethod
+        def eltsIs(attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeIs[ast.List] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.List] | bool:
+                return isinstance(node, ast.List) and attributeCondition(node.elts)
+            return workhorse
+
+        @staticmethod
+        def ctxIs(attributeCondition: Callable[[ast.expr_context], bool]) -> Callable[[ast.AST], TypeIs[ast.List] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.List] | bool:
+                return isinstance(node, ast.List) and attributeCondition(node.ctx)
+            return workhorse
+    List = _List()
+
+    class _ListComp:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.ListComp]:
+            return isinstance(node, ast.ListComp)
+
+        @staticmethod
+        def eltIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.ListComp] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.ListComp] | bool:
+                return isinstance(node, ast.ListComp) and attributeCondition(node.elt)
+            return workhorse
+
+        @staticmethod
+        def generatorsIs(attributeCondition: Callable[[list[ast.comprehension]], bool]) -> Callable[[ast.AST], TypeIs[ast.ListComp] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.ListComp] | bool:
+                return isinstance(node, ast.ListComp) and attributeCondition(node.generators)
+            return workhorse
+    ListComp = _ListComp()
 
     @staticmethod
     def Load(node: ast.AST) -> TypeIs[ast.Load]:
@@ -553,85 +1304,198 @@ class Be:
         It is a subclass of `ast.cmpop`."""
         return isinstance(node, ast.LtE)
 
-    @staticmethod
-    def Match(node: ast.AST) -> TypeIs[ast.Match]:
-        """`Be.Match`, Match this, matches `class` `ast.Match`.
-        It has attributes `subject`, `cases`.
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.Match)
+    class _Match:
 
-    @staticmethod
-    def match_case(node: ast.AST) -> TypeIs[ast.match_case]:
-        """`Be.match_case`, match case, matches `class` `ast.match_case`.
-        It has attributes `pattern`, `guard`, `body`.
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.AST`."""
-        return isinstance(node, ast.match_case)
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Match]:
+            return isinstance(node, ast.Match)
 
-    @staticmethod
-    def MatchAs(node: ast.AST) -> TypeIs[ast.MatchAs]:
-        """`Be.MatchAs`, Match As, matches `class` `ast.MatchAs`.
-        It has attributes `pattern`, `name`.
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.pattern`."""
-        return isinstance(node, ast.MatchAs)
+        @staticmethod
+        def subjectIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.Match] | bool]:
 
-    @staticmethod
-    def MatchClass(node: ast.AST) -> TypeIs[ast.MatchClass]:
-        """`Be.MatchClass`, Match Class, matches `class` `ast.MatchClass`.
-        It has attributes `cls`, `patterns`, `kwd_attrs`, `kwd_patterns`.
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.pattern`."""
-        return isinstance(node, ast.MatchClass)
+            def workhorse(node: ast.AST) -> TypeIs[ast.Match] | bool:
+                return isinstance(node, ast.Match) and attributeCondition(node.subject)
+            return workhorse
 
-    @staticmethod
-    def MatchMapping(node: ast.AST) -> TypeIs[ast.MatchMapping]:
-        """`Be.MatchMapping`, Match Mapping, matches `class` `ast.MatchMapping`.
-        It has attributes `keys`, `patterns`, `rest`.
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.pattern`."""
-        return isinstance(node, ast.MatchMapping)
+        @staticmethod
+        def casesIs(attributeCondition: Callable[[list[ast.match_case]], bool]) -> Callable[[ast.AST], TypeIs[ast.Match] | bool]:
 
-    @staticmethod
-    def MatchOr(node: ast.AST) -> TypeIs[ast.MatchOr]:
-        """`Be.MatchOr`, Match this Or that, matches `class` `ast.MatchOr`.
-        It has attributes `patterns`.
-        This `class` is associated with Python delimiters ':' and Python operators '|'.
-        It is a subclass of `ast.pattern`."""
-        return isinstance(node, ast.MatchOr)
+            def workhorse(node: ast.AST) -> TypeIs[ast.Match] | bool:
+                return isinstance(node, ast.Match) and attributeCondition(node.cases)
+            return workhorse
+    Match = _Match()
 
-    @staticmethod
-    def MatchSequence(node: ast.AST) -> TypeIs[ast.MatchSequence]:
-        """`Be.MatchSequence`, Match this Sequence, matches `class` `ast.MatchSequence`.
-        It has attributes `patterns`.
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.pattern`."""
-        return isinstance(node, ast.MatchSequence)
+    class _match_case:
 
-    @staticmethod
-    def MatchSingleton(node: ast.AST) -> TypeIs[ast.MatchSingleton]:
-        """`Be.MatchSingleton`, Match Singleton, matches `class` `ast.MatchSingleton`.
-        It has attributes `value`.
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.pattern`."""
-        return isinstance(node, ast.MatchSingleton)
+        def __call__(self, node: ast.AST) -> TypeIs[ast.match_case]:
+            return isinstance(node, ast.match_case)
 
-    @staticmethod
-    def MatchStar(node: ast.AST) -> TypeIs[ast.MatchStar]:
-        """`Be.MatchStar`, Match Star, matches `class` `ast.MatchStar`.
-        It has attributes `name`.
-        This `class` is associated with Python delimiters ':' and Python operators '*'.
-        It is a subclass of `ast.pattern`."""
-        return isinstance(node, ast.MatchStar)
+        @staticmethod
+        def patternIs(attributeCondition: Callable[[ast.pattern], bool]) -> Callable[[ast.AST], TypeIs[ast.match_case] | bool]:
 
-    @staticmethod
-    def MatchValue(node: ast.AST) -> TypeIs[ast.MatchValue]:
-        """`Be.MatchValue`, Match Value, matches `class` `ast.MatchValue`.
-        It has attributes `value`.
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.pattern`."""
-        return isinstance(node, ast.MatchValue)
+            def workhorse(node: ast.AST) -> TypeIs[ast.match_case] | bool:
+                return isinstance(node, ast.match_case) and attributeCondition(node.pattern)
+            return workhorse
+
+        @staticmethod
+        def guardIs(attributeCondition: Callable[[ast.expr | None], bool]) -> Callable[[ast.AST], TypeIs[ast.match_case] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.match_case] | bool:
+                return isinstance(node, ast.match_case) and attributeCondition(node.guard)
+            return workhorse
+
+        @staticmethod
+        def bodyIs(attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[ast.match_case] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.match_case] | bool:
+                return isinstance(node, ast.match_case) and attributeCondition(node.body)
+            return workhorse
+    match_case = _match_case()
+
+    class _MatchAs:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.MatchAs]:
+            return isinstance(node, ast.MatchAs)
+
+        @staticmethod
+        def patternIs(attributeCondition: Callable[[ast.pattern | None], bool]) -> Callable[[ast.AST], TypeIs[ast.MatchAs] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.MatchAs] | bool:
+                return isinstance(node, ast.MatchAs) and attributeCondition(node.pattern)
+            return workhorse
+
+        @staticmethod
+        def nameIs(attributeCondition: Callable[[str | None], bool]) -> Callable[[ast.AST], TypeIs[ast.MatchAs] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.MatchAs] | bool:
+                return isinstance(node, ast.MatchAs) and attributeCondition(node.name)
+            return workhorse
+    MatchAs = _MatchAs()
+
+    class _MatchClass:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.MatchClass]:
+            return isinstance(node, ast.MatchClass)
+
+        @staticmethod
+        def clsIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.MatchClass] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.MatchClass] | bool:
+                return isinstance(node, ast.MatchClass) and attributeCondition(node.cls)
+            return workhorse
+
+        @staticmethod
+        def patternsIs(attributeCondition: Callable[[Sequence[ast.pattern]], bool]) -> Callable[[ast.AST], TypeIs[ast.MatchClass] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.MatchClass] | bool:
+                return isinstance(node, ast.MatchClass) and attributeCondition(node.patterns)
+            return workhorse
+
+        @staticmethod
+        def kwd_attrsIs(attributeCondition: Callable[[list[str]], bool]) -> Callable[[ast.AST], TypeIs[ast.MatchClass] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.MatchClass] | bool:
+                return isinstance(node, ast.MatchClass) and attributeCondition(node.kwd_attrs)
+            return workhorse
+
+        @staticmethod
+        def kwd_patternsIs(attributeCondition: Callable[[Sequence[ast.pattern]], bool]) -> Callable[[ast.AST], TypeIs[ast.MatchClass] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.MatchClass] | bool:
+                return isinstance(node, ast.MatchClass) and attributeCondition(node.kwd_patterns)
+            return workhorse
+    MatchClass = _MatchClass()
+
+    class _MatchMapping:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.MatchMapping]:
+            return isinstance(node, ast.MatchMapping)
+
+        @staticmethod
+        def keysIs(attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeIs[ast.MatchMapping] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.MatchMapping] | bool:
+                return isinstance(node, ast.MatchMapping) and attributeCondition(node.keys)
+            return workhorse
+
+        @staticmethod
+        def patternsIs(attributeCondition: Callable[[Sequence[ast.pattern]], bool]) -> Callable[[ast.AST], TypeIs[ast.MatchMapping] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.MatchMapping] | bool:
+                return isinstance(node, ast.MatchMapping) and attributeCondition(node.patterns)
+            return workhorse
+
+        @staticmethod
+        def restIs(attributeCondition: Callable[[str | None], bool]) -> Callable[[ast.AST], TypeIs[ast.MatchMapping] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.MatchMapping] | bool:
+                return isinstance(node, ast.MatchMapping) and attributeCondition(node.rest)
+            return workhorse
+    MatchMapping = _MatchMapping()
+
+    class _MatchOr:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.MatchOr]:
+            return isinstance(node, ast.MatchOr)
+
+        @staticmethod
+        def patternsIs(attributeCondition: Callable[[Sequence[ast.pattern]], bool]) -> Callable[[ast.AST], TypeIs[ast.MatchOr] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.MatchOr] | bool:
+                return isinstance(node, ast.MatchOr) and attributeCondition(node.patterns)
+            return workhorse
+    MatchOr = _MatchOr()
+
+    class _MatchSequence:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.MatchSequence]:
+            return isinstance(node, ast.MatchSequence)
+
+        @staticmethod
+        def patternsIs(attributeCondition: Callable[[Sequence[ast.pattern]], bool]) -> Callable[[ast.AST], TypeIs[ast.MatchSequence] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.MatchSequence] | bool:
+                return isinstance(node, ast.MatchSequence) and attributeCondition(node.patterns)
+            return workhorse
+    MatchSequence = _MatchSequence()
+
+    class _MatchSingleton:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.MatchSingleton]:
+            return isinstance(node, ast.MatchSingleton)
+
+        @staticmethod
+        def valueIs(attributeCondition: Callable[[bool | None], bool]) -> Callable[[ast.AST], TypeIs[ast.MatchSingleton] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.MatchSingleton] | bool:
+                return isinstance(node, ast.MatchSingleton) and attributeCondition(node.value)
+            return workhorse
+    MatchSingleton = _MatchSingleton()
+
+    class _MatchStar:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.MatchStar]:
+            return isinstance(node, ast.MatchStar)
+
+        @staticmethod
+        def nameIs(attributeCondition: Callable[[str | None], bool]) -> Callable[[ast.AST], TypeIs[ast.MatchStar] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.MatchStar] | bool:
+                return isinstance(node, ast.MatchStar) and attributeCondition(node.name)
+            return workhorse
+    MatchStar = _MatchStar()
+
+    class _MatchValue:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.MatchValue]:
+            return isinstance(node, ast.MatchValue)
+
+        @staticmethod
+        def valueIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.MatchValue] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.MatchValue] | bool:
+                return isinstance(node, ast.MatchValue) and attributeCondition(node.value)
+            return workhorse
+    MatchValue = _MatchValue()
 
     @staticmethod
     def MatMult(node: ast.AST) -> TypeIs[ast.MatMult]:
@@ -652,12 +1516,25 @@ class Be:
         It is a subclass of `ast.operator`."""
         return isinstance(node, ast.Mod)
 
-    @staticmethod
-    def Module(node: ast.AST) -> TypeIs[ast.Module]:
-        """`Be.Module` matches `class` `ast.Module`.
-        It has attributes `body`, `type_ignores`.
-        It is a subclass of `ast.mod`."""
-        return isinstance(node, ast.Module)
+    class _Module:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Module]:
+            return isinstance(node, ast.Module)
+
+        @staticmethod
+        def bodyIs(attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[ast.Module] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Module] | bool:
+                return isinstance(node, ast.Module) and attributeCondition(node.body)
+            return workhorse
+
+        @staticmethod
+        def type_ignoresIs(attributeCondition: Callable[[list[ast.TypeIgnore]], bool]) -> Callable[[ast.AST], TypeIs[ast.Module] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Module] | bool:
+                return isinstance(node, ast.Module) and attributeCondition(node.type_ignores)
+            return workhorse
+    Module = _Module()
 
     @staticmethod
     def Mult(node: ast.AST) -> TypeIs[ast.Mult]:
@@ -666,28 +1543,58 @@ class Be:
         It is a subclass of `ast.operator`."""
         return isinstance(node, ast.Mult)
 
-    @staticmethod
-    def Name(node: ast.AST) -> TypeIs[ast.Name]:
-        """`Be.Name` matches `class` `ast.Name`.
-        It has attributes `id`, `ctx`.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.Name)
+    class _Name:
 
-    @staticmethod
-    def NamedExpr(node: ast.AST) -> TypeIs[ast.NamedExpr]:
-        """`Be.NamedExpr`, Named ***Expr***ession, matches `class` `ast.NamedExpr`.
-        It has attributes `target`, `value`.
-        This `class` is associated with Python operators ':='.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.NamedExpr)
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Name]:
+            return isinstance(node, ast.Name)
 
-    @staticmethod
-    def Nonlocal(node: ast.AST) -> TypeIs[ast.Nonlocal]:
-        """`Be.Nonlocal` matches `class` `ast.Nonlocal`.
-        It has attributes `names`.
-        This `class` is associated with Python keywords `nonlocal`.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.Nonlocal)
+        @staticmethod
+        def idIs(attributeCondition: Callable[[str], bool]) -> Callable[[ast.AST], TypeIs[ast.Name] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Name] | bool:
+                return isinstance(node, ast.Name) and attributeCondition(node.id)
+            return workhorse
+
+        @staticmethod
+        def ctxIs(attributeCondition: Callable[[ast.expr_context], bool]) -> Callable[[ast.AST], TypeIs[ast.Name] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Name] | bool:
+                return isinstance(node, ast.Name) and attributeCondition(node.ctx)
+            return workhorse
+    Name = _Name()
+
+    class _NamedExpr:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.NamedExpr]:
+            return isinstance(node, ast.NamedExpr)
+
+        @staticmethod
+        def targetIs(attributeCondition: Callable[[ast.Name], bool]) -> Callable[[ast.AST], TypeIs[ast.NamedExpr] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.NamedExpr] | bool:
+                return isinstance(node, ast.NamedExpr) and attributeCondition(node.target)
+            return workhorse
+
+        @staticmethod
+        def valueIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.NamedExpr] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.NamedExpr] | bool:
+                return isinstance(node, ast.NamedExpr) and attributeCondition(node.value)
+            return workhorse
+    NamedExpr = _NamedExpr()
+
+    class _Nonlocal:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Nonlocal]:
+            return isinstance(node, ast.Nonlocal)
+
+        @staticmethod
+        def namesIs(attributeCondition: Callable[[list[str]], bool]) -> Callable[[ast.AST], TypeIs[ast.Nonlocal] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Nonlocal] | bool:
+                return isinstance(node, ast.Nonlocal) and attributeCondition(node.names)
+            return workhorse
+    Nonlocal = _Nonlocal()
 
     @staticmethod
     def Not(node: ast.AST) -> TypeIs[ast.Not]:
@@ -723,13 +1630,18 @@ class Be:
         It is a subclass of `ast.boolop`."""
         return isinstance(node, ast.Or)
 
-    @staticmethod
-    def ParamSpec(node: ast.AST) -> TypeIs[ast.ParamSpec]:
-        """`Be.ParamSpec`, ***Param***eter ***Spec***ification, matches `class` `ast.ParamSpec`.
-        It has attributes `name`, `default_value`.
-        This `class` is associated with Python delimiters '[]'.
-        It is a subclass of `ast.type_param`."""
-        return isinstance(node, ast.ParamSpec)
+    class _ParamSpec:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.ParamSpec]:
+            return isinstance(node, ast.ParamSpec)
+
+        @staticmethod
+        def nameIs(attributeCondition: Callable[[str], bool]) -> Callable[[ast.AST], TypeIs[ast.ParamSpec] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.ParamSpec] | bool:
+                return isinstance(node, ast.ParamSpec) and attributeCondition(node.name)
+            return workhorse
+    ParamSpec = _ParamSpec()
 
     @staticmethod
     def Pass(node: ast.AST) -> TypeIs[ast.Pass]:
@@ -751,21 +1663,38 @@ class Be:
         It is a subclass of `ast.operator`."""
         return isinstance(node, ast.Pow)
 
-    @staticmethod
-    def Raise(node: ast.AST) -> TypeIs[ast.Raise]:
-        """`Be.Raise` matches `class` `ast.Raise`.
-        It has attributes `exc`, `cause`.
-        This `class` is associated with Python keywords `raise`.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.Raise)
+    class _Raise:
 
-    @staticmethod
-    def Return(node: ast.AST) -> TypeIs[ast.Return]:
-        """`Be.Return` matches `class` `ast.Return`.
-        It has attributes `value`.
-        This `class` is associated with Python keywords `return`.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.Return)
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Raise]:
+            return isinstance(node, ast.Raise)
+
+        @staticmethod
+        def excIs(attributeCondition: Callable[[ast.expr | None], bool]) -> Callable[[ast.AST], TypeIs[ast.Raise] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Raise] | bool:
+                return isinstance(node, ast.Raise) and attributeCondition(node.exc)
+            return workhorse
+
+        @staticmethod
+        def causeIs(attributeCondition: Callable[[ast.expr | None], bool]) -> Callable[[ast.AST], TypeIs[ast.Raise] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Raise] | bool:
+                return isinstance(node, ast.Raise) and attributeCondition(node.cause)
+            return workhorse
+    Raise = _Raise()
+
+    class _Return:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Return]:
+            return isinstance(node, ast.Return)
+
+        @staticmethod
+        def valueIs(attributeCondition: Callable[[ast.expr | None], bool]) -> Callable[[ast.AST], TypeIs[ast.Return] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Return] | bool:
+                return isinstance(node, ast.Return) and attributeCondition(node.value)
+            return workhorse
+    Return = _Return()
 
     @staticmethod
     def RShift(node: ast.AST) -> TypeIs[ast.RShift]:
@@ -774,37 +1703,85 @@ class Be:
         It is a subclass of `ast.operator`."""
         return isinstance(node, ast.RShift)
 
-    @staticmethod
-    def Set(node: ast.AST) -> TypeIs[ast.Set]:
-        """`Be.Set` matches `class` `ast.Set`.
-        It has attributes `elts`.
-        This `class` is associated with Python delimiters '{}'.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.Set)
+    class _Set:
 
-    @staticmethod
-    def SetComp(node: ast.AST) -> TypeIs[ast.SetComp]:
-        """`Be.SetComp`, Set ***c***o***mp***rehension, matches `class` `ast.SetComp`.
-        It has attributes `elt`, `generators`.
-        This `class` is associated with Python delimiters '{}'.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.SetComp)
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Set]:
+            return isinstance(node, ast.Set)
 
-    @staticmethod
-    def Slice(node: ast.AST) -> TypeIs[ast.Slice]:
-        """`Be.Slice` matches `class` `ast.Slice`.
-        It has attributes `lower`, `upper`, `step`.
-        This `class` is associated with Python delimiters '[], :'.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.Slice)
+        @staticmethod
+        def eltsIs(attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeIs[ast.Set] | bool]:
 
-    @staticmethod
-    def Starred(node: ast.AST) -> TypeIs[ast.Starred]:
-        """`Be.Starred` matches `class` `ast.Starred`.
-        It has attributes `value`, `ctx`.
-        This `class` is associated with Python operators '*'.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.Starred)
+            def workhorse(node: ast.AST) -> TypeIs[ast.Set] | bool:
+                return isinstance(node, ast.Set) and attributeCondition(node.elts)
+            return workhorse
+    Set = _Set()
+
+    class _SetComp:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.SetComp]:
+            return isinstance(node, ast.SetComp)
+
+        @staticmethod
+        def eltIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.SetComp] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.SetComp] | bool:
+                return isinstance(node, ast.SetComp) and attributeCondition(node.elt)
+            return workhorse
+
+        @staticmethod
+        def generatorsIs(attributeCondition: Callable[[list[ast.comprehension]], bool]) -> Callable[[ast.AST], TypeIs[ast.SetComp] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.SetComp] | bool:
+                return isinstance(node, ast.SetComp) and attributeCondition(node.generators)
+            return workhorse
+    SetComp = _SetComp()
+
+    class _Slice:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Slice]:
+            return isinstance(node, ast.Slice)
+
+        @staticmethod
+        def lowerIs(attributeCondition: Callable[[ast.expr | None], bool]) -> Callable[[ast.AST], TypeIs[ast.Slice] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Slice] | bool:
+                return isinstance(node, ast.Slice) and attributeCondition(node.lower)
+            return workhorse
+
+        @staticmethod
+        def upperIs(attributeCondition: Callable[[ast.expr | None], bool]) -> Callable[[ast.AST], TypeIs[ast.Slice] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Slice] | bool:
+                return isinstance(node, ast.Slice) and attributeCondition(node.upper)
+            return workhorse
+
+        @staticmethod
+        def stepIs(attributeCondition: Callable[[ast.expr | None], bool]) -> Callable[[ast.AST], TypeIs[ast.Slice] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Slice] | bool:
+                return isinstance(node, ast.Slice) and attributeCondition(node.step)
+            return workhorse
+    Slice = _Slice()
+
+    class _Starred:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Starred]:
+            return isinstance(node, ast.Starred)
+
+        @staticmethod
+        def valueIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.Starred] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Starred] | bool:
+                return isinstance(node, ast.Starred) and attributeCondition(node.value)
+            return workhorse
+
+        @staticmethod
+        def ctxIs(attributeCondition: Callable[[ast.expr_context], bool]) -> Callable[[ast.AST], TypeIs[ast.Starred] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Starred] | bool:
+                return isinstance(node, ast.Starred) and attributeCondition(node.ctx)
+            return workhorse
+    Starred = _Starred()
 
     @staticmethod
     def stmt(node: ast.AST) -> TypeIs[ast.stmt]:
@@ -825,37 +1802,120 @@ class Be:
         It is a subclass of `ast.operator`."""
         return isinstance(node, ast.Sub)
 
-    @staticmethod
-    def Subscript(node: ast.AST) -> TypeIs[ast.Subscript]:
-        """`Be.Subscript` matches `class` `ast.Subscript`.
-        It has attributes `value`, `slice`, `ctx`.
-        This `class` is associated with Python delimiters '[]'.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.Subscript)
+    class _Subscript:
 
-    @staticmethod
-    def Try(node: ast.AST) -> TypeIs[ast.Try]:
-        """`Be.Try` matches `class` `ast.Try`.
-        It has attributes `body`, `handlers`, `orelse`, `finalbody`.
-        This `class` is associated with Python keywords `try`, `except` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.Try)
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Subscript]:
+            return isinstance(node, ast.Subscript)
 
-    @staticmethod
-    def TryStar(node: ast.AST) -> TypeIs[ast.TryStar]:
-        """`Be.TryStar`, Try executing this, protected by `except*` ("except star"), matches `class` `ast.TryStar`.
-        It has attributes `body`, `handlers`, `orelse`, `finalbody`.
-        This `class` is associated with Python keywords `try`, `except*` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.TryStar)
+        @staticmethod
+        def valueIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.Subscript] | bool]:
 
-    @staticmethod
-    def Tuple(node: ast.AST) -> TypeIs[ast.Tuple]:
-        """`Be.Tuple` matches `class` `ast.Tuple`.
-        It has attributes `elts`, `ctx`.
-        This `class` is associated with Python delimiters '()'.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.Tuple)
+            def workhorse(node: ast.AST) -> TypeIs[ast.Subscript] | bool:
+                return isinstance(node, ast.Subscript) and attributeCondition(node.value)
+            return workhorse
+
+        @staticmethod
+        def sliceIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.Subscript] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Subscript] | bool:
+                return isinstance(node, ast.Subscript) and attributeCondition(node.slice)
+            return workhorse
+
+        @staticmethod
+        def ctxIs(attributeCondition: Callable[[ast.expr_context], bool]) -> Callable[[ast.AST], TypeIs[ast.Subscript] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Subscript] | bool:
+                return isinstance(node, ast.Subscript) and attributeCondition(node.ctx)
+            return workhorse
+    Subscript = _Subscript()
+
+    class _Try:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Try]:
+            return isinstance(node, ast.Try)
+
+        @staticmethod
+        def bodyIs(attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[ast.Try] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Try] | bool:
+                return isinstance(node, ast.Try) and attributeCondition(node.body)
+            return workhorse
+
+        @staticmethod
+        def handlersIs(attributeCondition: Callable[[list[ast.ExceptHandler]], bool]) -> Callable[[ast.AST], TypeIs[ast.Try] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Try] | bool:
+                return isinstance(node, ast.Try) and attributeCondition(node.handlers)
+            return workhorse
+
+        @staticmethod
+        def orelseIs(attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[ast.Try] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Try] | bool:
+                return isinstance(node, ast.Try) and attributeCondition(node.orelse)
+            return workhorse
+
+        @staticmethod
+        def finalbodyIs(attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[ast.Try] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Try] | bool:
+                return isinstance(node, ast.Try) and attributeCondition(node.finalbody)
+            return workhorse
+    Try = _Try()
+
+    class _TryStar:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.TryStar]:
+            return isinstance(node, ast.TryStar)
+
+        @staticmethod
+        def bodyIs(attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[ast.TryStar] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.TryStar] | bool:
+                return isinstance(node, ast.TryStar) and attributeCondition(node.body)
+            return workhorse
+
+        @staticmethod
+        def handlersIs(attributeCondition: Callable[[list[ast.ExceptHandler]], bool]) -> Callable[[ast.AST], TypeIs[ast.TryStar] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.TryStar] | bool:
+                return isinstance(node, ast.TryStar) and attributeCondition(node.handlers)
+            return workhorse
+
+        @staticmethod
+        def orelseIs(attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[ast.TryStar] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.TryStar] | bool:
+                return isinstance(node, ast.TryStar) and attributeCondition(node.orelse)
+            return workhorse
+
+        @staticmethod
+        def finalbodyIs(attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[ast.TryStar] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.TryStar] | bool:
+                return isinstance(node, ast.TryStar) and attributeCondition(node.finalbody)
+            return workhorse
+    TryStar = _TryStar()
+
+    class _Tuple:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Tuple]:
+            return isinstance(node, ast.Tuple)
+
+        @staticmethod
+        def eltsIs(attributeCondition: Callable[[Sequence[ast.expr]], bool]) -> Callable[[ast.AST], TypeIs[ast.Tuple] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Tuple] | bool:
+                return isinstance(node, ast.Tuple) and attributeCondition(node.elts)
+            return workhorse
+
+        @staticmethod
+        def ctxIs(attributeCondition: Callable[[ast.expr_context], bool]) -> Callable[[ast.AST], TypeIs[ast.Tuple] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Tuple] | bool:
+                return isinstance(node, ast.Tuple) and attributeCondition(node.ctx)
+            return workhorse
+    Tuple = _Tuple()
 
     @staticmethod
     def type_ignore(node: ast.AST) -> TypeIs[ast.type_ignore]:
@@ -869,35 +1929,85 @@ class Be:
         It is a subclass of `ast.AST`."""
         return isinstance(node, ast.type_param)
 
-    @staticmethod
-    def TypeAlias(node: ast.AST) -> TypeIs[ast.TypeAlias]:
-        """`Be.TypeAlias`, Type Alias, matches `class` `ast.TypeAlias`.
-        It has attributes `name`, `type_params`, `value`.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.TypeAlias)
+    class _TypeAlias:
 
-    @staticmethod
-    def TypeIgnore(node: ast.AST) -> TypeIs[ast.TypeIgnore]:
-        """`Be.TypeIgnore`, this Type (`type`) error, Ignore it, matches `class` `ast.TypeIgnore`.
-        It has attributes `lineno`, `tag`.
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.type_ignore`."""
-        return isinstance(node, ast.TypeIgnore)
+        def __call__(self, node: ast.AST) -> TypeIs[ast.TypeAlias]:
+            return isinstance(node, ast.TypeAlias)
 
-    @staticmethod
-    def TypeVar(node: ast.AST) -> TypeIs[ast.TypeVar]:
-        """`Be.TypeVar`, Type ***Var***iable, matches `class` `ast.TypeVar`.
-        It has attributes `name`, `bound`, `default_value`.
-        It is a subclass of `ast.type_param`."""
-        return isinstance(node, ast.TypeVar)
+        @staticmethod
+        def nameIs(attributeCondition: Callable[[ast.Name], bool]) -> Callable[[ast.AST], TypeIs[ast.TypeAlias] | bool]:
 
-    @staticmethod
-    def TypeVarTuple(node: ast.AST) -> TypeIs[ast.TypeVarTuple]:
-        """`Be.TypeVarTuple`, Type ***Var***iable ***Tuple***, matches `class` `ast.TypeVarTuple`.
-        It has attributes `name`, `default_value`.
-        This `class` is associated with Python operators '*'.
-        It is a subclass of `ast.type_param`."""
-        return isinstance(node, ast.TypeVarTuple)
+            def workhorse(node: ast.AST) -> TypeIs[ast.TypeAlias] | bool:
+                return isinstance(node, ast.TypeAlias) and attributeCondition(node.name)
+            return workhorse
+
+        @staticmethod
+        def type_paramsIs(attributeCondition: Callable[[Sequence[ast.type_param]], bool]) -> Callable[[ast.AST], TypeIs[ast.TypeAlias] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.TypeAlias] | bool:
+                return isinstance(node, ast.TypeAlias) and attributeCondition(node.type_params)
+            return workhorse
+
+        @staticmethod
+        def valueIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.TypeAlias] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.TypeAlias] | bool:
+                return isinstance(node, ast.TypeAlias) and attributeCondition(node.value)
+            return workhorse
+    TypeAlias = _TypeAlias()
+
+    class _TypeIgnore:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.TypeIgnore]:
+            return isinstance(node, ast.TypeIgnore)
+
+        @staticmethod
+        def linenoIs(attributeCondition: Callable[[int], bool]) -> Callable[[ast.AST], TypeIs[ast.TypeIgnore] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.TypeIgnore] | bool:
+                return isinstance(node, ast.TypeIgnore) and attributeCondition(node.lineno)
+            return workhorse
+
+        @staticmethod
+        def tagIs(attributeCondition: Callable[[str], bool]) -> Callable[[ast.AST], TypeIs[ast.TypeIgnore] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.TypeIgnore] | bool:
+                return isinstance(node, ast.TypeIgnore) and attributeCondition(node.tag)
+            return workhorse
+    TypeIgnore = _TypeIgnore()
+
+    class _TypeVar:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.TypeVar]:
+            return isinstance(node, ast.TypeVar)
+
+        @staticmethod
+        def nameIs(attributeCondition: Callable[[str], bool]) -> Callable[[ast.AST], TypeIs[ast.TypeVar] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.TypeVar] | bool:
+                return isinstance(node, ast.TypeVar) and attributeCondition(node.name)
+            return workhorse
+
+        @staticmethod
+        def boundIs(attributeCondition: Callable[[ast.expr | None], bool]) -> Callable[[ast.AST], TypeIs[ast.TypeVar] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.TypeVar] | bool:
+                return isinstance(node, ast.TypeVar) and attributeCondition(node.bound)
+            return workhorse
+    TypeVar = _TypeVar()
+
+    class _TypeVarTuple:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.TypeVarTuple]:
+            return isinstance(node, ast.TypeVarTuple)
+
+        @staticmethod
+        def nameIs(attributeCondition: Callable[[str], bool]) -> Callable[[ast.AST], TypeIs[ast.TypeVarTuple] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.TypeVarTuple] | bool:
+                return isinstance(node, ast.TypeVarTuple) and attributeCondition(node.name)
+            return workhorse
+    TypeVarTuple = _TypeVarTuple()
 
     @staticmethod
     def UAdd(node: ast.AST) -> TypeIs[ast.UAdd]:
@@ -912,12 +2022,25 @@ class Be:
         It is a subclass of `ast.AST`."""
         return isinstance(node, ast.unaryop)
 
-    @staticmethod
-    def UnaryOp(node: ast.AST) -> TypeIs[ast.UnaryOp]:
-        """`Be.UnaryOp`, ***Un***ary ***Op***eration, matches `class` `ast.UnaryOp`.
-        It has attributes `op`, `operand`.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.UnaryOp)
+    class _UnaryOp:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.UnaryOp]:
+            return isinstance(node, ast.UnaryOp)
+
+        @staticmethod
+        def opIs(attributeCondition: Callable[[ast.unaryop], bool]) -> Callable[[ast.AST], TypeIs[ast.UnaryOp] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.UnaryOp] | bool:
+                return isinstance(node, ast.UnaryOp) and attributeCondition(node.op)
+            return workhorse
+
+        @staticmethod
+        def operandIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.UnaryOp] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.UnaryOp] | bool:
+                return isinstance(node, ast.UnaryOp) and attributeCondition(node.operand)
+            return workhorse
+    UnaryOp = _UnaryOp()
 
     @staticmethod
     def USub(node: ast.AST) -> TypeIs[ast.USub]:
@@ -926,42 +2049,102 @@ class Be:
         It is a subclass of `ast.unaryop`."""
         return isinstance(node, ast.USub)
 
-    @staticmethod
-    def While(node: ast.AST) -> TypeIs[ast.While]:
-        """`Be.While` matches `class` `ast.While`.
-        It has attributes `test`, `body`, `orelse`.
-        This `class` is associated with Python keywords `while`.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.While)
+    class _While:
 
-    @staticmethod
-    def With(node: ast.AST) -> TypeIs[ast.With]:
-        """`Be.With` matches `class` `ast.With`.
-        It has attributes `items`, `body`, `type_comment`.
-        This `class` is associated with Python keywords `with` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`."""
-        return isinstance(node, ast.With)
+        def __call__(self, node: ast.AST) -> TypeIs[ast.While]:
+            return isinstance(node, ast.While)
 
-    @staticmethod
-    def withitem(node: ast.AST) -> TypeIs[ast.withitem]:
-        """`Be.withitem`, with item, matches `class` `ast.withitem`.
-        It has attributes `context_expr`, `optional_vars`.
-        This `class` is associated with Python keywords `as`.
-        It is a subclass of `ast.AST`."""
-        return isinstance(node, ast.withitem)
+        @staticmethod
+        def testIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.While] | bool]:
 
-    @staticmethod
-    def Yield(node: ast.AST) -> TypeIs[ast.Yield]:
-        """`Be.Yield`, Yield an element, matches `class` `ast.Yield`.
-        It has attributes `value`.
-        This `class` is associated with Python keywords `yield`.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.Yield)
+            def workhorse(node: ast.AST) -> TypeIs[ast.While] | bool:
+                return isinstance(node, ast.While) and attributeCondition(node.test)
+            return workhorse
 
-    @staticmethod
-    def YieldFrom(node: ast.AST) -> TypeIs[ast.YieldFrom]:
-        """`Be.YieldFrom`, Yield an element From, matches `class` `ast.YieldFrom`.
-        It has attributes `value`.
-        This `class` is associated with Python keywords `yield from`.
-        It is a subclass of `ast.expr`."""
-        return isinstance(node, ast.YieldFrom)
+        @staticmethod
+        def bodyIs(attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[ast.While] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.While] | bool:
+                return isinstance(node, ast.While) and attributeCondition(node.body)
+            return workhorse
+
+        @staticmethod
+        def orelseIs(attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[ast.While] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.While] | bool:
+                return isinstance(node, ast.While) and attributeCondition(node.orelse)
+            return workhorse
+    While = _While()
+
+    class _With:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.With]:
+            return isinstance(node, ast.With)
+
+        @staticmethod
+        def itemsIs(attributeCondition: Callable[[list[ast.withitem]], bool]) -> Callable[[ast.AST], TypeIs[ast.With] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.With] | bool:
+                return isinstance(node, ast.With) and attributeCondition(node.items)
+            return workhorse
+
+        @staticmethod
+        def bodyIs(attributeCondition: Callable[[Sequence[ast.stmt]], bool]) -> Callable[[ast.AST], TypeIs[ast.With] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.With] | bool:
+                return isinstance(node, ast.With) and attributeCondition(node.body)
+            return workhorse
+
+        @staticmethod
+        def type_commentIs(attributeCondition: Callable[[str | None], bool]) -> Callable[[ast.AST], TypeIs[ast.With] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.With] | bool:
+                return isinstance(node, ast.With) and attributeCondition(node.type_comment)
+            return workhorse
+    With = _With()
+
+    class _withitem:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.withitem]:
+            return isinstance(node, ast.withitem)
+
+        @staticmethod
+        def context_exprIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.withitem] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.withitem] | bool:
+                return isinstance(node, ast.withitem) and attributeCondition(node.context_expr)
+            return workhorse
+
+        @staticmethod
+        def optional_varsIs(attributeCondition: Callable[[ast.expr | None], bool]) -> Callable[[ast.AST], TypeIs[ast.withitem] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.withitem] | bool:
+                return isinstance(node, ast.withitem) and attributeCondition(node.optional_vars)
+            return workhorse
+    withitem = _withitem()
+
+    class _Yield:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Yield]:
+            return isinstance(node, ast.Yield)
+
+        @staticmethod
+        def valueIs(attributeCondition: Callable[[ast.expr | None], bool]) -> Callable[[ast.AST], TypeIs[ast.Yield] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.Yield] | bool:
+                return isinstance(node, ast.Yield) and attributeCondition(node.value)
+            return workhorse
+    Yield = _Yield()
+
+    class _YieldFrom:
+
+        def __call__(self, node: ast.AST) -> TypeIs[ast.YieldFrom]:
+            return isinstance(node, ast.YieldFrom)
+
+        @staticmethod
+        def valueIs(attributeCondition: Callable[[ast.expr], bool]) -> Callable[[ast.AST], TypeIs[ast.YieldFrom] | bool]:
+
+            def workhorse(node: ast.AST) -> TypeIs[ast.YieldFrom] | bool:
+                return isinstance(node, ast.YieldFrom) and attributeCondition(node.value)
+            return workhorse
+    YieldFrom = _YieldFrom()
