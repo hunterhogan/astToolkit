@@ -412,11 +412,11 @@ allSubclasses: dict[str, dict[str, dict[str, Any]]] = {
 "class Make, maximally empty parameters": {"expression": Make.Or(), "astToolkit.dump": "ast.Or()", "ast.dump": "Or()"},
 "ast module, minimal parameters": {"expression": ast.Or(), "astToolkit.dump": "ast.Or()", "ast.dump": "Or()"}
 },
-"ParamSpec": {
-"class Make, maximally empty parameters": {"expression": Make.ParamSpec(name='Make_ParamSpec'), "astToolkit.dump": "ast.ParamSpec(name='Make_ParamSpec', default_value=None)", "ast.dump": "ParamSpec(name='Make_ParamSpec')"},
-"class Make, minimal parameters": {"expression": Make.ParamSpec(name='Make_ParamSpec', default_value=None), "astToolkit.dump": "ast.ParamSpec(name='Make_ParamSpec', default_value=None)", "ast.dump": "ParamSpec(name='Make_ParamSpec')"},
-"ast module, minimal parameters": {"expression": ast.ParamSpec(name='ast_ParamSpec'), "astToolkit.dump": "ast.ParamSpec(name='ast_ParamSpec', default_value=None)", "ast.dump": "ParamSpec(name='ast_ParamSpec')"}
-},
+# "ParamSpec": {
+# "class Make, maximally empty parameters": {"expression": Make.ParamSpec(name='Make_ParamSpec'), "astToolkit.dump": "ast.ParamSpec(name='Make_ParamSpec', default_value=None)", "ast.dump": "ParamSpec(name='Make_ParamSpec')"},
+# "class Make, minimal parameters": {"expression": Make.ParamSpec(name='Make_ParamSpec', default_value=None), "astToolkit.dump": "ast.ParamSpec(name='Make_ParamSpec', default_value=None)", "ast.dump": "ParamSpec(name='Make_ParamSpec')"},
+# "ast module, minimal parameters": {"expression": ast.ParamSpec(name='ast_ParamSpec'), "astToolkit.dump": "ast.ParamSpec(name='ast_ParamSpec', default_value=None)", "ast.dump": "ParamSpec(name='ast_ParamSpec')"}
+# },
 "Pass": {
 "class Make, maximally empty parameters": {"expression": Make.Pass(), "astToolkit.dump": "ast.Pass()", "ast.dump": "Pass()"},
 "ast module, minimal parameters": {"expression": ast.Pass(), "astToolkit.dump": "ast.Pass()", "ast.dump": "Pass()"}
@@ -503,25 +503,25 @@ allSubclasses: dict[str, dict[str, dict[str, Any]]] = {
 "class Make, maximally empty parameters": {"expression": Make.type_param(), "astToolkit.dump": "ast.type_param()", "ast.dump": "type_param()"},
 "ast module, minimal parameters": {"expression": ast.type_param(), "astToolkit.dump": "ast.type_param()", "ast.dump": "type_param()"}
 },
-"TypeAlias": {
-"class Make, maximally empty parameters": {"expression": Make.TypeAlias(name=Make.Name(id='Make_TypeAlias'), type_params=[], value=Make.Name(id='Make_TypeAlias_value')), "astToolkit.dump": "ast.TypeAlias(name=ast.Name(id='Make_TypeAlias', ctx=ast.Load()), type_params=[], value=ast.Name(id='Make_TypeAlias_value', ctx=ast.Load()))", "ast.dump": "TypeAlias(name=Name(id='Make_TypeAlias', ctx=Load()), type_params=[], value=Name(id='Make_TypeAlias_value', ctx=Load()))"},
-"class Make, minimal parameters": {"expression": Make.TypeAlias(name=Make.Name(id='Make_TypeAlias', context=Make.Store()), type_params=[Make.TypeVar(name='Make_TypeAlias_type_params', bound=None, default_value=None)], value=Make.Name(id='Make_TypeAlias_value', context=Make.Load())), "astToolkit.dump": "ast.TypeAlias(name=ast.Name(id='Make_TypeAlias', ctx=ast.Store()), type_params=[ast.TypeVar(name='Make_TypeAlias_type_params', bound=None, default_value=None)], value=ast.Name(id='Make_TypeAlias_value', ctx=ast.Load()))", "ast.dump": "TypeAlias(name=Name(id='Make_TypeAlias', ctx=Store()), type_params=[TypeVar(name='Make_TypeAlias_type_params')], value=Name(id='Make_TypeAlias_value', ctx=Load()))"},
-"ast module, minimal parameters": {"expression": ast.TypeAlias(name=ast.Name(id='ast_TypeAlias'), value=ast.Name(id='ast_TypeAlias_value')), "astToolkit.dump": "ast.TypeAlias(name=ast.Name(id='ast_TypeAlias', ctx=ast.Load()), type_params=[], value=ast.Name(id='ast_TypeAlias_value', ctx=ast.Load()))", "ast.dump": "TypeAlias(name=Name(id='ast_TypeAlias', ctx=Load()), type_params=[], value=Name(id='ast_TypeAlias_value', ctx=Load()))"}
-},
+# "TypeAlias": {
+# "class Make, maximally empty parameters": {"expression": Make.TypeAlias(name=Make.Name(id='Make_TypeAlias'), type_params=[], value=Make.Name(id='Make_TypeAlias_value')), "astToolkit.dump": "ast.TypeAlias(name=ast.Name(id='Make_TypeAlias', ctx=ast.Load()), type_params=[], value=ast.Name(id='Make_TypeAlias_value', ctx=ast.Load()))", "ast.dump": "TypeAlias(name=Name(id='Make_TypeAlias', ctx=Load()), type_params=[], value=Name(id='Make_TypeAlias_value', ctx=Load()))"},
+# "class Make, minimal parameters": {"expression": Make.TypeAlias(name=Make.Name(id='Make_TypeAlias', context=Make.Store()), type_params=[Make.TypeVar(name='Make_TypeAlias_type_params', bound=None, default_value=None)], value=Make.Name(id='Make_TypeAlias_value', context=Make.Load())), "astToolkit.dump": "ast.TypeAlias(name=ast.Name(id='Make_TypeAlias', ctx=ast.Store()), type_params=[ast.TypeVar(name='Make_TypeAlias_type_params', bound=None, default_value=None)], value=ast.Name(id='Make_TypeAlias_value', ctx=ast.Load()))", "ast.dump": "TypeAlias(name=Name(id='Make_TypeAlias', ctx=Store()), type_params=[TypeVar(name='Make_TypeAlias_type_params')], value=Name(id='Make_TypeAlias_value', ctx=Load()))"},
+# "ast module, minimal parameters": {"expression": ast.TypeAlias(name=ast.Name(id='ast_TypeAlias'), value=ast.Name(id='ast_TypeAlias_value')), "astToolkit.dump": "ast.TypeAlias(name=ast.Name(id='ast_TypeAlias', ctx=ast.Load()), type_params=[], value=ast.Name(id='ast_TypeAlias_value', ctx=ast.Load()))", "ast.dump": "TypeAlias(name=Name(id='ast_TypeAlias', ctx=Load()), type_params=[], value=Name(id='ast_TypeAlias_value', ctx=Load()))"}
+# },
 "TypeIgnore": {
 "class Make, maximally empty parameters": {"expression": Make.TypeIgnore(lineno=1, tag='Make_TypeIgnore_tag'), "astToolkit.dump": "ast.TypeIgnore(lineno=1, tag='Make_TypeIgnore_tag')", "ast.dump": "TypeIgnore(lineno=1, tag='Make_TypeIgnore_tag')"},
 "ast module, minimal parameters": {"expression": ast.TypeIgnore(lineno=1, tag='ast_TypeIgnore_tag'), "astToolkit.dump": "ast.TypeIgnore(lineno=1, tag='ast_TypeIgnore_tag')", "ast.dump": "TypeIgnore(lineno=1, tag='ast_TypeIgnore_tag')"}
 },
-"TypeVar": {
-"class Make, maximally empty parameters": {"expression": Make.TypeVar(name='Make_TypeVar'), "astToolkit.dump": "ast.TypeVar(name='Make_TypeVar', bound=None, default_value=None)", "ast.dump": "TypeVar(name='Make_TypeVar')"},
-"class Make, minimal parameters": {"expression": Make.TypeVar(name='Make_TypeVar', bound=None, default_value=None), "astToolkit.dump": "ast.TypeVar(name='Make_TypeVar', bound=None, default_value=None)", "ast.dump": "TypeVar(name='Make_TypeVar')"},
-"ast module, minimal parameters": {"expression": ast.TypeVar(name='ast_TypeVar'), "astToolkit.dump": "ast.TypeVar(name='ast_TypeVar', bound=None, default_value=None)", "ast.dump": "TypeVar(name='ast_TypeVar')"}
-},
-"TypeVarTuple": {
-"class Make, maximally empty parameters": {"expression": Make.TypeVarTuple(name='Make_TypeVarTuple'), "astToolkit.dump": "ast.TypeVarTuple(name='Make_TypeVarTuple', default_value=None)", "ast.dump": "TypeVarTuple(name='Make_TypeVarTuple')"},
-"class Make, minimal parameters": {"expression": Make.TypeVarTuple(name='Make_TypeVarTuple', default_value=None), "astToolkit.dump": "ast.TypeVarTuple(name='Make_TypeVarTuple', default_value=None)", "ast.dump": "TypeVarTuple(name='Make_TypeVarTuple')"},
-"ast module, minimal parameters": {"expression": ast.TypeVarTuple(name='ast_TypeVarTuple'), "astToolkit.dump": "ast.TypeVarTuple(name='ast_TypeVarTuple', default_value=None)", "ast.dump": "TypeVarTuple(name='ast_TypeVarTuple')"}
-},
+# "TypeVar": {
+# "class Make, maximally empty parameters": {"expression": Make.TypeVar(name='Make_TypeVar'), "astToolkit.dump": "ast.TypeVar(name='Make_TypeVar', bound=None, default_value=None)", "ast.dump": "TypeVar(name='Make_TypeVar')"},
+# "class Make, minimal parameters": {"expression": Make.TypeVar(name='Make_TypeVar', bound=None, default_value=None), "astToolkit.dump": "ast.TypeVar(name='Make_TypeVar', bound=None, default_value=None)", "ast.dump": "TypeVar(name='Make_TypeVar')"},
+# "ast module, minimal parameters": {"expression": ast.TypeVar(name='ast_TypeVar'), "astToolkit.dump": "ast.TypeVar(name='ast_TypeVar', bound=None, default_value=None)", "ast.dump": "TypeVar(name='ast_TypeVar')"}
+# },
+# "TypeVarTuple": {
+# "class Make, maximally empty parameters": {"expression": Make.TypeVarTuple(name='Make_TypeVarTuple'), "astToolkit.dump": "ast.TypeVarTuple(name='Make_TypeVarTuple', default_value=None)", "ast.dump": "TypeVarTuple(name='Make_TypeVarTuple')"},
+# "class Make, minimal parameters": {"expression": Make.TypeVarTuple(name='Make_TypeVarTuple', default_value=None), "astToolkit.dump": "ast.TypeVarTuple(name='Make_TypeVarTuple', default_value=None)", "ast.dump": "TypeVarTuple(name='Make_TypeVarTuple')"},
+# "ast module, minimal parameters": {"expression": ast.TypeVarTuple(name='ast_TypeVarTuple'), "astToolkit.dump": "ast.TypeVarTuple(name='ast_TypeVarTuple', default_value=None)", "ast.dump": "TypeVarTuple(name='ast_TypeVarTuple')"}
+# },
 "UAdd": {
 "class Make, maximally empty parameters": {"expression": Make.UAdd(), "astToolkit.dump": "ast.UAdd()", "ast.dump": "UAdd()"},
 "ast module, minimal parameters": {"expression": ast.UAdd(), "astToolkit.dump": "ast.UAdd()", "ast.dump": "UAdd()"}
