@@ -1,5 +1,5 @@
-from astToolkit import 个
-from collections.abc import Callable, Sequence
+from astToolkit import 归个
+from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 import ast
 
@@ -20,7 +20,7 @@ class Then:
 	"""
 
 	@staticmethod
-	def appendTo(listOfAny: list[Any]) -> Callable[[ast.AST | str], ast.AST | str]:
+	def appendTo[个](listOfAny: list[Any]) -> Callable[[个],  个]:
 		"""Append matched nodes to a collection while preserving them in the AST.
 		(AI generated docstring)
 
@@ -37,12 +37,12 @@ class Then:
 
 			actionFunction: Function that appends nodes to the list and returns: them unmodified
 		"""
-		def workhorse(node: ast.AST | str) -> ast.AST | str:
+		def workhorse(node: 个) -> 个:
 			listOfAny.append(node)
 			return node
 		return workhorse
 	@staticmethod
-	def extractIt(node: 个) -> 个:
+	def extractIt[个](node: 个) -> 个:
 		"""Extract and return nodes unchanged for identity operations.
 		(AI generated docstring)
 
@@ -115,7 +115,7 @@ class Then:
 		"""
 		return None
 	@staticmethod
-	def replaceWith(astAST: 个) -> Callable[[个], 个]:
+	def replaceWith(this: 归个) -> Callable[[Any], 归个]:
 		"""Replace matched nodes with a specified replacement node.
 		(AI generated docstring)
 
@@ -131,9 +131,9 @@ class Then:
 
 			replacementFunction: Function that returns: the replacement node, discarding the original
 		"""
-		return lambda _replaceMe: astAST
+		return lambda _replaceMe: this
 	@staticmethod
-	def updateKeyValueIn(key: Callable[..., Any], value: Callable[..., Any], dictionary: dict[Any, Any]) -> Callable[[ast.AST], dict[Any, Any]]:
+	def updateKeyValueIn[个, 文件, 文义](key: Callable[[个], 文件], value: Callable[[个], 文义], dictionary: dict[文件, 文义]) -> Callable[[个], Mapping[文件, 文义]]:
 		"""Update a dictionary with key-value pairs derived from matched nodes.
 		(AI generated docstring)
 
@@ -152,7 +152,7 @@ class Then:
 
 			updateFunction: Function that processes nodes and returns: the updated dictionary
 		"""
-		def workhorse(node: ast.AST) -> dict[Any, Any]:
+		def workhorse(node: 个) -> dict[文件, 文义]:
 			dictionary.setdefault(key(node), value(node))
 			return dictionary
 		return workhorse

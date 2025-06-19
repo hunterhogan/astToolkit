@@ -52,7 +52,7 @@ from astToolkit._astTypes import (
 	hasDOTvalues as hasDOTvalues, hasDOTvararg as hasDOTvararg,
 	identifierDotAttribute as identifierDotAttribute, 一符 as 一符, 个 as 个, 归个 as 归个, 二符 as 二符,
 	俪 as 俪, 口 as 口, 工 as 工, 工位 as 工位, 布尔符 as 布尔符, 常 as 常, 形 as 形, 忽 as 忽, 拦 as 拦, 木 as 木, 本 as 本,
-	比符 as 比符,
+	比符 as 比符, 文义 as 文义, 文件 as 文件
 )
 
 if sys.version_info >= (3, 13):
