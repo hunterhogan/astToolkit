@@ -36,7 +36,9 @@ class IfThis:
 			predicateFunction: Function that returns `TypeIs[ast.arg]` for
 				matching nodes, enabling type-safe argument node processing
 		"""
-		return lambda node: Be.arg(node) and IfThis.isIdentifier(identifier)(DOT.arg(node))
+		def workhorse(node: ast.AST) -> TypeIs[ast.arg]:
+			return Be.arg(node) and IfThis.isIdentifier(identifier)(DOT.arg(node))
+		return workhorse
 
 	@staticmethod
 	def is_keywordIdentifier(identifier: str) -> Callable[[ast.AST], TypeIs[ast.keyword] | bool]:
@@ -56,7 +58,9 @@ class IfThis:
 			predicateFunction: Function that returns `TypeIs[ast.keyword]` for
 				matching nodes, enabling type-safe keyword argument processing
 		"""
-		return lambda node: Be.keyword(node) and node.arg is not None and IfThis.isIdentifier(identifier)(node.arg)
+		def workhorse(node: ast.AST) -> TypeIs[ast.keyword]:
+			return Be.keyword(node) and node.arg is not None and IfThis.isIdentifier(identifier)(node.arg)
+		return workhorse
 
 	@staticmethod
 	def isArgumentIdentifier(identifier: str) -> Callable[[ast.AST], TypeIs[ast.arg | ast.keyword] | bool]:
@@ -76,10 +80,12 @@ class IfThis:
 			predicateFunction: Function that returns `TypeIs[ast.arg | ast.keyword]`
 				for matching nodes, enabling type-safe argument processing
 		"""
-		return lambda node: (Be.arg(node) or Be.keyword(node)) and node.arg is not None and IfThis.isIdentifier(identifier)(node.arg)
+		def workhorse(node: ast.AST) -> TypeIs[ast.arg | ast.keyword] | bool:
+			return (Be.arg(node) or Be.keyword(node)) and node.arg is not None and IfThis.isIdentifier(identifier)(node.arg)
+		return workhorse
 
 	@staticmethod
-	def isAssignAndTargets0Is(targets0Predicate: Callable[[ast.AST], bool]) -> Callable[[ast.AST], TypeIs[ast.AnnAssign] | bool]:
+	def isAssignAndTargets0Is(targets0Predicate: Callable[[ast.AST], bool]) -> Callable[[ast.AST], TypeIs[ast.Assign] | bool]:
 		"""Match assignment nodes where first target satisfies predicate.
 		(AI generated docstring)
 
@@ -96,7 +102,9 @@ class IfThis:
 			predicateFunction: Function that returns `TypeIs[ast.AnnAssign]` for
 				matching assignment nodes with qualifying first targets
 		"""
-		return lambda node: Be.Assign(node) and targets0Predicate(node.targets[0])
+		def workhorse(node: ast.AST) -> TypeIs[ast.Assign] | bool:
+			return Be.Assign(node) and targets0Predicate(node.targets[0])
+		return workhorse
 
 	@staticmethod
 	def isAttributeIdentifier(identifier: str) -> Callable[[ast.AST], TypeIs[ast.Attribute] | bool]:
@@ -159,7 +167,9 @@ class IfThis:
 			predicateFunction: Function that returns `TypeIs[ast.Attribute]` for
 				matching namespaced attribute access nodes
 		"""
-		return lambda node: IfThis.isAttributeName(node) and IfThis.isNameIdentifier(namespace)(DOT.value(node)) and IfThis.isIdentifier(identifier)(DOT.attr(node))
+		def workhorse(node: ast.AST) -> TypeIs[ast.Attribute]:
+			return IfThis.isAttributeName(node) and IfThis.isNameIdentifier(namespace)(DOT.value(node)) and IfThis.isIdentifier(identifier)(DOT.attr(node))
+		return workhorse
 
 	@staticmethod
 	def isCallIdentifier(identifier: str) -> Callable[[ast.AST], TypeIs[ast.Call] | bool]:
@@ -243,7 +253,9 @@ class IfThis:
 			predicateFunction: Function that returns `TypeIs[ast.ClassDef]` for
 				matching class definition nodes with the specified name
 		"""
-		return lambda node: Be.ClassDef(node) and IfThis.isIdentifier(identifier)(DOT.name(node))
+		def workhorse(node: ast.AST) -> TypeIs[ast.ClassDef] | bool:
+			return Be.ClassDef(node) and IfThis.isIdentifier(identifier)(DOT.name(node))
+		return workhorse
 
 	@staticmethod
 	def isConstant_value(value: Any) -> Callable[[ast.AST], TypeIs[ast.Constant] | bool]:
@@ -263,7 +275,9 @@ class IfThis:
 			predicateFunction: Function that returns `TypeIs[ast.Constant]` for
 				matching constant nodes with the specified value
 		"""
-		return lambda node: Be.Constant(node) and DOT.value(node) == value
+		def workhorse(node: ast.AST) -> TypeIs[ast.Constant] | bool:
+			return Be.Constant(node) and DOT.value(node) == value
+		return workhorse
 
 	@staticmethod
 	def isFunctionDefIdentifier(identifier: str) -> Callable[[ast.AST], TypeIs[ast.FunctionDef] | bool]:
@@ -283,7 +297,9 @@ class IfThis:
 			predicateFunction: Function that returns `TypeIs[ast.FunctionDef]` for
 				matching function definition nodes with the specified name
 		"""
-		return lambda node: Be.FunctionDef(node) and IfThis.isIdentifier(identifier)(DOT.name(node))
+		def workhorse(node: ast.AST) -> TypeIs[ast.FunctionDef] | bool:
+			return Be.FunctionDef(node) and IfThis.isIdentifier(identifier)(DOT.name(node))
+		return workhorse
 
 	@staticmethod
 	def isIdentifier(identifier: str) -> Callable[[str], TypeIs[str] | bool]:
@@ -303,7 +319,9 @@ class IfThis:
 			predicateFunction: Function that returns `TypeIs[str]` for
 				matching string values
 		"""
-		return lambda node: node == identifier
+		def workhorse(node: str) -> TypeIs[str]:
+			return node == identifier
+		return workhorse
 
 	@staticmethod
 	def isIfUnaryNotAttributeNamespaceIdentifier(namespace: str, identifier: str) -> Callable[[ast.AST], TypeIs[ast.If] | bool]:
@@ -324,8 +342,9 @@ class IfThis:
 			predicateFunction: Function that returns `TypeIs[ast.If]` for
 				matching if statements with negated namespaced attribute tests
 		"""
-		return lambda node: (Be.If(node)
-					and IfThis.isUnaryNotAttributeNamespaceIdentifier(namespace, identifier)(node.test))
+		def workhorse(node: ast.AST) -> TypeIs[ast.If] | bool:
+			return Be.If(node) and IfThis.isUnaryNotAttributeNamespaceIdentifier(namespace, identifier)(node.test)
+		return workhorse
 
 	@staticmethod
 	def isNameIdentifier(identifier: str) -> Callable[[ast.AST], TypeIs[ast.Name] | bool]:
@@ -345,7 +364,9 @@ class IfThis:
 			predicateFunction: Function that returns `TypeIs[ast.Name]` for
 				matching name nodes with the specified identifier
 		"""
-		return lambda node: Be.Name(node) and IfThis.isIdentifier(identifier)(DOT.id(node))
+		def workhorse(node: ast.AST) -> TypeIs[ast.Name]:
+			return Be.Name(node) and IfThis.isIdentifier(identifier)(DOT.id(node))
+		return workhorse
 
 	@staticmethod
 	def isNestedNameIdentifier(identifier: str) -> Callable[[ast.AST], TypeIs[ast.Attribute | ast.Starred | ast.Subscript] | bool]:
@@ -435,9 +456,11 @@ class IfThis:
 			predicateFunction: Function that returns `TypeIs[ast.UnaryOp]` for
 				matching unary not operations on namespaced attributes
 		"""
-		return lambda node: (Be.UnaryOp(node)
+		def workhorse(node: ast.AST) -> TypeIs[ast.UnaryOp]:
+			return (Be.UnaryOp(node)
 					and Be.Not(node.op)
 					and IfThis.isAttributeNamespaceIdentifier(namespace, identifier)(node.operand))
+		return workhorse
 
 	@staticmethod
 	def matchesMeButNotAnyDescendant(predicate: Callable[[ast.AST], bool]) -> Callable[[ast.AST], bool]:
@@ -457,7 +480,9 @@ class IfThis:
 			predicateFunction: Function that returns `True` for nodes matching
 				the predicate without matching descendants
 		"""
-		return lambda node: predicate(node) and IfThis.matchesNoDescendant(predicate)(node)
+		def workhorse(node: ast.AST) -> bool:
+			return predicate(node) and IfThis.matchesNoDescendant(predicate)(node)
+		return workhorse
 
 	@staticmethod
 	def matchesNoDescendant(predicate: Callable[[ast.AST], bool]) -> Callable[[ast.AST], bool]:
