@@ -56,7 +56,7 @@ class Find:
     'A comprehensive suite of functions for AST class identification and type narrowing.\n\n    `class` `Be` has a method for each `ast.AST` subclass, also called "node type", to perform type\n    checking while enabling compile-time type narrowing through `TypeIs` annotations. This tool\n    forms the foundation of type-safe AST analysis and transformation throughout astToolkit.\n\n    Each method takes an `ast.AST` node and returns a `TypeIs` that confirms both runtime type\n    safety and enables static type checkers to narrow the node type in conditional contexts. This\n    eliminates the need for unsafe casting while providing comprehensive coverage of Python\'s AST\n    node hierarchy.\n\n    Methods correspond directly to Python AST node types, following the naming convention of the AST\n    classes themselves. Coverage includes expression nodes (`Add`, `Call`, `Name`), statement nodes\n    (`Assign`, `FunctionDef`, `Return`), operator nodes (`And`, `Or`, `Not`), and structural nodes\n    (`Module`, `arguments`, `keyword`).\n\n    The `class` is the primary type-checker in the antecedent-action pattern, where predicates\n    identify target nodes and actions, uh... act on nodes and their attributes. Type guards from\n    this class are commonly used as building blocks in `IfThis` predicates and directly as\n    `findThis` parameters in visitor classes.\n\n    Parameters\n    ----------\n    node : ast.AST\n        The AST node to test for specific type membership.\n\n    Returns\n    -------\n    typeIs : `TypeIs`\n        A `TypeIs` instance that confirms the node\'s type and narrows its type in\n        static type checkers.\n\n    Examples\n    --------\n    Type-safe node processing with automatic type narrowing:\n\n    ```python\n        if Be.FunctionDef(node):\n            functionName = node.name  # Type-safe access to name attribute parameterCount =\n            len(node.args.args)\n    ```\n\n    Using type guards in visitor patterns:\n\n    ```python\n        NodeTourist(Be.Return, Then.extractIt(DOT.value)).visit(functionNode)\n    ```\n\n    Type-safe access to attributes of specific node types:\n\n    ```python\n        if Be.Call(node) and Be.Name(node.func):\n            callableName = node.func.id  # Type-safe access to function name\n    ```\n\n    '
 
     def Add(self) -> 'Find':
-        """`Be.Add` matches any of `class` `ast.Add` | `ast.Add`.
+        """`Be.Add` matches any of `ast.Add` | `class` `ast.Add`.
 
         This `class` is associated with Python delimiters '+=' and Python operators '+'.
         It is a subclass of `ast.operator`.
@@ -151,7 +151,7 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def AST(self) -> 'Find':
-        """`Be.AST`, Abstract Syntax Tree, matches any of `ast.slice` | `ast.NodeList` | `ast.type_ignore` | `ast.mod` | `ast.keyword` | `ast.arg` | `ast.Exec` | `ast.match_case` | `ast.comprehension` | `ast.cmpop` | `ast.alias` | `ast.arguments` | `ast.stmt` | `ast.withitem` | `ast.expr_context` | `ast.unaryop` | `ast.pattern` | `ast._NoParent` | `ast.excepthandler` | `ast.type_param` | `ast.operator` | `class` `ast.AST` | `ast.boolop` | `ast.expr`.
+        """`Be.AST`, Abstract Syntax Tree, matches any of `ast.arguments` | `ast.expr` | `ast.type_param` | `ast.match_case` | `class` `ast.AST` | `ast.keyword` | `ast._NoParent` | `ast.unaryop` | `ast.NodeList` | `ast.withitem` | `ast.expr_context` | `ast.excepthandler` | `ast.type_ignore` | `ast.cmpop` | `ast.Exec` | `ast.pattern` | `ast.comprehension` | `ast.stmt` | `ast.operator` | `ast.slice` | `ast.mod` | `ast.arg` | `ast.boolop` | `ast.alias`.
 
         It is a subclass of `ast.object`.
         """
@@ -269,7 +269,7 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def BitXor(self) -> 'Find':
-        """`Be.BitXor`, ***Bit***wise e***X***clusive Or, matches any of `class` `ast.BitXor` | `ast.BitXor`.
+        """`Be.BitXor`, ***Bit***wise e***X***clusive Or, matches any of `ast.BitXor` | `class` `ast.BitXor`.
 
         This `class` is associated with Python operators '^'.
         It is a subclass of `ast.operator`.
@@ -281,7 +281,7 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def boolop(self) -> 'Find':
-        """`Be.boolop`, ***bool***ean ***op***erator, matches any of `ast.And` | `ast.Or` | `class` `ast.boolop`.
+        """`Be.boolop`, ***bool***ean ***op***erator, matches any of `ast.Or` | `ast.And` | `class` `ast.boolop`.
 
         It is a subclass of `ast.AST`.
         """
@@ -339,7 +339,7 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def cmpop(self) -> 'Find':
-        """`Be.cmpop`, ***c***o***mp***arison ***op***erator, matches any of `ast.NotEq` | `ast.NotIn` | `ast.GtE` | `ast.Gt` | `class` `ast.cmpop` | `ast.Lt` | `ast.LtE` | `ast.In` | `ast.Is` | `ast.Eq` | `ast.IsNot`.
+        """`Be.cmpop`, ***c***o***mp***arison ***op***erator, matches any of `ast.GtE` | `class` `ast.cmpop` | `ast.NotIn` | `ast.Eq` | `ast.NotEq` | `ast.Lt` | `ast.Is` | `ast.Gt` | `ast.In` | `ast.LtE` | `ast.IsNot`.
 
         It is a subclass of `ast.AST`.
         """
@@ -372,7 +372,7 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Constant(self) -> 'Find':
-        """`Be.Constant` matches any of `ast.NameConstant` | `ast.Ellipsis` | `ast.Str` | `ast.Bytes` | `ast.Num` | `class` `ast.Constant`.
+        """`Be.Constant` matches any of `ast.NameConstant` | `ast.Ellipsis` | `ast.Num` | `class` `ast.Constant` | `ast.Bytes` | `ast.Str`.
 
         It is a subclass of `ast.expr`.
         """
@@ -489,7 +489,7 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def expr(self) -> 'Find':
-        """`Be.expr`, ***expr***ession, matches any of `ast.Subscript` | `ast.UnaryOp` | `ast.DictComp` | `ast.Name` | `ast.Tuple` | `ast.BoolOp` | `ast.IfExp` | `ast.JoinedStr` | `ast.NamedExpr` | `ast.YieldFrom` | `ast.Yield` | `ast.Starred` | `ast.List` | `ast.FormattedValue` | `ast.SetComp` | `ast.Dict` | `ast.BinOp` | `ast.Compare` | `ast.Set` | `ast.Attribute` | `ast.Call` | `ast.Await` | `ast.Lambda` | `ast.GeneratorExp` | `ast.Slice` | `ast.ListComp` | `class` `ast.expr` | `ast.Constant`.
+        """`Be.expr`, ***expr***ession, matches any of `ast.List` | `class` `ast.expr` | `ast.Constant` | `ast.Starred` | `ast.Compare` | `ast.Yield` | `ast.BoolOp` | `ast.DictComp` | `ast.Call` | `ast.FormattedValue` | `ast.GeneratorExp` | `ast.Subscript` | `ast.Dict` | `ast.Set` | `ast.ListComp` | `ast.YieldFrom` | `ast.UnaryOp` | `ast.Await` | `ast.BinOp` | `ast.NamedExpr` | `ast.JoinedStr` | `ast.Slice` | `ast.Name` | `ast.Tuple` | `ast.Attribute` | `ast.IfExp` | `ast.Lambda` | `ast.SetComp`.
 
         It is a subclass of `ast.AST`.
         """
@@ -511,7 +511,7 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def expr_context(self) -> 'Find':
-        """`Be.expr_context`, ***expr***ession ***context***, matches any of `ast.AugStore` | `ast.Del` | `ast.Load` | `class` `ast.expr_context` | `ast.Param` | `ast.AugLoad` | `ast.Store`.
+        """`Be.expr_context`, ***expr***ession ***context***, matches any of `ast.Store` | `ast.Param` | `ast.Load` | `ast.AugStore` | `class` `ast.expr_context` | `ast.Del` | `ast.AugLoad`.
 
         It is a subclass of `ast.AST`.
         """
@@ -816,7 +816,7 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def LShift(self) -> 'Find':
-        """`Be.LShift`, Left Shift, matches any of `ast.LShift` | `class` `ast.LShift`.
+        """`Be.LShift`, Left Shift, matches any of `class` `ast.LShift` | `ast.LShift`.
 
         This `class` is associated with Python delimiters '<<=' and Python operators '<<'.
         It is a subclass of `ast.operator`.
@@ -972,7 +972,7 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def MatMult(self) -> 'Find':
-        """`Be.MatMult`, ***Mat***rix ***Mult***iplication, matches any of `class` `ast.MatMult` | `ast.MatMult`.
+        """`Be.MatMult`, ***Mat***rix ***Mult***iplication, matches any of `ast.MatMult` | `class` `ast.MatMult`.
 
         It is a subclass of `ast.operator`.
         """
@@ -983,7 +983,7 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def mod(self) -> 'Find':
-        """`Be.mod`, ***mod***ule, matches any of `ast.FunctionType` | `class` `ast.mod` | `ast.Suite` | `ast.Module` | `ast.Expression` | `ast.Interactive`.
+        """`Be.mod`, ***mod***ule, matches any of `ast.Module` | `ast.Expression` | `ast.Suite` | `class` `ast.mod` | `ast.FunctionType` | `ast.Interactive`.
 
         It is a subclass of `ast.AST`.
         """
@@ -994,7 +994,7 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Mod(self) -> 'Find':
-        """`Be.Mod`, ***Mod***ulo, matches any of `class` `ast.Mod` | `ast.Mod`.
+        """`Be.Mod`, ***Mod***ulo, matches any of `ast.Mod` | `class` `ast.Mod`.
 
         This `class` is associated with Python delimiters '%=' and Python operators '%'.
         It is a subclass of `ast.operator`.
@@ -1017,7 +1017,7 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Mult(self) -> 'Find':
-        """`Be.Mult`, ***Mult***iplication, matches any of `class` `ast.Mult` | `ast.Mult`.
+        """`Be.Mult`, ***Mult***iplication, matches any of `ast.Mult` | `class` `ast.Mult`.
 
         This `class` is associated with Python delimiters '*=' and Python operators '*'.
         It is a subclass of `ast.operator`.
@@ -1100,7 +1100,7 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def operator(self) -> 'Find':
-        """`Be.operator` matches any of `ast.MatMult` | `ast.Pow` | `ast.FloorDiv` | `ast.LShift` | `ast.RShift` | `ast.BitAnd` | `ast.Sub` | `ast.BitOr` | `class` `ast.operator` | `ast.BitXor` | `ast.Add` | `ast.Mod` | `ast.Div` | `ast.Mult`.
+        """`Be.operator` matches any of `ast.Sub` | `ast.LShift` | `ast.BitXor` | `ast.Div` | `ast.Add` | `ast.MatMult` | `ast.BitAnd` | `ast.Mod` | `ast.BitOr` | `ast.Pow` | `ast.FloorDiv` | `class` `ast.operator` | `ast.Mult` | `ast.RShift`.
 
         It is a subclass of `ast.AST`.
         """
@@ -1111,7 +1111,7 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Or(self) -> 'Find':
-        """`Be.Or` matches any of `ast.Or` | `class` `ast.Or`.
+        """`Be.Or` matches any of `class` `ast.Or` | `ast.Or`.
 
         This `class` is associated with Python keywords `or`.
         It is a subclass of `ast.boolop`.
@@ -1147,7 +1147,7 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def pattern(self) -> 'Find':
-        """`Be.pattern` matches any of `ast.MatchOr` | `ast.MatchAs` | `ast.MatchMapping` | `ast.MatchClass` | `class` `ast.pattern` | `ast.MatchSequence` | `ast.MatchSingleton` | `ast.MatchStar` | `ast.MatchValue`.
+        """`Be.pattern` matches any of `ast.MatchValue` | `ast.MatchMapping` | `ast.MatchOr` | `ast.MatchSequence` | `ast.MatchStar` | `ast.MatchSingleton` | `ast.MatchAs` | `ast.MatchClass` | `class` `ast.pattern`.
 
         It is a subclass of `ast.AST`.
         """
@@ -1194,7 +1194,7 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def RShift(self) -> 'Find':
-        """`Be.RShift`, Right Shift, matches any of `ast.RShift` | `class` `ast.RShift`.
+        """`Be.RShift`, Right Shift, matches any of `class` `ast.RShift` | `ast.RShift`.
 
         This `class` is associated with Python delimiters '>>=' and Python operators '>>'.
         It is a subclass of `ast.operator`.
@@ -1254,7 +1254,7 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def stmt(self) -> 'Find':
-        """`Be.stmt`, ***st***ate***m***en***t***, matches any of `ast.Delete` | `ast.Import` | `ast.Assert` | `ast.Try` | `ast.Raise` | `ast.Expr` | `class` `ast.stmt` | `ast.Break` | `ast.Match` | `ast.Nonlocal` | `ast.AsyncFor` | `ast.Assign` | `ast.Pass` | `ast.Continue` | `ast.ClassDef` | `ast.TryStar` | `ast.TypeAlias` | `ast.If` | `ast.AnnAssign` | `ast.With` | `ast.FunctionDef` | `ast.Return` | `ast.AugAssign` | `ast.While` | `ast.AsyncFunctionDef` | `ast.For` | `ast.AsyncWith` | `ast.Global` | `ast.ImportFrom`.
+        """`Be.stmt`, ***st***ate***m***en***t***, matches any of `ast.Continue` | `ast.Return` | `ast.TypeAlias` | `ast.Match` | `ast.Global` | `ast.With` | `ast.AsyncFor` | `ast.ClassDef` | `ast.AsyncWith` | `ast.For` | `ast.Import` | `ast.Pass` | `ast.AsyncFunctionDef` | `ast.Break` | `ast.If` | `ast.Nonlocal` | `class` `ast.stmt` | `ast.AugAssign` | `ast.Raise` | `ast.Try` | `ast.TryStar` | `ast.ImportFrom` | `ast.Delete` | `ast.Assign` | `ast.AnnAssign` | `ast.Expr` | `ast.Assert` | `ast.FunctionDef` | `ast.While`.
 
         It is a subclass of `ast.AST`.
         """
@@ -1276,7 +1276,7 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Sub(self) -> 'Find':
-        """`Be.Sub`, ***Sub***traction, matches any of `class` `ast.Sub` | `ast.Sub`.
+        """`Be.Sub`, ***Sub***traction, matches any of `ast.Sub` | `class` `ast.Sub`.
 
         This `class` is associated with Python delimiters '-=' and Python operators '-'.
         It is a subclass of `ast.operator`.
@@ -1336,7 +1336,7 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def type_ignore(self) -> 'Find':
-        """`Be.type_ignore`, this `type` error, you ignore it, matches any of `ast.TypeIgnore` | `class` `ast.type_ignore`.
+        """`Be.type_ignore`, this `type` error, you ignore it, matches any of `class` `ast.type_ignore` | `ast.TypeIgnore`.
 
         It is a subclass of `ast.AST`.
         """
@@ -1347,7 +1347,7 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def type_param(self) -> 'Find':
-        """`Be.type_param`, type ***param***eter, matches any of `ast.ParamSpec` | `ast.TypeVar` | `ast.TypeVarTuple` | `class` `ast.type_param`.
+        """`Be.type_param`, type ***param***eter, matches any of `ast.TypeVar` | `ast.ParamSpec` | `ast.TypeVarTuple` | `class` `ast.type_param`.
 
         It is a subclass of `ast.AST`.
         """
@@ -1416,7 +1416,7 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def unaryop(self) -> 'Find':
-        """`Be.unaryop`, ***un***ary ***op***erator, matches any of `ast.UAdd` | `ast.Not` | `class` `ast.unaryop` | `ast.Invert` | `ast.USub`.
+        """`Be.unaryop`, ***un***ary ***op***erator, matches any of `ast.USub` | `class` `ast.unaryop` | `ast.Invert` | `ast.UAdd` | `ast.Not`.
 
         It is a subclass of `ast.AST`.
         """
