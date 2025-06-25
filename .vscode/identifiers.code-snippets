@@ -148,6 +148,22 @@
 		],
 		"description": "形 (xíng): type parameter"
 	},
+	"文件": {
+		"scope": "markdown,plaintext,python",
+		"prefix": "wenjian",
+		"body": [
+			"文件"
+		],
+		"description": "文件 (wénjiàn): (dictionary key)"
+	},
+	"文义": {
+		"scope": "markdown,plaintext,python",
+		"prefix": "wenyi",
+		"body": [
+			"文义"
+		],
+		"description": "文义 (wényì): meaning (dictionary value)"
+	},
 	"一符": {
 		"scope": "markdown,plaintext,python",
 		"prefix": "yifu",

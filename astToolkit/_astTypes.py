@@ -1,4 +1,4 @@
-"""This file is generated automatically, so changes to this file will be lost."""
+"""Automatically generated file, so changes may be overwritten."""
 from types import EllipsisType
 from typing import TypeAlias as typing_TypeAlias, TypedDict, TypeVar as typing_TypeVar
 import ast

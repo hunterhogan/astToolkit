@@ -1,4 +1,4 @@
-"""This file is generated automatically, so changes to this file will be lost."""
+"""Automatically generated file, so changes may be overwritten."""
 from astToolkit import (
 	ConstantValueType, hasDOTannotation, hasDOTannotation_expr, hasDOTannotation_exprOrNone, hasDOTarg, hasDOTarg_str,
 	hasDOTarg_strOrNone, hasDOTargs, hasDOTargs_arguments, hasDOTargs_list_arg, hasDOTargs_list_expr, hasDOTargtypes,
@@ -24,11 +24,10 @@ import ast
 import sys
 
 if sys.version_info >= (3, 13):
-    from astToolkit import hasDOTdefault_value as hasDOTdefault_value
+    from astToolkit import hasDOTdefault_value
 
 class DOT:
-    """
-    Access attributes and sub-nodes of AST elements via consistent accessor methods.
+    """Access attributes and sub-nodes of AST elements via consistent accessor methods.
 
     The DOT class provides static methods to access specific attributes of different types of AST nodes in a consistent
     way. This simplifies attribute access across various node types and improves code readability by abstracting the
@@ -36,6 +35,7 @@ class DOT:
 
     DOT is designed for safe, read-only access to node properties, unlike the grab class which is designed for modifying
     node attributes.
+
     """
 
     @staticmethod

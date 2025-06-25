@@ -1,3 +1,65 @@
+"""A powerfully composable, type-safe toolkit for Python Abstract Syntax Tree analysis, transformation, and code generation.
+
+(AI generated docstring)
+
+The `astToolkit` package provides a layered architecture designed for composability and type safety in AST
+operations. It implements the antecedent-action pattern where predicates identify nodes and actions operate
+on matched nodes through visitor classes.
+
+Core Architecture Layers
+------------------------
+
+**Atomic Classes (Foundation Layer)**
+- `Be`: Type guard functions returning `TypeIs[ast.NodeType]` for safe type narrowing
+- `DOT`: Read-only attribute accessors with sophisticated typing support
+- `Grab`: Attribute modification functions that transform specific node attributes
+- `Make`: Factory methods for creating properly configured AST nodes
+
+**Visitor Classes (Traversal Layer)**
+- `NodeTourist`: Read-only AST traversal extending `ast.NodeVisitor`
+- `NodeChanger`: Destructive AST modification extending `ast.NodeTransformer`
+
+**Composable APIs (Predicate/Action Layer)**
+- `IfThis`: Predicate functions for node identification and pattern matching
+- `Then`: Action functions for matched nodes including collection, transformation, and extraction
+
+**Container Classes (High-Level Layer)**
+- `IngredientsFunction`: Function representation with dependencies and metadata
+- `IngredientsModule`: Complete module builder combining functions, imports, and constructs
+- `LedgerOfImports`: Import dependency tracking and management
+
+Type System
+-----------
+The package includes 120+ specialized type aliases (`hasDOT*` types) that map AST node attributes to
+their containing node types, enabling type-safe attribute access and powering the `DOT` and related classes.
+
+Antecedent-Action Pattern
+-------------------------
+The core pattern follows: **Predicate** (identifies nodes) + **Action** (operates on nodes) via visitor classes.
+
+- **Antecedents**: `Be.*`, `IfThis.*`, `DOT.*` methods for node identification
+- **Actions**: `Then.*`, `Make.*`, `Grab.*` methods for node operations
+- **Application**: `NodeTourist(antecedent, action)` or `NodeChanger(antecedent, action)`
+
+Examples
+--------
+Extract parameter names from function definitions:
+
+    function_def = tree.body[0]
+    param_name = NodeTourist(
+        Be.arg,
+        Then.extractIt(DOT.arg)
+    ).captureLastMatch(function_def)
+
+Transform multiplication to addition:
+
+    NodeChanger(
+        Be.Mult,
+        Then.replaceWith(ast.Add())
+    ).visit(tree)
+
+"""
+
 import sys
 
 from astToolkit._astTypes import (
@@ -40,8 +102,9 @@ from astToolkit._astTypes import (
 	hasDOTvalue as hasDOTvalue, hasDOTvalue_boolOrNone as hasDOTvalue_boolOrNone,
 	hasDOTvalue_ConstantValueType as hasDOTvalue_ConstantValueType, hasDOTvalue_expr as hasDOTvalue_expr,
 	hasDOTvalue_exprOrNone as hasDOTvalue_exprOrNone, hasDOTvalues as hasDOTvalues, hasDOTvararg as hasDOTvararg,
-	identifierDotAttribute as identifierDotAttribute, 一符 as 一符, 个 as 个, 二符 as 二符, 俪 as 俪, 口 as 口, 工 as 工, 工位 as 工位,
-	布尔符 as 布尔符, 常 as 常, 归个 as 归个, 形 as 形, 忽 as 忽, 拦 as 拦, 文义 as 文义, 文件 as 文件, 木 as 木, 本 as 本, 比符 as 比符,
+	identifierDotAttribute as identifierDotAttribute, 一符 as 一符, 个 as 个, 二符 as 二符, 俪 as 俪, 口 as 口, 工 as 工,
+	工位 as 工位, 布尔符 as 布尔符, 常 as 常, 归个 as 归个, 形 as 形, 忽 as 忽, 拦 as 拦, 文义 as 文义, 文件 as 文件, 木 as 木,
+	本 as 本, 比符 as 比符,
 )
 
 if sys.version_info >= (3, 13):
@@ -58,6 +121,7 @@ from astToolkit._toolBe import Be as Be
 from astToolkit._toolDOT import DOT as DOT
 from astToolkit._toolGrab import Grab as Grab
 from astToolkit._toolMake import Make as Make
+from astToolkit._prototypeFind import Find as Find
 
 from astToolkit._toolIfThis import IfThis as IfThis
 from astToolkit._toolThen import Then as Then

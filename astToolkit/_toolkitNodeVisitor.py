@@ -1,5 +1,5 @@
-"""
-AST Traversal and Transformation Classes
+"""AST Traversal and Transformation Classes.
+
 (AI generated docstring)
 
 This module provides the foundational visitor infrastructure for the astToolkit package, implementing the
@@ -35,8 +35,8 @@ from typing_extensions import TypeIs
 import ast
 
 class NodeTourist(ast.NodeVisitor, Generic[木, 归个]):
-	"""
-	Read-only AST visitor that extracts information from nodes matching predicate conditions.
+	"""Read-only AST visitor that extracts information from nodes matching predicate conditions.
+
 	(AI generated docstring)
 
 	`NodeTourist` implements the antecedent-action pattern for non-destructive AST analysis. It traverses an AST
@@ -48,27 +48,32 @@ class NodeTourist(ast.NodeVisitor, Generic[木, 归个]):
 	node types or patterns without modifying the source code structure. The generic type parameters ensure type
 	safety when working with specific AST node types and return values.
 
-	Parameters:
-			findThis: Predicate function that tests AST nodes. Can return either a `TypeIs` for type narrowing or a
-			simple boolean. When using `TypeIs`, the type checker can safely narrow the node type for the action
-			function.
-			doThat: Action function that operates on nodes matching the predicate. Receives the matched node with
-			properly narrowed typing and returns the extracted information.
+	Parameters
+	----------
+	findThis : Callable[[ast.AST], TypeIs[木] | bool]
+		Predicate function that tests AST nodes. Can return either a `TypeIs` for type narrowing or a
+		simple boolean. When using `TypeIs`, the type checker can safely narrow the node type for the action
+		function.
+	doThat : Callable[[木], 归个]
+		Action function that operates on nodes matching the predicate. Receives the matched node with
+		properly narrowed typing and returns the extracted information.
 
-	Examples:
-			Extract all function names from a module:
-			```python
-			functionNameCollector = NodeTourist(Be.FunctionDef, lambda functionDef: DOT.name(functionDef))
-			functionNames = []
-			functionNameCollector.doThat = Then.appendTo(functionNames)
-			functionNameCollector.visit(astModule)
-			```
+	Examples
+	--------
+	Extract all bicycle component names from a module:
+	```python
+	bicycleComponentCollector = NodeTourist(Be.FunctionDef, lambda wheelFunction: DOT.name(wheelFunction))
+	componentNames = []
+	bicycleComponentCollector.doThat = Then.appendTo(componentNames)
+	bicycleComponentCollector.visit(bicycleModule)
+	```
 
-			Find specific function definition:
-			```python
-			specificFunction = NodeTourist(IfThis.isFunctionDefIdentifier("targetFunction"), Then.extractIt)
-			foundFunction = specificFunction.captureLastMatch(astModule)
-			```
+	Find specific kitchen recipe definition:
+	```python
+	specificRecipe = NodeTourist(IfThis.isFunctionDefIdentifier("bakeBread"), Then.extractIt)
+	foundRecipe = specificRecipe.captureLastMatch(kitchenModule)
+	```
+
 	"""
 
 	def __init__(self, findThis: Callable[[ast.AST], TypeIs[木] | bool], doThat: Callable[[木], 归个]) -> None:
@@ -76,14 +81,33 @@ class NodeTourist(ast.NodeVisitor, Generic[木, 归个]):
 		self.doThat = doThat
 		self.nodeCaptured: 归个 | None = None
 
-	def visit(self, node: ast.AST):
+	def visit(self, node: ast.AST) -> None:
+		"""Apply predicate and action functions during AST traversal.
+
+		(AI generated docstring)
+
+		Overrides the base `ast.NodeVisitor.visit` method to implement the antecedent-action pattern. For each
+		node visited during traversal, this method applies the predicate function (`findThis`) to test whether
+		the node matches the desired criteria. If the predicate returns `True`, the action function (`doThat`)
+		is applied to the node and the result is captured in `nodeCaptured`.
+
+		The method continues standard AST traversal by calling `generic_visit` to ensure all child nodes are
+		processed recursively. This preserves the complete tree traversal behavior while adding the predicate-
+		action functionality.
+
+		Parameters
+		----------
+		node : ast.AST
+			AST node to test and potentially process during traversal.
+
+		"""
 		if self.findThis(node):
-			self.nodeCaptured = self.doThat(cast(木, node))
+			self.nodeCaptured = self.doThat(cast("木", node))
 		self.generic_visit(node)
 
 	def captureLastMatch(self, node: ast.AST) -> 归个 | None:
-		"""
-		Visit an AST tree and return the result from the last matching node.
+		"""Visit an AST tree and return the result from the last matching node.
+
 		(AI generated docstring)
 
 		This method provides a convenient interface for single-result extraction workflows. It resets the internal
@@ -94,21 +118,26 @@ class NodeTourist(ast.NodeVisitor, Generic[木, 归个]):
 		match in traversal order. For collecting multiple matches, modify the `doThat` action function to append
 		results to a collection.
 
-		Parameters:
-				node: Root AST node to begin traversal from. Can be any AST node type including modules, functions,
-				classes, or expressions.
+		Parameters
+		----------
+		node : ast.AST
+			Root AST node to begin traversal from. Can be any AST node type including modules, functions,
+			classes, or expressions.
 
-		Returns:
-				lastResult: Result from the action function applied to the last matching node, or `None` if no matches
-				were found during traversal.
+		Returns
+		-------
+		lastResult : 归个 | None
+			Result from the action function applied to the last matching node, or `None` if no matches
+			were found during traversal.
+
 		"""
 		self.nodeCaptured = None
 		self.visit(node)
 		return self.nodeCaptured
 
 class NodeChanger(ast.NodeTransformer, Generic[木, 归个]):
-	"""
-	Destructive AST transformer that selectively modifies nodes matching predicate conditions.
+	"""Destructive AST transformer that selectively modifies nodes matching predicate conditions.
+
 	(AI generated docstring)
 
 	`NodeChanger` implements the antecedent-action pattern for targeted AST transformation. It extends Python's
@@ -124,36 +153,68 @@ class NodeChanger(ast.NodeTransformer, Generic[木, 归个]):
 	preserving the overall structure and semantics of the code. Common use cases include function inlining,
 	variable renaming, dead code elimination, and pattern-based code transformations.
 
-	Parameters:
-			findThis: Predicate function that identifies nodes to transform. Should return `True` for nodes that require
-			modification and `False` for nodes that should remain unchanged. The function receives an `ast.AST` node
-			and determines whether transformation is needed.
-			doThat: Action function that performs the actual transformation. Receives nodes that matched the predicate
-			and returns the replacement node, modified node, or `None` for deletion. The return value becomes the new
-			node in the transformed tree.
+	Parameters
+	----------
+	findThis : Callable[[ast.AST], TypeIs[木] | bool]
+		Predicate function that identifies nodes to transform. Should return `True` for nodes that require
+		modification and `False` for nodes that should remain unchanged. The function receives an `ast.AST` node
+		and determines whether transformation is needed.
+	doThat : Callable[[木], 归个]
+		Action function that performs the actual transformation. Receives nodes that matched the predicate
+		and returns the replacement node, modified node, or `None` for deletion. The return value becomes the new
+		node in the transformed tree.
 
-	Examples:
-			Replace all function calls to a specific function:
-			```python
-			callReplacer = NodeChanger(
-					IfThis.isCallIdentifier("oldFunction"),
-					Then.replaceWith(Make.Call(Make.Name("newFunction"), [], []))
-			)
-			transformedAST = callReplacer.visit(originalAST)
-			```
+	Examples
+	--------
+	Replace all bicycle wheel references with tire references:
+	```python
+	wheelReplacer = NodeChanger(
+			IfThis.isCallIdentifier("checkWheel"),
+			Then.replaceWith(Make.Call(Make.Name("checkTire"), [], []))
+	)
+	transformedBicycle = wheelReplacer.visit(bicycleAST)
+	```
 
-			Remove all pass statements:
-			```python
-			passRemover = NodeChanger(Be.Pass, Then.removeIt)
-			cleanedAST = passRemover.visit(originalAST)
-			```
+	Remove all kitchen cleanup statements:
+	```python
+	cleanupRemover = NodeChanger(Be.Pass, Then.removeIt)
+	streamlinedKitchen = cleanupRemover.visit(kitchenAST)
+	```
+
 	"""
 
 	def __init__(self, findThis: Callable[[ast.AST], TypeIs[木] | bool], doThat: Callable[[木], 归个]) -> None:
 		self.findThis = findThis
 		self.doThat = doThat
 
-	def visit(self, node: ast.AST):
+	def visit(self, node: ast.AST) -> 归个 | ast.AST:
+		"""Apply predicate and action functions during AST transformation.
+
+		(AI generated docstring)
+
+		Overrides the base `ast.NodeTransformer.visit` method to implement the antecedent-action pattern for
+		destructive AST modification. For each node visited during traversal, this method applies the predicate
+		function (`findThis`) to test whether the node should be transformed.
+
+		If the predicate returns `True`, the action function (`doThat`) is applied to the node to perform the
+		transformation. The action function may return a replacement node, a modified version of the original
+		node, or `None` to delete the node from the tree.
+
+		If the predicate returns `False`, the method delegates to the parent `visit` method to continue standard
+		transformation traversal, ensuring all child nodes are processed recursively.
+
+		Parameters
+		----------
+		node : ast.AST
+			AST node to test and potentially transform during traversal.
+
+		Returns
+		-------
+		transformedNode : 归个 | ast.AST
+			The result of applying the action function if the predicate matches, otherwise the result of
+			standard transformation traversal. Returns `None` if the node should be deleted.
+
+		"""
 		if self.findThis(node):
-			return self.doThat(cast(木, node))
+			return self.doThat(cast("木", node))
 		return super().visit(node)
