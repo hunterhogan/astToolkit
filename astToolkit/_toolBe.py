@@ -28,14 +28,13 @@ class Be:
 
     Parameters
     ----------
-    node : ast.AST
-        The AST node to test for specific type membership.
+    node: ast.AST
+        AST node to test for specific type membership
 
     Returns
     -------
-    typeIs : `TypeIs`
-        A `TypeIs` instance that confirms the node's type and narrows its type in
-        static type checkers.
+    typeIs: TypeIs
+        `TypeIs` enabling both runtime validation and static type narrowing
 
     Examples
     --------
@@ -64,7 +63,7 @@ class Be:
 
     @staticmethod
     def Add(node: ast.AST) -> TypeIs[ast.Add]:
-        """`Be.Add` matches any of `class` `ast.Add` | `ast.Add`.
+        """`Be.Add` matches any of `ast.Add` | `class` `ast.Add`.
 
         This `class` is associated with Python delimiters '+=' and Python operators '+'.
         It is a subclass of `ast.operator`.
@@ -94,7 +93,7 @@ class Be:
 
     @staticmethod
     def And(node: ast.AST) -> TypeIs[ast.And]:
-        """`Be.And` matches any of `ast.And` | `class` `ast.And`.
+        """`Be.And` matches any of `class` `ast.And` | `ast.And`.
 
         This `class` is associated with Python keywords `and`.
         It is a subclass of `ast.boolop`.
@@ -271,7 +270,7 @@ class Be:
 
     @staticmethod
     def AST(node: ast.AST) -> TypeIs[ast.AST]:
-        """`Be.AST`, Abstract Syntax Tree, matches any of `ast.slice` | `ast.NodeList` | `ast.type_ignore` | `ast.mod` | `ast.keyword` | `ast.arg` | `ast.Exec` | `ast.match_case` | `ast.comprehension` | `ast.cmpop` | `ast.alias` | `ast.arguments` | `ast.stmt` | `ast.withitem` | `ast.expr_context` | `ast.unaryop` | `ast.pattern` | `ast._NoParent` | `ast.excepthandler` | `ast.type_param` | `ast.operator` | `class` `ast.AST` | `ast.boolop` | `ast.expr`.
+        """`Be.AST`, Abstract Syntax Tree, matches any of `ast._NoParent` | `ast.withitem` | `ast.excepthandler` | `ast.keyword` | `ast.comprehension` | `ast.NodeList` | `ast.type_ignore` | `ast.slice` | `ast.type_param` | `ast.expr_context` | `ast.boolop` | `ast.operator` | `ast.Exec` | `ast.stmt` | `ast.arg` | `class` `ast.AST` | `ast.match_case` | `ast.alias` | `ast.unaryop` | `ast.expr` | `ast.mod` | `ast.pattern` | `ast.cmpop` | `ast.arguments`.
 
         It is a subclass of `ast.object`.
         """
@@ -503,7 +502,7 @@ class Be:
 
     @staticmethod
     def BitAnd(node: ast.AST) -> TypeIs[ast.BitAnd]:
-        """`Be.BitAnd`, ***Bit***wise And, matches any of `ast.BitAnd` | `class` `ast.BitAnd`.
+        """`Be.BitAnd`, ***Bit***wise And, matches any of `class` `ast.BitAnd` | `ast.BitAnd`.
 
         This `class` is associated with Python operators '&'.
         It is a subclass of `ast.operator`.
@@ -530,7 +529,7 @@ class Be:
 
     @staticmethod
     def boolop(node: ast.AST) -> TypeIs[ast.boolop]:
-        """`Be.boolop`, ***bool***ean ***op***erator, matches any of `ast.And` | `ast.Or` | `class` `ast.boolop`.
+        """`Be.boolop`, ***bool***ean ***op***erator, matches any of `class` `ast.boolop` | `ast.Or` | `ast.And`.
 
         It is a subclass of `ast.AST`.
         """
@@ -645,7 +644,7 @@ class Be:
 
     @staticmethod
     def cmpop(node: ast.AST) -> TypeIs[ast.cmpop]:
-        """`Be.cmpop`, ***c***o***mp***arison ***op***erator, matches any of `ast.NotEq` | `ast.NotIn` | `ast.GtE` | `ast.Gt` | `class` `ast.cmpop` | `ast.Lt` | `ast.LtE` | `ast.In` | `ast.Is` | `ast.Eq` | `ast.IsNot`.
+        """`Be.cmpop`, ***c***o***mp***arison ***op***erator, matches any of `ast.Is` | `ast.Lt` | `ast.NotIn` | `ast.Gt` | `ast.Eq` | `ast.NotEq` | `ast.IsNot` | `ast.In` | `ast.GtE` | `class` `ast.cmpop` | `ast.LtE`.
 
         It is a subclass of `ast.AST`.
         """
@@ -733,7 +732,7 @@ class Be:
                 return isinstance(node, ast.Constant) and attributeCondition(node.kind)
             return workhorse
     Constant = _Constant()
-    '`Be.Constant` matches any of `ast.NameConstant` | `ast.Ellipsis` | `ast.Str` | `ast.Bytes` | `ast.Num` | `class` `ast.Constant`.\n\n        It is a subclass of `ast.expr`.\n        '
+    '`Be.Constant` matches any of `ast.Ellipsis` | `ast.Str` | `ast.Num` | `ast.NameConstant` | `ast.Bytes` | `class` `ast.Constant`.\n\n        It is a subclass of `ast.expr`.\n        '
 
     @staticmethod
     def Continue(node: ast.AST) -> TypeIs[ast.Continue]:
@@ -817,7 +816,7 @@ class Be:
 
     @staticmethod
     def Div(node: ast.AST) -> TypeIs[ast.Div]:
-        """`Be.Div`, ***Div***ision, matches any of `class` `ast.Div` | `ast.Div`.
+        """`Be.Div`, ***Div***ision, matches any of `ast.Div` | `class` `ast.Div`.
 
         This `class` is associated with Python delimiters '/=' and Python operators '/'.
         It is a subclass of `ast.operator`.
@@ -871,7 +870,7 @@ class Be:
 
     @staticmethod
     def expr(node: ast.AST) -> TypeIs[ast.expr]:
-        """`Be.expr`, ***expr***ession, matches any of `ast.Subscript` | `ast.UnaryOp` | `ast.DictComp` | `ast.Name` | `ast.Tuple` | `ast.BoolOp` | `ast.IfExp` | `ast.JoinedStr` | `ast.NamedExpr` | `ast.YieldFrom` | `ast.Yield` | `ast.Starred` | `ast.List` | `ast.FormattedValue` | `ast.SetComp` | `ast.Dict` | `ast.BinOp` | `ast.Compare` | `ast.Set` | `ast.Attribute` | `ast.Call` | `ast.Await` | `ast.Lambda` | `ast.GeneratorExp` | `ast.Slice` | `ast.ListComp` | `class` `ast.expr` | `ast.Constant`.
+        """`Be.expr`, ***expr***ession, matches any of `ast.Call` | `class` `ast.expr` | `ast.Tuple` | `ast.List` | `ast.ListComp` | `ast.Name` | `ast.BoolOp` | `ast.BinOp` | `ast.Yield` | `ast.Attribute` | `ast.IfExp` | `ast.Set` | `ast.DictComp` | `ast.NamedExpr` | `ast.Subscript` | `ast.Dict` | `ast.FormattedValue` | `ast.Await` | `ast.Constant` | `ast.Lambda` | `ast.YieldFrom` | `ast.JoinedStr` | `ast.SetComp` | `ast.GeneratorExp` | `ast.Compare` | `ast.Slice` | `ast.Starred` | `ast.UnaryOp`.
 
         It is a subclass of `ast.AST`.
         """
@@ -893,7 +892,7 @@ class Be:
 
     @staticmethod
     def expr_context(node: ast.AST) -> TypeIs[ast.expr_context]:
-        """`Be.expr_context`, ***expr***ession ***context***, matches any of `ast.AugStore` | `ast.Del` | `ast.Load` | `class` `ast.expr_context` | `ast.Param` | `ast.AugLoad` | `ast.Store`.
+        """`Be.expr_context`, ***expr***ession ***context***, matches any of `ast.Param` | `ast.Store` | `ast.AugStore` | `ast.AugLoad` | `class` `ast.expr_context` | `ast.Del` | `ast.Load`.
 
         It is a subclass of `ast.AST`.
         """
@@ -1378,7 +1377,7 @@ class Be:
 
     @staticmethod
     def LShift(node: ast.AST) -> TypeIs[ast.LShift]:
-        """`Be.LShift`, Left Shift, matches any of `ast.LShift` | `class` `ast.LShift`.
+        """`Be.LShift`, Left Shift, matches any of `class` `ast.LShift` | `ast.LShift`.
 
         This `class` is associated with Python delimiters '<<=' and Python operators '<<'.
         It is a subclass of `ast.operator`.
@@ -1616,7 +1615,7 @@ class Be:
 
     @staticmethod
     def mod(node: ast.AST) -> TypeIs[ast.mod]:
-        """`Be.mod`, ***mod***ule, matches any of `ast.FunctionType` | `class` `ast.mod` | `ast.Suite` | `ast.Module` | `ast.Expression` | `ast.Interactive`.
+        """`Be.mod`, ***mod***ule, matches any of `ast.Interactive` | `ast.Expression` | `class` `ast.mod` | `ast.Module` | `ast.FunctionType` | `ast.Suite`.
 
         It is a subclass of `ast.AST`.
         """
@@ -1624,7 +1623,7 @@ class Be:
 
     @staticmethod
     def Mod(node: ast.AST) -> TypeIs[ast.Mod]:
-        """`Be.Mod`, ***Mod***ulo, matches any of `class` `ast.Mod` | `ast.Mod`.
+        """`Be.Mod`, ***Mod***ulo, matches any of `ast.Mod` | `class` `ast.Mod`.
 
         This `class` is associated with Python delimiters '%=' and Python operators '%'.
         It is a subclass of `ast.operator`.
@@ -1654,7 +1653,7 @@ class Be:
 
     @staticmethod
     def Mult(node: ast.AST) -> TypeIs[ast.Mult]:
-        """`Be.Mult`, ***Mult***iplication, matches any of `class` `ast.Mult` | `ast.Mult`.
+        """`Be.Mult`, ***Mult***iplication, matches any of `ast.Mult` | `class` `ast.Mult`.
 
         This `class` is associated with Python delimiters '*=' and Python operators '*'.
         It is a subclass of `ast.operator`.
@@ -1746,7 +1745,7 @@ class Be:
 
     @staticmethod
     def operator(node: ast.AST) -> TypeIs[ast.operator]:
-        """`Be.operator` matches any of `ast.MatMult` | `ast.Pow` | `ast.FloorDiv` | `ast.LShift` | `ast.RShift` | `ast.BitAnd` | `ast.Sub` | `ast.BitOr` | `class` `ast.operator` | `ast.BitXor` | `ast.Add` | `ast.Mod` | `ast.Div` | `ast.Mult`.
+        """`Be.operator` matches any of `ast.FloorDiv` | `ast.Mod` | `ast.Div` | `ast.Sub` | `ast.LShift` | `ast.BitOr` | `ast.RShift` | `ast.MatMult` | `ast.Pow` | `ast.BitAnd` | `ast.Mult` | `class` `ast.operator` | `ast.Add` | `ast.BitXor`.
 
         It is a subclass of `ast.AST`.
         """
@@ -1786,7 +1785,7 @@ class Be:
 
     @staticmethod
     def pattern(node: ast.AST) -> TypeIs[ast.pattern]:
-        """`Be.pattern` matches any of `ast.MatchOr` | `ast.MatchAs` | `ast.MatchMapping` | `ast.MatchClass` | `class` `ast.pattern` | `ast.MatchSequence` | `ast.MatchSingleton` | `ast.MatchStar` | `ast.MatchValue`.
+        """`Be.pattern` matches any of `ast.MatchClass` | `ast.MatchMapping` | `ast.MatchSingleton` | `ast.MatchOr` | `ast.MatchAs` | `ast.MatchSequence` | `ast.MatchValue` | `class` `ast.pattern` | `ast.MatchStar`.
 
         It is a subclass of `ast.AST`.
         """
@@ -1838,7 +1837,7 @@ class Be:
 
     @staticmethod
     def RShift(node: ast.AST) -> TypeIs[ast.RShift]:
-        """`Be.RShift`, Right Shift, matches any of `ast.RShift` | `class` `ast.RShift`.
+        """`Be.RShift`, Right Shift, matches any of `class` `ast.RShift` | `ast.RShift`.
 
         This `class` is associated with Python delimiters '>>=' and Python operators '>>'.
         It is a subclass of `ast.operator`.
@@ -1931,7 +1930,7 @@ class Be:
 
     @staticmethod
     def stmt(node: ast.AST) -> TypeIs[ast.stmt]:
-        """`Be.stmt`, ***st***ate***m***en***t***, matches any of `ast.Delete` | `ast.Import` | `ast.Assert` | `ast.Try` | `ast.Raise` | `ast.Expr` | `class` `ast.stmt` | `ast.Break` | `ast.Match` | `ast.Nonlocal` | `ast.AsyncFor` | `ast.Assign` | `ast.Pass` | `ast.Continue` | `ast.ClassDef` | `ast.TryStar` | `ast.TypeAlias` | `ast.If` | `ast.AnnAssign` | `ast.With` | `ast.FunctionDef` | `ast.Return` | `ast.AugAssign` | `ast.While` | `ast.AsyncFunctionDef` | `ast.For` | `ast.AsyncWith` | `ast.Global` | `ast.ImportFrom`.
+        """`Be.stmt`, ***st***ate***m***en***t***, matches any of `ast.Delete` | `ast.FunctionDef` | `ast.Import` | `ast.Pass` | `ast.AsyncFunctionDef` | `ast.Nonlocal` | `ast.TypeAlias` | `ast.Raise` | `ast.With` | `class` `ast.stmt` | `ast.AsyncWith` | `ast.If` | `ast.Continue` | `ast.Assign` | `ast.Expr` | `ast.Try` | `ast.AsyncFor` | `ast.Break` | `ast.Return` | `ast.Match` | `ast.TryStar` | `ast.AnnAssign` | `ast.For` | `ast.While` | `ast.Assert` | `ast.ClassDef` | `ast.ImportFrom` | `ast.Global` | `ast.AugAssign`.
 
         It is a subclass of `ast.AST`.
         """
@@ -1947,7 +1946,7 @@ class Be:
 
     @staticmethod
     def Sub(node: ast.AST) -> TypeIs[ast.Sub]:
-        """`Be.Sub`, ***Sub***traction, matches any of `class` `ast.Sub` | `ast.Sub`.
+        """`Be.Sub`, ***Sub***traction, matches any of `ast.Sub` | `class` `ast.Sub`.
 
         This `class` is associated with Python delimiters '-=' and Python operators '-'.
         It is a subclass of `ast.operator`.
@@ -2075,7 +2074,7 @@ class Be:
 
     @staticmethod
     def type_ignore(node: ast.AST) -> TypeIs[ast.type_ignore]:
-        """`Be.type_ignore`, this `type` error, you ignore it, matches any of `ast.TypeIgnore` | `class` `ast.type_ignore`.
+        """`Be.type_ignore`, this `type` error, you ignore it, matches any of `class` `ast.type_ignore` | `ast.TypeIgnore`.
 
         It is a subclass of `ast.AST`.
         """
@@ -2083,7 +2082,7 @@ class Be:
 
     @staticmethod
     def type_param(node: ast.AST) -> TypeIs[ast.type_param]:
-        """`Be.type_param`, type ***param***eter, matches any of `ast.ParamSpec` | `ast.TypeVar` | `ast.TypeVarTuple` | `class` `ast.type_param`.
+        """`Be.type_param`, type ***param***eter, matches any of `class` `ast.type_param` | `ast.ParamSpec` | `ast.TypeVarTuple` | `ast.TypeVar`.
 
         It is a subclass of `ast.AST`.
         """
@@ -2184,7 +2183,7 @@ class Be:
 
     @staticmethod
     def unaryop(node: ast.AST) -> TypeIs[ast.unaryop]:
-        """`Be.unaryop`, ***un***ary ***op***erator, matches any of `ast.UAdd` | `ast.Not` | `class` `ast.unaryop` | `ast.Invert` | `ast.USub`.
+        """`Be.unaryop`, ***un***ary ***op***erator, matches any of `ast.Invert` | `ast.Not` | `ast.UAdd` | `ast.USub` | `class` `ast.unaryop`.
 
         It is a subclass of `ast.AST`.
         """

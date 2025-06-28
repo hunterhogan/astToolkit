@@ -1,3 +1,4 @@
+# ruff: noqa: B009, B010
 """Automatically generated file, so changes may be overwritten."""
 from astToolkit import (
 	ConstantValueType, hasDOTannotation, hasDOTarg, hasDOTargs, hasDOTargtypes, hasDOTasname, hasDOTattr, hasDOTbases,
@@ -28,7 +29,6 @@ class Grab:
 
     Each method returns a function that takes a node, applies a transformation to a specific attribute of that node, and
     returns the modified node. This enables fine-grained control when transforming AST structures.
-
     """
 
     @staticmethod

@@ -1005,7 +1005,7 @@ class Make:
             AST `object` representing a literal constant value.
 
         """
-        return ast.Constant(value=value, kind=kind, **keywordArguments) # pyright: ignore[reportArgumentType]
+        return ast.Constant(value=value, kind=kind, **keywordArguments)
 
     @staticmethod
     def Continue(**keywordArguments: Unpack[ast_attributes]) -> ast.Continue:

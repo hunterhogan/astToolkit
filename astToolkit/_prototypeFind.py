@@ -53,14 +53,8 @@ class Find:
                 return False
             attrCurrent = attrNext
         return True
-    'A comprehensive suite of functions for AST class identification and type narrowing.\n\n    `class` `Be` has a method for each `ast.AST` subclass, also called "node type", to perform type\n    checking while enabling compile-time type narrowing through `TypeIs` annotations. This tool\n    forms the foundation of type-safe AST analysis and transformation throughout astToolkit.\n\n    Each method takes an `ast.AST` node and returns a `TypeIs` that confirms both runtime type\n    safety and enables static type checkers to narrow the node type in conditional contexts. This\n    eliminates the need for unsafe casting while providing comprehensive coverage of Python\'s AST\n    node hierarchy.\n\n    Methods correspond directly to Python AST node types, following the naming convention of the AST\n    classes themselves. Coverage includes expression nodes (`Add`, `Call`, `Name`), statement nodes\n    (`Assign`, `FunctionDef`, `Return`), operator nodes (`And`, `Or`, `Not`), and structural nodes\n    (`Module`, `arguments`, `keyword`).\n\n    The `class` is the primary type-checker in the antecedent-action pattern, where predicates\n    identify target nodes and actions, uh... act on nodes and their attributes. Type guards from\n    this class are commonly used as building blocks in `IfThis` predicates and directly as\n    `findThis` parameters in visitor classes.\n\n    Parameters\n    ----------\n    node : ast.AST\n        The AST node to test for specific type membership.\n\n    Returns\n    -------\n    typeIs : `TypeIs`\n        A `TypeIs` instance that confirms the node\'s type and narrows its type in\n        static type checkers.\n\n    Examples\n    --------\n    Type-safe node processing with automatic type narrowing:\n\n    ```python\n        if Be.FunctionDef(node):\n            functionName = node.name  # Type-safe access to name attribute parameterCount =\n            len(node.args.args)\n    ```\n\n    Using type guards in visitor patterns:\n\n    ```python\n        NodeTourist(Be.Return, Then.extractIt(DOT.value)).visit(functionNode)\n    ```\n\n    Type-safe access to attributes of specific node types:\n\n    ```python\n        if Be.Call(node) and Be.Name(node.func):\n            callableName = node.func.id  # Type-safe access to function name\n    ```\n\n    '
 
     def Add(self) -> 'Find':
-        """`Be.Add` matches any of `ast.Add` | `class` `ast.Add`.
-
-        This `class` is associated with Python delimiters '+=' and Python operators '+'.
-        It is a subclass of `ast.operator`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Add], ast.AST]:
             return (isinstance(node, ast.Add), node)
@@ -68,11 +62,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def alias(self) -> 'Find':
-        """`Be.alias` matches `class` `ast.alias`.
-
-        This `class` is associated with Python keywords `as`.
-        It is a subclass of `ast.AST`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.alias], ast.AST]:
             return (isinstance(node, ast.alias), node)
@@ -80,11 +69,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def And(self) -> 'Find':
-        """`Be.And` matches any of `ast.And` | `class` `ast.And`.
-
-        This `class` is associated with Python keywords `and`.
-        It is a subclass of `ast.boolop`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.And], ast.AST]:
             return (isinstance(node, ast.And), node)
@@ -92,11 +76,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def AnnAssign(self) -> 'Find':
-        """`Be.AnnAssign`, ***Ann***otated ***Assign***ment, matches `class` `ast.AnnAssign`.
-
-        This `class` is associated with Python delimiters ':, ='.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.AnnAssign], ast.AST]:
             return (isinstance(node, ast.AnnAssign), node)
@@ -104,10 +83,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def arg(self) -> 'Find':
-        """`Be.arg`, ***arg***ument, matches `class` `ast.arg`.
-
-        It is a subclass of `ast.AST`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.arg], ast.AST]:
             return (isinstance(node, ast.arg), node)
@@ -115,11 +90,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def arguments(self) -> 'Find':
-        """`Be.arguments` matches `class` `ast.arguments`.
-
-        This `class` is associated with Python delimiters ','.
-        It is a subclass of `ast.AST`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.arguments], ast.AST]:
             return (isinstance(node, ast.arguments), node)
@@ -127,11 +97,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Assert(self) -> 'Find':
-        """`Be.Assert` matches `class` `ast.Assert`.
-
-        This `class` is associated with Python keywords `assert`.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Assert], ast.AST]:
             return (isinstance(node, ast.Assert), node)
@@ -139,11 +104,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Assign(self) -> 'Find':
-        """`Be.Assign` matches `class` `ast.Assign`.
-
-        This `class` is associated with Python delimiters '='.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Assign], ast.AST]:
             return (isinstance(node, ast.Assign), node)
@@ -151,10 +111,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def AST(self) -> 'Find':
-        """`Be.AST`, Abstract Syntax Tree, matches any of `ast.arguments` | `ast.expr` | `ast.type_param` | `ast.match_case` | `class` `ast.AST` | `ast.keyword` | `ast._NoParent` | `ast.unaryop` | `ast.NodeList` | `ast.withitem` | `ast.expr_context` | `ast.excepthandler` | `ast.type_ignore` | `ast.cmpop` | `ast.Exec` | `ast.pattern` | `ast.comprehension` | `ast.stmt` | `ast.operator` | `ast.slice` | `ast.mod` | `ast.arg` | `ast.boolop` | `ast.alias`.
-
-        It is a subclass of `ast.object`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.AST], ast.AST]:
             return (isinstance(node, ast.AST), node)
@@ -162,11 +118,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def AsyncFor(self) -> 'Find':
-        """`Be.AsyncFor`, ***Async***hronous For loop, matches `class` `ast.AsyncFor`.
-
-        This `class` is associated with Python keywords `async for` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.AsyncFor], ast.AST]:
             return (isinstance(node, ast.AsyncFor), node)
@@ -174,11 +125,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def AsyncFunctionDef(self) -> 'Find':
-        """`Be.AsyncFunctionDef`, ***Async***hronous Function ***Def***inition, matches `class` `ast.AsyncFunctionDef`.
-
-        This `class` is associated with Python keywords `async def` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.AsyncFunctionDef], ast.AST]:
             return (isinstance(node, ast.AsyncFunctionDef), node)
@@ -186,11 +132,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def AsyncWith(self) -> 'Find':
-        """`Be.AsyncWith`, ***Async***hronous With statement, matches `class` `ast.AsyncWith`.
-
-        This `class` is associated with Python keywords `async with` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.AsyncWith], ast.AST]:
             return (isinstance(node, ast.AsyncWith), node)
@@ -198,11 +139,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Attribute(self) -> 'Find':
-        """`Be.Attribute` matches `class` `ast.Attribute`.
-
-        This `class` is associated with Python delimiters '.'.
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Attribute], ast.AST]:
             return (isinstance(node, ast.Attribute), node)
@@ -210,11 +146,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def AugAssign(self) -> 'Find':
-        """`Be.AugAssign`, ***Aug***mented ***Assign***ment, matches `class` `ast.AugAssign`.
-
-        This `class` is associated with Python delimiters '+=, -=, *=, /=, //=, %=, **=, |=, &=, ^=, <<=, >>='.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.AugAssign], ast.AST]:
             return (isinstance(node, ast.AugAssign), node)
@@ -222,11 +153,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Await(self) -> 'Find':
-        """`Be.Await`, ***Await*** the asynchronous operation, matches `class` `ast.Await`.
-
-        This `class` is associated with Python keywords `await`.
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Await], ast.AST]:
             return (isinstance(node, ast.Await), node)
@@ -234,10 +160,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def BinOp(self) -> 'Find':
-        """`Be.BinOp`, ***Bin***ary ***Op***eration, matches `class` `ast.BinOp`.
-
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.BinOp], ast.AST]:
             return (isinstance(node, ast.BinOp), node)
@@ -245,11 +167,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def BitAnd(self) -> 'Find':
-        """`Be.BitAnd`, ***Bit***wise And, matches any of `ast.BitAnd` | `class` `ast.BitAnd`.
-
-        This `class` is associated with Python operators '&'.
-        It is a subclass of `ast.operator`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.BitAnd], ast.AST]:
             return (isinstance(node, ast.BitAnd), node)
@@ -257,11 +174,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def BitOr(self) -> 'Find':
-        """`Be.BitOr`, ***Bit***wise Or, matches any of `class` `ast.BitOr` | `ast.BitOr`.
-
-        This `class` is associated with Python operators '|'.
-        It is a subclass of `ast.operator`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.BitOr], ast.AST]:
             return (isinstance(node, ast.BitOr), node)
@@ -269,11 +181,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def BitXor(self) -> 'Find':
-        """`Be.BitXor`, ***Bit***wise e***X***clusive Or, matches any of `ast.BitXor` | `class` `ast.BitXor`.
-
-        This `class` is associated with Python operators '^'.
-        It is a subclass of `ast.operator`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.BitXor], ast.AST]:
             return (isinstance(node, ast.BitXor), node)
@@ -281,10 +188,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def boolop(self) -> 'Find':
-        """`Be.boolop`, ***bool***ean ***op***erator, matches any of `ast.Or` | `ast.And` | `class` `ast.boolop`.
-
-        It is a subclass of `ast.AST`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.boolop], ast.AST]:
             return (isinstance(node, ast.boolop), node)
@@ -292,10 +195,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def BoolOp(self) -> 'Find':
-        """`Be.BoolOp`, ***Bool***ean ***Op***eration, matches `class` `ast.BoolOp`.
-
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.BoolOp], ast.AST]:
             return (isinstance(node, ast.BoolOp), node)
@@ -303,11 +202,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Break(self) -> 'Find':
-        """`Be.Break` matches `class` `ast.Break`.
-
-        This `class` is associated with Python keywords `break`.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Break], ast.AST]:
             return (isinstance(node, ast.Break), node)
@@ -315,11 +209,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Call(self) -> 'Find':
-        """`Be.Call` matches `class` `ast.Call`.
-
-        This `class` is associated with Python delimiters '()'.
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Call], ast.AST]:
             return (isinstance(node, ast.Call), node)
@@ -327,11 +216,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def ClassDef(self) -> 'Find':
-        """`Be.ClassDef`, ***Class*** ***Def***inition, matches `class` `ast.ClassDef`.
-
-        This `class` is associated with Python keywords `class` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.ClassDef], ast.AST]:
             return (isinstance(node, ast.ClassDef), node)
@@ -339,10 +223,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def cmpop(self) -> 'Find':
-        """`Be.cmpop`, ***c***o***mp***arison ***op***erator, matches any of `ast.GtE` | `class` `ast.cmpop` | `ast.NotIn` | `ast.Eq` | `ast.NotEq` | `ast.Lt` | `ast.Is` | `ast.Gt` | `ast.In` | `ast.LtE` | `ast.IsNot`.
-
-        It is a subclass of `ast.AST`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.cmpop], ast.AST]:
             return (isinstance(node, ast.cmpop), node)
@@ -350,10 +230,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Compare(self) -> 'Find':
-        """`Be.Compare` matches `class` `ast.Compare`.
-
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Compare], ast.AST]:
             return (isinstance(node, ast.Compare), node)
@@ -361,10 +237,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def comprehension(self) -> 'Find':
-        """`Be.comprehension` matches `class` `ast.comprehension`.
-
-        It is a subclass of `ast.AST`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.comprehension], ast.AST]:
             return (isinstance(node, ast.comprehension), node)
@@ -372,10 +244,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Constant(self) -> 'Find':
-        """`Be.Constant` matches any of `ast.NameConstant` | `ast.Ellipsis` | `ast.Num` | `class` `ast.Constant` | `ast.Bytes` | `ast.Str`.
-
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Constant], ast.AST]:
             return (isinstance(node, ast.Constant), node)
@@ -383,11 +251,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Continue(self) -> 'Find':
-        """`Be.Continue` matches `class` `ast.Continue`.
-
-        This `class` is associated with Python keywords `continue`.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Continue], ast.AST]:
             return (isinstance(node, ast.Continue), node)
@@ -395,10 +258,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Del(self) -> 'Find':
-        """`Be.Del`, ***Del***ete, matches `class` `ast.Del`.
-
-        It is a subclass of `ast.expr_context`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Del], ast.AST]:
             return (isinstance(node, ast.Del), node)
@@ -406,11 +265,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Delete(self) -> 'Find':
-        """`Be.Delete` matches `class` `ast.Delete`.
-
-        This `class` is associated with Python keywords `del`.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Delete], ast.AST]:
             return (isinstance(node, ast.Delete), node)
@@ -418,11 +272,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Dict(self) -> 'Find':
-        """`Be.Dict`, ***Dict***ionary, matches `class` `ast.Dict`.
-
-        This `class` is associated with Python delimiters '{}'.
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Dict], ast.AST]:
             return (isinstance(node, ast.Dict), node)
@@ -430,11 +279,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def DictComp(self) -> 'Find':
-        """`Be.DictComp`, ***Dict***ionary ***c***o***mp***rehension, matches `class` `ast.DictComp`.
-
-        This `class` is associated with Python delimiters '{}'.
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.DictComp], ast.AST]:
             return (isinstance(node, ast.DictComp), node)
@@ -442,11 +286,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Div(self) -> 'Find':
-        """`Be.Div`, ***Div***ision, matches any of `class` `ast.Div` | `ast.Div`.
-
-        This `class` is associated with Python delimiters '/=' and Python operators '/'.
-        It is a subclass of `ast.operator`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Div], ast.AST]:
             return (isinstance(node, ast.Div), node)
@@ -454,11 +293,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Eq(self) -> 'Find':
-        """`Be.Eq`, is ***Eq***ual to, matches `class` `ast.Eq`.
-
-        This `class` is associated with Python operators '=='.
-        It is a subclass of `ast.cmpop`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Eq], ast.AST]:
             return (isinstance(node, ast.Eq), node)
@@ -466,10 +300,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def excepthandler(self) -> 'Find':
-        """`Be.excepthandler`, ***except***ion ***handler***, matches any of `ast.ExceptHandler` | `class` `ast.excepthandler`.
-
-        It is a subclass of `ast.AST`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.excepthandler], ast.AST]:
             return (isinstance(node, ast.excepthandler), node)
@@ -477,11 +307,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def ExceptHandler(self) -> 'Find':
-        """`Be.ExceptHandler`, ***Except***ion ***Handler***, matches `class` `ast.ExceptHandler`.
-
-        This `class` is associated with Python keywords `except`.
-        It is a subclass of `ast.excepthandler`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.ExceptHandler], ast.AST]:
             return (isinstance(node, ast.ExceptHandler), node)
@@ -489,10 +314,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def expr(self) -> 'Find':
-        """`Be.expr`, ***expr***ession, matches any of `ast.List` | `class` `ast.expr` | `ast.Constant` | `ast.Starred` | `ast.Compare` | `ast.Yield` | `ast.BoolOp` | `ast.DictComp` | `ast.Call` | `ast.FormattedValue` | `ast.GeneratorExp` | `ast.Subscript` | `ast.Dict` | `ast.Set` | `ast.ListComp` | `ast.YieldFrom` | `ast.UnaryOp` | `ast.Await` | `ast.BinOp` | `ast.NamedExpr` | `ast.JoinedStr` | `ast.Slice` | `ast.Name` | `ast.Tuple` | `ast.Attribute` | `ast.IfExp` | `ast.Lambda` | `ast.SetComp`.
-
-        It is a subclass of `ast.AST`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.expr], ast.AST]:
             return (isinstance(node, ast.expr), node)
@@ -500,10 +321,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Expr(self) -> 'Find':
-        """`Be.Expr`, ***Expr***ession, matches `class` `ast.Expr`.
-
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Expr], ast.AST]:
             return (isinstance(node, ast.Expr), node)
@@ -511,10 +328,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def expr_context(self) -> 'Find':
-        """`Be.expr_context`, ***expr***ession ***context***, matches any of `ast.Store` | `ast.Param` | `ast.Load` | `ast.AugStore` | `class` `ast.expr_context` | `ast.Del` | `ast.AugLoad`.
-
-        It is a subclass of `ast.AST`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.expr_context], ast.AST]:
             return (isinstance(node, ast.expr_context), node)
@@ -522,10 +335,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Expression(self) -> 'Find':
-        """`Be.Expression` matches `class` `ast.Expression`.
-
-        It is a subclass of `ast.mod`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Expression], ast.AST]:
             return (isinstance(node, ast.Expression), node)
@@ -533,11 +342,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def FloorDiv(self) -> 'Find':
-        """`Be.FloorDiv`, Floor ***Div***ision, matches any of `ast.FloorDiv` | `class` `ast.FloorDiv`.
-
-        This `class` is associated with Python delimiters '//=' and Python operators '//'.
-        It is a subclass of `ast.operator`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.FloorDiv], ast.AST]:
             return (isinstance(node, ast.FloorDiv), node)
@@ -545,11 +349,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def For(self) -> 'Find':
-        """`Be.For` matches `class` `ast.For`.
-
-        This `class` is associated with Python keywords `for` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.For], ast.AST]:
             return (isinstance(node, ast.For), node)
@@ -557,11 +356,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def FormattedValue(self) -> 'Find':
-        """`Be.FormattedValue` matches `class` `ast.FormattedValue`.
-
-        This `class` is associated with Python delimiters '{}'.
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.FormattedValue], ast.AST]:
             return (isinstance(node, ast.FormattedValue), node)
@@ -569,11 +363,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def FunctionDef(self) -> 'Find':
-        """`Be.FunctionDef`, Function ***Def***inition, matches `class` `ast.FunctionDef`.
-
-        This `class` is associated with Python keywords `def` and Python delimiters '()'.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.FunctionDef], ast.AST]:
             return (isinstance(node, ast.FunctionDef), node)
@@ -581,10 +370,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def FunctionType(self) -> 'Find':
-        """`Be.FunctionType`, Function Type, matches `class` `ast.FunctionType`.
-
-        It is a subclass of `ast.mod`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.FunctionType], ast.AST]:
             return (isinstance(node, ast.FunctionType), node)
@@ -592,10 +377,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def GeneratorExp(self) -> 'Find':
-        """`Be.GeneratorExp`, Generator ***Exp***ression, matches `class` `ast.GeneratorExp`.
-
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.GeneratorExp], ast.AST]:
             return (isinstance(node, ast.GeneratorExp), node)
@@ -603,11 +384,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Global(self) -> 'Find':
-        """`Be.Global` matches `class` `ast.Global`.
-
-        This `class` is associated with Python keywords `global`.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Global], ast.AST]:
             return (isinstance(node, ast.Global), node)
@@ -615,11 +391,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Gt(self) -> 'Find':
-        """`Be.Gt`, is Greater than, matches `class` `ast.Gt`.
-
-        This `class` is associated with Python operators '>'.
-        It is a subclass of `ast.cmpop`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Gt], ast.AST]:
             return (isinstance(node, ast.Gt), node)
@@ -627,11 +398,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def GtE(self) -> 'Find':
-        """`Be.GtE`, is Greater than or Equal to, matches `class` `ast.GtE`.
-
-        This `class` is associated with Python operators '>='.
-        It is a subclass of `ast.cmpop`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.GtE], ast.AST]:
             return (isinstance(node, ast.GtE), node)
@@ -639,11 +405,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def If(self) -> 'Find':
-        """`Be.If` matches `class` `ast.If`.
-
-        This `class` is associated with Python keywords `if` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.If], ast.AST]:
             return (isinstance(node, ast.If), node)
@@ -651,11 +412,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def IfExp(self) -> 'Find':
-        """`Be.IfExp`, If ***Exp***ression, matches `class` `ast.IfExp`.
-
-        This `class` is associated with Python keywords `if`.
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.IfExp], ast.AST]:
             return (isinstance(node, ast.IfExp), node)
@@ -663,11 +419,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Import(self) -> 'Find':
-        """`Be.Import` matches `class` `ast.Import`.
-
-        This `class` is associated with Python keywords `import`.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Import], ast.AST]:
             return (isinstance(node, ast.Import), node)
@@ -675,11 +426,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def ImportFrom(self) -> 'Find':
-        """`Be.ImportFrom` matches `class` `ast.ImportFrom`.
-
-        This `class` is associated with Python keywords `import`.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.ImportFrom], ast.AST]:
             return (isinstance(node, ast.ImportFrom), node)
@@ -687,11 +433,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def In(self) -> 'Find':
-        """`Be.In` matches `class` `ast.In`.
-
-        This `class` is associated with Python keywords `in`.
-        It is a subclass of `ast.cmpop`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.In], ast.AST]:
             return (isinstance(node, ast.In), node)
@@ -699,10 +440,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Interactive(self) -> 'Find':
-        """`Be.Interactive`, Interactive mode, matches `class` `ast.Interactive`.
-
-        It is a subclass of `ast.mod`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Interactive], ast.AST]:
             return (isinstance(node, ast.Interactive), node)
@@ -710,11 +447,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Invert(self) -> 'Find':
-        """`Be.Invert` matches `class` `ast.Invert`.
-
-        This `class` is associated with Python operators '~'.
-        It is a subclass of `ast.unaryop`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Invert], ast.AST]:
             return (isinstance(node, ast.Invert), node)
@@ -722,11 +454,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Is(self) -> 'Find':
-        """`Be.Is` matches `class` `ast.Is`.
-
-        This `class` is associated with Python keywords `is`.
-        It is a subclass of `ast.cmpop`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Is], ast.AST]:
             return (isinstance(node, ast.Is), node)
@@ -734,11 +461,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def IsNot(self) -> 'Find':
-        """`Be.IsNot` matches `class` `ast.IsNot`.
-
-        This `class` is associated with Python keywords `is not`.
-        It is a subclass of `ast.cmpop`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.IsNot], ast.AST]:
             return (isinstance(node, ast.IsNot), node)
@@ -746,10 +468,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def JoinedStr(self) -> 'Find':
-        """`Be.JoinedStr`, Joined ***Str***ing, matches `class` `ast.JoinedStr`.
-
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.JoinedStr], ast.AST]:
             return (isinstance(node, ast.JoinedStr), node)
@@ -757,11 +475,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def keyword(self) -> 'Find':
-        """`Be.keyword` matches `class` `ast.keyword`.
-
-        This `class` is associated with Python delimiters '='.
-        It is a subclass of `ast.AST`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.keyword], ast.AST]:
             return (isinstance(node, ast.keyword), node)
@@ -769,11 +482,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Lambda(self) -> 'Find':
-        """`Be.Lambda`, Lambda function, matches `class` `ast.Lambda`.
-
-        This `class` is associated with Python keywords `lambda` and Python delimiters ':'.
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Lambda], ast.AST]:
             return (isinstance(node, ast.Lambda), node)
@@ -781,11 +489,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def List(self) -> 'Find':
-        """`Be.List` matches `class` `ast.List`.
-
-        This `class` is associated with Python delimiters '[]'.
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.List], ast.AST]:
             return (isinstance(node, ast.List), node)
@@ -793,11 +496,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def ListComp(self) -> 'Find':
-        """`Be.ListComp`, List ***c***o***mp***rehension, matches `class` `ast.ListComp`.
-
-        This `class` is associated with Python delimiters '[]'.
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.ListComp], ast.AST]:
             return (isinstance(node, ast.ListComp), node)
@@ -805,10 +503,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Load(self) -> 'Find':
-        """`Be.Load` matches `class` `ast.Load`.
-
-        It is a subclass of `ast.expr_context`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Load], ast.AST]:
             return (isinstance(node, ast.Load), node)
@@ -816,11 +510,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def LShift(self) -> 'Find':
-        """`Be.LShift`, Left Shift, matches any of `class` `ast.LShift` | `ast.LShift`.
-
-        This `class` is associated with Python delimiters '<<=' and Python operators '<<'.
-        It is a subclass of `ast.operator`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.LShift], ast.AST]:
             return (isinstance(node, ast.LShift), node)
@@ -828,11 +517,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Lt(self) -> 'Find':
-        """`Be.Lt`, is Less than, matches `class` `ast.Lt`.
-
-        This `class` is associated with Python operators '<'.
-        It is a subclass of `ast.cmpop`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Lt], ast.AST]:
             return (isinstance(node, ast.Lt), node)
@@ -840,11 +524,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def LtE(self) -> 'Find':
-        """`Be.LtE`, is Less than or Equal to, matches `class` `ast.LtE`.
-
-        This `class` is associated with Python operators '<='.
-        It is a subclass of `ast.cmpop`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.LtE], ast.AST]:
             return (isinstance(node, ast.LtE), node)
@@ -852,11 +531,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Match(self) -> 'Find':
-        """`Be.Match`, Match this, matches `class` `ast.Match`.
-
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Match], ast.AST]:
             return (isinstance(node, ast.Match), node)
@@ -864,11 +538,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def match_case(self) -> 'Find':
-        """`Be.match_case`, match case, matches `class` `ast.match_case`.
-
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.AST`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.match_case], ast.AST]:
             return (isinstance(node, ast.match_case), node)
@@ -876,11 +545,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def MatchAs(self) -> 'Find':
-        """`Be.MatchAs`, Match As, matches `class` `ast.MatchAs`.
-
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.pattern`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.MatchAs], ast.AST]:
             return (isinstance(node, ast.MatchAs), node)
@@ -888,11 +552,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def MatchClass(self) -> 'Find':
-        """`Be.MatchClass`, Match Class, matches `class` `ast.MatchClass`.
-
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.pattern`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.MatchClass], ast.AST]:
             return (isinstance(node, ast.MatchClass), node)
@@ -900,11 +559,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def MatchMapping(self) -> 'Find':
-        """`Be.MatchMapping`, Match Mapping, matches `class` `ast.MatchMapping`.
-
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.pattern`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.MatchMapping], ast.AST]:
             return (isinstance(node, ast.MatchMapping), node)
@@ -912,11 +566,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def MatchOr(self) -> 'Find':
-        """`Be.MatchOr`, Match this Or that, matches `class` `ast.MatchOr`.
-
-        This `class` is associated with Python delimiters ':' and Python operators '|'.
-        It is a subclass of `ast.pattern`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.MatchOr], ast.AST]:
             return (isinstance(node, ast.MatchOr), node)
@@ -924,11 +573,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def MatchSequence(self) -> 'Find':
-        """`Be.MatchSequence`, Match this Sequence, matches `class` `ast.MatchSequence`.
-
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.pattern`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.MatchSequence], ast.AST]:
             return (isinstance(node, ast.MatchSequence), node)
@@ -936,11 +580,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def MatchSingleton(self) -> 'Find':
-        """`Be.MatchSingleton`, Match Singleton, matches `class` `ast.MatchSingleton`.
-
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.pattern`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.MatchSingleton], ast.AST]:
             return (isinstance(node, ast.MatchSingleton), node)
@@ -948,11 +587,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def MatchStar(self) -> 'Find':
-        """`Be.MatchStar`, Match Star, matches `class` `ast.MatchStar`.
-
-        This `class` is associated with Python delimiters ':' and Python operators '*'.
-        It is a subclass of `ast.pattern`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.MatchStar], ast.AST]:
             return (isinstance(node, ast.MatchStar), node)
@@ -960,11 +594,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def MatchValue(self) -> 'Find':
-        """`Be.MatchValue`, Match Value, matches `class` `ast.MatchValue`.
-
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.pattern`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.MatchValue], ast.AST]:
             return (isinstance(node, ast.MatchValue), node)
@@ -972,10 +601,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def MatMult(self) -> 'Find':
-        """`Be.MatMult`, ***Mat***rix ***Mult***iplication, matches any of `ast.MatMult` | `class` `ast.MatMult`.
-
-        It is a subclass of `ast.operator`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.MatMult], ast.AST]:
             return (isinstance(node, ast.MatMult), node)
@@ -983,10 +608,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def mod(self) -> 'Find':
-        """`Be.mod`, ***mod***ule, matches any of `ast.Module` | `ast.Expression` | `ast.Suite` | `class` `ast.mod` | `ast.FunctionType` | `ast.Interactive`.
-
-        It is a subclass of `ast.AST`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.mod], ast.AST]:
             return (isinstance(node, ast.mod), node)
@@ -994,11 +615,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Mod(self) -> 'Find':
-        """`Be.Mod`, ***Mod***ulo, matches any of `ast.Mod` | `class` `ast.Mod`.
-
-        This `class` is associated with Python delimiters '%=' and Python operators '%'.
-        It is a subclass of `ast.operator`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Mod], ast.AST]:
             return (isinstance(node, ast.Mod), node)
@@ -1006,10 +622,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Module(self) -> 'Find':
-        """`Be.Module` matches `class` `ast.Module`.
-
-        It is a subclass of `ast.mod`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Module], ast.AST]:
             return (isinstance(node, ast.Module), node)
@@ -1017,11 +629,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Mult(self) -> 'Find':
-        """`Be.Mult`, ***Mult***iplication, matches any of `ast.Mult` | `class` `ast.Mult`.
-
-        This `class` is associated with Python delimiters '*=' and Python operators '*'.
-        It is a subclass of `ast.operator`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Mult], ast.AST]:
             return (isinstance(node, ast.Mult), node)
@@ -1029,10 +636,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Name(self) -> 'Find':
-        """`Be.Name` matches `class` `ast.Name`.
-
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Name], ast.AST]:
             return (isinstance(node, ast.Name), node)
@@ -1040,11 +643,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def NamedExpr(self) -> 'Find':
-        """`Be.NamedExpr`, Named ***Expr***ession, matches `class` `ast.NamedExpr`.
-
-        This `class` is associated with Python operators ':='.
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.NamedExpr], ast.AST]:
             return (isinstance(node, ast.NamedExpr), node)
@@ -1052,11 +650,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Nonlocal(self) -> 'Find':
-        """`Be.Nonlocal` matches `class` `ast.Nonlocal`.
-
-        This `class` is associated with Python keywords `nonlocal`.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Nonlocal], ast.AST]:
             return (isinstance(node, ast.Nonlocal), node)
@@ -1064,11 +657,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Not(self) -> 'Find':
-        """`Be.Not` matches `class` `ast.Not`.
-
-        This `class` is associated with Python keywords `not`.
-        It is a subclass of `ast.unaryop`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Not], ast.AST]:
             return (isinstance(node, ast.Not), node)
@@ -1076,11 +664,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def NotEq(self) -> 'Find':
-        """`Be.NotEq`, is Not ***Eq***ual to, matches `class` `ast.NotEq`.
-
-        This `class` is associated with Python operators '!='.
-        It is a subclass of `ast.cmpop`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.NotEq], ast.AST]:
             return (isinstance(node, ast.NotEq), node)
@@ -1088,11 +671,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def NotIn(self) -> 'Find':
-        """`Be.NotIn`, is Not ***In***cluded in or does Not have membership In, matches `class` `ast.NotIn`.
-
-        This `class` is associated with Python keywords `not in`.
-        It is a subclass of `ast.cmpop`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.NotIn], ast.AST]:
             return (isinstance(node, ast.NotIn), node)
@@ -1100,10 +678,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def operator(self) -> 'Find':
-        """`Be.operator` matches any of `ast.Sub` | `ast.LShift` | `ast.BitXor` | `ast.Div` | `ast.Add` | `ast.MatMult` | `ast.BitAnd` | `ast.Mod` | `ast.BitOr` | `ast.Pow` | `ast.FloorDiv` | `class` `ast.operator` | `ast.Mult` | `ast.RShift`.
-
-        It is a subclass of `ast.AST`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.operator], ast.AST]:
             return (isinstance(node, ast.operator), node)
@@ -1111,11 +685,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Or(self) -> 'Find':
-        """`Be.Or` matches any of `class` `ast.Or` | `ast.Or`.
-
-        This `class` is associated with Python keywords `or`.
-        It is a subclass of `ast.boolop`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Or], ast.AST]:
             return (isinstance(node, ast.Or), node)
@@ -1123,11 +692,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def ParamSpec(self) -> 'Find':
-        """`Be.ParamSpec`, ***Param***eter ***Spec***ification, matches `class` `ast.ParamSpec`.
-
-        This `class` is associated with Python delimiters '[]'.
-        It is a subclass of `ast.type_param`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.ParamSpec], ast.AST]:
             return (isinstance(node, ast.ParamSpec), node)
@@ -1135,11 +699,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Pass(self) -> 'Find':
-        """`Be.Pass` matches `class` `ast.Pass`.
-
-        This `class` is associated with Python keywords `pass`.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Pass], ast.AST]:
             return (isinstance(node, ast.Pass), node)
@@ -1147,10 +706,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def pattern(self) -> 'Find':
-        """`Be.pattern` matches any of `ast.MatchValue` | `ast.MatchMapping` | `ast.MatchOr` | `ast.MatchSequence` | `ast.MatchStar` | `ast.MatchSingleton` | `ast.MatchAs` | `ast.MatchClass` | `class` `ast.pattern`.
-
-        It is a subclass of `ast.AST`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.pattern], ast.AST]:
             return (isinstance(node, ast.pattern), node)
@@ -1158,11 +713,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Pow(self) -> 'Find':
-        """`Be.Pow`, ***Pow***er, matches any of `class` `ast.Pow` | `ast.Pow`.
-
-        This `class` is associated with Python delimiters '**=' and Python operators '**'.
-        It is a subclass of `ast.operator`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Pow], ast.AST]:
             return (isinstance(node, ast.Pow), node)
@@ -1170,11 +720,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Raise(self) -> 'Find':
-        """`Be.Raise` matches `class` `ast.Raise`.
-
-        This `class` is associated with Python keywords `raise`.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Raise], ast.AST]:
             return (isinstance(node, ast.Raise), node)
@@ -1182,11 +727,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Return(self) -> 'Find':
-        """`Be.Return` matches `class` `ast.Return`.
-
-        This `class` is associated with Python keywords `return`.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Return], ast.AST]:
             return (isinstance(node, ast.Return), node)
@@ -1194,11 +734,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def RShift(self) -> 'Find':
-        """`Be.RShift`, Right Shift, matches any of `class` `ast.RShift` | `ast.RShift`.
-
-        This `class` is associated with Python delimiters '>>=' and Python operators '>>'.
-        It is a subclass of `ast.operator`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.RShift], ast.AST]:
             return (isinstance(node, ast.RShift), node)
@@ -1206,11 +741,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Set(self) -> 'Find':
-        """`Be.Set` matches `class` `ast.Set`.
-
-        This `class` is associated with Python delimiters '{}'.
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Set], ast.AST]:
             return (isinstance(node, ast.Set), node)
@@ -1218,11 +748,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def SetComp(self) -> 'Find':
-        """`Be.SetComp`, Set ***c***o***mp***rehension, matches `class` `ast.SetComp`.
-
-        This `class` is associated with Python delimiters '{}'.
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.SetComp], ast.AST]:
             return (isinstance(node, ast.SetComp), node)
@@ -1230,11 +755,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Slice(self) -> 'Find':
-        """`Be.Slice` matches `class` `ast.Slice`.
-
-        This `class` is associated with Python delimiters '[], :'.
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Slice], ast.AST]:
             return (isinstance(node, ast.Slice), node)
@@ -1242,11 +762,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Starred(self) -> 'Find':
-        """`Be.Starred` matches `class` `ast.Starred`.
-
-        This `class` is associated with Python operators '*'.
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Starred], ast.AST]:
             return (isinstance(node, ast.Starred), node)
@@ -1254,10 +769,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def stmt(self) -> 'Find':
-        """`Be.stmt`, ***st***ate***m***en***t***, matches any of `ast.Continue` | `ast.Return` | `ast.TypeAlias` | `ast.Match` | `ast.Global` | `ast.With` | `ast.AsyncFor` | `ast.ClassDef` | `ast.AsyncWith` | `ast.For` | `ast.Import` | `ast.Pass` | `ast.AsyncFunctionDef` | `ast.Break` | `ast.If` | `ast.Nonlocal` | `class` `ast.stmt` | `ast.AugAssign` | `ast.Raise` | `ast.Try` | `ast.TryStar` | `ast.ImportFrom` | `ast.Delete` | `ast.Assign` | `ast.AnnAssign` | `ast.Expr` | `ast.Assert` | `ast.FunctionDef` | `ast.While`.
-
-        It is a subclass of `ast.AST`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.stmt], ast.AST]:
             return (isinstance(node, ast.stmt), node)
@@ -1265,10 +776,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Store(self) -> 'Find':
-        """`Be.Store` matches `class` `ast.Store`.
-
-        It is a subclass of `ast.expr_context`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Store], ast.AST]:
             return (isinstance(node, ast.Store), node)
@@ -1276,11 +783,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Sub(self) -> 'Find':
-        """`Be.Sub`, ***Sub***traction, matches any of `ast.Sub` | `class` `ast.Sub`.
-
-        This `class` is associated with Python delimiters '-=' and Python operators '-'.
-        It is a subclass of `ast.operator`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Sub], ast.AST]:
             return (isinstance(node, ast.Sub), node)
@@ -1288,11 +790,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Subscript(self) -> 'Find':
-        """`Be.Subscript` matches `class` `ast.Subscript`.
-
-        This `class` is associated with Python delimiters '[]'.
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Subscript], ast.AST]:
             return (isinstance(node, ast.Subscript), node)
@@ -1300,11 +797,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Try(self) -> 'Find':
-        """`Be.Try` matches `class` `ast.Try`.
-
-        This `class` is associated with Python keywords `try`, `except` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Try], ast.AST]:
             return (isinstance(node, ast.Try), node)
@@ -1312,11 +804,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def TryStar(self) -> 'Find':
-        """`Be.TryStar`, Try executing this, protected by `except*` ("except star"), matches `class` `ast.TryStar`.
-
-        This `class` is associated with Python keywords `try`, `except*` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.TryStar], ast.AST]:
             return (isinstance(node, ast.TryStar), node)
@@ -1324,11 +811,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Tuple(self) -> 'Find':
-        """`Be.Tuple` matches `class` `ast.Tuple`.
-
-        This `class` is associated with Python delimiters '()'.
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Tuple], ast.AST]:
             return (isinstance(node, ast.Tuple), node)
@@ -1336,10 +818,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def type_ignore(self) -> 'Find':
-        """`Be.type_ignore`, this `type` error, you ignore it, matches any of `class` `ast.type_ignore` | `ast.TypeIgnore`.
-
-        It is a subclass of `ast.AST`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.type_ignore], ast.AST]:
             return (isinstance(node, ast.type_ignore), node)
@@ -1347,10 +825,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def type_param(self) -> 'Find':
-        """`Be.type_param`, type ***param***eter, matches any of `ast.TypeVar` | `ast.ParamSpec` | `ast.TypeVarTuple` | `class` `ast.type_param`.
-
-        It is a subclass of `ast.AST`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.type_param], ast.AST]:
             return (isinstance(node, ast.type_param), node)
@@ -1358,10 +832,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def TypeAlias(self) -> 'Find':
-        """`Be.TypeAlias`, Type Alias, matches `class` `ast.TypeAlias`.
-
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.TypeAlias], ast.AST]:
             return (isinstance(node, ast.TypeAlias), node)
@@ -1369,11 +839,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def TypeIgnore(self) -> 'Find':
-        """`Be.TypeIgnore`, this Type (`type`) error, Ignore it, matches `class` `ast.TypeIgnore`.
-
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.type_ignore`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.TypeIgnore], ast.AST]:
             return (isinstance(node, ast.TypeIgnore), node)
@@ -1381,10 +846,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def TypeVar(self) -> 'Find':
-        """`Be.TypeVar`, Type ***Var***iable, matches `class` `ast.TypeVar`.
-
-        It is a subclass of `ast.type_param`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.TypeVar], ast.AST]:
             return (isinstance(node, ast.TypeVar), node)
@@ -1392,11 +853,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def TypeVarTuple(self) -> 'Find':
-        """`Be.TypeVarTuple`, Type ***Var***iable ***Tuple***, matches `class` `ast.TypeVarTuple`.
-
-        This `class` is associated with Python operators '*'.
-        It is a subclass of `ast.type_param`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.TypeVarTuple], ast.AST]:
             return (isinstance(node, ast.TypeVarTuple), node)
@@ -1404,11 +860,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def UAdd(self) -> 'Find':
-        """`Be.UAdd`, ***U***nary ***Add***ition, matches `class` `ast.UAdd`.
-
-        This `class` is associated with Python operators '+'.
-        It is a subclass of `ast.unaryop`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.UAdd], ast.AST]:
             return (isinstance(node, ast.UAdd), node)
@@ -1416,10 +867,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def unaryop(self) -> 'Find':
-        """`Be.unaryop`, ***un***ary ***op***erator, matches any of `ast.USub` | `class` `ast.unaryop` | `ast.Invert` | `ast.UAdd` | `ast.Not`.
-
-        It is a subclass of `ast.AST`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.unaryop], ast.AST]:
             return (isinstance(node, ast.unaryop), node)
@@ -1427,10 +874,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def UnaryOp(self) -> 'Find':
-        """`Be.UnaryOp`, ***Un***ary ***Op***eration, matches `class` `ast.UnaryOp`.
-
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.UnaryOp], ast.AST]:
             return (isinstance(node, ast.UnaryOp), node)
@@ -1438,11 +881,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def USub(self) -> 'Find':
-        """`Be.USub`, ***U***nary ***Sub***traction, matches `class` `ast.USub`.
-
-        This `class` is associated with Python operators '-'.
-        It is a subclass of `ast.unaryop`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.USub], ast.AST]:
             return (isinstance(node, ast.USub), node)
@@ -1450,11 +888,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def While(self) -> 'Find':
-        """`Be.While` matches `class` `ast.While`.
-
-        This `class` is associated with Python keywords `while`.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.While], ast.AST]:
             return (isinstance(node, ast.While), node)
@@ -1462,11 +895,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def With(self) -> 'Find':
-        """`Be.With` matches `class` `ast.With`.
-
-        This `class` is associated with Python keywords `with` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.With], ast.AST]:
             return (isinstance(node, ast.With), node)
@@ -1474,11 +902,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def withitem(self) -> 'Find':
-        """`Be.withitem`, with item, matches `class` `ast.withitem`.
-
-        This `class` is associated with Python keywords `as`.
-        It is a subclass of `ast.AST`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.withitem], ast.AST]:
             return (isinstance(node, ast.withitem), node)
@@ -1486,11 +909,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def Yield(self) -> 'Find':
-        """`Be.Yield`, Yield an element, matches `class` `ast.Yield`.
-
-        This `class` is associated with Python keywords `yield`.
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.Yield], ast.AST]:
             return (isinstance(node, ast.Yield), node)
@@ -1498,11 +916,6 @@ class Find:
         return Find(dontMutateMyQueue)
 
     def YieldFrom(self) -> 'Find':
-        """`Be.YieldFrom`, Yield an element From, matches `class` `ast.YieldFrom`.
-
-        This `class` is associated with Python keywords `yield from`.
-        It is a subclass of `ast.expr`.
-        """
 
         def workhorse(node: ast.AST) -> tuple[TypeIs[ast.YieldFrom], ast.AST]:
             return (isinstance(node, ast.YieldFrom), node)
