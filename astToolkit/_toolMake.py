@@ -302,7 +302,7 @@ class Make:
         return ast.arg(arg=Buffalo_buffalo_Buffalo_buffalo_buffalo_buffalo_Buffalo_buffalo, annotation=annotation, **keywordArguments)
 
     @staticmethod
-    def arguments(posonlyargs: list[ast.arg] | None=None, list_arg: list[ast.arg] | None=None, vararg: ast.arg | None=None, kwonlyargs: list[ast.arg] | None=None, kw_defaults: Sequence[ast.expr | None]=[None], kwarg: ast.arg | None=None, defaults: Sequence[ast.expr] | None=None) -> ast.arguments:
+    def arguments(posonlyargs: list[ast.arg] | None=None, list_arg: list[ast.arg] | None=None, vararg: ast.arg | None=None, kwonlyargs: list[ast.arg] | None=None, kw_defaults: Sequence[ast.expr | None] | None=None, kwarg: ast.arg | None=None, defaults: Sequence[ast.expr] | None=None) -> ast.arguments:
         """Make a function signature AST object containing all parameter specifications.
 
         (AI generated docstring)
@@ -334,7 +334,7 @@ class Make:
             AST object representing complete function parameter specification.
 
         """
-        return ast.arguments(posonlyargs=posonlyargs or [], args=list_arg or [], vararg=vararg, kwonlyargs=kwonlyargs or [], kw_defaults=list(kw_defaults), kwarg=kwarg, defaults=list(defaults) if defaults else [])
+        return ast.arguments(posonlyargs=posonlyargs or [], args=list_arg or [], vararg=vararg, kwonlyargs=kwonlyargs or [], kw_defaults=list(kw_defaults) if kw_defaults else [], kwarg=kwarg, defaults=list(defaults) if defaults else [])
 
     @staticmethod
     def Assert(test: ast.expr, msg: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Assert:
@@ -440,7 +440,7 @@ class Make:
         return ast.AsyncFor(target=target, iter=iter, body=list(body), orelse=list(orElse) if orElse else [], **keywordArguments)
 
     @staticmethod
-    def AsyncFunctionDef(name: str, argumentSpecification: ast.arguments=ast.arguments(), body: Sequence[ast.stmt] | None=None, decorator_list: Sequence[ast.expr] | None=None, returns: ast.expr | None=None, type_params: Sequence[ast.type_param] | None=None, **keywordArguments: Unpack[ast_attributes_type_comment]) -> ast.AsyncFunctionDef:
+    def AsyncFunctionDef(name: str, argumentSpecification: ast.arguments | None=None, body: Sequence[ast.stmt] | None=None, decorator_list: Sequence[ast.expr] | None=None, returns: ast.expr | None=None, type_params: Sequence[ast.type_param] | None=None, **keywordArguments: Unpack[ast_attributes_type_comment]) -> ast.AsyncFunctionDef:
         """Asynchronous function definition AST object for `async def` (***async***hronous ***def***inition) declarations.
 
         (AI generated docstring)
@@ -470,7 +470,7 @@ class Make:
             AST object representing an asynchronous function definition.
 
         """
-        return ast.AsyncFunctionDef(name=name, args=argumentSpecification, body=list(body) if body else [], decorator_list=list(decorator_list) if decorator_list else [], returns=returns, type_params=list(type_params) if type_params else [], **keywordArguments)
+        return ast.AsyncFunctionDef(name=name, args=argumentSpecification or ast.arguments(), body=list(body) if body else [], decorator_list=list(decorator_list) if decorator_list else [], returns=returns, type_params=list(type_params) if type_params else [], **keywordArguments)
 
     @staticmethod
     def AsyncWith(items: list[ast.withitem], body: Sequence[ast.stmt], **keywordArguments: Unpack[ast_attributes_type_comment]) -> ast.AsyncWith:
@@ -499,7 +499,7 @@ class Make:
         return ast.AsyncWith(items=items, body=list(body), **keywordArguments)
 
     @staticmethod
-    def Attribute(value: ast.expr, *attribute: str, context: ast.expr_context=ast.Load(), **keywordArguments: Unpack[ast_attributes]) -> ast.Attribute:
+    def Attribute(value: ast.expr, *attribute: str, context: ast.expr_context | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Attribute:
         """Attribute access AST `object` representing dot notation in Python code.
 
         (AI generated docstring)
@@ -525,12 +525,13 @@ class Make:
             AST `object` representing attribute access with potential chaining.
 
         """
+        ctx = context or ast.Load()
 
-        def addDOTattribute(chain: ast.expr, identifier: str, context: ast.expr_context, **keywordArguments: Unpack[ast_attributes]) -> ast.Attribute:
-            return ast.Attribute(value=chain, attr=identifier, ctx=context, **keywordArguments)
-        buffaloBuffalo = addDOTattribute(value, attribute[0], context, **keywordArguments)
+        def addDOTattribute(chain: ast.expr, identifier: str, ctx: ast.expr_context, **keywordArguments: Unpack[ast_attributes]) -> ast.Attribute:
+            return ast.Attribute(value=chain, attr=identifier, ctx=ctx, **keywordArguments)
+        buffaloBuffalo = addDOTattribute(value, attribute[0], ctx, **keywordArguments)
         for identifier in attribute[1:None]:
-            buffaloBuffalo = addDOTattribute(buffaloBuffalo, identifier, context, **keywordArguments)
+            buffaloBuffalo = addDOTattribute(buffaloBuffalo, identifier, ctx, **keywordArguments)
         return buffaloBuffalo
 
     @staticmethod
@@ -1006,7 +1007,7 @@ class Make:
             AST `object` representing a literal constant value.
 
         """
-        return ast.Constant(value=value, kind=kind, **keywordArguments) # pyright: ignore[reportArgumentType]
+        return ast.Constant(value=value, kind=kind, **keywordArguments)
 
     @staticmethod
     def Continue(**keywordArguments: Unpack[ast_attributes]) -> ast.Continue:
@@ -1074,8 +1075,8 @@ class Make:
         return ast.Delete(targets=list(targets), **keywordArguments)
 
     @staticmethod
-    def Dict(keys: Sequence[ast.expr | None]=[None], values: Sequence[ast.expr] | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Dict:
-        """Make a dictionary literal AST `object` with key-value pairs.
+    def Dict(keys: Sequence[ast.expr | None] | None=None, values: Sequence[ast.expr] | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Dict:
+        """Combine `keys` and `values` into an AST (Abstract Syntax Tree) representation of the Python built-in `class` `dict` (***dict***ionary).
 
         (AI generated docstring)
 
@@ -1096,7 +1097,7 @@ class Make:
             (***Dict***ionary) AST `object` representing a dictionary literal with specified key-value pairs.
 
         """
-        return ast.Dict(keys=list(keys), values=list(values) if values else [], **keywordArguments)
+        return ast.Dict(keys=list(keys) if keys else [], values=list(values) if values else [], **keywordArguments)
 
     @staticmethod
     def DictComp(key: ast.expr, value: ast.expr, generators: list[ast.comprehension], **keywordArguments: Unpack[ast_attributes]) -> ast.DictComp:
@@ -1439,7 +1440,7 @@ class Make:
         return ast.FormattedValue(value=value, conversion=conversion, format_spec=format_spec, **keywordArguments)
 
     @staticmethod
-    def FunctionDef(name: str, argumentSpecification: ast.arguments=ast.arguments(), body: Sequence[ast.stmt] | None=None, decorator_list: Sequence[ast.expr] | None=None, returns: ast.expr | None=None, type_params: Sequence[ast.type_param] | None=None, **keywordArguments: Unpack[ast_attributes_type_comment]) -> ast.FunctionDef:
+    def FunctionDef(name: str, argumentSpecification: ast.arguments | None=None, body: Sequence[ast.stmt] | None=None, decorator_list: Sequence[ast.expr] | None=None, returns: ast.expr | None=None, type_params: Sequence[ast.type_param] | None=None, **keywordArguments: Unpack[ast_attributes_type_comment]) -> ast.FunctionDef:
         """Make a function definition AST object for standard `def` declarations with typing support.
 
         (AI generated docstring)
@@ -1485,7 +1486,7 @@ class Make:
         )
 
         """
-        return ast.FunctionDef(name=name, args=argumentSpecification, body=list(body) if body else [], decorator_list=list(decorator_list) if decorator_list else [], returns=returns, type_params=list(type_params) if type_params else [], **keywordArguments)
+        return ast.FunctionDef(name=name, args=argumentSpecification or ast.arguments(), body=list(body) if body else [], decorator_list=list(decorator_list) if decorator_list else [], returns=returns, type_params=list(type_params) if type_params else [], **keywordArguments)
 
     @staticmethod
     def FunctionType(argtypes: Sequence[ast.expr], returns: ast.expr) -> ast.FunctionType:
@@ -1957,7 +1958,7 @@ class Make:
         return ast.Lambda(args=argumentSpecification, body=body, **keywordArguments)
 
     @staticmethod
-    def List(listElements: Sequence[ast.expr] | None=None, context: ast.expr_context=ast.Load(), **keywordArguments: Unpack[ast_attributes]) -> ast.List:
+    def List(listElements: Sequence[ast.expr] | None=None, context: ast.expr_context | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.List:
         """Make a list literal AST `object` with ordered element collection.
 
         (AI generated docstring)
@@ -1979,7 +1980,7 @@ class Make:
             AST `object` representing a list literal with specified elements.
 
         """
-        return ast.List(elts=list(listElements) if listElements else [], ctx=context, **keywordArguments)
+        return ast.List(elts=list(listElements) if listElements else [], ctx=context or ast.Load(), **keywordArguments)
 
     @staticmethod
     def ListComp(element: ast.expr, generators: list[ast.comprehension], **keywordArguments: Unpack[ast_attributes]) -> ast.ListComp:
@@ -2554,7 +2555,7 @@ class Make:
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
-    def Name(id: str, context: ast.expr_context=ast.Load(), **keywordArguments: Unpack[ast_attributes]) -> ast.Name:
+    def Name(id: str, context: ast.expr_context | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Name:
         """Make a name AST `object` for variable and identifier references.
 
         (AI generated docstring)
@@ -2576,7 +2577,7 @@ class Make:
             AST `object` representing an identifier reference with specified context.
 
         """
-        return ast.Name(id=id, ctx=context, **keywordArguments)
+        return ast.Name(id=id, ctx=context or ast.Load(), **keywordArguments)
 
     @staticmethod
     def NamedExpr(target: ast.Name, value: ast.expr, **keywordArguments: Unpack[ast_attributes]) -> ast.NamedExpr:
@@ -3054,7 +3055,7 @@ class Make:
         return ast.Slice(lower=lower, upper=upper, step=step, **keywordArguments)
 
     @staticmethod
-    def Starred(value: ast.expr, context: ast.expr_context=ast.Load(), **keywordArguments: Unpack[ast_attributes]) -> ast.Starred:
+    def Starred(value: ast.expr, context: ast.expr_context | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Starred:
         """Make a starred expression AST `object` for unpacking operations.
 
         (AI generated docstring)
@@ -3086,7 +3087,7 @@ class Make:
         ```
 
         """
-        return ast.Starred(value=value, ctx=context, **keywordArguments)
+        return ast.Starred(value=value, ctx=context or ast.Load(), **keywordArguments)
 
     @staticmethod
     def stmt(**keywordArguments: Unpack[ast_attributes]) -> ast.stmt:
@@ -3176,7 +3177,7 @@ class Make:
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
-    def Subscript(value: ast.expr, slice: ast.expr, context: ast.expr_context=ast.Load(), **keywordArguments: Unpack[ast_attributes]) -> ast.Subscript:
+    def Subscript(value: ast.expr, slice: ast.expr, context: ast.expr_context | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Subscript:
         """Make a subscript AST `object` for indexing and slicing operations.
 
         (AI generated docstring)
@@ -3199,7 +3200,7 @@ class Make:
             AST `object` representing a subscription operation with brackets.
 
         """
-        return ast.Subscript(value=value, slice=slice, ctx=context, **keywordArguments)
+        return ast.Subscript(value=value, slice=slice, ctx=context or ast.Load(), **keywordArguments)
 
     @staticmethod
     def Try(body: Sequence[ast.stmt], handlers: list[ast.ExceptHandler], orElse: Sequence[ast.stmt] | None=None, finalbody: Sequence[ast.stmt] | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Try:
@@ -3266,7 +3267,7 @@ class Make:
         return ast.TryStar(body=list(body), handlers=handlers, orelse=list(orElse) if orElse else [], finalbody=list(finalbody) if finalbody else [], **keywordArguments)
 
     @staticmethod
-    def Tuple(listElements: Sequence[ast.expr] | None=None, context: ast.expr_context=ast.Load(), **keywordArguments: Unpack[ast_attributes]) -> ast.Tuple:
+    def Tuple(listElements: Sequence[ast.expr] | None=None, context: ast.expr_context | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Tuple:
         """Make a tuple literal AST `object` for ordered immutable collections.
 
         (AI generated docstring)
@@ -3288,7 +3289,7 @@ class Make:
             AST `object` representing a tuple literal with specified elements.
 
         """
-        return ast.Tuple(elts=list(listElements) if listElements else [], ctx=context, **keywordArguments)
+        return ast.Tuple(elts=list(listElements) if listElements else [], ctx=context or ast.Load(), **keywordArguments)
 
     @staticmethod
     def type_ignore() -> ast.type_ignore:

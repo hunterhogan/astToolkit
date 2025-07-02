@@ -1,3 +1,4 @@
+# ruff: noqa: E501
 from astToolkit import Make
 from typing import Any
 import ast
@@ -245,7 +246,7 @@ allSubclasses: dict[str, dict[str, dict[str, Any]]] = {
 "ImportFrom": {
 "class Make, maximally empty parameters": {"expression": Make.ImportFrom(dotModule='Make.ImportFrom', list_alias=[Make.alias(name='Make_ImportFrom_alias')]), "astToolkit.dump": "ast.ImportFrom(module='Make.ImportFrom', names=[ast.alias(name='Make_ImportFrom_alias', asname=None)], level=0)", "ast.dump": "ImportFrom(module='Make.ImportFrom', names=[alias(name='Make_ImportFrom_alias')], level=0)"},
 "class Make, minimal parameters": {"expression": Make.ImportFrom(dotModule='Make.ImportFrom', list_alias=[Make.alias(name='Make_ImportFrom_alias', asName=None)], level=0), "astToolkit.dump": "ast.ImportFrom(module='Make.ImportFrom', names=[ast.alias(name='Make_ImportFrom_alias', asname=None)], level=0)", "ast.dump": "ImportFrom(module='Make.ImportFrom', names=[alias(name='Make_ImportFrom_alias')], level=0)"},
-"ast module, minimal parameters": {"expression": ast.ImportFrom(), "astToolkit.dump": "ast.ImportFrom(module=None, names=[], level=None)", "ast.dump": "ImportFrom(names=[])"}
+"ast module, minimal parameters": {"expression": ast.ImportFrom(), "astToolkit.dump": "ast.ImportFrom(module=None, names=[], level=None)", "ast.dump": "ImportFrom(names=[])"} # pyright: ignore[reportCallIssue]
 },
 "In": {
 "class Make, maximally empty parameters": {"expression": Make.In(), "astToolkit.dump": "ast.In()", "ast.dump": "In()"},
