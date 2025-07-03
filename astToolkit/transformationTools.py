@@ -1,27 +1,28 @@
 """
-AST Transformation Tools for Code Optimization and Generation
+AST Transformation Tools for Code Optimization and Generation.
+
 (AI generated docstring)
 
-This module provides higher-level transformation tools that operate on AST structures to perform
-complex code optimizations and transformations. The module includes five key functions:
+This module provides higher-level transformation tools that operate on AST structures to perform complex code optimizations and
+transformations. The module includes five key functions:
 
-1. makeDictionaryFunctionDef: Creates a lookup dictionary mapping function names to their AST definitions
-   within a module, enabling efficient access to specific function definitions.
+1. makeDictionaryFunctionDef: Creates a lookup dictionary mapping function names to their AST definitions within a module,
+	enabling efficient access to specific function definitions.
 
-2. inlineFunctionDef: Performs function inlining by recursively substituting function calls with their
-   implementation bodies, creating self-contained functions without external dependencies.
+2. inlineFunctionDef: Performs function inlining by recursively substituting function calls with their implementation bodies,
+	creating self-contained functions without external dependencies.
 
-3. removeUnusedParameters: Optimizes function signatures by analyzing and removing unused parameters,
-   updating the function signature, return statements, and type annotations accordingly.
+3. removeUnusedParameters: Optimizes function signatures by analyzing and removing unused parameters, updating the function
+	signature, return statements, and type annotations accordingly.
 
-4. unparseFindReplace: Recursively replaces AST nodes throughout a tree structure using textual
-   representation matching, providing a brute-force but effective approach for complex replacements.
+4. unparseFindReplace: Recursively replaces AST nodes throughout a tree structure using textual representation matching, providing
+	a brute-force but effective approach for complex replacements.
 
-5. write_astModule: Converts an IngredientsModule to optimized Python source code and writes it to a file,
-   handling import organization and code formatting in the process.
+5. write_astModule: Converts an IngredientsModule to optimized Python source code and writes it to a file, handling import
+	organization and code formatting in the process.
 
-These transformation tools form the backbone of the code optimization pipeline, enabling sophisticated
-code transformations while maintaining semantic integrity and performance characteristics.
+These transformation tools form the backbone of the code optimization pipeline, enabling sophisticated code transformations while
+maintaining semantic integrity and performance characteristics.
 """
 
 from astToolkit import (
@@ -32,7 +33,7 @@ from collections.abc import Callable, Mapping, Sequence
 from copy import deepcopy
 from os import PathLike
 from pathlib import PurePath
-from typing import Any, cast
+from typing import Any
 from Z0Z_tools import raiseIfNone, writeStringToHere
 import ast
 
@@ -41,21 +42,20 @@ import ast
 # This is most obviously a problem in `ClassIsAndAttribute.targetsIs` because the user needs to pass
 # a function that can take list[ast.expr] as a parameter.
 # I don't know if the following works, but it is interesting.
-# ClassIsAndAttribute.targetsIs(ast.Assign, lambda list_expr: any([IfThis.isSubscriptIdentifier('foldGroups')(node) for node in list_expr]))
+# ClassIsAndAttribute.targetsIs(ast.Assign, lambda list_expr: any([IfThis.isSubscriptIdentifier('foldGroups')(node) for node in list_expr]))  # noqa: ERA001
 
-class cleverNamePrototype:
+class _cleverNamePrototype: # pyright: ignore[reportUnusedClass]
 	@staticmethod
 	def index(at: int) -> Callable[[Sequence[个]], 个]:
 		def workhorse(zzz: Sequence[个]) -> 个:
 			node = zzz[at]
 			# slice?
-			return node
+			return node  # noqa: RET504
 		return workhorse
 
 def makeDictionaryAsyncFunctionDef(astAST: ast.AST) -> dict[str, ast.AsyncFunctionDef]:
 	"""
-	Dictionary of `async def` (***async***hronous ***def***inition) function `name` to
-	`ast.AsyncFunctionDef` (***Async***hronous Function ***Def***inition) `object`.
+	Make a dictionary of `async def` (***async***hronous ***def***inition) function `name` to `ast.AsyncFunctionDef` (***Async***hronous Function ***Def***inition) `object`.
 
 	This function finds all `ast.AsyncFunctionDef` in `astAST` (Abstract Syntax Tree) and makes a
 	dictionary of identifiers as strings paired with `ast.AsyncFunctionDef`.
@@ -67,7 +67,7 @@ def makeDictionaryAsyncFunctionDef(astAST: ast.AST) -> dict[str, ast.AsyncFuncti
 		`ast.AsyncFunctionDef.name` as a string and `ast.AsyncFunctionDef` as an `object`.
 
 	Returns
-	----------
+	-------
 	dictionaryIdentifier2AsyncFunctionDef : dict[str, ast.AsyncFunctionDef]
 		A dictionary of identifier to `ast.AsyncFunctionDef`.
 	"""
@@ -77,7 +77,7 @@ def makeDictionaryAsyncFunctionDef(astAST: ast.AST) -> dict[str, ast.AsyncFuncti
 
 def makeDictionaryClassDef(astAST: ast.AST) -> dict[str, ast.ClassDef]:
 	"""
-	Dictionary of `class` definition `name` to `ast.ClassDef` (***Class*** ***Def***inition) `object`.
+	Make a dictionary of `class` definition `name` to `ast.ClassDef` (***Class*** ***Def***inition) `object`.
 
 	This function finds all `ast.ClassDef` in `astAST` (Abstract Syntax Tree) and makes a dictionary
 	of identifiers as strings paired with `ast.ClassDef`.
@@ -99,8 +99,7 @@ def makeDictionaryClassDef(astAST: ast.AST) -> dict[str, ast.ClassDef]:
 
 def makeDictionaryFunctionDef(astAST: ast.AST) -> dict[str, ast.FunctionDef]:
 	"""
-	Dictionary of `def` (***def***inition) function `name` to `ast.FunctionDef` (Function
-	***Def***inition) `object`.
+	Make a dictionary of `def` (***def***inition) function `name` to `ast.FunctionDef` (Function ***Def***inition) `object`.
 
 	This function finds all `ast.FunctionDef` in `astAST` (Abstract Syntax Tree) and makes a
 	dictionary of identifiers as strings paired with `ast.FunctionDef`.
@@ -122,9 +121,7 @@ def makeDictionaryFunctionDef(astAST: ast.AST) -> dict[str, ast.FunctionDef]:
 
 def makeDictionaryMosDef(astAST: ast.AST) -> dict[str, ast.AsyncFunctionDef | ast.ClassDef | ast.FunctionDef]:
 	"""
-	Dictionary of identifier to `ast.AsyncFunctionDef` (***Async***hronous Function
-	***Def***inition), `ast.ClassDef` (***Class*** ***Def***inition), or `ast.FunctionDef` (Function
-	***Def***inition) `object`.
+	Make a dictionary of identifier to `ast.AsyncFunctionDef` (***Async***hronous Function ***Def***inition), `ast.ClassDef` (***Class*** ***Def***inition), or `ast.FunctionDef` (Function ***Def***inition) `object`.
 
 	This function finds all `ast.AsyncFunctionDef`, `ast.ClassDef`, and `ast.FunctionDef` in
 	`astAST` (Abstract Syntax Tree) and makes a dictionary of identifiers as strings paired with
@@ -147,9 +144,10 @@ def makeDictionaryMosDef(astAST: ast.AST) -> dict[str, ast.AsyncFunctionDef | as
 	dictionaryIdentifier2MosDef.update(makeDictionaryFunctionDef(astAST))
 	return dictionaryIdentifier2MosDef
 
-def inlineFunctionDef(identifierToInline: str, module: ast.Module) -> ast.FunctionDef:
+def inlineFunctionDef(identifierToInline: str, module: ast.Module) -> ast.FunctionDef:  # noqa: C901, PLR0912
 	"""
 	Inline function calls within a function definition to create a self-contained function.
+
 	(AI generated docstring)
 
 	This function takes a function identifier and a module, finds the function definition,
@@ -170,18 +168,19 @@ def inlineFunctionDef(identifierToInline: str, module: ast.Module) -> ast.Functi
 		The inlined function definition as an `ast.FunctionDef` object.
 
 	Raises
-	-------
+	------
 		ValueError: If the function to inline is not found in the module.
 	"""
 	dictionaryFunctionDef: dict[str, ast.FunctionDef] = makeDictionaryFunctionDef(module)
 	try:
 		FunctionDefToInline = dictionaryFunctionDef[identifierToInline]
 	except KeyError as ERRORmessage:
-		raise ValueError(f"FunctionDefToInline not found in dictionaryIdentifier2FunctionDef: {identifierToInline = }") from ERRORmessage
+		message = f"FunctionDefToInline not found in dictionaryIdentifier2FunctionDef: {identifierToInline = }"
+		raise ValueError(message) from ERRORmessage
 
 	listIdentifiersCalledFunctions: list[str] = []
-	findIdentifiersToInline = NodeTourist(findThis = IfThis.isCallToName
-							, doThat = Grab.funcAttribute(cast(Callable[[ast.expr], ast.expr], Grab.idAttribute(cast(Callable[[str], str], Then.appendTo(listIdentifiersCalledFunctions))))))
+	findIdentifiersToInline = NodeTourist[ast.Call, ast.expr](IfThis.isCallToName
+		, Grab.funcAttribute(Grab.idAttribute(Then.appendTo(listIdentifiersCalledFunctions))))
 	findIdentifiersToInline.visit(FunctionDefToInline)
 
 	dictionary4Inlining: dict[str, ast.FunctionDef] = {}
@@ -203,10 +202,8 @@ def inlineFunctionDef(identifierToInline: str, module: ast.Module) -> ast.Functi
 					FunctionDefTarget = dictionaryFunctionDef[identifier]
 					if len(FunctionDefTarget.body) == 1:
 						replacement = NodeTourist(Be.Return, Then.extractIt(DOT.value)).captureLastMatch(FunctionDefTarget)
-
-						findThis = IfThis.isCallIdentifier(identifier)
-						doThat = Then.replaceWith(replacement)
-						inliner = NodeChanger(findThis, doThat)
+						inliner = NodeChanger[ast.Call, ast.expr | None](
+							findThis = IfThis.isCallIdentifier(identifier), doThat = Then.replaceWith(replacement))
 						for astFunctionDef in dictionary4Inlining.values():
 							inliner.visit(astFunctionDef)
 					else:
@@ -227,7 +224,8 @@ def inlineFunctionDef(identifierToInline: str, module: ast.Module) -> ast.Functi
 
 def removeUnusedParameters(ingredientsFunction: IngredientsFunction) -> IngredientsFunction:
 	"""
-	Removes unused parameters from a function's AST definition, return statement, and annotation.
+	Remove unused parameters from a function's AST definition, return statement, and annotation.
+
 	(AI generated docstring)
 
 	This function analyzes the Abstract Syntax Tree (AST) of a given function and removes
@@ -274,6 +272,7 @@ def removeUnusedParameters(ingredientsFunction: IngredientsFunction) -> Ingredie
 def unparseFindReplace(astTree: 木, mappingFindReplaceNodes: Mapping[ast.AST, ast.AST]) -> 木:
 	"""
 	Recursively replace AST (Abstract Syntax Tree) nodes based on a mapping of find-replace pairs.
+
 	(AI generated docstring)
 
 	This function applies brute-force node replacement throughout an AST tree
@@ -310,13 +309,10 @@ def unparseFindReplace(astTree: 木, mappingFindReplaceNodes: Mapping[ast.AST, a
 			astTree = deepcopy(newTree)
 	return newTree
 
-# @overload
-# def write_astModule(astModule: ast.AST, pathFilename: PathLike[Any] | PurePath, packageName: str | None = None) -> None:...
-# @overload
-# def write_astModule(ingredients: IngredientsModule, pathFilename: PathLike[Any] | PurePath, packageName: str | None = None) -> None:...
 def write_astModule(ingredients: IngredientsModule, pathFilename: PathLike[Any] | PurePath, packageName: str | None = None) -> None:
 	"""
 	Convert an IngredientsModule to Python source code and write it to a file.
+
 	(AI generated docstring)
 
 	This function renders an IngredientsModule into executable Python code,
@@ -342,8 +338,6 @@ def write_astModule(ingredients: IngredientsModule, pathFilename: PathLike[Any] 
 	packageName : str | None = None
 		Optional package name to preserve in import optimization.
 	"""
-	# if ingredients:
-	# 	astModule = Make.Module(ingredients.body, ingredients.type_ignores)
 	astModule = Make.Module(ingredients.body, ingredients.type_ignores)
 	ast.fix_missing_locations(astModule)
 	pythonSource: str = raiseIfNone(ast.unparse(astModule))

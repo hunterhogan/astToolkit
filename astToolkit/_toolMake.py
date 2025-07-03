@@ -3349,7 +3349,7 @@ class Make:
             AST object representing a complete type alias declaration.
 
         """
-        return ast.TypeAlias(name=name, type_params=list(type_params), value=value, **keywordArguments)
+        return ast.TypeAlias(name=name, type_params=list(type_params) if type_params else [], value=value, **keywordArguments)
 
     @staticmethod
     def TypeIgnore(lineno: int, tag: str) -> ast.TypeIgnore:

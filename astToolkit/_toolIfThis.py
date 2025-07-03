@@ -126,10 +126,7 @@ class IfThis:
 	@staticmethod
 	def matchesNoDescendant(predicate: Callable[[ast.AST], bool]) -> Callable[[ast.AST], bool]:
 		def workhorse(node: ast.AST) -> bool:
-			for descendant in ast.walk(node):
-				if descendant is not node and predicate(descendant):
-					return False
-			return True
+			return all(not (descendant is not node and predicate(descendant)) for descendant in ast.walk(node))
 		return workhorse
 
 	@staticmethod
