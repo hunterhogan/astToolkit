@@ -1,7 +1,7 @@
 from ast import AST
 from astToolkit import ConstantValueType
 
-def dump(node: AST, *, annotate_fields: bool = True, include_attributes: bool = False, indent: int | str | None = None, show_empty: bool = False) -> str:
+def dump(node: AST, *, annotate_fields: bool = True, include_attributes: bool = False, indent: int | str | None = None, show_empty: bool = False) -> str:  # noqa: C901, PLR0915
 	"""Return a formatted string representation of an AST node.
 
 	(AI generated docstring)
@@ -25,7 +25,7 @@ def dump(node: AST, *, annotate_fields: bool = True, include_attributes: bool = 
 		String representation of the AST node with specified formatting.
 
 	"""
-	def _format(node: ConstantValueType | AST | list[AST] | list[str], level: int = 0) -> tuple[str, bool]:
+	def _format(node: ConstantValueType | AST | list[AST] | list[str], level: int = 0) -> tuple[str, bool]:  # noqa: C901, PLR0912, PLR0915
 		if indent_str is not None:
 			level += 1
 			ImaIndent: str = '\n' + indent_str * level

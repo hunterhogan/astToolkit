@@ -48,17 +48,16 @@ urls = { Donate = "https://www.patreon.com/integrated", Homepage = "https://gith
 dependencies = [
   "Z0Z_tools",
   "autoflake",
-  "python_minifier",
-  "tomli",
-  "typing-extensions>=4.10.0",
+  "typing_extensions>=4.10.0",
 ]
 optional-dependencies = { testing = [
   "mypy",
-  "pytest",
   "pytest-cov",
   "pytest-xdist",
+  "pytest",
   "pyupgrade",
   "setuptools-scm",
+  "tomli",
   "trove_classifiers",
 ] }
 
