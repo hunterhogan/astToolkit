@@ -1,3 +1,4 @@
+# ruff: noqa: A002
 """Automatically generated file, so changes may be overwritten."""
 from astToolkit import (
 	ast_attributes, ast_attributes_int, ast_attributes_type_comment, ConstantValueType, identifierDotAttribute,
@@ -55,7 +56,7 @@ class Make:
     lineno : int
         (line _**n**umer**o**_ (_Latin_ "number")) Position information manually specifying the line number where an AST object begins.
     type_comment : str
-        (a `type` annotation in a comment) Optional string with the type annotation as a comment or `# type: ignore`.
+        (a `type` annotation in a comment) Optional string with the type annotation as a comment or `# noqa: `.
 
     """
 
@@ -2285,7 +2286,7 @@ class Make:
         return ast.MatchSequence(patterns=list(patterns) if patterns else [], **keywordArguments)
 
     @staticmethod
-    def MatchSingleton(value: bool | None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchSingleton:
+    def MatchSingleton(value: bool | None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchSingleton: # noqa: FBT001
         """Create an `ast.MatchSingleton` (Match Singleton) node for matching singleton values.
 
         (AI generated docstring)
@@ -2484,7 +2485,7 @@ class Make:
         body : Sequence[ast.stmt] = []
             List of statements forming the module content.
         type_ignores : Sequence[ast.TypeIgnore] = []
-            (type ***ignore*** comments) List of TypeIgnore objects for `# type: ignore` comments.
+            (type ***ignore*** comments) List of TypeIgnore objects for `# noqa: ` comments.
 
         Returns
         -------
@@ -3315,16 +3316,6 @@ class Make:
         return ast.type_param(**keywordArguments)
 
     @staticmethod
-    @overload
-    def TypeAlias(name: ast.Name, type_params: Sequence[ast.type_param]=[], *, value: ast.expr, **keywordArguments: Unpack[ast_attributes]) -> ast.TypeAlias:
-        ...
-
-    @staticmethod
-    @overload
-    def TypeAlias(name: ast.Name, type_params: Sequence[ast.type_param], value: ast.expr, **keywordArguments: Unpack[ast_attributes]) -> ast.TypeAlias:
-        ...
-
-    @staticmethod
     def TypeAlias(name: ast.Name, type_params: Sequence[ast.type_param], value: ast.expr, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeAlias: # pyright: ignore[reportInconsistentOverload]
         """Make a type alias definition AST object for `type` statement declarations.
 
@@ -3353,11 +3344,11 @@ class Make:
 
     @staticmethod
     def TypeIgnore(lineno: int, tag: str) -> ast.TypeIgnore:
-        """Make a type ignore comment AST object for `# type: ignore` directives.
+        """Make a type ignore comment AST object for `# noqa: ` directives.
 
         (AI generated docstring)
 
-        The `ast.TypeIgnore` (this Type (`type`) error, Ignore it) object represents `# type: ignore` comments that
+        The `ast.TypeIgnore` (this Type (`type`) error, Ignore it) object represents `# noqa: ` comments that
         instruct static type checkers to skip type analysis for specific lines.
         Includes optional tags for categorizing different types of ignores.
 
@@ -3375,7 +3366,7 @@ class Make:
 
         Examples
         --------
-        Creates AST equivalent to: # type: ignore (on line 42)
+        Creates AST equivalent to: # noqa:  (on line 42)
         ```python
         simpleIgnore = Make.TypeIgnore(42, '')
         ```

@@ -1,1119 +1,1902 @@
-from collections import deque
-from collections.abc import Callable
+# ruff: noqa: A001
+from astToolkit import ConstantValueType
+from collections.abc import Sequence
 from typing import Any
 from typing_extensions import TypeIs
 import ast
 
 class Find:
 
-    def __init__(self, queueOfTruth: list[Callable[[Any], tuple[bool, Any]]] | None=None, queueOfFind_attr: deque[str] | None=None) -> None:
-        self.queueOfTruth = queueOfTruth or []
-        self.queueOfFind_attr = queueOfFind_attr or deque()
-
-    def __getattribute__(self, attr: str) -> Any:
-        if object.__getattribute__(self, attr):
-            if self.queueOfFind_attr:
-                pass
-            self.queueOfFind_attr.append(attr)
-            return self
-
-        def attribute_checker(attrCurrent: Any) -> tuple[bool, Any]:
-            hasAttributeCheck = hasattr(attrCurrent, attr)
-            if hasAttributeCheck:
-                return (hasAttributeCheck, getattr(attrCurrent, attr))
-            return (hasAttributeCheck, attrCurrent)
-        Z0Z_ImaQueue = object.__getattribute__(self, 'queueOfTruth')
-        dontMutateMyQueue: list[Callable[[Any], tuple[bool, Any]]] = [*Z0Z_ImaQueue, attribute_checker]
-        return Find(dontMutateMyQueue)
-
-    def __call__(self, node: ast.AST) -> bool:
-        attrCurrent: Any = node
-        for trueFalseCallable in self.queueOfTruth:
-            Ima_bool, attrNext = trueFalseCallable(attrCurrent)
-            if not Ima_bool:
-                return False
-            attrCurrent = attrNext
-        return True
-    'A comprehensive suite of functions for AST class identification and type narrowing.\n\n    `class` `Be` has a method for each `ast.AST` subclass, also called "node type", to perform type\n    checking while enabling compile-time type narrowing through `TypeIs` annotations. This tool\n    forms the foundation of type-safe AST analysis and transformation throughout astToolkit.\n\n    Each method takes an `ast.AST` node and returns a `TypeIs` that confirms both runtime type\n    safety and enables static type checkers to narrow the node type in conditional contexts. This\n    eliminates the need for unsafe casting while providing comprehensive coverage of Python\'s AST\n    node hierarchy.\n\n    Methods correspond directly to Python AST node types, following the naming convention of the AST\n    classes themselves. Coverage includes expression nodes (`Add`, `Call`, `Name`), statement nodes\n    (`Assign`, `FunctionDef`, `Return`), operator nodes (`And`, `Or`, `Not`), and structural nodes\n    (`Module`, `arguments`, `keyword`).\n\n    The `class` is the primary type-checker in the antecedent-action pattern, where predicates\n    identify target nodes and actions, uh... act on nodes and their attributes. Type guards from\n    this class are commonly used as building blocks in `IfThis` predicates and directly as\n    `findThis` parameters in visitor classes.\n\n    Parameters\n    ----------\n    node: ast.AST\n        AST node to test for specific type membership\n\n    Returns\n    -------\n    typeIs: TypeIs\n        `TypeIs` enabling both runtime validation and static type narrowing\n\n    Examples\n    --------\n    Type-safe node processing with automatic type narrowing:\n\n    ```python\n        if Be.FunctionDef(node):\n            functionName = node.name  # Type-safe access to name attribute parameterCount =\n            len(node.args.args)\n    ```\n\n    Using type guards in visitor patterns:\n\n    ```python\n        NodeTourist(Be.Return, Then.extractIt(DOT.value)).visit(functionNode)\n    ```\n\n    Type-safe access to attributes of specific node types:\n\n    ```python\n        if Be.Call(node) and Be.Name(node.func):\n            callableName = node.func.id  # Type-safe access to function name\n    ```\n\n    '
-
     @classmethod
-    def Add(cls, node: ast.AST) -> TypeIs[ast.Add]:
-        """`Be.Add` matches `class` `ast.Add`.
+    def at(cls, getable: Any, index: int, /) -> object:
+        return getable.__getitem__(index)
 
-        This `class` is associated with Python delimiters '+=' and Python operators '+'.
-        It is a subclass of `ast.operator`.
-        """
-        return isinstance(node, ast.Add)
+    class Add:
 
-    @classmethod
-    def alias(cls, node: ast.AST) -> TypeIs[ast.alias]:
-        """`Be.alias` matches `class` `ast.alias`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Add]:
+            return isinstance(node, ast.Add)
 
-        This `class` is associated with Python keywords `as`.
-        It is a subclass of `ast.AST`.
-        """
-        return isinstance(node, ast.alias)
+    class alias:
 
-    @classmethod
-    def And(cls, node: ast.AST) -> TypeIs[ast.And]:
-        """`Be.And` matches `class` `ast.And`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.alias]:
+            return isinstance(node, ast.alias)
 
-        This `class` is associated with Python keywords `and`.
-        It is a subclass of `ast.boolop`.
-        """
-        return isinstance(node, ast.And)
+        class name:
 
-    @classmethod
-    def AnnAssign(cls, node: ast.AST) -> TypeIs[ast.AnnAssign]:
-        """`Be.AnnAssign`, ***Ann***otated ***Assign***ment, matches `class` `ast.AnnAssign`.
+            @classmethod
+            def __call__(cls, node: ast.alias) -> str:
+                return node.name
 
-        This `class` is associated with Python delimiters ':, ='.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.AnnAssign)
+        class asname:
 
-    @classmethod
-    def arg(cls, node: ast.AST) -> TypeIs[ast.arg]:
-        """`Be.arg`, ***arg***ument, matches `class` `ast.arg`.
+            @classmethod
+            def __call__(cls, node: ast.alias) -> str | None:
+                return node.asname
 
-        It is a subclass of `ast.AST`.
-        """
-        return isinstance(node, ast.arg)
+    class And:
 
-    @classmethod
-    def arguments(cls, node: ast.AST) -> TypeIs[ast.arguments]:
-        """`Be.arguments` matches `class` `ast.arguments`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.And]:
+            return isinstance(node, ast.And)
 
-        This `class` is associated with Python delimiters ','.
-        It is a subclass of `ast.AST`.
-        """
-        return isinstance(node, ast.arguments)
+    class AnnAssign:
 
-    @classmethod
-    def Assert(cls, node: ast.AST) -> TypeIs[ast.Assert]:
-        """`Be.Assert` matches `class` `ast.Assert`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.AnnAssign]:
+            return isinstance(node, ast.AnnAssign)
 
-        This `class` is associated with Python keywords `assert`.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.Assert)
+        class target:
 
-    @classmethod
-    def Assign(cls, node: ast.AST) -> TypeIs[ast.Assign]:
-        """`Be.Assign` matches `class` `ast.Assign`.
+            @classmethod
+            def __call__(cls, node: ast.AnnAssign) -> ast.Name | ast.Attribute | ast.Subscript:
+                return node.target
 
-        This `class` is associated with Python delimiters '='.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.Assign)
+        class annotation:
 
-    @classmethod
-    def AST(cls, node: ast.AST) -> TypeIs[ast.AST]:
-        """`Be.AST`, Abstract Syntax Tree, matches any of `class` `ast.withitem` | `ast.expr_context` | `ast.cmpop` | `ast.Exec` | `ast.alias` | `ast.stmt` | `ast.match_case` | `ast.arg` | `ast.unaryop` | `ast.arguments` | `ast._NoParent` | `ast.keyword` | `ast.expr` | `ast.mod` | `ast.pattern` | `ast.type_param` | `ast.type_ignore` | `ast.operator` | `ast.comprehension` | `ast.NodeList` | `ast.excepthandler` | `ast.boolop` | `ast.slice` | `ast.AST`.
+            @classmethod
+            def __call__(cls, node: ast.AnnAssign) -> ast.expr:
+                return node.annotation
 
-        It is a subclass of `ast.object`.
-        """
-        return isinstance(node, ast.AST)
+        class value:
 
-    @classmethod
-    def AsyncFor(cls, node: ast.AST) -> TypeIs[ast.AsyncFor]:
-        """`Be.AsyncFor`, ***Async***hronous For loop, matches `class` `ast.AsyncFor`.
+            @classmethod
+            def __call__(cls, node: ast.AnnAssign) -> ast.expr | None:
+                return node.value
 
-        This `class` is associated with Python keywords `async for` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.AsyncFor)
+        class simple:
 
-    @classmethod
-    def AsyncFunctionDef(cls, node: ast.AST) -> TypeIs[ast.AsyncFunctionDef]:
-        """`Be.AsyncFunctionDef`, ***Async***hronous Function ***Def***inition, matches `class` `ast.AsyncFunctionDef`.
+            @classmethod
+            def __call__(cls, node: ast.AnnAssign) -> int:
+                return node.simple
 
-        This `class` is associated with Python keywords `async def` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.AsyncFunctionDef)
+    class arg:
 
-    @classmethod
-    def AsyncWith(cls, node: ast.AST) -> TypeIs[ast.AsyncWith]:
-        """`Be.AsyncWith`, ***Async***hronous With statement, matches `class` `ast.AsyncWith`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.arg]:
+            return isinstance(node, ast.arg)
 
-        This `class` is associated with Python keywords `async with` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.AsyncWith)
+        class arg:
 
-    @classmethod
-    def Attribute(cls, node: ast.AST) -> TypeIs[ast.Attribute]:
-        """`Be.Attribute` matches `class` `ast.Attribute`.
+            @classmethod
+            def __call__(cls, node: ast.arg) -> str:
+                return node.arg
 
-        This `class` is associated with Python delimiters '.'.
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.Attribute)
+        class annotation:
 
-    @classmethod
-    def AugAssign(cls, node: ast.AST) -> TypeIs[ast.AugAssign]:
-        """`Be.AugAssign`, ***Aug***mented ***Assign***ment, matches `class` `ast.AugAssign`.
+            @classmethod
+            def __call__(cls, node: ast.arg) -> ast.expr | None:
+                return node.annotation
 
-        This `class` is associated with Python delimiters '+=, -=, *=, /=, //=, %=, **=, |=, &=, ^=, <<=, >>='.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.AugAssign)
+        class type_comment:
 
-    @classmethod
-    def Await(cls, node: ast.AST) -> TypeIs[ast.Await]:
-        """`Be.Await`, ***Await*** the asynchronous operation, matches `class` `ast.Await`.
+            @classmethod
+            def __call__(cls, node: ast.arg) -> str | None:
+                return node.type_comment
 
-        This `class` is associated with Python keywords `await`.
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.Await)
+    class arguments:
 
-    @classmethod
-    def BinOp(cls, node: ast.AST) -> TypeIs[ast.BinOp]:
-        """`Be.BinOp`, ***Bin***ary ***Op***eration, matches `class` `ast.BinOp`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.arguments]:
+            return isinstance(node, ast.arguments)
 
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.BinOp)
+        class posonlyargs:
 
-    @classmethod
-    def BitAnd(cls, node: ast.AST) -> TypeIs[ast.BitAnd]:
-        """`Be.BitAnd`, ***Bit***wise And, matches `class` `ast.BitAnd`.
+            @classmethod
+            def __call__(cls, node: ast.arguments) -> list[ast.arg]:
+                return node.posonlyargs
 
-        This `class` is associated with Python operators '&'.
-        It is a subclass of `ast.operator`.
-        """
-        return isinstance(node, ast.BitAnd)
+        class args:
 
-    @classmethod
-    def BitOr(cls, node: ast.AST) -> TypeIs[ast.BitOr]:
-        """`Be.BitOr`, ***Bit***wise Or, matches `class` `ast.BitOr`.
+            @classmethod
+            def __call__(cls, node: ast.arguments) -> list[ast.arg]:
+                return node.args
 
-        This `class` is associated with Python operators '|'.
-        It is a subclass of `ast.operator`.
-        """
-        return isinstance(node, ast.BitOr)
+        class vararg:
 
-    @classmethod
-    def BitXor(cls, node: ast.AST) -> TypeIs[ast.BitXor]:
-        """`Be.BitXor`, ***Bit***wise e***X***clusive Or, matches `class` `ast.BitXor`.
+            @classmethod
+            def __call__(cls, node: ast.arguments) -> ast.arg | None:
+                return node.vararg
 
-        This `class` is associated with Python operators '^'.
-        It is a subclass of `ast.operator`.
-        """
-        return isinstance(node, ast.BitXor)
+        class kwonlyargs:
 
-    @classmethod
-    def BoolOp(cls, node: ast.AST) -> TypeIs[ast.BoolOp]:
-        """`Be.BoolOp`, ***Bool***ean ***Op***eration, matches `class` `ast.BoolOp`.
+            @classmethod
+            def __call__(cls, node: ast.arguments) -> list[ast.arg]:
+                return node.kwonlyargs
 
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.BoolOp)
+        class kw_defaults:
 
-    @classmethod
-    def boolop(cls, node: ast.AST) -> TypeIs[ast.boolop]:
-        """`Be.boolop`, ***bool***ean ***op***erator, matches any of `class` `ast.Or` | `ast.And` | `ast.boolop`.
+            @classmethod
+            def __call__(cls, node: ast.arguments) -> Sequence[ast.expr | None]:
+                return node.kw_defaults
 
-        It is a subclass of `ast.AST`.
-        """
-        return isinstance(node, ast.boolop)
+        class kwarg:
 
-    @classmethod
-    def Break(cls, node: ast.AST) -> TypeIs[ast.Break]:
-        """`Be.Break` matches `class` `ast.Break`.
+            @classmethod
+            def __call__(cls, node: ast.arguments) -> ast.arg | None:
+                return node.kwarg
 
-        This `class` is associated with Python keywords `break`.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.Break)
+        class defaults:
 
-    @classmethod
-    def Call(cls, node: ast.AST) -> TypeIs[ast.Call]:
-        """`Be.Call` matches `class` `ast.Call`.
+            @classmethod
+            def __call__(cls, node: ast.arguments) -> Sequence[ast.expr]:
+                return node.defaults
 
-        This `class` is associated with Python delimiters '()'.
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.Call)
+    class Assert:
 
-    @classmethod
-    def ClassDef(cls, node: ast.AST) -> TypeIs[ast.ClassDef]:
-        """`Be.ClassDef`, ***Class*** ***Def***inition, matches `class` `ast.ClassDef`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Assert]:
+            return isinstance(node, ast.Assert)
 
-        This `class` is associated with Python keywords `class` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.ClassDef)
+        class test:
 
-    @classmethod
-    def cmpop(cls, node: ast.AST) -> TypeIs[ast.cmpop]:
-        """`Be.cmpop`, ***c***o***mp***arison ***op***erator, matches any of `class` `ast.NotEq` | `ast.In` | `ast.cmpop` | `ast.Lt` | `ast.GtE` | `ast.Gt` | `ast.IsNot` | `ast.Is` | `ast.Eq` | `ast.LtE` | `ast.NotIn`.
+            @classmethod
+            def __call__(cls, node: ast.Assert) -> ast.expr:
+                return node.test
 
-        It is a subclass of `ast.AST`.
-        """
-        return isinstance(node, ast.cmpop)
+        class msg:
 
-    @classmethod
-    def Compare(cls, node: ast.AST) -> TypeIs[ast.Compare]:
-        """`Be.Compare` matches `class` `ast.Compare`.
+            @classmethod
+            def __call__(cls, node: ast.Assert) -> ast.expr | None:
+                return node.msg
 
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.Compare)
+    class Assign:
 
-    @classmethod
-    def comprehension(cls, node: ast.AST) -> TypeIs[ast.comprehension]:
-        """`Be.comprehension` matches `class` `ast.comprehension`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Assign]:
+            return isinstance(node, ast.Assign)
 
-        It is a subclass of `ast.AST`.
-        """
-        return isinstance(node, ast.comprehension)
+        class targets:
 
-    @classmethod
-    def Constant(cls, node: ast.AST) -> TypeIs[ast.Constant]:
-        """`Be.Constant` matches any of `class` `ast.Str` | `ast.Num` | `ast.Ellipsis` | `ast.Bytes` | `ast.Constant` | `ast.NameConstant`.
+            @classmethod
+            def __call__(cls, node: ast.Assign) -> Sequence[ast.expr]:
+                return node.targets
 
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.Constant)
+        class value:
 
-    @classmethod
-    def Continue(cls, node: ast.AST) -> TypeIs[ast.Continue]:
-        """`Be.Continue` matches `class` `ast.Continue`.
+            @classmethod
+            def __call__(cls, node: ast.Assign) -> ast.expr:
+                return node.value
 
-        This `class` is associated with Python keywords `continue`.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.Continue)
+        class type_comment:
 
-    @classmethod
-    def Del(cls, node: ast.AST) -> TypeIs[ast.Del]:
-        """`Be.Del`, ***Del***ete, matches `class` `ast.Del`.
+            @classmethod
+            def __call__(cls, node: ast.Assign) -> str | None:
+                return node.type_comment
 
-        It is a subclass of `ast.expr_context`.
-        """
-        return isinstance(node, ast.Del)
+    class AST:
 
-    @classmethod
-    def Delete(cls, node: ast.AST) -> TypeIs[ast.Delete]:
-        """`Be.Delete` matches `class` `ast.Delete`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.AST]:
+            return isinstance(node, ast.AST)
 
-        This `class` is associated with Python keywords `del`.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.Delete)
+    class AsyncFor:
 
-    @classmethod
-    def Dict(cls, node: ast.AST) -> TypeIs[ast.Dict]:
-        """`Be.Dict`, ***Dict***ionary, matches `class` `ast.Dict`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.AsyncFor]:
+            return isinstance(node, ast.AsyncFor)
 
-        This `class` is associated with Python delimiters '{}'.
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.Dict)
+        class target:
 
-    @classmethod
-    def DictComp(cls, node: ast.AST) -> TypeIs[ast.DictComp]:
-        """`Be.DictComp`, ***Dict***ionary ***c***o***mp***rehension, matches `class` `ast.DictComp`.
+            @classmethod
+            def __call__(cls, node: ast.AsyncFor) -> ast.expr:
+                return node.target
 
-        This `class` is associated with Python delimiters '{}'.
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.DictComp)
+        class iter:
 
-    @classmethod
-    def Div(cls, node: ast.AST) -> TypeIs[ast.Div]:
-        """`Be.Div`, ***Div***ision, matches `class` `ast.Div`.
+            @classmethod
+            def __call__(cls, node: ast.AsyncFor) -> ast.expr:
+                return node.iter
 
-        This `class` is associated with Python delimiters '/=' and Python operators '/'.
-        It is a subclass of `ast.operator`.
-        """
-        return isinstance(node, ast.Div)
+        class body:
 
-    @classmethod
-    def Eq(cls, node: ast.AST) -> TypeIs[ast.Eq]:
-        """`Be.Eq`, is ***Eq***ual to, matches `class` `ast.Eq`.
+            @classmethod
+            def __call__(cls, node: ast.AsyncFor) -> Sequence[ast.stmt]:
+                return node.body
 
-        This `class` is associated with Python operators '=='.
-        It is a subclass of `ast.cmpop`.
-        """
-        return isinstance(node, ast.Eq)
+        class orelse:
 
-    @classmethod
-    def ExceptHandler(cls, node: ast.AST) -> TypeIs[ast.ExceptHandler]:
-        """`Be.ExceptHandler`, ***Except***ion ***Handler***, matches `class` `ast.ExceptHandler`.
+            @classmethod
+            def __call__(cls, node: ast.AsyncFor) -> Sequence[ast.stmt]:
+                return node.orelse
 
-        This `class` is associated with Python keywords `except`.
-        It is a subclass of `ast.excepthandler`.
-        """
-        return isinstance(node, ast.ExceptHandler)
+        class type_comment:
 
-    @classmethod
-    def excepthandler(cls, node: ast.AST) -> TypeIs[ast.excepthandler]:
-        """`Be.excepthandler`, ***except***ion ***handler***, matches any of `class` `ast.excepthandler` | `ast.ExceptHandler`.
+            @classmethod
+            def __call__(cls, node: ast.AsyncFor) -> str | None:
+                return node.type_comment
 
-        It is a subclass of `ast.AST`.
-        """
-        return isinstance(node, ast.excepthandler)
+    class AsyncFunctionDef:
 
-    @classmethod
-    def expr(cls, node: ast.AST) -> TypeIs[ast.expr]:
-        """`Be.expr`, ***expr***ession, matches any of `class` `ast.List` | `ast.SetComp` | `ast.Constant` | `ast.UnaryOp` | `ast.DictComp` | `ast.Dict` | `ast.Slice` | `ast.Await` | `ast.ListComp` | `ast.NamedExpr` | `ast.Tuple` | `ast.Attribute` | `ast.Starred` | `ast.Subscript` | `ast.BinOp` | `ast.expr` | `ast.FormattedValue` | `ast.GeneratorExp` | `ast.JoinedStr` | `ast.Name` | `ast.BoolOp` | `ast.IfExp` | `ast.Call` | `ast.YieldFrom` | `ast.Compare` | `ast.Lambda` | `ast.Set` | `ast.Yield`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.AsyncFunctionDef]:
+            return isinstance(node, ast.AsyncFunctionDef)
 
-        It is a subclass of `ast.AST`.
-        """
-        return isinstance(node, ast.expr)
+        class name:
 
-    @classmethod
-    def Expr(cls, node: ast.AST) -> TypeIs[ast.Expr]:
-        """`Be.Expr`, ***Expr***ession, matches `class` `ast.Expr`.
+            @classmethod
+            def __call__(cls, node: ast.AsyncFunctionDef) -> str:
+                return node.name
 
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.Expr)
+        class args:
 
-    @classmethod
-    def expr_context(cls, node: ast.AST) -> TypeIs[ast.expr_context]:
-        """`Be.expr_context`, ***expr***ession ***context***, matches any of `class` `ast.expr_context` | `ast.AugLoad` | `ast.Load` | `ast.Store` | `ast.AugStore` | `ast.Param` | `ast.Del`.
+            @classmethod
+            def __call__(cls, node: ast.AsyncFunctionDef) -> ast.arguments:
+                return node.args
 
-        It is a subclass of `ast.AST`.
-        """
-        return isinstance(node, ast.expr_context)
+        class body:
 
-    @classmethod
-    def Expression(cls, node: ast.AST) -> TypeIs[ast.Expression]:
-        """`Be.Expression` matches `class` `ast.Expression`.
+            @classmethod
+            def __call__(cls, node: ast.AsyncFunctionDef) -> Sequence[ast.stmt]:
+                return node.body
 
-        It is a subclass of `ast.mod`.
-        """
-        return isinstance(node, ast.Expression)
+        class decorator_list:
 
-    @classmethod
-    def FloorDiv(cls, node: ast.AST) -> TypeIs[ast.FloorDiv]:
-        """`Be.FloorDiv`, Floor ***Div***ision, matches `class` `ast.FloorDiv`.
+            @classmethod
+            def __call__(cls, node: ast.AsyncFunctionDef) -> Sequence[ast.expr]:
+                return node.decorator_list
 
-        This `class` is associated with Python delimiters '//=' and Python operators '//'.
-        It is a subclass of `ast.operator`.
-        """
-        return isinstance(node, ast.FloorDiv)
+        class returns:
 
-    @classmethod
-    def For(cls, node: ast.AST) -> TypeIs[ast.For]:
-        """`Be.For` matches `class` `ast.For`.
+            @classmethod
+            def __call__(cls, node: ast.AsyncFunctionDef) -> ast.expr | None:
+                return node.returns
 
-        This `class` is associated with Python keywords `for` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.For)
+        class type_comment:
 
-    @classmethod
-    def FormattedValue(cls, node: ast.AST) -> TypeIs[ast.FormattedValue]:
-        """`Be.FormattedValue` matches `class` `ast.FormattedValue`.
+            @classmethod
+            def __call__(cls, node: ast.AsyncFunctionDef) -> str | None:
+                return node.type_comment
 
-        This `class` is associated with Python delimiters '{}'.
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.FormattedValue)
+        class type_params:
 
-    @classmethod
-    def FunctionDef(cls, node: ast.AST) -> TypeIs[ast.FunctionDef]:
-        """`Be.FunctionDef`, Function ***Def***inition, matches `class` `ast.FunctionDef`.
+            @classmethod
+            def __call__(cls, node: ast.AsyncFunctionDef) -> Sequence[ast.type_param]:
+                return node.type_params
 
-        This `class` is associated with Python keywords `def` and Python delimiters '()'.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.FunctionDef)
+    class AsyncWith:
 
-    @classmethod
-    def FunctionType(cls, node: ast.AST) -> TypeIs[ast.FunctionType]:
-        """`Be.FunctionType`, Function Type, matches `class` `ast.FunctionType`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.AsyncWith]:
+            return isinstance(node, ast.AsyncWith)
 
-        It is a subclass of `ast.mod`.
-        """
-        return isinstance(node, ast.FunctionType)
+        class items:
 
-    @classmethod
-    def GeneratorExp(cls, node: ast.AST) -> TypeIs[ast.GeneratorExp]:
-        """`Be.GeneratorExp`, Generator ***Exp***ression, matches `class` `ast.GeneratorExp`.
+            @classmethod
+            def __call__(cls, node: ast.AsyncWith) -> list[ast.withitem]:
+                return node.items
 
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.GeneratorExp)
+        class body:
 
-    @classmethod
-    def Global(cls, node: ast.AST) -> TypeIs[ast.Global]:
-        """`Be.Global` matches `class` `ast.Global`.
+            @classmethod
+            def __call__(cls, node: ast.AsyncWith) -> Sequence[ast.stmt]:
+                return node.body
 
-        This `class` is associated with Python keywords `global`.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.Global)
+        class type_comment:
 
-    @classmethod
-    def Gt(cls, node: ast.AST) -> TypeIs[ast.Gt]:
-        """`Be.Gt`, is Greater than, matches `class` `ast.Gt`.
+            @classmethod
+            def __call__(cls, node: ast.AsyncWith) -> str | None:
+                return node.type_comment
 
-        This `class` is associated with Python operators '>'.
-        It is a subclass of `ast.cmpop`.
-        """
-        return isinstance(node, ast.Gt)
+    class Attribute:
 
-    @classmethod
-    def GtE(cls, node: ast.AST) -> TypeIs[ast.GtE]:
-        """`Be.GtE`, is Greater than or Equal to, matches `class` `ast.GtE`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Attribute]:
+            return isinstance(node, ast.Attribute)
 
-        This `class` is associated with Python operators '>='.
-        It is a subclass of `ast.cmpop`.
-        """
-        return isinstance(node, ast.GtE)
+        class value:
 
-    @classmethod
-    def If(cls, node: ast.AST) -> TypeIs[ast.If]:
-        """`Be.If` matches `class` `ast.If`.
+            @classmethod
+            def __call__(cls, node: ast.Attribute) -> ast.expr:
+                return node.value
 
-        This `class` is associated with Python keywords `if` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.If)
+        class attr:
 
-    @classmethod
-    def IfExp(cls, node: ast.AST) -> TypeIs[ast.IfExp]:
-        """`Be.IfExp`, If ***Exp***ression, matches `class` `ast.IfExp`.
+            @classmethod
+            def __call__(cls, node: ast.Attribute) -> str:
+                return node.attr
 
-        This `class` is associated with Python keywords `if`.
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.IfExp)
+        class ctx:
 
-    @classmethod
-    def Import(cls, node: ast.AST) -> TypeIs[ast.Import]:
-        """`Be.Import` matches `class` `ast.Import`.
+            @classmethod
+            def __call__(cls, node: ast.Attribute) -> ast.expr_context:
+                return node.ctx
 
-        This `class` is associated with Python keywords `import`.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.Import)
+    class AugAssign:
 
-    @classmethod
-    def ImportFrom(cls, node: ast.AST) -> TypeIs[ast.ImportFrom]:
-        """`Be.ImportFrom` matches `class` `ast.ImportFrom`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.AugAssign]:
+            return isinstance(node, ast.AugAssign)
 
-        This `class` is associated with Python keywords `import`.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.ImportFrom)
+        class target:
 
-    @classmethod
-    def In(cls, node: ast.AST) -> TypeIs[ast.In]:
-        """`Be.In` matches `class` `ast.In`.
+            @classmethod
+            def __call__(cls, node: ast.AugAssign) -> ast.Name | ast.Attribute | ast.Subscript:
+                return node.target
 
-        This `class` is associated with Python keywords `in`.
-        It is a subclass of `ast.cmpop`.
-        """
-        return isinstance(node, ast.In)
+        class op:
 
-    @classmethod
-    def Interactive(cls, node: ast.AST) -> TypeIs[ast.Interactive]:
-        """`Be.Interactive`, Interactive mode, matches `class` `ast.Interactive`.
+            @classmethod
+            def __call__(cls, node: ast.AugAssign) -> ast.operator:
+                return node.op
 
-        It is a subclass of `ast.mod`.
-        """
-        return isinstance(node, ast.Interactive)
+        class value:
 
-    @classmethod
-    def Invert(cls, node: ast.AST) -> TypeIs[ast.Invert]:
-        """`Be.Invert` matches `class` `ast.Invert`.
+            @classmethod
+            def __call__(cls, node: ast.AugAssign) -> ast.expr:
+                return node.value
 
-        This `class` is associated with Python operators '~'.
-        It is a subclass of `ast.unaryop`.
-        """
-        return isinstance(node, ast.Invert)
+    class Await:
 
-    @classmethod
-    def Is(cls, node: ast.AST) -> TypeIs[ast.Is]:
-        """`Be.Is` matches `class` `ast.Is`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Await]:
+            return isinstance(node, ast.Await)
 
-        This `class` is associated with Python keywords `is`.
-        It is a subclass of `ast.cmpop`.
-        """
-        return isinstance(node, ast.Is)
+        class value:
 
-    @classmethod
-    def IsNot(cls, node: ast.AST) -> TypeIs[ast.IsNot]:
-        """`Be.IsNot` matches `class` `ast.IsNot`.
+            @classmethod
+            def __call__(cls, node: ast.Await) -> ast.expr:
+                return node.value
 
-        This `class` is associated with Python keywords `is not`.
-        It is a subclass of `ast.cmpop`.
-        """
-        return isinstance(node, ast.IsNot)
+    class BinOp:
 
-    @classmethod
-    def JoinedStr(cls, node: ast.AST) -> TypeIs[ast.JoinedStr]:
-        """`Be.JoinedStr`, Joined ***Str***ing, matches `class` `ast.JoinedStr`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.BinOp]:
+            return isinstance(node, ast.BinOp)
 
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.JoinedStr)
+        class left:
 
-    @classmethod
-    def keyword(cls, node: ast.AST) -> TypeIs[ast.keyword]:
-        """`Be.keyword` matches `class` `ast.keyword`.
+            @classmethod
+            def __call__(cls, node: ast.BinOp) -> ast.expr:
+                return node.left
 
-        This `class` is associated with Python delimiters '='.
-        It is a subclass of `ast.AST`.
-        """
-        return isinstance(node, ast.keyword)
+        class op:
 
-    @classmethod
-    def Lambda(cls, node: ast.AST) -> TypeIs[ast.Lambda]:
-        """`Be.Lambda`, Lambda function, matches `class` `ast.Lambda`.
+            @classmethod
+            def __call__(cls, node: ast.BinOp) -> ast.operator:
+                return node.op
 
-        This `class` is associated with Python keywords `lambda` and Python delimiters ':'.
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.Lambda)
+        class right:
 
-    @classmethod
-    def List(cls, node: ast.AST) -> TypeIs[ast.List]:
-        """`Be.List` matches `class` `ast.List`.
+            @classmethod
+            def __call__(cls, node: ast.BinOp) -> ast.expr:
+                return node.right
 
-        This `class` is associated with Python delimiters '[]'.
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.List)
+    class BitAnd:
 
-    @classmethod
-    def ListComp(cls, node: ast.AST) -> TypeIs[ast.ListComp]:
-        """`Be.ListComp`, List ***c***o***mp***rehension, matches `class` `ast.ListComp`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.BitAnd]:
+            return isinstance(node, ast.BitAnd)
 
-        This `class` is associated with Python delimiters '[]'.
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.ListComp)
+    class BitOr:
 
-    @classmethod
-    def Load(cls, node: ast.AST) -> TypeIs[ast.Load]:
-        """`Be.Load` matches `class` `ast.Load`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.BitOr]:
+            return isinstance(node, ast.BitOr)
 
-        It is a subclass of `ast.expr_context`.
-        """
-        return isinstance(node, ast.Load)
+    class BitXor:
 
-    @classmethod
-    def LShift(cls, node: ast.AST) -> TypeIs[ast.LShift]:
-        """`Be.LShift`, Left Shift, matches `class` `ast.LShift`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.BitXor]:
+            return isinstance(node, ast.BitXor)
 
-        This `class` is associated with Python delimiters '<<=' and Python operators '<<'.
-        It is a subclass of `ast.operator`.
-        """
-        return isinstance(node, ast.LShift)
+    class BoolOp:
 
-    @classmethod
-    def Lt(cls, node: ast.AST) -> TypeIs[ast.Lt]:
-        """`Be.Lt`, is Less than, matches `class` `ast.Lt`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.BoolOp]:
+            return isinstance(node, ast.BoolOp)
 
-        This `class` is associated with Python operators '<'.
-        It is a subclass of `ast.cmpop`.
-        """
-        return isinstance(node, ast.Lt)
+        class op:
 
-    @classmethod
-    def LtE(cls, node: ast.AST) -> TypeIs[ast.LtE]:
-        """`Be.LtE`, is Less than or Equal to, matches `class` `ast.LtE`.
+            @classmethod
+            def __call__(cls, node: ast.BoolOp) -> ast.boolop:
+                return node.op
 
-        This `class` is associated with Python operators '<='.
-        It is a subclass of `ast.cmpop`.
-        """
-        return isinstance(node, ast.LtE)
+        class values:
 
-    @classmethod
-    def Match(cls, node: ast.AST) -> TypeIs[ast.Match]:
-        """`Be.Match`, Match this, matches `class` `ast.Match`.
+            @classmethod
+            def __call__(cls, node: ast.BoolOp) -> Sequence[ast.expr]:
+                return node.values
 
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.Match)
+    class boolop:
 
-    @classmethod
-    def match_case(cls, node: ast.AST) -> TypeIs[ast.match_case]:
-        """`Be.match_case`, match case, matches `class` `ast.match_case`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.boolop]:
+            return isinstance(node, ast.boolop)
 
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.AST`.
-        """
-        return isinstance(node, ast.match_case)
+    class Break:
 
-    @classmethod
-    def MatchAs(cls, node: ast.AST) -> TypeIs[ast.MatchAs]:
-        """`Be.MatchAs`, Match As, matches `class` `ast.MatchAs`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Break]:
+            return isinstance(node, ast.Break)
 
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.pattern`.
-        """
-        return isinstance(node, ast.MatchAs)
+    class Call:
 
-    @classmethod
-    def MatchClass(cls, node: ast.AST) -> TypeIs[ast.MatchClass]:
-        """`Be.MatchClass`, Match Class, matches `class` `ast.MatchClass`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Call]:
+            return isinstance(node, ast.Call)
 
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.pattern`.
-        """
-        return isinstance(node, ast.MatchClass)
+        class func:
 
-    @classmethod
-    def MatchMapping(cls, node: ast.AST) -> TypeIs[ast.MatchMapping]:
-        """`Be.MatchMapping`, Match Mapping, matches `class` `ast.MatchMapping`.
+            @classmethod
+            def __call__(cls, node: ast.Call) -> ast.expr:
+                return node.func
 
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.pattern`.
-        """
-        return isinstance(node, ast.MatchMapping)
+        class args:
 
-    @classmethod
-    def MatchOr(cls, node: ast.AST) -> TypeIs[ast.MatchOr]:
-        """`Be.MatchOr`, Match this Or that, matches `class` `ast.MatchOr`.
+            @classmethod
+            def __call__(cls, node: ast.Call) -> Sequence[ast.expr]:
+                return node.args
 
-        This `class` is associated with Python delimiters ':' and Python operators '|'.
-        It is a subclass of `ast.pattern`.
-        """
-        return isinstance(node, ast.MatchOr)
+        class keywords:
 
-    @classmethod
-    def MatchSequence(cls, node: ast.AST) -> TypeIs[ast.MatchSequence]:
-        """`Be.MatchSequence`, Match this Sequence, matches `class` `ast.MatchSequence`.
+            @classmethod
+            def __call__(cls, node: ast.Call) -> list[ast.keyword]:
+                return node.keywords
 
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.pattern`.
-        """
-        return isinstance(node, ast.MatchSequence)
+    class ClassDef:
 
-    @classmethod
-    def MatchSingleton(cls, node: ast.AST) -> TypeIs[ast.MatchSingleton]:
-        """`Be.MatchSingleton`, Match Singleton, matches `class` `ast.MatchSingleton`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.ClassDef]:
+            return isinstance(node, ast.ClassDef)
 
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.pattern`.
-        """
-        return isinstance(node, ast.MatchSingleton)
+        class name:
 
-    @classmethod
-    def MatchStar(cls, node: ast.AST) -> TypeIs[ast.MatchStar]:
-        """`Be.MatchStar`, Match Star, matches `class` `ast.MatchStar`.
+            @classmethod
+            def __call__(cls, node: ast.ClassDef) -> str:
+                return node.name
 
-        This `class` is associated with Python delimiters ':' and Python operators '*'.
-        It is a subclass of `ast.pattern`.
-        """
-        return isinstance(node, ast.MatchStar)
+        class bases:
 
-    @classmethod
-    def MatchValue(cls, node: ast.AST) -> TypeIs[ast.MatchValue]:
-        """`Be.MatchValue`, Match Value, matches `class` `ast.MatchValue`.
+            @classmethod
+            def __call__(cls, node: ast.ClassDef) -> Sequence[ast.expr]:
+                return node.bases
 
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.pattern`.
-        """
-        return isinstance(node, ast.MatchValue)
+        class keywords:
 
-    @classmethod
-    def MatMult(cls, node: ast.AST) -> TypeIs[ast.MatMult]:
-        """`Be.MatMult`, ***Mat***rix ***Mult***iplication, matches `class` `ast.MatMult`.
+            @classmethod
+            def __call__(cls, node: ast.ClassDef) -> list[ast.keyword]:
+                return node.keywords
 
-        It is a subclass of `ast.operator`.
-        """
-        return isinstance(node, ast.MatMult)
+        class body:
 
-    @classmethod
-    def mod(cls, node: ast.AST) -> TypeIs[ast.mod]:
-        """`Be.mod`, ***mod***ule, matches any of `class` `ast.FunctionType` | `ast.mod` | `ast.Expression` | `ast.Interactive` | `ast.Suite` | `ast.Module`.
+            @classmethod
+            def __call__(cls, node: ast.ClassDef) -> Sequence[ast.stmt]:
+                return node.body
 
-        It is a subclass of `ast.AST`.
-        """
-        return isinstance(node, ast.mod)
+        class decorator_list:
 
-    @classmethod
-    def Mod(cls, node: ast.AST) -> TypeIs[ast.Mod]:
-        """`Be.Mod`, ***Mod***ulo, matches `class` `ast.Mod`.
+            @classmethod
+            def __call__(cls, node: ast.ClassDef) -> Sequence[ast.expr]:
+                return node.decorator_list
 
-        This `class` is associated with Python delimiters '%=' and Python operators '%'.
-        It is a subclass of `ast.operator`.
-        """
-        return isinstance(node, ast.Mod)
+        class type_params:
 
-    @classmethod
-    def Module(cls, node: ast.AST) -> TypeIs[ast.Module]:
-        """`Be.Module` matches `class` `ast.Module`.
+            @classmethod
+            def __call__(cls, node: ast.ClassDef) -> Sequence[ast.type_param]:
+                return node.type_params
 
-        It is a subclass of `ast.mod`.
-        """
-        return isinstance(node, ast.Module)
+    class cmpop:
 
-    @classmethod
-    def Mult(cls, node: ast.AST) -> TypeIs[ast.Mult]:
-        """`Be.Mult`, ***Mult***iplication, matches `class` `ast.Mult`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.cmpop]:
+            return isinstance(node, ast.cmpop)
 
-        This `class` is associated with Python delimiters '*=' and Python operators '*'.
-        It is a subclass of `ast.operator`.
-        """
-        return isinstance(node, ast.Mult)
+    class Compare:
 
-    @classmethod
-    def Name(cls, node: ast.AST) -> TypeIs[ast.Name]:
-        """`Be.Name` matches `class` `ast.Name`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Compare]:
+            return isinstance(node, ast.Compare)
 
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.Name)
+        class left:
 
-    @classmethod
-    def NamedExpr(cls, node: ast.AST) -> TypeIs[ast.NamedExpr]:
-        """`Be.NamedExpr`, Named ***Expr***ession, matches `class` `ast.NamedExpr`.
+            @classmethod
+            def __call__(cls, node: ast.Compare) -> ast.expr:
+                return node.left
 
-        This `class` is associated with Python operators ':='.
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.NamedExpr)
+        class ops:
 
-    @classmethod
-    def Nonlocal(cls, node: ast.AST) -> TypeIs[ast.Nonlocal]:
-        """`Be.Nonlocal` matches `class` `ast.Nonlocal`.
+            @classmethod
+            def __call__(cls, node: ast.Compare) -> Sequence[ast.cmpop]:
+                return node.ops
 
-        This `class` is associated with Python keywords `nonlocal`.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.Nonlocal)
+        class comparators:
 
-    @classmethod
-    def Not(cls, node: ast.AST) -> TypeIs[ast.Not]:
-        """`Be.Not` matches `class` `ast.Not`.
+            @classmethod
+            def __call__(cls, node: ast.Compare) -> Sequence[ast.expr]:
+                return node.comparators
 
-        This `class` is associated with Python keywords `not`.
-        It is a subclass of `ast.unaryop`.
-        """
-        return isinstance(node, ast.Not)
+    class comprehension:
 
-    @classmethod
-    def NotEq(cls, node: ast.AST) -> TypeIs[ast.NotEq]:
-        """`Be.NotEq`, is Not ***Eq***ual to, matches `class` `ast.NotEq`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.comprehension]:
+            return isinstance(node, ast.comprehension)
 
-        This `class` is associated with Python operators '!='.
-        It is a subclass of `ast.cmpop`.
-        """
-        return isinstance(node, ast.NotEq)
+        class target:
 
-    @classmethod
-    def NotIn(cls, node: ast.AST) -> TypeIs[ast.NotIn]:
-        """`Be.NotIn`, is Not ***In***cluded in or does Not have membership In, matches `class` `ast.NotIn`.
+            @classmethod
+            def __call__(cls, node: ast.comprehension) -> ast.expr:
+                return node.target
 
-        This `class` is associated with Python keywords `not in`.
-        It is a subclass of `ast.cmpop`.
-        """
-        return isinstance(node, ast.NotIn)
+        class iter:
 
-    @classmethod
-    def operator(cls, node: ast.AST) -> TypeIs[ast.operator]:
-        """`Be.operator` matches any of `class` `ast.Div` | `ast.FloorDiv` | `ast.Mult` | `ast.operator` | `ast.RShift` | `ast.Pow` | `ast.BitAnd` | `ast.Sub` | `ast.MatMult` | `ast.BitXor` | `ast.Mod` | `ast.BitOr` | `ast.LShift` | `ast.Add`.
+            @classmethod
+            def __call__(cls, node: ast.comprehension) -> ast.expr:
+                return node.iter
 
-        It is a subclass of `ast.AST`.
-        """
-        return isinstance(node, ast.operator)
+        class ifs:
 
-    @classmethod
-    def Or(cls, node: ast.AST) -> TypeIs[ast.Or]:
-        """`Be.Or` matches `class` `ast.Or`.
+            @classmethod
+            def __call__(cls, node: ast.comprehension) -> Sequence[ast.expr]:
+                return node.ifs
 
-        This `class` is associated with Python keywords `or`.
-        It is a subclass of `ast.boolop`.
-        """
-        return isinstance(node, ast.Or)
+        class is_async:
 
-    @classmethod
-    def ParamSpec(cls, node: ast.AST) -> TypeIs[ast.ParamSpec]:
-        """`Be.ParamSpec`, ***Param***eter ***Spec***ification, matches `class` `ast.ParamSpec`.
+            @classmethod
+            def __call__(cls, node: ast.comprehension) -> int:
+                return node.is_async
 
-        This `class` is associated with Python delimiters '[]'.
-        It is a subclass of `ast.type_param`.
-        """
-        return isinstance(node, ast.ParamSpec)
+    class Constant:
 
-    @classmethod
-    def Pass(cls, node: ast.AST) -> TypeIs[ast.Pass]:
-        """`Be.Pass` matches `class` `ast.Pass`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Constant]:
+            return isinstance(node, ast.Constant)
 
-        This `class` is associated with Python keywords `pass`.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.Pass)
+        class value:
 
-    @classmethod
-    def pattern(cls, node: ast.AST) -> TypeIs[ast.pattern]:
-        """`Be.pattern` matches any of `class` `ast.MatchAs` | `ast.MatchSequence` | `ast.MatchStar` | `ast.MatchValue` | `ast.pattern` | `ast.MatchSingleton` | `ast.MatchClass` | `ast.MatchOr` | `ast.MatchMapping`.
+            @classmethod
+            def __call__(cls, node: ast.Constant) -> ConstantValueType:
+                return node.value
 
-        It is a subclass of `ast.AST`.
-        """
-        return isinstance(node, ast.pattern)
+        class kind:
 
-    @classmethod
-    def Pow(cls, node: ast.AST) -> TypeIs[ast.Pow]:
-        """`Be.Pow`, ***Pow***er, matches `class` `ast.Pow`.
+            @classmethod
+            def __call__(cls, node: ast.Constant) -> str | None:
+                return node.kind
 
-        This `class` is associated with Python delimiters '**=' and Python operators '**'.
-        It is a subclass of `ast.operator`.
-        """
-        return isinstance(node, ast.Pow)
+    class Continue:
 
-    @classmethod
-    def Raise(cls, node: ast.AST) -> TypeIs[ast.Raise]:
-        """`Be.Raise` matches `class` `ast.Raise`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Continue]:
+            return isinstance(node, ast.Continue)
 
-        This `class` is associated with Python keywords `raise`.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.Raise)
+    class Del:
 
-    @classmethod
-    def Return(cls, node: ast.AST) -> TypeIs[ast.Return]:
-        """`Be.Return` matches `class` `ast.Return`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Del]:
+            return isinstance(node, ast.Del)
 
-        This `class` is associated with Python keywords `return`.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.Return)
+    class Delete:
 
-    @classmethod
-    def RShift(cls, node: ast.AST) -> TypeIs[ast.RShift]:
-        """`Be.RShift`, Right Shift, matches `class` `ast.RShift`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Delete]:
+            return isinstance(node, ast.Delete)
 
-        This `class` is associated with Python delimiters '>>=' and Python operators '>>'.
-        It is a subclass of `ast.operator`.
-        """
-        return isinstance(node, ast.RShift)
+        class targets:
 
-    @classmethod
-    def Set(cls, node: ast.AST) -> TypeIs[ast.Set]:
-        """`Be.Set` matches `class` `ast.Set`.
+            @classmethod
+            def __call__(cls, node: ast.Delete) -> Sequence[ast.expr]:
+                return node.targets
 
-        This `class` is associated with Python delimiters '{}'.
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.Set)
+    class Dict:
 
-    @classmethod
-    def SetComp(cls, node: ast.AST) -> TypeIs[ast.SetComp]:
-        """`Be.SetComp`, Set ***c***o***mp***rehension, matches `class` `ast.SetComp`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Dict]:
+            return isinstance(node, ast.Dict)
 
-        This `class` is associated with Python delimiters '{}'.
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.SetComp)
+        class keys:
 
-    @classmethod
-    def Slice(cls, node: ast.AST) -> TypeIs[ast.Slice]:
-        """`Be.Slice` matches `class` `ast.Slice`.
+            @classmethod
+            def __call__(cls, node: ast.Dict) -> Sequence[ast.expr | None]:
+                return node.keys
 
-        This `class` is associated with Python delimiters '[], :'.
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.Slice)
+        class values:
 
-    @classmethod
-    def Starred(cls, node: ast.AST) -> TypeIs[ast.Starred]:
-        """`Be.Starred` matches `class` `ast.Starred`.
+            @classmethod
+            def __call__(cls, node: ast.Dict) -> Sequence[ast.expr]:
+                return node.values
 
-        This `class` is associated with Python operators '*'.
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.Starred)
+    class DictComp:
 
-    @classmethod
-    def stmt(cls, node: ast.AST) -> TypeIs[ast.stmt]:
-        """`Be.stmt`, ***st***ate***m***en***t***, matches any of `class` `ast.Return` | `ast.AsyncFor` | `ast.Assign` | `ast.AsyncWith` | `ast.Match` | `ast.stmt` | `ast.Try` | `ast.Import` | `ast.Pass` | `ast.Break` | `ast.With` | `ast.AnnAssign` | `ast.ImportFrom` | `ast.Raise` | `ast.FunctionDef` | `ast.AugAssign` | `ast.Assert` | `ast.While` | `ast.Continue` | `ast.If` | `ast.Delete` | `ast.TryStar` | `ast.AsyncFunctionDef` | `ast.For` | `ast.Expr` | `ast.ClassDef` | `ast.Nonlocal` | `ast.Global` | `ast.TypeAlias`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.DictComp]:
+            return isinstance(node, ast.DictComp)
 
-        It is a subclass of `ast.AST`.
-        """
-        return isinstance(node, ast.stmt)
+        class key:
 
-    @classmethod
-    def Store(cls, node: ast.AST) -> TypeIs[ast.Store]:
-        """`Be.Store` matches `class` `ast.Store`.
+            @classmethod
+            def __call__(cls, node: ast.DictComp) -> ast.expr:
+                return node.key
 
-        It is a subclass of `ast.expr_context`.
-        """
-        return isinstance(node, ast.Store)
+        class value:
 
-    @classmethod
-    def Sub(cls, node: ast.AST) -> TypeIs[ast.Sub]:
-        """`Be.Sub`, ***Sub***traction, matches `class` `ast.Sub`.
+            @classmethod
+            def __call__(cls, node: ast.DictComp) -> ast.expr:
+                return node.value
 
-        This `class` is associated with Python delimiters '-=' and Python operators '-'.
-        It is a subclass of `ast.operator`.
-        """
-        return isinstance(node, ast.Sub)
+        class generators:
 
-    @classmethod
-    def Subscript(cls, node: ast.AST) -> TypeIs[ast.Subscript]:
-        """`Be.Subscript` matches `class` `ast.Subscript`.
+            @classmethod
+            def __call__(cls, node: ast.DictComp) -> list[ast.comprehension]:
+                return node.generators
 
-        This `class` is associated with Python delimiters '[]'.
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.Subscript)
+    class Div:
 
-    @classmethod
-    def Try(cls, node: ast.AST) -> TypeIs[ast.Try]:
-        """`Be.Try` matches `class` `ast.Try`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Div]:
+            return isinstance(node, ast.Div)
 
-        This `class` is associated with Python keywords `try`, `except` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.Try)
+    class Eq:
 
-    @classmethod
-    def TryStar(cls, node: ast.AST) -> TypeIs[ast.TryStar]:
-        """`Be.TryStar`, Try executing this, protected by `except*` ("except star"), matches `class` `ast.TryStar`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Eq]:
+            return isinstance(node, ast.Eq)
 
-        This `class` is associated with Python keywords `try`, `except*` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.TryStar)
+    class ExceptHandler:
 
-    @classmethod
-    def Tuple(cls, node: ast.AST) -> TypeIs[ast.Tuple]:
-        """`Be.Tuple` matches `class` `ast.Tuple`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.ExceptHandler]:
+            return isinstance(node, ast.ExceptHandler)
 
-        This `class` is associated with Python delimiters '()'.
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.Tuple)
+        class type:
 
-    @classmethod
-    def type_ignore(cls, node: ast.AST) -> TypeIs[ast.type_ignore]:
-        """`Be.type_ignore`, this `type` error, you ignore it, matches any of `class` `ast.TypeIgnore` | `ast.type_ignore`.
+            @classmethod
+            def __call__(cls, node: ast.ExceptHandler) -> ast.expr | None:
+                return node.type
 
-        It is a subclass of `ast.AST`.
-        """
-        return isinstance(node, ast.type_ignore)
+        class name:
 
-    @classmethod
-    def type_param(cls, node: ast.AST) -> TypeIs[ast.type_param]:
-        """`Be.type_param`, type ***param***eter, matches any of `class` `ast.TypeVarTuple` | `ast.TypeVar` | `ast.type_param` | `ast.ParamSpec`.
+            @classmethod
+            def __call__(cls, node: ast.ExceptHandler) -> str | None:
+                return node.name
 
-        It is a subclass of `ast.AST`.
-        """
-        return isinstance(node, ast.type_param)
+        class body:
 
-    @classmethod
-    def TypeAlias(cls, node: ast.AST) -> TypeIs[ast.TypeAlias]:
-        """`Be.TypeAlias`, Type Alias, matches `class` `ast.TypeAlias`.
+            @classmethod
+            def __call__(cls, node: ast.ExceptHandler) -> Sequence[ast.stmt]:
+                return node.body
 
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.TypeAlias)
+    class excepthandler:
 
-    @classmethod
-    def TypeIgnore(cls, node: ast.AST) -> TypeIs[ast.TypeIgnore]:
-        """`Be.TypeIgnore`, this Type (`type`) error, Ignore it, matches `class` `ast.TypeIgnore`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.excepthandler]:
+            return isinstance(node, ast.excepthandler)
 
-        This `class` is associated with Python delimiters ':'.
-        It is a subclass of `ast.type_ignore`.
-        """
-        return isinstance(node, ast.TypeIgnore)
+    class expr:
 
-    @classmethod
-    def TypeVar(cls, node: ast.AST) -> TypeIs[ast.TypeVar]:
-        """`Be.TypeVar`, Type ***Var***iable, matches `class` `ast.TypeVar`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.expr]:
+            return isinstance(node, ast.expr)
 
-        It is a subclass of `ast.type_param`.
-        """
-        return isinstance(node, ast.TypeVar)
+    class Expr:
 
-    @classmethod
-    def TypeVarTuple(cls, node: ast.AST) -> TypeIs[ast.TypeVarTuple]:
-        """`Be.TypeVarTuple`, Type ***Var***iable ***Tuple***, matches `class` `ast.TypeVarTuple`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Expr]:
+            return isinstance(node, ast.Expr)
 
-        This `class` is associated with Python operators '*'.
-        It is a subclass of `ast.type_param`.
-        """
-        return isinstance(node, ast.TypeVarTuple)
+        class value:
 
-    @classmethod
-    def UAdd(cls, node: ast.AST) -> TypeIs[ast.UAdd]:
-        """`Be.UAdd`, ***U***nary ***Add***ition, matches `class` `ast.UAdd`.
+            @classmethod
+            def __call__(cls, node: ast.Expr) -> ast.expr:
+                return node.value
 
-        This `class` is associated with Python operators '+'.
-        It is a subclass of `ast.unaryop`.
-        """
-        return isinstance(node, ast.UAdd)
+    class expr_context:
 
-    @classmethod
-    def UnaryOp(cls, node: ast.AST) -> TypeIs[ast.UnaryOp]:
-        """`Be.UnaryOp`, ***Un***ary ***Op***eration, matches `class` `ast.UnaryOp`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.expr_context]:
+            return isinstance(node, ast.expr_context)
 
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.UnaryOp)
+    class Expression:
 
-    @classmethod
-    def unaryop(cls, node: ast.AST) -> TypeIs[ast.unaryop]:
-        """`Be.unaryop`, ***un***ary ***op***erator, matches any of `class` `ast.unaryop` | `ast.UAdd` | `ast.USub` | `ast.Invert` | `ast.Not`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Expression]:
+            return isinstance(node, ast.Expression)
 
-        It is a subclass of `ast.AST`.
-        """
-        return isinstance(node, ast.unaryop)
+        class body:
 
-    @classmethod
-    def USub(cls, node: ast.AST) -> TypeIs[ast.USub]:
-        """`Be.USub`, ***U***nary ***Sub***traction, matches `class` `ast.USub`.
+            @classmethod
+            def __call__(cls, node: ast.Expression) -> ast.expr:
+                return node.body
 
-        This `class` is associated with Python operators '-'.
-        It is a subclass of `ast.unaryop`.
-        """
-        return isinstance(node, ast.USub)
+    class FloorDiv:
 
-    @classmethod
-    def While(cls, node: ast.AST) -> TypeIs[ast.While]:
-        """`Be.While` matches `class` `ast.While`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.FloorDiv]:
+            return isinstance(node, ast.FloorDiv)
 
-        This `class` is associated with Python keywords `while`.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.While)
+    class For:
 
-    @classmethod
-    def With(cls, node: ast.AST) -> TypeIs[ast.With]:
-        """`Be.With` matches `class` `ast.With`.
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.For]:
+            return isinstance(node, ast.For)
 
-        This `class` is associated with Python keywords `with` and Python delimiters ':'.
-        It is a subclass of `ast.stmt`.
-        """
-        return isinstance(node, ast.With)
+        class target:
 
-    @classmethod
-    def withitem(cls, node: ast.AST) -> TypeIs[ast.withitem]:
-        """`Be.withitem`, with item, matches `class` `ast.withitem`.
+            @classmethod
+            def __call__(cls, node: ast.For) -> ast.expr:
+                return node.target
 
-        This `class` is associated with Python keywords `as`.
-        It is a subclass of `ast.AST`.
-        """
-        return isinstance(node, ast.withitem)
+        class iter:
 
-    @classmethod
-    def Yield(cls, node: ast.AST) -> TypeIs[ast.Yield]:
-        """`Be.Yield`, Yield an element, matches `class` `ast.Yield`.
+            @classmethod
+            def __call__(cls, node: ast.For) -> ast.expr:
+                return node.iter
 
-        This `class` is associated with Python keywords `yield`.
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.Yield)
+        class body:
 
-    @classmethod
-    def YieldFrom(cls, node: ast.AST) -> TypeIs[ast.YieldFrom]:
-        """`Be.YieldFrom`, Yield an element From, matches `class` `ast.YieldFrom`.
-
-        This `class` is associated with Python keywords `yield from`.
-        It is a subclass of `ast.expr`.
-        """
-        return isinstance(node, ast.YieldFrom)
+            @classmethod
+            def __call__(cls, node: ast.For) -> Sequence[ast.stmt]:
+                return node.body
+
+        class orelse:
+
+            @classmethod
+            def __call__(cls, node: ast.For) -> Sequence[ast.stmt]:
+                return node.orelse
+
+        class type_comment:
+
+            @classmethod
+            def __call__(cls, node: ast.For) -> str | None:
+                return node.type_comment
+
+    class FormattedValue:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.FormattedValue]:
+            return isinstance(node, ast.FormattedValue)
+
+        class value:
+
+            @classmethod
+            def __call__(cls, node: ast.FormattedValue) -> ast.expr:
+                return node.value
+
+        class conversion:
+
+            @classmethod
+            def __call__(cls, node: ast.FormattedValue) -> int:
+                return node.conversion
+
+        class format_spec:
+
+            @classmethod
+            def __call__(cls, node: ast.FormattedValue) -> ast.expr | None:
+                return node.format_spec
+
+    class FunctionDef:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.FunctionDef]:
+            return isinstance(node, ast.FunctionDef)
+
+        class name:
+
+            @classmethod
+            def __call__(cls, node: ast.FunctionDef) -> str:
+                return node.name
+
+        class args:
+
+            @classmethod
+            def __call__(cls, node: ast.FunctionDef) -> ast.arguments:
+                return node.args
+
+        class body:
+
+            @classmethod
+            def __call__(cls, node: ast.FunctionDef) -> Sequence[ast.stmt]:
+                return node.body
+
+        class decorator_list:
+
+            @classmethod
+            def __call__(cls, node: ast.FunctionDef) -> Sequence[ast.expr]:
+                return node.decorator_list
+
+        class returns:
+
+            @classmethod
+            def __call__(cls, node: ast.FunctionDef) -> ast.expr | None:
+                return node.returns
+
+        class type_comment:
+
+            @classmethod
+            def __call__(cls, node: ast.FunctionDef) -> str | None:
+                return node.type_comment
+
+        class type_params:
+
+            @classmethod
+            def __call__(cls, node: ast.FunctionDef) -> Sequence[ast.type_param]:
+                return node.type_params
+
+    class FunctionType:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.FunctionType]:
+            return isinstance(node, ast.FunctionType)
+
+        class argtypes:
+
+            @classmethod
+            def __call__(cls, node: ast.FunctionType) -> Sequence[ast.expr]:
+                return node.argtypes
+
+        class returns:
+
+            @classmethod
+            def __call__(cls, node: ast.FunctionType) -> ast.expr:
+                return node.returns
+
+    class GeneratorExp:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.GeneratorExp]:
+            return isinstance(node, ast.GeneratorExp)
+
+        class elt:
+
+            @classmethod
+            def __call__(cls, node: ast.GeneratorExp) -> ast.expr:
+                return node.elt
+
+        class generators:
+
+            @classmethod
+            def __call__(cls, node: ast.GeneratorExp) -> list[ast.comprehension]:
+                return node.generators
+
+    class Global:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Global]:
+            return isinstance(node, ast.Global)
+
+        class names:
+
+            @classmethod
+            def __call__(cls, node: ast.Global) -> list[str]:
+                return node.names
+
+    class Gt:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Gt]:
+            return isinstance(node, ast.Gt)
+
+    class GtE:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.GtE]:
+            return isinstance(node, ast.GtE)
+
+    class If:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.If]:
+            return isinstance(node, ast.If)
+
+        class test:
+
+            @classmethod
+            def __call__(cls, node: ast.If) -> ast.expr:
+                return node.test
+
+        class body:
+
+            @classmethod
+            def __call__(cls, node: ast.If) -> Sequence[ast.stmt]:
+                return node.body
+
+        class orelse:
+
+            @classmethod
+            def __call__(cls, node: ast.If) -> Sequence[ast.stmt]:
+                return node.orelse
+
+    class IfExp:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.IfExp]:
+            return isinstance(node, ast.IfExp)
+
+        class test:
+
+            @classmethod
+            def __call__(cls, node: ast.IfExp) -> ast.expr:
+                return node.test
+
+        class body:
+
+            @classmethod
+            def __call__(cls, node: ast.IfExp) -> ast.expr:
+                return node.body
+
+        class orelse:
+
+            @classmethod
+            def __call__(cls, node: ast.IfExp) -> ast.expr:
+                return node.orelse
+
+    class Import:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Import]:
+            return isinstance(node, ast.Import)
+
+        class names:
+
+            @classmethod
+            def __call__(cls, node: ast.Import) -> list[ast.alias]:
+                return node.names
+
+    class ImportFrom:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.ImportFrom]:
+            return isinstance(node, ast.ImportFrom)
+
+        class module:
+
+            @classmethod
+            def __call__(cls, node: ast.ImportFrom) -> str | None:
+                return node.module
+
+        class names:
+
+            @classmethod
+            def __call__(cls, node: ast.ImportFrom) -> list[ast.alias]:
+                return node.names
+
+        class level:
+
+            @classmethod
+            def __call__(cls, node: ast.ImportFrom) -> int:
+                return node.level
+
+    class In:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.In]:
+            return isinstance(node, ast.In)
+
+    class Interactive:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Interactive]:
+            return isinstance(node, ast.Interactive)
+
+        class body:
+
+            @classmethod
+            def __call__(cls, node: ast.Interactive) -> Sequence[ast.stmt]:
+                return node.body
+
+    class Invert:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Invert]:
+            return isinstance(node, ast.Invert)
+
+    class Is:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Is]:
+            return isinstance(node, ast.Is)
+
+    class IsNot:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.IsNot]:
+            return isinstance(node, ast.IsNot)
+
+    class JoinedStr:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.JoinedStr]:
+            return isinstance(node, ast.JoinedStr)
+
+        class values:
+
+            @classmethod
+            def __call__(cls, node: ast.JoinedStr) -> Sequence[ast.expr]:
+                return node.values
+
+    class keyword:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.keyword]:
+            return isinstance(node, ast.keyword)
+
+        class arg:
+
+            @classmethod
+            def __call__(cls, node: ast.keyword) -> str | None:
+                return node.arg
+
+        class value:
+
+            @classmethod
+            def __call__(cls, node: ast.keyword) -> ast.expr:
+                return node.value
+
+    class Lambda:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Lambda]:
+            return isinstance(node, ast.Lambda)
+
+        class args:
+
+            @classmethod
+            def __call__(cls, node: ast.Lambda) -> ast.arguments:
+                return node.args
+
+        class body:
+
+            @classmethod
+            def __call__(cls, node: ast.Lambda) -> ast.expr:
+                return node.body
+
+    class List:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.List]:
+            return isinstance(node, ast.List)
+
+        class elts:
+
+            @classmethod
+            def __call__(cls, node: ast.List) -> Sequence[ast.expr]:
+                return node.elts
+
+        class ctx:
+
+            @classmethod
+            def __call__(cls, node: ast.List) -> ast.expr_context:
+                return node.ctx
+
+    class ListComp:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.ListComp]:
+            return isinstance(node, ast.ListComp)
+
+        class elt:
+
+            @classmethod
+            def __call__(cls, node: ast.ListComp) -> ast.expr:
+                return node.elt
+
+        class generators:
+
+            @classmethod
+            def __call__(cls, node: ast.ListComp) -> list[ast.comprehension]:
+                return node.generators
+
+    class Load:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Load]:
+            return isinstance(node, ast.Load)
+
+    class LShift:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.LShift]:
+            return isinstance(node, ast.LShift)
+
+    class Lt:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Lt]:
+            return isinstance(node, ast.Lt)
+
+    class LtE:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.LtE]:
+            return isinstance(node, ast.LtE)
+
+    class Match:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Match]:
+            return isinstance(node, ast.Match)
+
+        class subject:
+
+            @classmethod
+            def __call__(cls, node: ast.Match) -> ast.expr:
+                return node.subject
+
+        class cases:
+
+            @classmethod
+            def __call__(cls, node: ast.Match) -> list[ast.match_case]:
+                return node.cases
+
+    class match_case:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.match_case]:
+            return isinstance(node, ast.match_case)
+
+        class pattern:
+
+            @classmethod
+            def __call__(cls, node: ast.match_case) -> ast.pattern:
+                return node.pattern
+
+        class guard:
+
+            @classmethod
+            def __call__(cls, node: ast.match_case) -> ast.expr | None:
+                return node.guard
+
+        class body:
+
+            @classmethod
+            def __call__(cls, node: ast.match_case) -> Sequence[ast.stmt]:
+                return node.body
+
+    class MatchAs:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.MatchAs]:
+            return isinstance(node, ast.MatchAs)
+
+        class pattern:
+
+            @classmethod
+            def __call__(cls, node: ast.MatchAs) -> ast.pattern | None:
+                return node.pattern
+
+        class name:
+
+            @classmethod
+            def __call__(cls, node: ast.MatchAs) -> str | None:
+                return node.name
+
+    class MatchClass:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.MatchClass]:
+            return isinstance(node, ast.MatchClass)
+
+        class cls:
+
+            @classmethod
+            def __call__(cls, node: ast.MatchClass) -> ast.expr:
+                return node.cls
+
+        class patterns:
+
+            @classmethod
+            def __call__(cls, node: ast.MatchClass) -> Sequence[ast.pattern]:
+                return node.patterns
+
+        class kwd_attrs:
+
+            @classmethod
+            def __call__(cls, node: ast.MatchClass) -> list[str]:
+                return node.kwd_attrs
+
+        class kwd_patterns:
+
+            @classmethod
+            def __call__(cls, node: ast.MatchClass) -> Sequence[ast.pattern]:
+                return node.kwd_patterns
+
+    class MatchMapping:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.MatchMapping]:
+            return isinstance(node, ast.MatchMapping)
+
+        class keys:
+
+            @classmethod
+            def __call__(cls, node: ast.MatchMapping) -> Sequence[ast.expr]:
+                return node.keys
+
+        class patterns:
+
+            @classmethod
+            def __call__(cls, node: ast.MatchMapping) -> Sequence[ast.pattern]:
+                return node.patterns
+
+        class rest:
+
+            @classmethod
+            def __call__(cls, node: ast.MatchMapping) -> str | None:
+                return node.rest
+
+    class MatchOr:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.MatchOr]:
+            return isinstance(node, ast.MatchOr)
+
+        class patterns:
+
+            @classmethod
+            def __call__(cls, node: ast.MatchOr) -> Sequence[ast.pattern]:
+                return node.patterns
+
+    class MatchSequence:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.MatchSequence]:
+            return isinstance(node, ast.MatchSequence)
+
+        class patterns:
+
+            @classmethod
+            def __call__(cls, node: ast.MatchSequence) -> Sequence[ast.pattern]:
+                return node.patterns
+
+    class MatchSingleton:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.MatchSingleton]:
+            return isinstance(node, ast.MatchSingleton)
+
+        class value:
+
+            @classmethod
+            def __call__(cls, node: ast.MatchSingleton) -> bool | None:
+                return node.value
+
+    class MatchStar:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.MatchStar]:
+            return isinstance(node, ast.MatchStar)
+
+        class name:
+
+            @classmethod
+            def __call__(cls, node: ast.MatchStar) -> str | None:
+                return node.name
+
+    class MatchValue:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.MatchValue]:
+            return isinstance(node, ast.MatchValue)
+
+        class value:
+
+            @classmethod
+            def __call__(cls, node: ast.MatchValue) -> ast.expr:
+                return node.value
+
+    class MatMult:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.MatMult]:
+            return isinstance(node, ast.MatMult)
+
+    class mod:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.mod]:
+            return isinstance(node, ast.mod)
+
+    class Mod:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Mod]:
+            return isinstance(node, ast.Mod)
+
+    class Module:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Module]:
+            return isinstance(node, ast.Module)
+
+        class body:
+
+            @classmethod
+            def __call__(cls, node: ast.Module) -> Sequence[ast.stmt]:
+                return node.body
+
+        class type_ignores:
+
+            @classmethod
+            def __call__(cls, node: ast.Module) -> list[ast.TypeIgnore]:
+                return node.type_ignores
+
+    class Mult:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Mult]:
+            return isinstance(node, ast.Mult)
+
+    class Name:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Name]:
+            return isinstance(node, ast.Name)
+
+        class id:
+
+            @classmethod
+            def __call__(cls, node: ast.Name) -> str:
+                return node.id
+
+        class ctx:
+
+            @classmethod
+            def __call__(cls, node: ast.Name) -> ast.expr_context:
+                return node.ctx
+
+    class NamedExpr:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.NamedExpr]:
+            return isinstance(node, ast.NamedExpr)
+
+        class target:
+
+            @classmethod
+            def __call__(cls, node: ast.NamedExpr) -> ast.Name:
+                return node.target
+
+        class value:
+
+            @classmethod
+            def __call__(cls, node: ast.NamedExpr) -> ast.expr:
+                return node.value
+
+    class Nonlocal:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Nonlocal]:
+            return isinstance(node, ast.Nonlocal)
+
+        class names:
+
+            @classmethod
+            def __call__(cls, node: ast.Nonlocal) -> list[str]:
+                return node.names
+
+    class Not:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Not]:
+            return isinstance(node, ast.Not)
+
+    class NotEq:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.NotEq]:
+            return isinstance(node, ast.NotEq)
+
+    class NotIn:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.NotIn]:
+            return isinstance(node, ast.NotIn)
+
+    class operator:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.operator]:
+            return isinstance(node, ast.operator)
+
+    class Or:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Or]:
+            return isinstance(node, ast.Or)
+
+    class ParamSpec:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.ParamSpec]:
+            return isinstance(node, ast.ParamSpec)
+
+        class name:
+
+            @classmethod
+            def __call__(cls, node: ast.ParamSpec) -> str:
+                return node.name
+
+        class default_value:
+
+            @classmethod
+            def __call__(cls, node: ast.ParamSpec) -> ast.expr | None:
+                return node.default_value
+
+    class Pass:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Pass]:
+            return isinstance(node, ast.Pass)
+
+    class pattern:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.pattern]:
+            return isinstance(node, ast.pattern)
+
+    class Pow:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Pow]:
+            return isinstance(node, ast.Pow)
+
+    class Raise:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Raise]:
+            return isinstance(node, ast.Raise)
+
+        class exc:
+
+            @classmethod
+            def __call__(cls, node: ast.Raise) -> ast.expr | None:
+                return node.exc
+
+        class cause:
+
+            @classmethod
+            def __call__(cls, node: ast.Raise) -> ast.expr | None:
+                return node.cause
+
+    class Return:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Return]:
+            return isinstance(node, ast.Return)
+
+        class value:
+
+            @classmethod
+            def __call__(cls, node: ast.Return) -> ast.expr | None:
+                return node.value
+
+    class RShift:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.RShift]:
+            return isinstance(node, ast.RShift)
+
+    class Set:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Set]:
+            return isinstance(node, ast.Set)
+
+        class elts:
+
+            @classmethod
+            def __call__(cls, node: ast.Set) -> Sequence[ast.expr]:
+                return node.elts
+
+    class SetComp:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.SetComp]:
+            return isinstance(node, ast.SetComp)
+
+        class elt:
+
+            @classmethod
+            def __call__(cls, node: ast.SetComp) -> ast.expr:
+                return node.elt
+
+        class generators:
+
+            @classmethod
+            def __call__(cls, node: ast.SetComp) -> list[ast.comprehension]:
+                return node.generators
+
+    class Slice:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Slice]:
+            return isinstance(node, ast.Slice)
+
+        class lower:
+
+            @classmethod
+            def __call__(cls, node: ast.Slice) -> ast.expr | None:
+                return node.lower
+
+        class upper:
+
+            @classmethod
+            def __call__(cls, node: ast.Slice) -> ast.expr | None:
+                return node.upper
+
+        class step:
+
+            @classmethod
+            def __call__(cls, node: ast.Slice) -> ast.expr | None:
+                return node.step
+
+    class Starred:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Starred]:
+            return isinstance(node, ast.Starred)
+
+        class value:
+
+            @classmethod
+            def __call__(cls, node: ast.Starred) -> ast.expr:
+                return node.value
+
+        class ctx:
+
+            @classmethod
+            def __call__(cls, node: ast.Starred) -> ast.expr_context:
+                return node.ctx
+
+    class stmt:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.stmt]:
+            return isinstance(node, ast.stmt)
+
+    class Store:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Store]:
+            return isinstance(node, ast.Store)
+
+    class Sub:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Sub]:
+            return isinstance(node, ast.Sub)
+
+    class Subscript:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Subscript]:
+            return isinstance(node, ast.Subscript)
+
+        class value:
+
+            @classmethod
+            def __call__(cls, node: ast.Subscript) -> ast.expr:
+                return node.value
+
+        class slice:
+
+            @classmethod
+            def __call__(cls, node: ast.Subscript) -> ast.expr:
+                return node.slice
+
+        class ctx:
+
+            @classmethod
+            def __call__(cls, node: ast.Subscript) -> ast.expr_context:
+                return node.ctx
+
+    class Try:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Try]:
+            return isinstance(node, ast.Try)
+
+        class body:
+
+            @classmethod
+            def __call__(cls, node: ast.Try) -> Sequence[ast.stmt]:
+                return node.body
+
+        class handlers:
+
+            @classmethod
+            def __call__(cls, node: ast.Try) -> list[ast.ExceptHandler]:
+                return node.handlers
+
+        class orelse:
+
+            @classmethod
+            def __call__(cls, node: ast.Try) -> Sequence[ast.stmt]:
+                return node.orelse
+
+        class finalbody:
+
+            @classmethod
+            def __call__(cls, node: ast.Try) -> Sequence[ast.stmt]:
+                return node.finalbody
+
+    class TryStar:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.TryStar]:
+            return isinstance(node, ast.TryStar)
+
+        class body:
+
+            @classmethod
+            def __call__(cls, node: ast.TryStar) -> Sequence[ast.stmt]:
+                return node.body
+
+        class handlers:
+
+            @classmethod
+            def __call__(cls, node: ast.TryStar) -> list[ast.ExceptHandler]:
+                return node.handlers
+
+        class orelse:
+
+            @classmethod
+            def __call__(cls, node: ast.TryStar) -> Sequence[ast.stmt]:
+                return node.orelse
+
+        class finalbody:
+
+            @classmethod
+            def __call__(cls, node: ast.TryStar) -> Sequence[ast.stmt]:
+                return node.finalbody
+
+    class Tuple:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Tuple]:
+            return isinstance(node, ast.Tuple)
+
+        class elts:
+
+            @classmethod
+            def __call__(cls, node: ast.Tuple) -> Sequence[ast.expr]:
+                return node.elts
+
+        class ctx:
+
+            @classmethod
+            def __call__(cls, node: ast.Tuple) -> ast.expr_context:
+                return node.ctx
+
+    class type_ignore:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.type_ignore]:
+            return isinstance(node, ast.type_ignore)
+
+    class type_param:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.type_param]:
+            return isinstance(node, ast.type_param)
+
+    class TypeAlias:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.TypeAlias]:
+            return isinstance(node, ast.TypeAlias)
+
+        class name:
+
+            @classmethod
+            def __call__(cls, node: ast.TypeAlias) -> ast.Name:
+                return node.name
+
+        class type_params:
+
+            @classmethod
+            def __call__(cls, node: ast.TypeAlias) -> Sequence[ast.type_param]:
+                return node.type_params
+
+        class value:
+
+            @classmethod
+            def __call__(cls, node: ast.TypeAlias) -> ast.expr:
+                return node.value
+
+    class TypeIgnore:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.TypeIgnore]:
+            return isinstance(node, ast.TypeIgnore)
+
+        class lineno:
+
+            @classmethod
+            def __call__(cls, node: ast.TypeIgnore) -> int:
+                return node.lineno
+
+        class tag:
+
+            @classmethod
+            def __call__(cls, node: ast.TypeIgnore) -> str:
+                return node.tag
+
+    class TypeVar:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.TypeVar]:
+            return isinstance(node, ast.TypeVar)
+
+        class name:
+
+            @classmethod
+            def __call__(cls, node: ast.TypeVar) -> str:
+                return node.name
+
+        class bound:
+
+            @classmethod
+            def __call__(cls, node: ast.TypeVar) -> ast.expr | None:
+                return node.bound
+
+        class default_value:
+
+            @classmethod
+            def __call__(cls, node: ast.TypeVar) -> ast.expr | None:
+                return node.default_value
+
+    class TypeVarTuple:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.TypeVarTuple]:
+            return isinstance(node, ast.TypeVarTuple)
+
+        class name:
+
+            @classmethod
+            def __call__(cls, node: ast.TypeVarTuple) -> str:
+                return node.name
+
+        class default_value:
+
+            @classmethod
+            def __call__(cls, node: ast.TypeVarTuple) -> ast.expr | None:
+                return node.default_value
+
+    class UAdd:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.UAdd]:
+            return isinstance(node, ast.UAdd)
+
+    class UnaryOp:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.UnaryOp]:
+            return isinstance(node, ast.UnaryOp)
+
+        class op:
+
+            @classmethod
+            def __call__(cls, node: ast.UnaryOp) -> ast.unaryop:
+                return node.op
+
+        class operand:
+
+            @classmethod
+            def __call__(cls, node: ast.UnaryOp) -> ast.expr:
+                return node.operand
+
+    class unaryop:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.unaryop]:
+            return isinstance(node, ast.unaryop)
+
+    class USub:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.USub]:
+            return isinstance(node, ast.USub)
+
+    class While:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.While]:
+            return isinstance(node, ast.While)
+
+        class test:
+
+            @classmethod
+            def __call__(cls, node: ast.While) -> ast.expr:
+                return node.test
+
+        class body:
+
+            @classmethod
+            def __call__(cls, node: ast.While) -> Sequence[ast.stmt]:
+                return node.body
+
+        class orelse:
+
+            @classmethod
+            def __call__(cls, node: ast.While) -> Sequence[ast.stmt]:
+                return node.orelse
+
+    class With:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.With]:
+            return isinstance(node, ast.With)
+
+        class items:
+
+            @classmethod
+            def __call__(cls, node: ast.With) -> list[ast.withitem]:
+                return node.items
+
+        class body:
+
+            @classmethod
+            def __call__(cls, node: ast.With) -> Sequence[ast.stmt]:
+                return node.body
+
+        class type_comment:
+
+            @classmethod
+            def __call__(cls, node: ast.With) -> str | None:
+                return node.type_comment
+
+    class withitem:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.withitem]:
+            return isinstance(node, ast.withitem)
+
+        class context_expr:
+
+            @classmethod
+            def __call__(cls, node: ast.withitem) -> ast.expr:
+                return node.context_expr
+
+        class optional_vars:
+
+            @classmethod
+            def __call__(cls, node: ast.withitem) -> ast.expr | None:
+                return node.optional_vars
+
+    class Yield:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.Yield]:
+            return isinstance(node, ast.Yield)
+
+        class value:
+
+            @classmethod
+            def __call__(cls, node: ast.Yield) -> ast.expr | None:
+                return node.value
+
+    class YieldFrom:
+
+        @classmethod
+        def __call__(cls, node: ast.AST) -> TypeIs[ast.YieldFrom]:
+            return isinstance(node, ast.YieldFrom)
+
+        class value:
+
+            @classmethod
+            def __call__(cls, node: ast.YieldFrom) -> ast.expr:
+                return node.value
