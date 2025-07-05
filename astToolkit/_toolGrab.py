@@ -13,12 +13,24 @@ from astToolkit import (
 	hasDOTtype_params, hasDOTupper, hasDOTvalue, hasDOTvalues, hasDOTvararg, 一符, 个, 二符, 俪, 口, 工, 工位, 布尔符, 形, 比符,
 )
 from collections.abc import Callable, Sequence
-from typing import Any
+from typing import Any, cast
 import ast
 import sys
 
 if sys.version_info >= (3, 13):
     from astToolkit import hasDOTdefault_value
+
+def index[个, 归个](at: int) -> Callable[[Sequence[个]], 归个]:
+
+    def workhorse(node: Sequence[个]) -> 归个:
+        return cast('归个', node[at])
+    return workhorse
+
+def indices[个, 归个](at: slice) -> Callable[[Sequence[个]], 归个]:
+
+    def workhorse(node: Sequence[个]) -> 归个:
+        return cast('归个', node[at])
+    return workhorse
 
 class Grab:
     """Modify specific attributes of AST nodes while preserving the node structure.

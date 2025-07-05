@@ -119,7 +119,7 @@ from astToolkit._toolkitNodeVisitor import (
 
 from astToolkit._toolBe import Be as Be
 from astToolkit._toolDOT import DOT as DOT
-from astToolkit._toolGrab import Grab as Grab
+from astToolkit._toolGrab import Grab as Grab, index as index, indices as indices
 from astToolkit._toolMake import Make as Make
 from astToolkit._prototypeFind import Find as Find
 

@@ -26,32 +26,16 @@ maintaining semantic integrity and performance characteristics.
 """
 
 from astToolkit import (
-	Be, DOT, Grab, IfThis, IngredientsFunction, IngredientsModule, Make, NodeChanger, NodeTourist, Then, 个, 木,
+	Be, DOT, Grab, IfThis, IngredientsFunction, IngredientsModule, Make, NodeChanger, NodeTourist, Then, 木,
 )
 from autoflake import fix_code as autoflake_fix_code
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Mapping
 from copy import deepcopy
 from os import PathLike
 from pathlib import PurePath
 from typing import Any
 from Z0Z_tools import raiseIfNone, writeStringToHere
 import ast
-
-# TODO Some `DOT` methods return lists, notably DOT.targets, which is an attribute of ast.Assign.
-# But, none or almost none of the other functions and methods accept a list as input.
-# This is most obviously a problem in `ClassIsAndAttribute.targetsIs` because the user needs to pass
-# a function that can take list[ast.expr] as a parameter.
-# I don't know if the following works, but it is interesting.
-# ClassIsAndAttribute.targetsIs(ast.Assign, lambda list_expr: any([IfThis.isSubscriptIdentifier('foldGroups')(node) for node in list_expr]))  # noqa: ERA001
-
-class _cleverNamePrototype: # pyright: ignore[reportUnusedClass]
-	@staticmethod
-	def index(at: int) -> Callable[[Sequence[个]], 个]:
-		def workhorse(zzz: Sequence[个]) -> 个:
-			node = zzz[at]
-			# slice?
-			return node  # noqa: RET504
-		return workhorse
 
 def makeDictionaryAsyncFunctionDef(astAST: ast.AST) -> dict[str, ast.AsyncFunctionDef]:
 	"""
