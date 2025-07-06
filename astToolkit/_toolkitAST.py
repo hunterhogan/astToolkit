@@ -1,9 +1,9 @@
 from astToolkit import identifierDotAttribute, IfThis, IngredientsFunction, LedgerOfImports, NodeTourist, Then
+from hunterMakesPy import raiseIfNone
 from inspect import getsource as inspect_getsource
 from os import PathLike
 from pathlib import Path, PurePath
 from typing import Any, Literal, TYPE_CHECKING, TypedDict, Unpack
-from Z0Z_tools import raiseIfNone
 import ast
 import importlib
 import sys
@@ -180,5 +180,5 @@ def parsePathFilename2astModule(pathFilename: PathLike[Any] | PurePath, **keywor
 		The parsed abstract syntax tree module.
 
 	"""
-	return ast.parse(Path(pathFilename).read_text(), **keywordArguments)
+	return ast.parse(Path(pathFilename).read_text(encoding="utf-8"), **keywordArguments)
 

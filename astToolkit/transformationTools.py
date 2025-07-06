@@ -34,7 +34,7 @@ from copy import deepcopy
 from os import PathLike
 from pathlib import PurePath
 from typing import Any
-from Z0Z_tools import raiseIfNone, writeStringToHere
+from hunterMakesPy import raiseIfNone, writeStringToHere
 import ast
 
 def makeDictionaryAsyncFunctionDef(astAST: ast.AST) -> dict[str, ast.AsyncFunctionDef]:

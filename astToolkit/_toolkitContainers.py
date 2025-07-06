@@ -1,7 +1,7 @@
 from astToolkit import identifierDotAttribute, Make
 from collections import defaultdict
 from collections.abc import Sequence
-from Z0Z_tools import updateExtendPolishDictionaryLists
+from hunterMakesPy import updateExtendPolishDictionaryLists
 import ast
 import dataclasses
 
