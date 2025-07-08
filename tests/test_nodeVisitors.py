@@ -12,13 +12,13 @@ class TestNodeVisitors:
 
 		visitedNodes = []
 
-		def collectNameNodes(node):
+		def collectNameNodes(node: ast.AST):
 			if isinstance(node, ast.Name):
 				visitedNodes.append(('Name', node.id, node.ctx.__class__.__name__))
 				return True
 			return False
 
-		def collectNodeInfo(node):
+		def collectNodeInfo(node: ast.AST):
 			# Action is already handled in the predicate for this test
 			return None
 
@@ -47,7 +47,7 @@ class TestNodeVisitors:
 	def test_nodeChangerBasicTransformation(self):
 		"""Test that NodeChanger can transform nodes."""
 
-		def findNameNodes(node):
+		def findNameNodes(node: ast.AST):
 			return isinstance(node, ast.Name) and node.id == "oldVariable"
 
 		def replaceWithNewName(node):

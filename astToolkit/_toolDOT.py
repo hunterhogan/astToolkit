@@ -16,8 +16,7 @@ from astToolkit import (
 	hasDOTtag, hasDOTtarget, hasDOTtarget_expr, hasDOTtarget_Name, hasDOTtarget_NameOrAttributeOrSubscript, hasDOTtargets,
 	hasDOTtest, hasDOTtype, hasDOTtype_comment, hasDOTtype_ignores, hasDOTtype_params, hasDOTupper, hasDOTvalue,
 	hasDOTvalue_boolOrNone, hasDOTvalue_ConstantValueType, hasDOTvalue_expr, hasDOTvalue_exprOrNone, hasDOTvalues,
-	hasDOTvararg,
-)
+	hasDOTvararg)
 from collections.abc import Sequence
 from typing import overload
 import ast
@@ -49,7 +48,7 @@ class DOT:
         ...
 
     @staticmethod
-    def annotation(node: hasDOTannotation) -> ast.expr | (ast.expr | None):
+    def annotation(node: hasDOTannotation) -> ast.expr | None:
         return node.annotation
 
     @staticmethod
@@ -63,7 +62,7 @@ class DOT:
         ...
 
     @staticmethod
-    def arg(node: hasDOTarg) -> str | (str | None):
+    def arg(node: hasDOTarg) -> None | str:
         return node.arg
 
     @staticmethod
@@ -90,7 +89,7 @@ class DOT:
         return node.argtypes
 
     @staticmethod
-    def asname(node: hasDOTasname) -> str | None:
+    def asname(node: hasDOTasname) -> None | str:
         return node.asname
 
     @staticmethod
@@ -239,7 +238,7 @@ class DOT:
         return node.keywords
 
     @staticmethod
-    def kind(node: hasDOTkind) -> str | None:
+    def kind(node: hasDOTkind) -> None | str:
         return node.kind
 
     @staticmethod
@@ -279,7 +278,7 @@ class DOT:
         return node.lower
 
     @staticmethod
-    def module(node: hasDOTmodule) -> str | None:
+    def module(node: hasDOTmodule) -> None | str:
         return node.module
 
     @staticmethod
@@ -302,7 +301,7 @@ class DOT:
         ...
 
     @staticmethod
-    def name(node: hasDOTname) -> ast.Name | str | (str | None):
+    def name(node: hasDOTname) -> ast.Name | None | str:
         return node.name
 
     @staticmethod
@@ -375,7 +374,7 @@ class DOT:
         ...
 
     @staticmethod
-    def pattern(node: hasDOTpattern) -> ast.pattern | (ast.pattern | None):
+    def pattern(node: hasDOTpattern) -> ast.pattern | None:
         return node.pattern
 
     @staticmethod
@@ -387,7 +386,7 @@ class DOT:
         return node.posonlyargs
 
     @staticmethod
-    def rest(node: hasDOTrest) -> str | None:
+    def rest(node: hasDOTrest) -> None | str:
         return node.rest
 
     @staticmethod
@@ -401,7 +400,7 @@ class DOT:
         ...
 
     @staticmethod
-    def returns(node: hasDOTreturns) -> ast.expr | (ast.expr | None):
+    def returns(node: hasDOTreturns) -> ast.expr | None:
         return node.returns
 
     @staticmethod
@@ -444,7 +443,7 @@ class DOT:
         ...
 
     @staticmethod
-    def target(node: hasDOTtarget) -> ast.expr | ast.Name | (ast.Name | ast.Attribute | ast.Subscript):
+    def target(node: hasDOTtarget) -> ast.Attribute | ast.expr | ast.Name | ast.Subscript:
         return node.target
 
     @staticmethod
@@ -460,7 +459,7 @@ class DOT:
         return node.type
 
     @staticmethod
-    def type_comment(node: hasDOTtype_comment) -> str | None:
+    def type_comment(node: hasDOTtype_comment) -> None | str:
         return node.type_comment
 
     @staticmethod
@@ -496,7 +495,7 @@ class DOT:
         ...
 
     @staticmethod
-    def value(node: hasDOTvalue) -> ast.expr | (ast.expr | None) | (bool | None) | ConstantValueType:
+    def value(node: hasDOTvalue) -> ast.expr | bool | ConstantValueType | None:
         return node.value
 
     @staticmethod

@@ -1,8 +1,7 @@
 # ruff: noqa: A002
 """Automatically generated file, so changes may be overwritten."""
 from astToolkit import (
-	ast_attributes, ast_attributes_int, ast_attributes_type_comment, ConstantValueType, identifierDotAttribute,
-)
+	ast_attributes, ast_attributes_int, ast_attributes_type_comment, ConstantValueType, identifierDotAttribute)
 from collections.abc import Iterable, Sequence
 from typing import overload, Unpack
 import ast

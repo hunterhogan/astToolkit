@@ -26,15 +26,14 @@ maintaining semantic integrity and performance characteristics.
 """
 
 from astToolkit import (
-	Be, DOT, Grab, IfThis, IngredientsFunction, IngredientsModule, Make, NodeChanger, NodeTourist, Then, 木,
-)
+	Be, DOT, Grab, IfThis, IngredientsFunction, IngredientsModule, Make, NodeChanger, NodeTourist, Then, 木)
 from autoflake import fix_code as autoflake_fix_code
 from collections.abc import Mapping
 from copy import deepcopy
+from hunterMakesPy import raiseIfNone, writeStringToHere
 from os import PathLike
 from pathlib import PurePath
 from typing import Any
-from hunterMakesPy import raiseIfNone, writeStringToHere
 import ast
 
 def makeDictionaryAsyncFunctionDef(astAST: ast.AST) -> dict[str, ast.AsyncFunctionDef]:
@@ -208,14 +207,17 @@ def inlineFunctionDef(identifierToInline: str, module: ast.Module) -> ast.Functi
 
 def removeUnusedParameters(ingredientsFunction: IngredientsFunction) -> IngredientsFunction:
 	"""
-	Remove unused parameters from a function's AST definition, return statement, and annotation.
+	Remove unused parameters from `IngredientsFunction.astFunctionDef`, but not from `import` statements.
 
-	(AI generated docstring)
+	This function, like the other components in the `IngredientsFunction` ecosystem, is overly specific.
 
-	This function analyzes the Abstract Syntax Tree (AST) of a given function and removes
-	any parameters that are not referenced within the function body. It updates the
-	function signature, the return statement (if it's a tuple containing unused variables),
-	and the return type annotation accordingly.
+	The `removeUnusedParameters` function removes `ast.arg` (abstract syntax tree ***arg***ument) parameters from the
+	`ast.arguments` argument specification of the `ast.FunctionDef` (Function ***Def***inition) function in
+	`IngredientsFunction.astFunctionDef` that are are not referenced in the `ast.FunctionDef.body` or that are only referenced in
+	`ast.Return` return statements.
+
+	This function will replace every `return` statement with a new `return` statement that returns all of the remaining
+	parameters. It will update the `returns` annotation.
 
 	Parameters
 	----------
@@ -330,3 +332,43 @@ def write_astModule(ingredients: IngredientsModule, pathFilename: PathLike[Any] 
 		autoflake_additional_imports.append(packageName)
 	pythonSource = autoflake_fix_code(pythonSource, autoflake_additional_imports, expand_star_imports=False, remove_all_unused_imports=True, remove_duplicate_keys = False, remove_unused_variables = False)
 	writeStringToHere(pythonSource, pathFilename)
+
+def unjoinBinOP(astAST: ast.AST, operator: type[ast.operator] = ast.operator) -> list[ast.expr]:
+	"""
+	Unjoin a binary operation AST node into a list of expressions.
+
+	(AI generated docstring)
+
+	This function takes an AST node representing a binary operation and recursively
+	unjoins it into a flat list of expressions. It handles both binary operations
+	and unary operations, ensuring that all nested expressions are extracted.
+
+	Parameters
+	----------
+	astAST : ast.AST
+		The AST node to unjoin.
+	operator : type[ast.operator] = ast.operator
+		The type of binary operator to look for in the AST. Defaults to `ast.operator`.
+
+	Returns
+	-------
+	list[ast.expr]
+		A list of expressions extracted from the binary operation AST node.
+	"""
+	list_ast_expr: list[ast.expr] = []
+	workbench: list[ast.expr] = []
+
+	findThis = Be.BinOp.opIs(lambda this_op: isinstance(this_op, operator))
+	doThat = Grab.andDoAllOf([Grab.leftAttribute(Then.appendTo(workbench)), Grab.rightAttribute(Then.appendTo(list_ast_expr))])
+	breakingBinOp = NodeTourist(findThis, doThat)
+
+	breakingBinOp.visit(astAST)
+
+	while workbench:
+		ast_expr = workbench.pop()
+		if isinstance(ast_expr, ast.BinOp):
+			breakingBinOp.visit(ast_expr)
+		else:
+			list_ast_expr.append(ast_expr)
+
+	return list_ast_expr
