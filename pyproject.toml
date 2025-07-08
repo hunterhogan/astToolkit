@@ -80,7 +80,7 @@ run = { branch = true, concurrency = [
 xml = { output = "tests/coverage/coverage.xml" }
 
 [tool.pytest.ini_options]
-addopts = ["--color=auto", "-n 2"]
+addopts = ["--color=auto"]
 log_auto_indent = true
 testpaths = ["tests"]
 
