@@ -9,8 +9,8 @@ allSubclasses: dict[str, dict[str, dict[str, Any]]] = {
 "ast module, minimal parameters": {"expression": ast.Add(), "astToolkit.dump": "ast.Add()", "ast.dump": "Add()"}
 },
 "alias": {
-"class Make, maximally empty parameters": {"expression": Make.alias(name='Make_alias'), "astToolkit.dump": "ast.alias(name='Make_alias', asname=None)", "ast.dump": "alias(name='Make_alias')"},
-"class Make, minimal parameters": {"expression": Make.alias(name='Make_alias', asName=None), "astToolkit.dump": "ast.alias(name='Make_alias', asname=None)", "ast.dump": "alias(name='Make_alias')"},
+"class Make, maximally empty parameters": {"expression": Make.alias(dotModule='Make_alias'), "astToolkit.dump": "ast.alias(name='Make_alias', asname=None)", "ast.dump": "alias(name='Make_alias')"},
+"class Make, minimal parameters": {"expression": Make.alias(dotModule='Make_alias', asName=None), "astToolkit.dump": "ast.alias(name='Make_alias', asname=None)", "ast.dump": "alias(name='Make_alias')"},
 "ast module, minimal parameters": {"expression": ast.alias(name='ast_alias'), "astToolkit.dump": "ast.alias(name='ast_alias', asname=None)", "ast.dump": "alias(name='ast_alias')"}
 },
 "And": {
@@ -244,8 +244,8 @@ allSubclasses: dict[str, dict[str, dict[str, Any]]] = {
 "ast module, minimal parameters": {"expression": ast.Import(), "astToolkit.dump": "ast.Import(names=[])", "ast.dump": "Import(names=[])"}
 },
 "ImportFrom": {
-"class Make, maximally empty parameters": {"expression": Make.ImportFrom(dotModule='Make.ImportFrom', list_alias=[Make.alias(name='Make_ImportFrom_alias')]), "astToolkit.dump": "ast.ImportFrom(module='Make.ImportFrom', names=[ast.alias(name='Make_ImportFrom_alias', asname=None)], level=0)", "ast.dump": "ImportFrom(module='Make.ImportFrom', names=[alias(name='Make_ImportFrom_alias')], level=0)"},
-"class Make, minimal parameters": {"expression": Make.ImportFrom(dotModule='Make.ImportFrom', list_alias=[Make.alias(name='Make_ImportFrom_alias', asName=None)], level=0), "astToolkit.dump": "ast.ImportFrom(module='Make.ImportFrom', names=[ast.alias(name='Make_ImportFrom_alias', asname=None)], level=0)", "ast.dump": "ImportFrom(module='Make.ImportFrom', names=[alias(name='Make_ImportFrom_alias')], level=0)"},
+"class Make, maximally empty parameters": {"expression": Make.ImportFrom(dotModule='Make.ImportFrom', list_alias=[Make.alias(dotModule='Make_ImportFrom_alias')]), "astToolkit.dump": "ast.ImportFrom(module='Make.ImportFrom', names=[ast.alias(name='Make_ImportFrom_alias', asname=None)], level=0)", "ast.dump": "ImportFrom(module='Make.ImportFrom', names=[alias(name='Make_ImportFrom_alias')], level=0)"},
+"class Make, minimal parameters": {"expression": Make.ImportFrom(dotModule='Make.ImportFrom', list_alias=[Make.alias(dotModule='Make_ImportFrom_alias', asName=None)], level=0), "astToolkit.dump": "ast.ImportFrom(module='Make.ImportFrom', names=[ast.alias(name='Make_ImportFrom_alias', asname=None)], level=0)", "ast.dump": "ImportFrom(module='Make.ImportFrom', names=[alias(name='Make_ImportFrom_alias')], level=0)"},
 "ast module, minimal parameters": {"expression": ast.ImportFrom(), "astToolkit.dump": "ast.ImportFrom(module=None, names=[], level=None)", "ast.dump": "ImportFrom(names=[])"} # pyright: ignore[reportCallIssue]
 },
 "In": {

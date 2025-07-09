@@ -168,14 +168,14 @@ class Make:
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
-    def alias(name: str, asName: str | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.alias:
+    def alias(dotModule: str, asName: str | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.alias:
         """Import alias AST `object` representing name mapping in import statements.
 
         (AI generated docstring)
 
         The `ast.alias` `object` represents name mappings used in `import` and
         `from ... import` statements. It handles both direct imports (`import math`)
-        and aliased imports (`import numpy as np`).
+        and aliased imports (`import re as regex`).
 
         Parameters
         ----------
@@ -191,7 +191,7 @@ class Make:
             AST `object` representing an import name mapping with optional aliasing.
 
         """
-        return ast.alias(name=name, asname=asName, **keywordArguments)
+        return ast.alias(name=dotModule, asname=asName, **keywordArguments)
 
     class And(ast.And):
         """Identical to the `ast` (abstract syntax tree) class but with a method, `join()`, that "joins" expressions using the `ast.BoolOp` (***Bool***ean ***Op***eration) class."""
@@ -1677,6 +1677,47 @@ class Make:
 
     @staticmethod
     def Import(dotModule: identifierDotAttribute, asName: str | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Import:
+        """Make an `ast.Import` `object` representing a single `import` statement.
+
+        The `ast.Import` `object` represents one `import` statement with zero or more module names separated by commas.
+        Each module name is an `ast.alias` `object`. The series of module names is stored in `ast.Import.names` as a `list` of
+        `ast.alias`.
+
+        Nevertheless, with `Make.Import`, you must create exactly one `ast.alias` `object` to be placed in `ast.Import.names`.
+
+        Parameters
+        ----------
+        dotModule : identifierDotAttribute
+            (package.Module notation) The name of the module to import: the name may be in dot notation, also called attribute access; the name may be an absolute or relative import.
+            This parameter corresponds with `ast.alias.name` in `ast.Import.names[0]`; or, written as one dot-notation statement, it corresponds with
+            `ast.Import.names[0].name`.
+        asName : str | None = None
+            (as Name) The identifier of the module in the local scope: `asName` must be a valid identifier, so it cannot be in dot notation.
+            This parameter corresponds with `ast.alias.asname` in `ast.Import.names[0]`; or, written as one dot-notation statement, it corresponds with
+            `ast.Import.names[0].asname`.
+
+        Returns
+        -------
+        importStatement : ast.Import
+            An `ast.Import` `object` with one `ast.alias` `object` representing a single `import` statement with a single module name.
+
+        Examples
+        --------
+        ```python
+        # To represent: `import os`
+        Make.Import(dotModule = 'os')
+
+        # To represent: `import re as regex`
+        Make.Import(dotModule = 're', asName = 'regex')
+
+        # To represent: `import collections.abc`
+        Make.Import(dotModule = 'collections.abc')
+
+        # To represent: `import scipy.signal.windows as SciPy`
+        Make.Import(dotModule = 'scipy.signal.windows', asName = 'SciPy')
+        ```
+
+        """
         return ast.Import(names=[Make.alias(dotModule, asName)], **keywordArguments)
 
     @staticmethod
@@ -3287,7 +3328,7 @@ class Make:
         return ast.type_param(**keywordArguments)
 
     @staticmethod
-    def TypeAlias(name: ast.Name, type_params: Sequence[ast.type_param], value: ast.expr, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeAlias: # pyright: ignore[reportInconsistentOverload]
+    def TypeAlias(name: ast.Name, type_params: Sequence[ast.type_param], value: ast.expr, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeAlias:
         """Make a type alias definition AST object for `type` statement declarations.
 
         (AI generated docstring)
@@ -3300,7 +3341,7 @@ class Make:
         ----------
         name : ast.expr
             Name expression (typically ast.Name) for the alias identifier.
-        type_params : Sequence[ast.type_param] = []
+        type_params : Sequence[ast.type_param]
             (type ***param***eter***s***) List of type parameters for generic aliases.
         value : ast.expr
             Type expression defining what the alias represents.
@@ -3311,7 +3352,7 @@ class Make:
             AST object representing a complete type alias declaration.
 
         """
-        return ast.TypeAlias(name=name, type_params=list(type_params) if type_params else [], value=value, **keywordArguments)
+        return ast.TypeAlias(name=name, type_params=list(type_params), value=value, **keywordArguments)
 
     @staticmethod
     def TypeIgnore(lineno: int, tag: str) -> ast.TypeIgnore:
