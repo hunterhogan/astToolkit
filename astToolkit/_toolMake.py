@@ -732,6 +732,28 @@ class Make:
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
+    def boolop() -> ast.boolop:
+        """Make a base boolean operator abstract class for logical operations.
+
+        (AI generated docstring)
+
+        The `ast.boolop` (***bool***ean ***op***erator) class serves as the abstract base for
+        boolean operators like `ast.And` and `ast.Or`. This method creates a minimal boolop
+        instance, though in practice you will typically use specific boolean operator factories like
+        `Make.And()`, `Make.Or()`, or their join methods.
+
+        Most users seeking boolean operation creation should use the specific operator
+        classes or `Make.BoolOp()` rather than this abstract base constructor.
+
+        Returns
+        -------
+        baseBooleanOperator : ast.boolop
+            (***bool***ean ***op***erator) AST `object` representing a base boolean operator.
+
+        """
+        return ast.boolop()
+
+    @staticmethod
     def BoolOp(op: ast.boolop, values: Sequence[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.BoolOp:
         """Make a boolean operation AST `object` for logical operations with multiple operands.
 
@@ -755,28 +777,6 @@ class Make:
 
         """
         return ast.BoolOp(op=op, values=list(values), **keywordArguments)
-
-    @staticmethod
-    def boolop() -> ast.boolop:
-        """Make a base boolean operator abstract class for logical operations.
-
-        (AI generated docstring)
-
-        The `ast.boolop` (***bool***ean ***op***erator) class serves as the abstract base for
-        boolean operators like `ast.And` and `ast.Or`. This method creates a minimal boolop
-        instance, though in practice you will typically use specific boolean operator factories like
-        `Make.And()`, `Make.Or()`, or their join methods.
-
-        Most users seeking boolean operation creation should use the specific operator
-        classes or `Make.BoolOp()` rather than this abstract base constructor.
-
-        Returns
-        -------
-        baseBooleanOperator : ast.boolop
-            (***bool***ean ***op***erator) AST `object` representing a base boolean operator.
-
-        """
-        return ast.boolop()
 
     @staticmethod
     def Break(**keywordArguments: Unpack[ast_attributes]) -> ast.Break:
@@ -3519,31 +3519,6 @@ class Make:
         return ast.UAdd()
 
     @staticmethod
-    def UnaryOp(op: ast.unaryop, operand: ast.expr, **keywordArguments: Unpack[ast_attributes]) -> ast.UnaryOp:
-        """Unary operation AST `object` for single-operand operations.
-
-        (AI generated docstring)
-
-        The `ast.UnaryOp` (***Un***ary ***Op***eration) `object` represents unary operations
-        that take a single operand, such as negation, logical not, bitwise inversion, and positive
-        sign operations.
-
-        Parameters
-        ----------
-        op : ast.unaryop
-            (***op***erator) The unary operator like `ast.UAdd()`, `ast.USub()`, `ast.Not()`, `ast.Invert()`.
-        operand : ast.expr
-            The expression that the unary operator is applied to.
-
-        Returns
-        -------
-        unaryOperation : ast.UnaryOp
-            (***Un***ary ***Op***eration) AST `object` representing a unary operation on a single expression.
-
-        """
-        return ast.UnaryOp(op=op, operand=operand, **keywordArguments)
-
-    @staticmethod
     def unaryop() -> ast.unaryop:
         """Abstract unary operator `object` for use in AST construction.
 
@@ -3567,6 +3542,31 @@ class Make:
 
         """
         return ast.unaryop()
+
+    @staticmethod
+    def UnaryOp(op: ast.unaryop, operand: ast.expr, **keywordArguments: Unpack[ast_attributes]) -> ast.UnaryOp:
+        """Unary operation AST `object` for single-operand operations.
+
+        (AI generated docstring)
+
+        The `ast.UnaryOp` (***Un***ary ***Op***eration) `object` represents unary operations
+        that take a single operand, such as negation, logical not, bitwise inversion, and positive
+        sign operations.
+
+        Parameters
+        ----------
+        op : ast.unaryop
+            (***op***erator) The unary operator like `ast.UAdd()`, `ast.USub()`, `ast.Not()`, `ast.Invert()`.
+        operand : ast.expr
+            The expression that the unary operator is applied to.
+
+        Returns
+        -------
+        unaryOperation : ast.UnaryOp
+            (***Un***ary ***Op***eration) AST `object` representing a unary operation on a single expression.
+
+        """
+        return ast.UnaryOp(op=op, operand=operand, **keywordArguments)
 
     @staticmethod
     def USub() -> ast.USub:

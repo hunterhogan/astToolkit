@@ -34,7 +34,7 @@ from typing import cast, Generic
 from typing_extensions import TypeIs
 import ast
 
-class NodeTourist(ast.NodeVisitor, Generic[木, 归个]):
+class NodeTourist(ast.NodeVisitor, Generic[木, 归个]):  # noqa: UP046
 	"""Read-only AST visitor that extracts information from nodes matching predicate conditions.
 
 	(AI generated docstring)
@@ -102,7 +102,7 @@ class NodeTourist(ast.NodeVisitor, Generic[木, 归个]):
 
 		"""
 		if self.findThis(node):
-			self.nodeCaptured = self.doThat(cast("木", node))
+			self.nodeCaptured = self.doThat(cast('木', node))
 		self.generic_visit(node)
 
 	def captureLastMatch(self, node: ast.AST) -> 归个 | None:
@@ -135,7 +135,7 @@ class NodeTourist(ast.NodeVisitor, Generic[木, 归个]):
 		self.visit(node)
 		return self.nodeCaptured
 
-class NodeChanger(ast.NodeTransformer, Generic[木, 归个]):
+class NodeChanger(ast.NodeTransformer, Generic[木, 归个]):  # noqa: UP046
 	"""Destructive AST transformer that selectively modifies nodes matching predicate conditions.
 
 	(AI generated docstring)
