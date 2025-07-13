@@ -25,16 +25,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.x"
-      - run: pip install requests toml
       - name: Check PyPI version
         id: check
         run: |
           python -c "
-          import os, requests, toml
-          dictionaryProject = toml.load('pyproject.toml')['project']
+          import json, os, pathlib, tomllib, urllib.requests
+          dictionaryProject = tomllib.loads(pathlib.Path('pyproject.toml').read_text())['project']
           version = dictionaryProject['version']
           name = dictionaryProject['name']
-          if version not in requests.get(f'https://pypi.org/pypi/{name}/json').json().get('releases', []):
+          if version not in json.loads(urllib.requests.get(f'https://pypi.org/pypi/{name}/json').read()).get('releases', []):
             with open(os.environ['GITHUB_OUTPUT'], 'a') as appendStream:
               appendStream.write('should_publish=true\n')
               appendStream.write(f'url=https://pypi.org/project/{name}/{version}\n')

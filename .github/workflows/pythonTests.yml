@@ -7,50 +7,64 @@ permissions:
 
 jobs:
 
-  get-python-versions:
+  get-project-info:
     runs-on: ubuntu-latest
     outputs:
-      python-versions: ${{ steps.get-python-versions.outputs.versions }}
+      tests-python-versions: ${{ steps.get-project-info.outputs.versions }}
 
     steps:
       - uses: actions/checkout@v4
-      - run: pip install packaging requests tomli
-      - id: get-python-versions
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '>=3.11'
+
+      - name: Cache, pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: pip-a-dee-doo-dah
+          restore-keys: pip-a-dee-doo-dah
+
+      - run: pip install packaging requests
+
+      - id: get-project-info
         run: |
           python -c "
-          from packaging.specifiers import SpecifierSet
-          from packaging.version import Version
-          from pathlib import Path
-          import itertools, json, requests, tomli, os
+          import itertools, json, os, packaging.specifiers, packaging.version, pathlib, requests, tomllib
 
-          specifications = SpecifierSet(tomli.loads(Path('pyproject.toml').read_text())['project']['requires-python'])
+          dictionaryProject = tomllib.loads(pathlib.Path('pyproject.toml').read_text())['project']
 
-          listPythonVersions = [str(max(group)) for _key, group in itertools.groupby(
-            specifications.filter(Version(item['version']) for item in requests.get(
-              'https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json').json())
-            , lambda V: V.release[0:-1])]
+          listPythonVersions = [str(max(group))
+            for _key, group in itertools.groupby(
+              packaging.specifiers.SpecifierSet(dictionaryProject['requires-python']).filter(
+                packaging.version.Version(manifest['version'])
+              for manifest in requests.get(
+                'https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json'
+                ).json())
+              , lambda V: V.release[0:-1])]
 
           with open(os.environ['GITHUB_OUTPUT'], 'a') as writeStream:
-              writeStream.write(f'versions={json.dumps(listPythonVersions)}\n')
+            writeStream.write(f'versions={json.dumps(listPythonVersions)}\n')
           "
 
   make-testbeds:
-    needs: get-python-versions
+    needs: get-project-info
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ${{fromJson(needs.get-python-versions.outputs.python-versions)}}
+        tests-python-versions: ${{ fromJson(needs.get-project-info.outputs.tests-python-versions) }}
     steps:
       - uses: actions/checkout@v4
-
-      - name: Install Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+      - name: Cache, pip
+        uses: actions/cache@v4
         with:
-          python-version: ${{ matrix.python-version }}
+          path: ~/.cache/pip
+          key: pip-a-dee-doo-dah
+          restore-keys: pip-a-dee-doo-dah
 
-      - name: Install package[testing]
-        run: |
-          python -m pip install --upgrade pip
-          pip install ".[testing]"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.tests-python-versions }}
 
+      - run: pip install ".[testing]"
       - run: pytest
