@@ -732,28 +732,6 @@ class Make:
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
-    def boolop() -> ast.boolop:
-        """Make a base boolean operator abstract class for logical operations.
-
-        (AI generated docstring)
-
-        The `ast.boolop` (***bool***ean ***op***erator) class serves as the abstract base for
-        boolean operators like `ast.And` and `ast.Or`. This method creates a minimal boolop
-        instance, though in practice you will typically use specific boolean operator factories like
-        `Make.And()`, `Make.Or()`, or their join methods.
-
-        Most users seeking boolean operation creation should use the specific operator
-        classes or `Make.BoolOp()` rather than this abstract base constructor.
-
-        Returns
-        -------
-        baseBooleanOperator : ast.boolop
-            (***bool***ean ***op***erator) AST `object` representing a base boolean operator.
-
-        """
-        return ast.boolop()
-
-    @staticmethod
     def BoolOp(op: ast.boolop, values: Sequence[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.BoolOp:
         """Make a boolean operation AST `object` for logical operations with multiple operands.
 
@@ -777,6 +755,28 @@ class Make:
 
         """
         return ast.BoolOp(op=op, values=list(values), **keywordArguments)
+
+    @staticmethod
+    def boolop() -> ast.boolop:
+        """Make a base boolean operator abstract class for logical operations.
+
+        (AI generated docstring)
+
+        The `ast.boolop` (***bool***ean ***op***erator) class serves as the abstract base for
+        boolean operators like `ast.And` and `ast.Or`. This method creates a minimal boolop
+        instance, though in practice you will typically use specific boolean operator factories like
+        `Make.And()`, `Make.Or()`, or their join methods.
+
+        Most users seeking boolean operation creation should use the specific operator
+        classes or `Make.BoolOp()` rather than this abstract base constructor.
+
+        Returns
+        -------
+        baseBooleanOperator : ast.boolop
+            (***bool***ean ***op***erator) AST `object` representing a base boolean operator.
+
+        """
+        return ast.boolop()
 
     @staticmethod
     def Break(**keywordArguments: Unpack[ast_attributes]) -> ast.Break:
@@ -3519,31 +3519,6 @@ class Make:
         return ast.UAdd()
 
     @staticmethod
-    def unaryop() -> ast.unaryop:
-        """Abstract unary operator `object` for use in AST construction.
-
-        (AI generated docstring)
-
-        Class `ast.unaryop` (***un***ary ***op***erator) is the base for all unary operators in Python's AST.
-        It serves as the abstract parent for specific unary operators: `ast.Invert`,
-        `ast.Not`, `ast.UAdd`, `ast.USub`. This factory method makes a generic
-        unary operator `object` that can be used in the antecedent-action pattern with visitor classes.
-
-        Unlike `ast.cmpop` which handles binary comparison operations between two operands,
-        `ast.unaryop` represents operators that act on a single operand. Both serve as abstract
-        base classes but for different categories of operations: `ast.cmpop` for comparisons
-        and `ast.unaryop` for unary transformations.
-
-        Returns
-        -------
-        unaryOperator : ast.unaryop
-            Abstract unary operator `object` that serves as the base `class` for all
-            Python unary operators in AST structures.
-
-        """
-        return ast.unaryop()
-
-    @staticmethod
     def UnaryOp(op: ast.unaryop, operand: ast.expr, **keywordArguments: Unpack[ast_attributes]) -> ast.UnaryOp:
         """Unary operation AST `object` for single-operand operations.
 
@@ -3567,6 +3542,31 @@ class Make:
 
         """
         return ast.UnaryOp(op=op, operand=operand, **keywordArguments)
+
+    @staticmethod
+    def unaryop() -> ast.unaryop:
+        """Abstract unary operator `object` for use in AST construction.
+
+        (AI generated docstring)
+
+        Class `ast.unaryop` (***un***ary ***op***erator) is the base for all unary operators in Python's AST.
+        It serves as the abstract parent for specific unary operators: `ast.Invert`,
+        `ast.Not`, `ast.UAdd`, `ast.USub`. This factory method makes a generic
+        unary operator `object` that can be used in the antecedent-action pattern with visitor classes.
+
+        Unlike `ast.cmpop` which handles binary comparison operations between two operands,
+        `ast.unaryop` represents operators that act on a single operand. Both serve as abstract
+        base classes but for different categories of operations: `ast.cmpop` for comparisons
+        and `ast.unaryop` for unary transformations.
+
+        Returns
+        -------
+        unaryOperator : ast.unaryop
+            Abstract unary operator `object` that serves as the base `class` for all
+            Python unary operators in AST structures.
+
+        """
+        return ast.unaryop()
 
     @staticmethod
     def USub() -> ast.USub:

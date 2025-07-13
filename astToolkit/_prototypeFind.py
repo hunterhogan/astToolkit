@@ -272,10 +272,6 @@ class Find:
         return isinstance(node, ast.BitXor)
 
     @staticmethod
-    def boolop(node: ast.AST) -> TypeIs[ast.boolop]:
-        return isinstance(node, ast.boolop)
-
-    @staticmethod
     def BoolOp(node: ast.AST) -> TypeIs[ast.BoolOp]:
         return isinstance(node, ast.BoolOp)
 
@@ -286,6 +282,10 @@ class Find:
     @staticmethod
     def BoolOp_values(node: ast.BoolOp) -> Sequence[ast.expr]:
         return node.values
+
+    @staticmethod
+    def boolop(node: ast.AST) -> TypeIs[ast.boolop]:
+        return isinstance(node, ast.boolop)
 
     @staticmethod
     def Break(node: ast.AST) -> TypeIs[ast.Break]:
@@ -1192,10 +1192,6 @@ class Find:
         return isinstance(node, ast.UAdd)
 
     @staticmethod
-    def unaryop(node: ast.AST) -> TypeIs[ast.unaryop]:
-        return isinstance(node, ast.unaryop)
-
-    @staticmethod
     def UnaryOp(node: ast.AST) -> TypeIs[ast.UnaryOp]:
         return isinstance(node, ast.UnaryOp)
 
@@ -1206,6 +1202,10 @@ class Find:
     @staticmethod
     def UnaryOp_operand(node: ast.UnaryOp) -> ast.expr:
         return node.operand
+
+    @staticmethod
+    def unaryop(node: ast.AST) -> TypeIs[ast.unaryop]:
+        return isinstance(node, ast.unaryop)
 
     @staticmethod
     def USub(node: ast.AST) -> TypeIs[ast.USub]:

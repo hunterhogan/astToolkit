@@ -527,14 +527,6 @@ class Be:
         """
         return isinstance(node, ast.BitXor)
 
-    @staticmethod
-    def boolop(node: ast.AST) -> TypeIs[ast.boolop]:
-        """`Be.boolop`, ***bool***ean ***op***erator, matches any of `class` `ast.boolop` | `ast.And` | `ast.Or`.
-
-        It is a subclass of `ast.AST`.
-        """
-        return isinstance(node, ast.boolop)
-
     class _BoolOp:
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.BoolOp]:
@@ -555,6 +547,14 @@ class Be:
             return workhorse
     BoolOp = _BoolOp()
     '`Be.BoolOp`, ***Bool***ean ***Op***eration, matches `class` `ast.BoolOp`.\n\n        It is a subclass of `ast.expr`.\n        '
+
+    @staticmethod
+    def boolop(node: ast.AST) -> TypeIs[ast.boolop]:
+        """`Be.boolop`, ***bool***ean ***op***erator, matches any of `class` `ast.boolop` | `ast.And` | `ast.Or`.
+
+        It is a subclass of `ast.AST`.
+        """
+        return isinstance(node, ast.boolop)
 
     @staticmethod
     def Break(node: ast.AST) -> TypeIs[ast.Break]:
@@ -2202,14 +2202,6 @@ class Be:
         """
         return isinstance(node, ast.UAdd)
 
-    @staticmethod
-    def unaryop(node: ast.AST) -> TypeIs[ast.unaryop]:
-        """`Be.unaryop`, ***un***ary ***op***erator, matches any of `class` `ast.unaryop` | `ast.Invert` | `ast.Not` | `ast.UAdd` | `ast.USub`.
-
-        It is a subclass of `ast.AST`.
-        """
-        return isinstance(node, ast.unaryop)
-
     class _UnaryOp:
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.UnaryOp]:
@@ -2230,6 +2222,14 @@ class Be:
             return workhorse
     UnaryOp = _UnaryOp()
     '`Be.UnaryOp`, ***Un***ary ***Op***eration, matches `class` `ast.UnaryOp`.\n\n        It is a subclass of `ast.expr`.\n        '
+
+    @staticmethod
+    def unaryop(node: ast.AST) -> TypeIs[ast.unaryop]:
+        """`Be.unaryop`, ***un***ary ***op***erator, matches any of `class` `ast.unaryop` | `ast.Invert` | `ast.Not` | `ast.UAdd` | `ast.USub`.
+
+        It is a subclass of `ast.AST`.
+        """
+        return isinstance(node, ast.unaryop)
 
     @staticmethod
     def USub(node: ast.AST) -> TypeIs[ast.USub]:

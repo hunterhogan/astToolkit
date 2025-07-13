@@ -50,15 +50,14 @@ dependencies = [
   "hunterMakesPy",
   "typing_extensions>=4.10.0",
 ]
-optional-dependencies = { testing = [
+optional-dependencies = { development = [
   "mypy",
+  "pyupgrade",
+  "setuptools-scm",
+], testing = [
   "pytest-cov",
   "pytest-xdist",
   "pytest",
-  "pyupgrade",
-  "setuptools-scm",
-  "tomli",
-  "trove_classifiers",
 ] }
 
 [build-system]
