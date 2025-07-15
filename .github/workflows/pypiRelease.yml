@@ -24,16 +24,16 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
+          python-version: "3.11"
       - name: Check PyPI version
         id: check
         run: |
           python -c "
-          import json, os, pathlib, tomllib, urllib.requests
+          import json, os, pathlib, tomllib, urllib.request
           dictionaryProject = tomllib.loads(pathlib.Path('pyproject.toml').read_text())['project']
           version = dictionaryProject['version']
           name = dictionaryProject['name']
-          if version not in json.loads(urllib.requests.get(f'https://pypi.org/pypi/{name}/json').read()).get('releases', []):
+          if version not in json.loads(urllib.request.urlopen(f'https://pypi.org/pypi/{name}/json').read()).get('releases', []):
             with open(os.environ['GITHUB_OUTPUT'], 'a') as appendStream:
               appendStream.write('should_publish=true\n')
               appendStream.write(f'url=https://pypi.org/project/{name}/{version}\n')
