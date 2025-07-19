@@ -1,5 +1,5 @@
 from ast import fix_missing_locations, parse
-from astToolkit import ConstantValueType, dump, Make
+from astToolkit import ConstantValueType, Make
 from collections.abc import Callable, Sequence
 from tests import support
 from tests.support.ast_helper import ASTTestMixin
@@ -11,6 +11,9 @@ import ast
 import sys
 import textwrap
 import unittest
+
+if sys.version_info >= (3, 13):
+	from astToolkit import dump
 
 class AST_Tests(unittest.TestCase):
 	maxDiff = None
