@@ -64,7 +64,7 @@ import sys
 
 from astToolkit._astTypes import (
 	ast_attributes as ast_attributes, ast_attributes_int as ast_attributes_int,
-	ast_attributes_type_comment as ast_attributes_type_comment, ConstantValueType as ConstantValueType,
+	ast_attributes_type_comment as ast_attributes_type_comment, astASTattributes as astASTattributes, ConstantValueType as ConstantValueType,
 	hasDOTannotation as hasDOTannotation, hasDOTannotation_expr as hasDOTannotation_expr,
 	hasDOTannotation_exprOrNone as hasDOTannotation_exprOrNone, hasDOTarg as hasDOTarg, hasDOTarg_str as hasDOTarg_str,
 	hasDOTarg_strOrNone as hasDOTarg_strOrNone, hasDOTargs as hasDOTargs, hasDOTargs_arguments as hasDOTargs_arguments,
@@ -110,7 +110,8 @@ from astToolkit._astTypes import (
 if sys.version_info >= (3, 13):
 	from astToolkit._astTypes import hasDOTdefault_value as hasDOTdefault_value
 
-from astToolkit._dumpHandmade import dump as dump
+if sys.version_info >= (3, 13):
+	from astToolkit._dumpHandmade import dump as dump
 
 from astToolkit._toolkitNodeVisitor import (
 	NodeChanger as NodeChanger,

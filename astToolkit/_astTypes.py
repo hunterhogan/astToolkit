@@ -5,6 +5,7 @@ import ast
 import sys
 
 type ConstantValueType = bool | bytes | complex | EllipsisType | float | int | None | range | str
+type astASTattributes = ast.AST | ConstantValueType | list[ast.AST] | list[ast.AST | None] | list[str]
 type identifierDotAttribute = str
 个 = typing_TypeVar('个', covariant=True)
 归个 = typing_TypeVar('归个', covariant=True)

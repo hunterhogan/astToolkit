@@ -8,6 +8,7 @@ from tests.test_ast.utils import to_tuple
 from textwrap import dedent
 from typing import Any, cast, ClassVar
 import ast
+import sys
 import textwrap
 import unittest
 
@@ -95,161 +96,163 @@ class AST_Tests(unittest.TestCase):
 class ASTHelpers_Test(unittest.TestCase):
 	maxDiff = None
 
-	def test_dump(self) -> None:
-		node = parse('spam(eggs, "and cheese")')
-		self.assertEqual(
-			dump(node),
-			"ast.Module(body=[ast.Expr(value=ast.Call(func=ast.Name(id='spam', ctx=ast.Load()), "
-			"args=[ast.Name(id='eggs', ctx=ast.Load()), ast.Constant(value='and cheese')]))])",
-		)
-		self.assertEqual(
-			dump(node, annotate_fields=False),
-			"ast.Module([ast.Expr(ast.Call(ast.Name('spam', ast.Load()), [ast.Name('eggs', ast.Load()), "
-			"ast.Constant('and cheese')]))])",
-		)
-		self.assertEqual(
-			dump(node, include_attributes=True),
-			"ast.Module(body=[ast.Expr(value=ast.Call(func=ast.Name(id='spam', ctx=ast.Load(), "
-			"lineno=1, col_offset=0, end_lineno=1, end_col_offset=4), "
-			"args=[ast.Name(id='eggs', ctx=ast.Load(), lineno=1, col_offset=5, "
-			"end_lineno=1, end_col_offset=9), ast.Constant(value='and cheese', "
-			"lineno=1, col_offset=11, end_lineno=1, end_col_offset=23)], "
-			"lineno=1, col_offset=0, end_lineno=1, end_col_offset=24), "
-			"lineno=1, col_offset=0, end_lineno=1, end_col_offset=24)])",
-		)
+	if sys.version_info >= (3, 13):
 
-	def test_dump_indent(self) -> None:
-		node = parse('spam(eggs, "and cheese")')
-		size=3
-		nDt=" " * size
-		self.assertEqual(
-			dump(node, indent=size),
-			f"""\
-ast.Module(
-{nDt}body=[
-{nDt}{nDt}ast.Expr(
-{nDt}{nDt}{nDt}value=ast.Call(
-{nDt}{nDt}{nDt}{nDt}func=ast.Name(id='spam', ctx=ast.Load()),
-{nDt}{nDt}{nDt}{nDt}args=[
-{nDt}{nDt}{nDt}{nDt}{nDt}ast.Name(id='eggs', ctx=ast.Load()),
-{nDt}{nDt}{nDt}{nDt}{nDt}ast.Constant(value='and cheese')]))])""",
-		)
-		self.assertEqual(
-			dump(node, annotate_fields=False, indent="\t"),
-			"""\
-ast.Module(
-\t[
-\t\tast.Expr(
-\t\t\tast.Call(
-\t\t\t\tast.Name('spam', ast.Load()),
-\t\t\t\t[
-\t\t\t\t\tast.Name('eggs', ast.Load()),
-\t\t\t\t\tast.Constant('and cheese')]))])""",
-		)
-		self.assertEqual(
-			dump(node, include_attributes=True, indent=3),
-			f"""\
-ast.Module(
-{nDt}body=[
-{nDt}{nDt}ast.Expr(
-{nDt}{nDt}{nDt}value=ast.Call(
-{nDt}{nDt}{nDt}{nDt}func=ast.Name(
-{nDt}{nDt}{nDt}{nDt}{nDt}id='spam',
-{nDt}{nDt}{nDt}{nDt}{nDt}ctx=ast.Load(),
-{nDt}{nDt}{nDt}{nDt}{nDt}lineno=1,
-{nDt}{nDt}{nDt}{nDt}{nDt}col_offset=0,
-{nDt}{nDt}{nDt}{nDt}{nDt}end_lineno=1,
-{nDt}{nDt}{nDt}{nDt}{nDt}end_col_offset=4),
-{nDt}{nDt}{nDt}{nDt}args=[
-{nDt}{nDt}{nDt}{nDt}{nDt}ast.Name(
-{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}id='eggs',
-{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}ctx=ast.Load(),
-{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}lineno=1,
-{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}col_offset=5,
-{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}end_lineno=1,
-{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}end_col_offset=9),
-{nDt}{nDt}{nDt}{nDt}{nDt}ast.Constant(
-{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}value='and cheese',
-{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}lineno=1,
-{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}col_offset=11,
-{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}end_lineno=1,
-{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}end_col_offset=23)],
-{nDt}{nDt}{nDt}{nDt}lineno=1,
-{nDt}{nDt}{nDt}{nDt}col_offset=0,
-{nDt}{nDt}{nDt}{nDt}end_lineno=1,
-{nDt}{nDt}{nDt}{nDt}end_col_offset=24),
-{nDt}{nDt}{nDt}lineno=1,
-{nDt}{nDt}{nDt}col_offset=0,
-{nDt}{nDt}{nDt}end_lineno=1,
-{nDt}{nDt}{nDt}end_col_offset=24)])""",
-		)
+		def test_dump(self) -> None:
+			node = parse('spam(eggs, "and cheese")')
+			self.assertEqual(
+				dump(node),
+				"ast.Module(body=[ast.Expr(value=ast.Call(func=ast.Name(id='spam', ctx=ast.Load()), "
+				"args=[ast.Name(id='eggs', ctx=ast.Load()), ast.Constant(value='and cheese')]))])",
+			)
+			self.assertEqual(
+				dump(node, annotate_fields=False),
+				"ast.Module([ast.Expr(ast.Call(ast.Name('spam', ast.Load()), [ast.Name('eggs', ast.Load()), "
+				"ast.Constant('and cheese')]))])",
+			)
+			self.assertEqual(
+				dump(node, include_attributes=True),
+				"ast.Module(body=[ast.Expr(value=ast.Call(func=ast.Name(id='spam', ctx=ast.Load(), "
+				"lineno=1, col_offset=0, end_lineno=1, end_col_offset=4), "
+				"args=[ast.Name(id='eggs', ctx=ast.Load(), lineno=1, col_offset=5, "
+				"end_lineno=1, end_col_offset=9), ast.Constant(value='and cheese', "
+				"lineno=1, col_offset=11, end_lineno=1, end_col_offset=23)], "
+				"lineno=1, col_offset=0, end_lineno=1, end_col_offset=24), "
+				"lineno=1, col_offset=0, end_lineno=1, end_col_offset=24)])",
+			)
 
-	def test_dump_incomplete(self) -> None:
-		node = Make.Raise(lineno=3, col_offset=4)
-		self.assertEqual(dump(node), "ast.Raise()")
-		self.assertEqual(
-			dump(node, include_attributes=True), "ast.Raise(lineno=3, col_offset=4)"
-		)
-		node = Make.Raise(exc=Make.Name(id="e", context=Make.Load()), lineno=3, col_offset=4)
-		self.assertEqual(dump(node), "ast.Raise(exc=ast.Name(id='e', ctx=ast.Load()))")
-		self.assertEqual(
-			dump(node, annotate_fields=False), "ast.Raise(ast.Name('e', ast.Load()))"
-		)
-		self.assertEqual(
-			dump(node, include_attributes=True),
-			"ast.Raise(exc=ast.Name(id='e', ctx=ast.Load()), lineno=3, col_offset=4)",
-		)
-		self.assertEqual(
-			dump(node, annotate_fields=False, include_attributes=True),
-			"ast.Raise(ast.Name('e', ast.Load()), lineno=3, col_offset=4)",
-		)
-		node = Make.Raise(cause=Make.Name(id="e", context=Make.Load()))
-		self.assertEqual(dump(node), "ast.Raise(cause=ast.Name(id='e', ctx=ast.Load()))")
-		self.assertEqual(
-			dump(node, annotate_fields=False), "ast.Raise(cause=ast.Name('e', ast.Load()))"
-		)
-		# Arguments:  # noqa: ERA001
-		node = Make.arguments(list_arg=[Make.arg("x")])
-		self.assertEqual(
-			dump(node, annotate_fields=False),
-			"ast.arguments([], [ast.arg('x')])",
-		)
-		node = Make.arguments(posonlyargs=[Make.arg("x")])
-		self.assertEqual(
-			dump(node, annotate_fields=False),
-			"ast.arguments([ast.arg('x')])",
-		)
-		node = Make.arguments(posonlyargs=[Make.arg("x")], kwonlyargs=[Make.arg("y")])
-		self.assertEqual(
-			dump(node, annotate_fields=False),
-			"ast.arguments([ast.arg('x')], kwonlyargs=[ast.arg('y')])",
-		)
-		node = Make.arguments(list_arg=[Make.arg("x")], kwonlyargs=[Make.arg("y")])
-		self.assertEqual(
-			dump(node, annotate_fields=False),
-			"ast.arguments([], [ast.arg('x')], kwonlyargs=[ast.arg('y')])",
-		)
-		node = Make.arguments()
-		self.assertEqual(
-			dump(node, annotate_fields=False),
-			"ast.arguments()",
-		)
-		# Classes:  # noqa: ERA001
-		node = Make.ClassDef(
-			"T",
-			[],
-			[Make.keyword("a", Make.Constant(None))],
-			[],
-			[Make.Name("dataclass", context=Make.Load())],
-		)
-		self.assertEqual(
-			dump(node),
-			"ast.ClassDef(name='T', keywords=[ast.keyword(arg='a', value=ast.Constant(value=None))], decorator_list=[ast.Name(id='dataclass', ctx=ast.Load())])",
-		)
-		self.assertEqual(
-			dump(node, annotate_fields=False),
-			"ast.ClassDef('T', [], [ast.keyword('a', ast.Constant(None))], [], [ast.Name('dataclass', ast.Load())])",
-		)
+		def test_dump_indent(self) -> None:
+			node = parse('spam(eggs, "and cheese")')
+			size=3
+			nDt=" " * size
+			self.assertEqual(
+				dump(node, indent=size),
+				f"""\
+	ast.Module(
+	{nDt}body=[
+	{nDt}{nDt}ast.Expr(
+	{nDt}{nDt}{nDt}value=ast.Call(
+	{nDt}{nDt}{nDt}{nDt}func=ast.Name(id='spam', ctx=ast.Load()),
+	{nDt}{nDt}{nDt}{nDt}args=[
+	{nDt}{nDt}{nDt}{nDt}{nDt}ast.Name(id='eggs', ctx=ast.Load()),
+	{nDt}{nDt}{nDt}{nDt}{nDt}ast.Constant(value='and cheese')]))])""",
+			)
+			self.assertEqual(
+				dump(node, annotate_fields=False, indent="\t"),
+				"""\
+	ast.Module(
+	\t[
+	\t\tast.Expr(
+	\t\t\tast.Call(
+	\t\t\t\tast.Name('spam', ast.Load()),
+	\t\t\t\t[
+	\t\t\t\t\tast.Name('eggs', ast.Load()),
+	\t\t\t\t\tast.Constant('and cheese')]))])""",
+			)
+			self.assertEqual(
+				dump(node, include_attributes=True, indent=3),
+				f"""\
+	ast.Module(
+	{nDt}body=[
+	{nDt}{nDt}ast.Expr(
+	{nDt}{nDt}{nDt}value=ast.Call(
+	{nDt}{nDt}{nDt}{nDt}func=ast.Name(
+	{nDt}{nDt}{nDt}{nDt}{nDt}id='spam',
+	{nDt}{nDt}{nDt}{nDt}{nDt}ctx=ast.Load(),
+	{nDt}{nDt}{nDt}{nDt}{nDt}lineno=1,
+	{nDt}{nDt}{nDt}{nDt}{nDt}col_offset=0,
+	{nDt}{nDt}{nDt}{nDt}{nDt}end_lineno=1,
+	{nDt}{nDt}{nDt}{nDt}{nDt}end_col_offset=4),
+	{nDt}{nDt}{nDt}{nDt}args=[
+	{nDt}{nDt}{nDt}{nDt}{nDt}ast.Name(
+	{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}id='eggs',
+	{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}ctx=ast.Load(),
+	{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}lineno=1,
+	{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}col_offset=5,
+	{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}end_lineno=1,
+	{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}end_col_offset=9),
+	{nDt}{nDt}{nDt}{nDt}{nDt}ast.Constant(
+	{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}value='and cheese',
+	{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}lineno=1,
+	{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}col_offset=11,
+	{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}end_lineno=1,
+	{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}end_col_offset=23)],
+	{nDt}{nDt}{nDt}{nDt}lineno=1,
+	{nDt}{nDt}{nDt}{nDt}col_offset=0,
+	{nDt}{nDt}{nDt}{nDt}end_lineno=1,
+	{nDt}{nDt}{nDt}{nDt}end_col_offset=24),
+	{nDt}{nDt}{nDt}lineno=1,
+	{nDt}{nDt}{nDt}col_offset=0,
+	{nDt}{nDt}{nDt}end_lineno=1,
+	{nDt}{nDt}{nDt}end_col_offset=24)])""",
+			)
+
+		def test_dump_incomplete(self) -> None:
+			node = Make.Raise(lineno=3, col_offset=4)
+			self.assertEqual(dump(node), "ast.Raise()")
+			self.assertEqual(
+				dump(node, include_attributes=True), "ast.Raise(lineno=3, col_offset=4)"
+			)
+			node = Make.Raise(exc=Make.Name(id="e", context=Make.Load()), lineno=3, col_offset=4)
+			self.assertEqual(dump(node), "ast.Raise(exc=ast.Name(id='e', ctx=ast.Load()))")
+			self.assertEqual(
+				dump(node, annotate_fields=False), "ast.Raise(ast.Name('e', ast.Load()))"
+			)
+			self.assertEqual(
+				dump(node, include_attributes=True),
+				"ast.Raise(exc=ast.Name(id='e', ctx=ast.Load()), lineno=3, col_offset=4)",
+			)
+			self.assertEqual(
+				dump(node, annotate_fields=False, include_attributes=True),
+				"ast.Raise(ast.Name('e', ast.Load()), lineno=3, col_offset=4)",
+			)
+			node = Make.Raise(cause=Make.Name(id="e", context=Make.Load()))
+			self.assertEqual(dump(node), "ast.Raise(cause=ast.Name(id='e', ctx=ast.Load()))")
+			self.assertEqual(
+				dump(node, annotate_fields=False), "ast.Raise(cause=ast.Name('e', ast.Load()))"
+			)
+			# Arguments:  # noqa: ERA001
+			node = Make.arguments(list_arg=[Make.arg("x")])
+			self.assertEqual(
+				dump(node, annotate_fields=False),
+				"ast.arguments([], [ast.arg('x')])",
+			)
+			node = Make.arguments(posonlyargs=[Make.arg("x")])
+			self.assertEqual(
+				dump(node, annotate_fields=False),
+				"ast.arguments([ast.arg('x')])",
+			)
+			node = Make.arguments(posonlyargs=[Make.arg("x")], kwonlyargs=[Make.arg("y")])
+			self.assertEqual(
+				dump(node, annotate_fields=False),
+				"ast.arguments([ast.arg('x')], kwonlyargs=[ast.arg('y')])",
+			)
+			node = Make.arguments(list_arg=[Make.arg("x")], kwonlyargs=[Make.arg("y")])
+			self.assertEqual(
+				dump(node, annotate_fields=False),
+				"ast.arguments([], [ast.arg('x')], kwonlyargs=[ast.arg('y')])",
+			)
+			node = Make.arguments()
+			self.assertEqual(
+				dump(node, annotate_fields=False),
+				"ast.arguments()",
+			)
+			# Classes:  # noqa: ERA001
+			node = Make.ClassDef(
+				"T",
+				[],
+				[Make.keyword("a", Make.Constant(None))],
+				[],
+				[Make.Name("dataclass", context=Make.Load())],
+			)
+			self.assertEqual(
+				dump(node),
+				"ast.ClassDef(name='T', keywords=[ast.keyword(arg='a', value=ast.Constant(value=None))], decorator_list=[ast.Name(id='dataclass', ctx=ast.Load())])",
+			)
+			self.assertEqual(
+				dump(node, annotate_fields=False),
+				"ast.ClassDef('T', [], [ast.keyword('a', ast.Constant(None))], [], [ast.Name('dataclass', ast.Load())])",
+			)
 
 	def test_bad_integer(self) -> None:
 		# issue13436: Bad error message with invalid numeric values  # noqa: ERA001
@@ -778,18 +781,21 @@ class ASTValidatorTests(unittest.TestCase):
 		Make.MatchMapping([], [], rest="_"),
 	]
 
-	def test_match_validation_pattern(self) -> None:
-		name_x: ast.Name = Make.Name("x", Make.Load())
-		for pattern in self._MATCH_PATTERNS:
-			with self.subTest(dump(pattern, indent=4)):
-				node = Make.Match(
-					subject=name_x,
-					cases=[Make.match_case(pattern=pattern, body=[Make.Pass()])],
-				)
-				node = fix_missing_locations(node)
-				module = Make.Module([node], [])
-				with self.assertRaises(ValueError):
-					compile(module, "<test>", "exec")
+	if sys.version_info >= (3, 13):
+
+		def test_match_validation_pattern(self) -> None:
+			name_x: ast.Name = Make.Name("x", Make.Load())
+			for pattern in self._MATCH_PATTERNS:
+				with self.subTest(dump(pattern, indent=4)):
+					node = Make.Match(
+						subject=name_x,
+						cases=[Make.match_case(pattern=pattern, body=[Make.Pass()])],
+					)
+					node = fix_missing_locations(node)
+					module = Make.Module([node], [])
+					with self.assertRaises(ValueError):
+						compile(module, "<test>", "exec")
+
 class ConstantTests(unittest.TestCase):
 	"""Tests on the ast.Constant node type."""
 
@@ -993,9 +999,6 @@ class NodeTransformerTests(ASTTestMixin, BaseNodeVisitorCases, unittest.TestCase
 				return node
 
 		self.assertASTTransformation(PrintToLog, code, expected)
-
-def compare(left: ast.AST, right: ast.AST) -> bool:
-	return dump(left) == dump(right)
 
 class ASTOptimizationTests(unittest.TestCase):
 	binop: ClassVar[dict[str, ast.operator]] = {
