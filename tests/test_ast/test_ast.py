@@ -128,63 +128,63 @@ class ASTHelpers_Test(unittest.TestCase):
 			self.assertEqual(
 				dump(node, indent=size),
 				f"""\
-	ast.Module(
-	{nDt}body=[
-	{nDt}{nDt}ast.Expr(
-	{nDt}{nDt}{nDt}value=ast.Call(
-	{nDt}{nDt}{nDt}{nDt}func=ast.Name(id='spam', ctx=ast.Load()),
-	{nDt}{nDt}{nDt}{nDt}args=[
-	{nDt}{nDt}{nDt}{nDt}{nDt}ast.Name(id='eggs', ctx=ast.Load()),
-	{nDt}{nDt}{nDt}{nDt}{nDt}ast.Constant(value='and cheese')]))])""",
+ast.Module(
+{nDt}body=[
+{nDt}{nDt}ast.Expr(
+{nDt}{nDt}{nDt}value=ast.Call(
+{nDt}{nDt}{nDt}{nDt}func=ast.Name(id='spam', ctx=ast.Load()),
+{nDt}{nDt}{nDt}{nDt}args=[
+{nDt}{nDt}{nDt}{nDt}{nDt}ast.Name(id='eggs', ctx=ast.Load()),
+{nDt}{nDt}{nDt}{nDt}{nDt}ast.Constant(value='and cheese')]))])""",
 			)
 			self.assertEqual(
 				dump(node, annotate_fields=False, indent="\t"),
 				"""\
-	ast.Module(
-	\t[
-	\t\tast.Expr(
-	\t\t\tast.Call(
-	\t\t\t\tast.Name('spam', ast.Load()),
-	\t\t\t\t[
-	\t\t\t\t\tast.Name('eggs', ast.Load()),
-	\t\t\t\t\tast.Constant('and cheese')]))])""",
+ast.Module(
+\t[
+\t\tast.Expr(
+\t\t\tast.Call(
+\t\t\t\tast.Name('spam', ast.Load()),
+\t\t\t\t[
+\t\t\t\t\tast.Name('eggs', ast.Load()),
+\t\t\t\t\tast.Constant('and cheese')]))])""",
 			)
 			self.assertEqual(
 				dump(node, include_attributes=True, indent=3),
 				f"""\
-	ast.Module(
-	{nDt}body=[
-	{nDt}{nDt}ast.Expr(
-	{nDt}{nDt}{nDt}value=ast.Call(
-	{nDt}{nDt}{nDt}{nDt}func=ast.Name(
-	{nDt}{nDt}{nDt}{nDt}{nDt}id='spam',
-	{nDt}{nDt}{nDt}{nDt}{nDt}ctx=ast.Load(),
-	{nDt}{nDt}{nDt}{nDt}{nDt}lineno=1,
-	{nDt}{nDt}{nDt}{nDt}{nDt}col_offset=0,
-	{nDt}{nDt}{nDt}{nDt}{nDt}end_lineno=1,
-	{nDt}{nDt}{nDt}{nDt}{nDt}end_col_offset=4),
-	{nDt}{nDt}{nDt}{nDt}args=[
-	{nDt}{nDt}{nDt}{nDt}{nDt}ast.Name(
-	{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}id='eggs',
-	{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}ctx=ast.Load(),
-	{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}lineno=1,
-	{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}col_offset=5,
-	{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}end_lineno=1,
-	{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}end_col_offset=9),
-	{nDt}{nDt}{nDt}{nDt}{nDt}ast.Constant(
-	{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}value='and cheese',
-	{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}lineno=1,
-	{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}col_offset=11,
-	{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}end_lineno=1,
-	{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}end_col_offset=23)],
-	{nDt}{nDt}{nDt}{nDt}lineno=1,
-	{nDt}{nDt}{nDt}{nDt}col_offset=0,
-	{nDt}{nDt}{nDt}{nDt}end_lineno=1,
-	{nDt}{nDt}{nDt}{nDt}end_col_offset=24),
-	{nDt}{nDt}{nDt}lineno=1,
-	{nDt}{nDt}{nDt}col_offset=0,
-	{nDt}{nDt}{nDt}end_lineno=1,
-	{nDt}{nDt}{nDt}end_col_offset=24)])""",
+ast.Module(
+{nDt}body=[
+{nDt}{nDt}ast.Expr(
+{nDt}{nDt}{nDt}value=ast.Call(
+{nDt}{nDt}{nDt}{nDt}func=ast.Name(
+{nDt}{nDt}{nDt}{nDt}{nDt}id='spam',
+{nDt}{nDt}{nDt}{nDt}{nDt}ctx=ast.Load(),
+{nDt}{nDt}{nDt}{nDt}{nDt}lineno=1,
+{nDt}{nDt}{nDt}{nDt}{nDt}col_offset=0,
+{nDt}{nDt}{nDt}{nDt}{nDt}end_lineno=1,
+{nDt}{nDt}{nDt}{nDt}{nDt}end_col_offset=4),
+{nDt}{nDt}{nDt}{nDt}args=[
+{nDt}{nDt}{nDt}{nDt}{nDt}ast.Name(
+{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}id='eggs',
+{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}ctx=ast.Load(),
+{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}lineno=1,
+{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}col_offset=5,
+{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}end_lineno=1,
+{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}end_col_offset=9),
+{nDt}{nDt}{nDt}{nDt}{nDt}ast.Constant(
+{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}value='and cheese',
+{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}lineno=1,
+{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}col_offset=11,
+{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}end_lineno=1,
+{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}end_col_offset=23)],
+{nDt}{nDt}{nDt}{nDt}lineno=1,
+{nDt}{nDt}{nDt}{nDt}col_offset=0,
+{nDt}{nDt}{nDt}{nDt}end_lineno=1,
+{nDt}{nDt}{nDt}{nDt}end_col_offset=24),
+{nDt}{nDt}{nDt}lineno=1,
+{nDt}{nDt}{nDt}col_offset=0,
+{nDt}{nDt}{nDt}end_lineno=1,
+{nDt}{nDt}{nDt}end_col_offset=24)])""",
 			)
 
 		def test_dump_incomplete(self) -> None:
