@@ -3,7 +3,7 @@ import ast
 class ASTTestMixin:
     """Test mixing to have basic assertions for AST nodes."""
 
-    def assertASTEqual(self, ast1, ast2):
+    def assertASTEqual(self, ast1: ast.AST, ast2: ast.AST) -> None:
         # Ensure the comparisons start at an AST node
         self.assertIsInstance(ast1, ast.AST)
         self.assertIsInstance(ast2, ast.AST)

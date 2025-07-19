@@ -2318,14 +2318,15 @@ def set_recursion_limit(limit):
     finally:
         sys.setrecursionlimit(original_limit)
 
-def infinite_recursion(max_depth=None):
+def infinite_recursion(max_depth: int | None = None) -> contextlib._GeneratorContextManager[types.NoneType, types.NoneType, types.NoneType]:
     if max_depth is None:
         # Pick a number large enough to cause problems
         # but not take too long for code that can handle
         # very deep recursion.
         max_depth = 20_000
     elif max_depth < 3:
-        raise ValueError(f"max_depth must be at least 3, got {max_depth}")
+        message = f"max_depth must be at least 3, got {max_depth}"
+        raise ValueError(message)
     depth = get_recursion_depth()
     depth = max(depth - 1, 1)  # Ignore infinite_recursion() frame.
     limit = depth + max_depth

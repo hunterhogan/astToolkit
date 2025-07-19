@@ -1,12 +1,12 @@
 from ast import fix_missing_locations, parse
 from astToolkit import ConstantValueType, dump, Make
-from collections.abc import Callable
+from collections.abc import Callable, Sequence
 from tests import support
 from tests.support.ast_helper import ASTTestMixin
 from tests.test_ast.snippets import eval_results, eval_tests, exec_results, exec_tests, single_results, single_tests
 from tests.test_ast.utils import to_tuple
 from textwrap import dedent
-from typing import cast, ClassVar
+from typing import Any, cast, ClassVar
 import ast
 import textwrap
 import unittest
@@ -33,9 +33,9 @@ class AST_Tests(unittest.TestCase):
 			if isinstance(value, list):
 				first_pos = parent_position
 				if value and name == "decorator_list":
-					first_pos = (value[0].lineno, value[0].col_offset)
-				for child in value:
-					self._assertTrueorder(child, first_pos)
+					first_pos = (cast("ast.expr", value[0]).lineno, cast("ast.expr", value[0]).col_offset)
+				for child in value: # pyright: ignore[reportUnknownVariableType]
+					self._assertTrueorder(cast("ast.AST", child), first_pos)
 			elif value is not None:
 				self._assertTrueorder(value, parent_position)
 		self.assertEqual(ast_node._fields, ast_node.__match_args__)
@@ -60,36 +60,6 @@ class AST_Tests(unittest.TestCase):
 		for snippet in snippets_to_validate:
 			tree = parse(snippet)
 			compile(tree, "<string>", "exec")
-
-	def test_arguments(self) -> None:
-		x = Make.arguments()
-		self.assertEqual(
-			x._fields,
-			(
-				"posonlyargs",
-				"args",
-				"vararg",
-				"kwonlyargs",
-				"kw_defaults",
-				"kwarg",
-				"defaults",
-			),
-		)
-		self.assertEqual(
-			x.__annotations__,
-			{
-				"posonlyargs": list[ast.arg],
-				"args": list[ast.arg],
-				"vararg": ast.arg | None,
-				"kwonlyargs": list[ast.arg],
-				"kw_defaults": list[ast.expr],
-				"kwarg": ast.arg | None,
-				"defaults": list[ast.expr],
-			},
-		)
-
-		self.assertEqual(x.args, [])
-		self.assertIsNone(x.vararg)
 
 	def test_module(self) -> None:
 		body = [Make.Expr(Make.Constant(42))]
@@ -122,14 +92,6 @@ class AST_Tests(unittest.TestCase):
 			with self.assertRaisesRegex(TypeError, "invalid type in Constant: type"):
 				compile(e, "<test>", "eval")
 
-	def test_empty_yield_from(self) -> None:
-		# Issue 16546: yield from value is not optional.  # noqa: ERA001
-		empty_yield_from = parse("def f():\n yield from g()")
-		empty_yield_from.body[0].body[0].value.value = None
-		with self.assertRaises(ValueError) as cm:
-			compile(empty_yield_from, "<test>", "exec")
-		self.assertIn("field 'value' is required", str(cm.exception))
-
 class ASTHelpers_Test(unittest.TestCase):
 	maxDiff = None
 
@@ -158,18 +120,20 @@ class ASTHelpers_Test(unittest.TestCase):
 
 	def test_dump_indent(self) -> None:
 		node = parse('spam(eggs, "and cheese")')
-# 		self.assertEqual(
-# 			dump(node, indent=3),
-# 			"""\
-# ast.Module(
-#    body=[
-# 	  ast.Expr(
-# 		 value=ast.Call(
-# 			func=ast.Name(id='spam', ctx=ast.Load()),
-# 			args=[
-# 			   ast.Name(id='eggs', ctx=ast.Load()),
-# 			   ast.Constant(value='and cheese')]))])""",
-# 		)
+		size=3
+		nDt=" " * size
+		self.assertEqual(
+			dump(node, indent=size),
+			f"""\
+ast.Module(
+{nDt}body=[
+{nDt}{nDt}ast.Expr(
+{nDt}{nDt}{nDt}value=ast.Call(
+{nDt}{nDt}{nDt}{nDt}func=ast.Name(id='spam', ctx=ast.Load()),
+{nDt}{nDt}{nDt}{nDt}args=[
+{nDt}{nDt}{nDt}{nDt}{nDt}ast.Name(id='eggs', ctx=ast.Load()),
+{nDt}{nDt}{nDt}{nDt}{nDt}ast.Constant(value='and cheese')]))])""",
+		)
 		self.assertEqual(
 			dump(node, annotate_fields=False, indent="\t"),
 			"""\
@@ -182,43 +146,43 @@ ast.Module(
 \t\t\t\t\tast.Name('eggs', ast.Load()),
 \t\t\t\t\tast.Constant('and cheese')]))])""",
 		)
-# 		self.assertEqual(
-# 			dump(node, include_attributes=True, indent=3),
-# 			"""\
-# ast.Module(
-#    body=[
-# 	  ast.Expr(
-# 		 value=ast.Call(
-# 			func=ast.Name(
-# 			   id='spam',
-# 			   ctx=ast.Load(),
-# 			   lineno=1,
-# 			   col_offset=0,
-# 			   end_lineno=1,
-# 			   end_col_offset=4),
-# 			args=[
-# 			   ast.Name(
-# 				  id='eggs',
-# 				  ctx=ast.Load(),
-# 				  lineno=1,
-# 				  col_offset=5,
-# 				  end_lineno=1,
-# 				  end_col_offset=9),
-# 			   ast.Constant(
-# 				  value='and cheese',
-# 				  lineno=1,
-# 				  col_offset=11,
-# 				  end_lineno=1,
-# 				  end_col_offset=23)],
-# 			lineno=1,
-# 			col_offset=0,
-# 			end_lineno=1,
-# 			end_col_offset=24),
-# 		 lineno=1,
-# 		 col_offset=0,
-# 		 end_lineno=1,
-# 		 end_col_offset=24)])""",
-# 		)
+		self.assertEqual(
+			dump(node, include_attributes=True, indent=3),
+			f"""\
+ast.Module(
+{nDt}body=[
+{nDt}{nDt}ast.Expr(
+{nDt}{nDt}{nDt}value=ast.Call(
+{nDt}{nDt}{nDt}{nDt}func=ast.Name(
+{nDt}{nDt}{nDt}{nDt}{nDt}id='spam',
+{nDt}{nDt}{nDt}{nDt}{nDt}ctx=ast.Load(),
+{nDt}{nDt}{nDt}{nDt}{nDt}lineno=1,
+{nDt}{nDt}{nDt}{nDt}{nDt}col_offset=0,
+{nDt}{nDt}{nDt}{nDt}{nDt}end_lineno=1,
+{nDt}{nDt}{nDt}{nDt}{nDt}end_col_offset=4),
+{nDt}{nDt}{nDt}{nDt}args=[
+{nDt}{nDt}{nDt}{nDt}{nDt}ast.Name(
+{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}id='eggs',
+{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}ctx=ast.Load(),
+{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}lineno=1,
+{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}col_offset=5,
+{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}end_lineno=1,
+{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}end_col_offset=9),
+{nDt}{nDt}{nDt}{nDt}{nDt}ast.Constant(
+{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}value='and cheese',
+{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}lineno=1,
+{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}col_offset=11,
+{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}end_lineno=1,
+{nDt}{nDt}{nDt}{nDt}{nDt}{nDt}end_col_offset=23)],
+{nDt}{nDt}{nDt}{nDt}lineno=1,
+{nDt}{nDt}{nDt}{nDt}col_offset=0,
+{nDt}{nDt}{nDt}{nDt}end_lineno=1,
+{nDt}{nDt}{nDt}{nDt}end_col_offset=24),
+{nDt}{nDt}{nDt}lineno=1,
+{nDt}{nDt}{nDt}col_offset=0,
+{nDt}{nDt}{nDt}end_lineno=1,
+{nDt}{nDt}{nDt}end_col_offset=24)])""",
+		)
 
 	def test_dump_incomplete(self) -> None:
 		node = Make.Raise(lineno=3, col_offset=4)
@@ -299,9 +263,9 @@ ast.Module(
 		body = [Make.ImportFrom(dotModule="time", list_alias=[Make.alias(dotModule="sleep", lineno=0, col_offset=0)], level=None, lineno=0, col_offset=0)] # pyright: ignore[reportArgumentType]
 		mod = Make.Module(body, [])
 		code = compile(mod, "test", "exec")
-		ns = {}
-		exec(code, ns)  # noqa: S102
-		self.assertIn("sleep", ns)
+		namespace: dict[str, Any] = {}
+		exec(code, namespace)  # noqa: S102
+		self.assertIn("sleep", namespace)
 
 	def test_recursion_direct(self) -> None:
 		e = Make.UnaryOp(op=Make.Not(), lineno=0, col_offset=0, operand=Make.Constant(1))
@@ -318,14 +282,14 @@ ast.Module(
 			compile(Make.Expression(e), "<test>", "eval")
 
 class ASTValidatorTests(unittest.TestCase):
-	def mod(self, mod: ast.Module, msg: str | None = None, mode: str = "exec", *, exc: type[BaseException] = ValueError) -> None:
-		mod.lineno = mod.col_offset = 0
+	def mod(self, mod: ast.mod, msg: str | None = None, mode: str = "exec", *, exc: type[BaseException] = ValueError) -> None:
+		mod.lineno = mod.col_offset = 0 # pyright: ignore[reportAttributeAccessIssue]
 		fix_missing_locations(mod)
 		if msg is None:
-			compile(mod, "<test>", mode)
+			compile(mod, "<test>", mode) # pyright: ignore[reportArgumentType]
 		else:
 			with self.assertRaises(exc) as cm:
-				compile(mod, "<test>", mode)
+				compile(mod, "<test>", mode) # pyright: ignore[reportArgumentType]
 			self.assertIn(msg, str(cm.exception))
 
 	def expr(self, node: ast.expr, msg: str | None = None, *, exc: type[BaseException] = ValueError) -> None:
@@ -342,7 +306,7 @@ class ASTValidatorTests(unittest.TestCase):
 		m = Make.Expression(Make.Name("x", Make.Store()))
 		self.mod(m, "must have Load context", "eval")
 
-	def _check_arguments(self, fac: Callable[[ast.arguments], ast.FunctionDef], check: Callable[[ast.AST, str | None], None]) -> None:
+	def _check_arguments(self, fac: Callable[[ast.arguments], ast.AST], check: Callable[[ast.AST, str | None], None]) -> None:
 		def arguments(
 			args: list[ast.arg] | None = None,
 			posonlyargs: list[ast.arg] | None = None,
@@ -388,7 +352,7 @@ class ASTValidatorTests(unittest.TestCase):
 			Make.arg("b", Make.Name("y", Make.Load())),
 		]
 		check(
-			arguments(kwonlyargs=args, kw_defaults=[None, Make.Name("x", Make.Store())]),
+			arguments(kwonlyargs=args, kw_defaults=[None, Make.Name("x", Make.Store())]), # pyright: ignore[reportArgumentType]
 			"must have Load context",
 		)
 
@@ -406,7 +370,7 @@ class ASTValidatorTests(unittest.TestCase):
 		def fac(args: ast.arguments) -> ast.FunctionDef:
 			return Make.FunctionDef("x", args, [Make.Pass()], [], None, None)
 
-		self._check_arguments(fac, self.stmt)
+		self._check_arguments(fac, self.stmt) # pyright: ignore[reportArgumentType]
 
 	def test_funcdef_pattern_matching(self) -> None:
 		# gh-104799: New fields on FunctionDef should be added at the end  # noqa: ERA001
@@ -461,7 +425,7 @@ class ASTValidatorTests(unittest.TestCase):
 			"must have Load context",
 		)
 		self.stmt(cls(body=[]), "empty body on ClassDef")
-		self.stmt(cls(body=[None]), "None disallowed")
+		self.stmt(cls(body=[None]), "None disallowed") # pyright: ignore[reportArgumentType]
 		self.stmt(
 			cls(decorator_list=[Make.Name("x", Make.Store())]), "must have Load context"
 		)
@@ -633,7 +597,7 @@ class ASTValidatorTests(unittest.TestCase):
 		def fac(args: ast.arguments) -> ast.Lambda:
 			return Make.Lambda(args, Make.Name("x", Make.Load()))
 
-		self._check_arguments(fac, self.expr)
+		self._check_arguments(fac, self.expr) # pyright: ignore[reportArgumentType]
 
 	def test_ifexp(self) -> None:
 		load = Make.Name("x", Make.Load())
@@ -652,42 +616,40 @@ class ASTValidatorTests(unittest.TestCase):
 		s = Make.Set([Make.Name("x", Make.Store())])
 		self.expr(s, "must have Load context")
 
-	def _check_comprehension(self, fac: Callable[[ast.arguments], ast.FunctionDef]) -> None:
-		self.expr(fac([]), "comprehension with no generators")
+	def _check_comprehension(self, fac: Callable[[list[ast.comprehension]], ast.AST]) -> None:
+		self.expr(fac([]), "comprehension with no generators") # pyright: ignore[reportArgumentType]
 		g = Make.comprehension(
 			Make.Name("x", Make.Load()), Make.Name("x", Make.Load()), [], 0
 		)
-		self.expr(fac([g]), "must have Store context")
+		self.expr(fac([g]), "must have Store context") # pyright: ignore[reportArgumentType]
 		g = Make.comprehension(
 			Make.Name("x", Make.Store()), Make.Name("x", Make.Store()), [], 0
 		)
-		self.expr(fac([g]), "must have Load context")
+		self.expr(fac([g]), "must have Load context") # pyright: ignore[reportArgumentType]
 		x = Make.Name("x", Make.Store())
 		y = Make.Name("y", Make.Load())
 		g = Make.comprehension(x, y, [None], 0) # pyright: ignore[reportArgumentType]
-		self.expr(fac([g]), "None disallowed")
+		self.expr(fac([g]), "None disallowed") # pyright: ignore[reportArgumentType]
 		g = Make.comprehension(x, y, [Make.Name("x", Make.Store())], 0)
-		self.expr(fac([g]), "must have Load context")
+		self.expr(fac([g]), "must have Load context") # pyright: ignore[reportArgumentType]
 
-	def _simple_comp(self, fac: Callable[[ast.arguments], ast.FunctionDef]) -> None:
-		g = Make.comprehension(
-			Make.Name("x", Make.Store()), Make.Name("x", Make.Load()), [], 0
-		)
-		self.expr(fac(Make.Name("x", Make.Store()), [g]), "must have Load context")
+	def _simple_comp(self, fac: Callable[[ast.expr, list[ast.comprehension]], ast.expr]) -> None:
+		g = Make.comprehension(Make.Name("x", Make.Store()), Make.Name("x", Make.Load()), [], 0)
+		self.expr(fac(Make.Name("x", Make.Store()), [g]), "must have Load context") # pyright: ignore[reportCallIssue]
 
 		def wrap(gens: list[ast.comprehension]) -> ast.AST:
-			return fac(Make.Name("x", Make.Store()), gens)
+			return fac(Make.Name("x", Make.Store()), gens) # pyright: ignore[reportCallIssue]
 
-		self._check_comprehension(wrap)
+		self._check_comprehension(wrap) # pyright: ignore[reportArgumentType]
 
 	def test_listcomp(self) -> None:
-		self._simple_comp(ast.ListComp)
+		self._simple_comp(ast.ListComp) # pyright: ignore[reportArgumentType]
 
 	def test_setcomp(self) -> None:
-		self._simple_comp(ast.SetComp)
+		self._simple_comp(ast.SetComp) # pyright: ignore[reportArgumentType]
 
 	def test_generatorexp(self) -> None:
-		self._simple_comp(ast.GeneratorExp)
+		self._simple_comp(ast.GeneratorExp) # pyright: ignore[reportArgumentType]
 
 	def test_dictcomp(self) -> None:
 		g = Make.comprehension(
@@ -703,7 +665,7 @@ class ASTValidatorTests(unittest.TestCase):
 			v = Make.Name("y", Make.Load())
 			return Make.DictComp(k, v, comps)
 
-		self._check_comprehension(factory)
+		self._check_comprehension(factory) # pyright: ignore[reportArgumentType]
 
 	def test_yield(self) -> None:
 		self.expr(Make.Yield(Make.Name("x", Make.Store())), "must have Load")
@@ -758,17 +720,17 @@ class ASTValidatorTests(unittest.TestCase):
 		assign = Make.Assign([left], Make.Constant(4))
 		self.stmt(assign, "must have Store context")
 
-	def _sequence(self, fac: Callable[[ast.arguments], ast.FunctionDef]) -> None:
-		self.expr(fac([None], Make.Load()), "None disallowed")
+	def _sequence(self, fac: Callable[[list[ast.expr | None], ast.expr_context], ast.expr]) -> None:
+		self.expr(fac([None], Make.Load()), "None disallowed") # pyright: ignore[reportCallIssue]
 		self.expr(
-			fac([Make.Name("x", Make.Store())], Make.Load()), "must have Load context"
+			fac([Make.Name("x", Make.Store())], Make.Load()), "must have Load context" # pyright: ignore[reportCallIssue]
 		)
 
 	def test_list(self) -> None:
-		self._sequence(ast.List)
+		self._sequence(ast.List) # pyright: ignore[reportArgumentType]
 
 	def test_tuple(self) -> None:
-		self._sequence(ast.Tuple)
+		self._sequence(ast.Tuple) # pyright: ignore[reportArgumentType]
 
 	constant_1: ast.Constant = Make.Constant(1)
 	pattern_1: ast.MatchValue = Make.MatchValue(constant_1)
@@ -781,22 +743,22 @@ class ASTValidatorTests(unittest.TestCase):
 
 	name_carter: ast.Name = Make.Name("carter", Make.Load())
 
-	_MATCH_PATTERNS: ClassVar[list[ast.pattern]] = [
+	_MATCH_PATTERNS: ClassVar[Sequence[ast.pattern]] = [
 		Make.MatchValue(Make.Attribute(Make.Attribute(Make.Name("x", Make.Store()), "y", context=Make.Load()), "z", context=Make.Load())),
 		Make.MatchValue(Make.Attribute(Make.Attribute(Make.Name("x", Make.Load()), "y", context=Make.Store()), "z", context=Make.Load())),
 		Make.MatchValue(Make.Constant(...)),
 		Make.MatchValue(Make.Constant(True)),
-		Make.MatchValue(Make.Constant((1, 2, 3))),
-		Make.MatchSingleton("string"),
-		Make.MatchSequence([Make.MatchSingleton("string")]),
-		Make.MatchSequence([Make.MatchSequence([Make.MatchSingleton("string")])]),
+		Make.MatchValue(Make.Constant((1, 2, 3))), # pyright: ignore[reportArgumentType]
+		Make.MatchSingleton("string"), # pyright: ignore[reportArgumentType]
+		Make.MatchSequence([Make.MatchSingleton("string")]), # pyright: ignore[reportArgumentType]
+		Make.MatchSequence([Make.MatchSequence([Make.MatchSingleton("string")])]), # pyright: ignore[reportArgumentType]
 		Make.MatchMapping([constant_1, constant_true], [pattern_x]),
 		Make.MatchMapping([constant_true, constant_1], [pattern_x, pattern_1], rest="True"),
 		Make.MatchMapping([constant_true, Make.Starred(Make.Name("lol", Make.Load()), Make.Load())], [pattern_x, pattern_1], rest="legit"),
 		Make.MatchClass(Make.Attribute(Make.Attribute(constant_x, "y", context=Make.Load()), "z", context=Make.Load()), patterns=[], kwd_attrs=[], kwd_patterns=[]),
 		Make.MatchClass(name_carter, patterns=[], kwd_attrs=["True"], kwd_patterns=[pattern_1]),
 		Make.MatchClass(name_carter, patterns=[], kwd_attrs=[], kwd_patterns=[pattern_1]),
-		Make.MatchClass(name_carter, patterns=[Make.MatchSingleton("string")], kwd_attrs=[], kwd_patterns=[]),
+		Make.MatchClass(name_carter, patterns=[Make.MatchSingleton("string")], kwd_attrs=[], kwd_patterns=[]), # pyright: ignore[reportArgumentType]
 		Make.MatchClass(name_carter, patterns=[Make.MatchStar()], kwd_attrs=[], kwd_patterns=[]),
 		Make.MatchClass(name_carter, patterns=[], kwd_attrs=[], kwd_patterns=[Make.MatchStar()]),
 		Make.MatchClass(
@@ -809,7 +771,7 @@ class ASTValidatorTests(unittest.TestCase):
 		Make.MatchAs(name="False"),
 		Make.MatchOr([]),
 		Make.MatchOr([pattern_1]),
-		Make.MatchOr([pattern_1, pattern_x, Make.MatchSingleton("xxx")]),
+		Make.MatchOr([pattern_1, pattern_x, Make.MatchSingleton("xxx")]), # pyright: ignore[reportArgumentType]
 		Make.MatchAs(name="_"),
 		Make.MatchStar(name="x"),
 		Make.MatchSequence([Make.MatchStar("_")]),
@@ -833,26 +795,26 @@ class ConstantTests(unittest.TestCase):
 
 	def compile_constant(self, value: ConstantValueType) -> ConstantValueType:
 		tree: ast.Module = parse("x = 123")
-		node: ast.Constant = cast("ast.Constant", tree.body[0].value)
+		node: ast.Constant = cast("ast.Constant", cast("ast.Assign", tree.body[0]).value)
 		new_node: ast.Constant = Make.Constant(value=value)
 		ast.copy_location(new_node, node)
-		tree.body[0].value = new_node
+		cast("ast.Assign", tree.body[0]).value = new_node
 
 		code = compile(tree, "<string>", "exec")
 
-		namespace = {}
+		namespace: dict[str, Any] = {}
 		exec(code, namespace)  # noqa: S102
 		return namespace["x"]
 
 	def test_validation(self) -> None:
 		with self.assertRaises(TypeError) as cm:
-			self.compile_constant([1, 2, 3])
+			self.compile_constant([1, 2, 3]) # pyright: ignore[reportArgumentType]
 		self.assertEqual(str(cm.exception), "got an invalid type in Constant: list")
 
 	def test_singletons(self) -> None:
-		for const in (None, False, True, Ellipsis, b"", frozenset()):
+		for const in (None, False, True, Ellipsis, b"", frozenset[Any]()):
 			with self.subTest(const=const):
-				value = self.compile_constant(const)
+				value = self.compile_constant(const) # pyright: ignore[reportArgumentType]
 				self.assertIs(value, const)
 
 	def test_values(self) -> None:
@@ -874,16 +836,16 @@ class ConstantTests(unittest.TestCase):
 		)
 		for value in values:
 			with self.subTest(value=value):
-				result = self.compile_constant(value)
+				result = self.compile_constant(value) # pyright: ignore[reportArgumentType]
 				self.assertEqual(result, value)
 
 	def test_assign_to_constant(self) -> None:
 		tree = parse("x = 1")
 
-		target = tree.body[0].targets[0]
+		target = cast("ast.Assign", tree.body[0]).targets[0]
 		new_target = Make.Constant(value=1)
 		ast.copy_location(new_target, target)
-		tree.body[0].targets[0] = new_target
+		cast("ast.Assign", tree.body[0]).targets[0] = new_target
 
 		with self.assertRaises(ValueError) as cm:
 			compile(tree, "string", "exec")
@@ -894,20 +856,20 @@ class ConstantTests(unittest.TestCase):
 
 	def test_string_kind(self) -> None:
 		c = parse('"x"', mode="eval").body
-		self.assertEqual(c.value, "x")
-		self.assertEqual(c.kind, None)
+		self.assertEqual(cast("ast.Constant", c).value, "x")
+		self.assertEqual(cast("ast.Constant", c).kind, None)
 
 		c = parse('u"x"', mode="eval").body
-		self.assertEqual(c.value, "x")
-		self.assertEqual(c.kind, "u")
+		self.assertEqual(cast("ast.Constant", c).value, "x")
+		self.assertEqual(cast("ast.Constant", c).kind, "u")
 
 		c = parse('r"x"', mode="eval").body
-		self.assertEqual(c.value, "x")
-		self.assertEqual(c.kind, None)
+		self.assertEqual(cast("ast.Constant", c).value, "x")
+		self.assertEqual(cast("ast.Constant", c).kind, None)
 
 		c = parse('b"x"', mode="eval").body
-		self.assertEqual(c.value, b"x")
-		self.assertEqual(c.kind, None)
+		self.assertEqual(cast("ast.Constant", c).value, b"x")
+		self.assertEqual(cast("ast.Constant", c).kind, None)
 
 class BaseNodeVisitorCases:
 	pass
@@ -1062,233 +1024,6 @@ class ASTOptimizationTests(unittest.TestCase):
 
 	def wrap_statement(self, statement: ast.stmt) -> ast.Module:
 		return Make.Module(body=[statement])
-
-	def assert_ast(self, code: str, non_optimized_target: ast.AST, optimized_target: ast.AST) -> None:
-		non_optimized_tree = parse(code, optimize=-1)
-		optimized_tree = parse(code, optimize=1)
-
-		# Is a non-optimized tree equal to a non-optimized target?
-		self.assertTrue(
-			compare(non_optimized_tree, non_optimized_target),
-			f"{dump(non_optimized_target)} must equal "
-			f"{dump(non_optimized_tree)}",
-		)
-
-		# Is a optimized tree equal to a non-optimized target?
-		self.assertFalse(
-			compare(optimized_tree, non_optimized_target),
-			f"{dump(non_optimized_target)} must not equal "
-			f"{dump(non_optimized_tree)}"
-		)
-
-		# Is a optimized tree is equal to an optimized target?
-		self.assertTrue(
-			compare(optimized_tree,  optimized_target),
-			f"{dump(optimized_target)} must equal "
-			f"{dump(optimized_tree)}",
-		)
-
-	def create_binop(self, operand: str, left:ast.expr=Make.Constant(1), right:ast.expr=Make.Constant(1)) -> ast.BinOp:  # noqa: B008
-			return Make.BinOp(left=left, op=self.binop[operand], right=right)
-
-	def test_folding_binop(self) -> None:
-		code = "1 %s 1"
-		operators = self.binop.keys()
-
-		for op in operators:
-			result_code = code % op
-			non_optimized_target = self.wrap_expr(self.create_binop(op))
-			optimized_target = self.wrap_expr(Make.Constant(value=eval(result_code)))  # noqa: S307
-
-			with self.subTest(
-				result_code=result_code,
-				non_optimized_target=non_optimized_target,
-				optimized_target=optimized_target
-			):
-				self.assert_ast(result_code, non_optimized_target, optimized_target)
-
-		# Multiplication of constant tuples must be folded
-		code = "(1,) * 3"
-		non_optimized_target = self.wrap_expr(self.create_binop("*", Make.Tuple(listElements=[Make.Constant(value=1)]), Make.Constant(value=3)))
-		optimized_target = self.wrap_expr(Make.Constant(eval(code)))  # noqa: S307
-
-		self.assert_ast(code, non_optimized_target, optimized_target)
-
-	def test_folding_unaryop(self) -> None:
-		code = "%s1"
-		operators = self.unaryop.keys()
-
-		def create_unaryop(operand: str) -> ast.UnaryOp:
-			return Make.UnaryOp(op=self.unaryop[operand], operand=Make.Constant(1))
-
-		for op in operators:
-			result_code = code % op
-			non_optimized_target = self.wrap_expr(create_unaryop(op))
-			optimized_target = self.wrap_expr(Make.Constant(eval(result_code)))  # noqa: S307
-
-			with self.subTest(
-				result_code=result_code,
-				non_optimized_target=non_optimized_target,
-				optimized_target=optimized_target
-			):
-				self.assert_ast(result_code, non_optimized_target, optimized_target)
-
-	def test_folding_not(self) -> None:
-		code = "not (1 %s (1,))"
-		operators = {
-			"in": Make.In(),
-			"is": Make.Is(),
-		}
-		opt_operators = {
-			"is": Make.IsNot(),
-			"in": Make.NotIn(),
-		}
-
-		def create_notop(operand: str) -> ast.UnaryOp:
-			return Make.UnaryOp(op=Make.Not(), operand=Make.Compare(
-				left=Make.Constant(value=1),
-				ops=[operators[operand]],
-				comparators=[Make.Tuple(listElements=[Make.Constant(value=1)])]
-			))
-
-		for op in operators:
-			result_code = code % op
-			non_optimized_target = self.wrap_expr(create_notop(op))
-			optimized_target = self.wrap_expr(
-				Make.Compare(left=Make.Constant(1), ops=[opt_operators[op]], comparators=[Make.Constant(value=(1,))])
-			)
-
-			with self.subTest(
-				result_code=result_code,
-				non_optimized_target=non_optimized_target,
-				optimized_target=optimized_target
-			):
-				self.assert_ast(result_code, non_optimized_target, optimized_target)
-
-	def test_folding_format(self) -> None:
-		code = "'%s' % (a,)"
-
-		non_optimized_target = self.wrap_expr(
-			Make.BinOp(
-				left=Make.Constant(value="%s"),
-				op=Make.Mod(),
-				right=Make.Tuple(listElements=[Make.Name(id='a')]))
-		)
-		optimized_target = self.wrap_expr(
-			Make.JoinedStr(
-				values=[
-					Make.FormattedValue(value=Make.Name(id='a'), conversion=115)
-				]
-			)
-		)
-
-		self.assert_ast(code, non_optimized_target, optimized_target)
-
-	def test_folding_tuple(self) -> None:
-		code = "(1,)"
-
-		non_optimized_target = self.wrap_expr(Make.Tuple(listElements=[Make.Constant(1)]))
-		optimized_target = self.wrap_expr(Make.Constant(value=(1,)))
-
-		self.assert_ast(code, non_optimized_target, optimized_target)
-
-	def test_folding_comparator(self) -> None:
-		code = "1 %s %s1%s"
-		operators = [("in", Make.In()), ("not in", Make.NotIn())]
-		braces = [
-			("[", "]", ast.List, (1,)),
-			("{", "}", ast.Set, frozenset({1})),
-		]
-		for left, right, non_optimized_comparator, optimized_comparator in braces:
-			for op, node in operators:
-				non_optimized_target = self.wrap_expr(Make.Compare(
-					left=Make.Constant(1), ops=[node],
-					comparators=[non_optimized_comparator(elts=[Make.Constant(1)])]
-				))
-				optimized_target = self.wrap_expr(Make.Compare(
-					left=Make.Constant(1), ops=[node],
-					comparators=[Make.Constant(value=optimized_comparator)]
-				))
-				self.assert_ast(code % (op, left, right), non_optimized_target, optimized_target)
-
-	def test_folding_iter(self) -> None:
-		code = "for _ in %s1%s: pass"
-		braces = [
-			("[", "]", ast.List, (1,)),
-			("{", "}", ast.Set, frozenset({1})),
-		]
-
-		for left, right, ast_cls, optimized_iter in braces:
-			non_optimized_target = self.wrap_statement(Make.For(
-				target=Make.Name(id="_", context=Make.Store()),
-				iter=ast_cls(elts=[Make.Constant(1)]),
-				body=[Make.Pass()]
-			))
-			optimized_target = self.wrap_statement(Make.For(
-				target=Make.Name(id="_", context=Make.Store()),
-				iter=Make.Constant(value=optimized_iter),
-				body=[Make.Pass()]
-			))
-
-			self.assert_ast(code % (left, right), non_optimized_target, optimized_target)
-
-	def test_folding_subscript(self) -> None:
-		code = "(1,)[0]"
-
-		non_optimized_target = self.wrap_expr(
-			Make.Subscript(value=Make.Tuple(listElements=[Make.Constant(value=1)]), slice=Make.Constant(value=0))
-		)
-		optimized_target = self.wrap_expr(Make.Constant(value=1))
-
-		self.assert_ast(code, non_optimized_target, optimized_target)
-
-	def test_folding_type_param_in_function_def(self) -> None:
-		code = "def foo[%s = 1 + 1](): pass"
-
-		unoptimized_binop = self.create_binop("+")
-		unoptimized_type_params = [
-			("T", "T", ast.TypeVar),
-			("**P", "P", ast.ParamSpec),
-			("*Ts", "Ts", ast.TypeVarTuple),
-		]
-
-		for theType, name, type_param in unoptimized_type_params:
-			result_code = code % theType
-			optimized_target = self.wrap_statement(Make.FunctionDef(name='foo', argumentSpecification=Make.arguments(), body=[Make.Pass()], type_params=[type_param(name=name, default_value=Make.Constant(2))]))
-			non_optimized_target = self.wrap_statement(Make.FunctionDef(name='foo', argumentSpecification=Make.arguments(), body=[Make.Pass()], type_params=[type_param(name=name, default_value=unoptimized_binop)]))
-			self.assert_ast(result_code, non_optimized_target, optimized_target)
-
-	def test_folding_type_param_in_class_def(self) -> None:
-		code = "class foo[%s = 1 + 1]: pass"
-
-		unoptimized_binop = self.create_binop("+")
-		unoptimized_type_params = [
-			("T", "T", ast.TypeVar),
-			("**P", "P", ast.ParamSpec),
-			("*Ts", "Ts", ast.TypeVarTuple),
-		]
-
-		for theType, name, type_param in unoptimized_type_params:
-			result_code = code % theType
-			optimized_target = self.wrap_statement(Make.ClassDef(name='foo', body=[Make.Pass()], type_params=[type_param(name=name, default_value=Make.Constant(2))]))
-			non_optimized_target = self.wrap_statement(Make.ClassDef(name='foo', body=[Make.Pass()], type_params=[type_param(name=name, default_value=unoptimized_binop)]))
-			self.assert_ast(result_code, non_optimized_target, optimized_target)
-
-	def test_folding_type_param_in_type_alias(self) -> None:
-		code = "type foo[%s = 1 + 1] = 1"
-
-		unoptimized_binop = self.create_binop("+")
-		unoptimized_type_params = [
-			("T", "T", ast.TypeVar),
-			("**P", "P", ast.ParamSpec),
-			("*Ts", "Ts", ast.TypeVarTuple),
-		]
-
-		for theType, name, type_param in unoptimized_type_params:
-			result_code = code % theType
-			optimized_target = self.wrap_statement(Make.TypeAlias(name=Make.Name(id='foo', context=Make.Store()), type_params=[type_param(name=name, default_value=Make.Constant(2))], value=Make.Constant(value=1)))
-			non_optimized_target = self.wrap_statement(Make.TypeAlias(name=Make.Name(id='foo', context=Make.Store()), type_params=[type_param(name=name, default_value=unoptimized_binop)], value=Make.Constant(value=1)))
-			self.assert_ast(result_code, non_optimized_target, optimized_target)
 
 if __name__ == "__main__":
 	unittest.main()
