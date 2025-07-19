@@ -70,18 +70,15 @@ class Then:
 
 	@staticmethod
 	def insertThisAbove(list_astAST: Sequence[ast.AST]) -> Callable[[ast.AST], Sequence[ast.AST]]:
-		"""Insert specified nodes above the matched node in a sequence.
+		"""Create a list of `ast.AST` with `list_astAST` above the matched node.
 
-		(AI generated docstring)
-
-		Creates an action function that places the provided AST nodes before the matched node, forming a new sequence. Designed
-		for use with `NodeChanger` when adding statements or declarations that should precede the target node in the transformed
-		AST.
+		By physically inserting the list of `ast.AST` subclasses before the matched node, the list will logical precede the
+		matched node.
 
 		Parameters
 		----------
 		list_astAST : Sequence[ast.AST]
-			AST nodes to insert above the matched node.
+			A list of one or more `ast.AST` subclasses to effectively insert above the matched node.
 
 		Returns
 		-------

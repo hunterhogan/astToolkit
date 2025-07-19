@@ -26,6 +26,18 @@ class IfThis:
 	"""
 
 	@staticmethod
+	def isAllOf[归个](*predicate: Callable[[ast.AST], TypeIs[归个] | bool]) -> Callable[[ast.AST], TypeIs[归个] | bool]:
+		def workhorse(node: ast.AST) -> TypeIs[归个] | bool:
+			return all(antecedent(node) for antecedent in predicate)
+		return workhorse
+
+	@staticmethod
+	def isAnyOf[归个](*predicate: Callable[[ast.AST], TypeIs[归个] | bool]) -> Callable[[ast.AST], TypeIs[归个] | bool]:
+		def workhorse(node: ast.AST) -> TypeIs[归个] | bool:
+			return any(antecedent(node) for antecedent in predicate)
+		return workhorse
+
+	@staticmethod
 	def is_argIdentifier(identifier: str) -> Callable[[ast.AST], TypeIs[ast.arg]]:
 		"""Return a predicate matching an `ast.arg` node with a specific identifier.
 

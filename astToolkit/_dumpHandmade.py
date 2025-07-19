@@ -4,8 +4,6 @@ from astToolkit import ConstantValueType
 def dump(node: AST, *, annotate_fields: bool = True, include_attributes: bool = False, indent: int | str | None = None, show_empty: bool = False) -> str:  # noqa: C901, PLR0915
 	"""Return a formatted string representation of an AST node.
 
-	(AI generated docstring)
-
 	Parameters
 	----------
 	node : AST
@@ -13,7 +11,9 @@ def dump(node: AST, *, annotate_fields: bool = True, include_attributes: bool = 
 	annotate_fields : bool = True
 		Whether to include field names in the output.
 	include_attributes : bool = False
-		Whether to include node attributes in addition to fields.
+		Whether to include node "_attributes" in addition to fields. The attributes in category `_attributes` are `lineno` (line
+		_**n**umer**o**_ (_Latin_ "number")), `col_offset` (***col***umn offset), `end_lineno` (end line _**n**umer**o**_ (_Latin_
+		"number")), and `end_col_offset` (end ***col***umn offset).
 	indent : int | str | None = None
 		String for indentation or number of spaces; `None` for single-line output.
 	show_empty : bool = False

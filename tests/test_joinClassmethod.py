@@ -69,7 +69,7 @@ raw_scenarios: list[tuple[str, list[ast.expr], ast_attributes]] = [
 
 for scenario_id, expressions, kwargs in raw_scenarios:
 	# Create a builder that captures the specific expressions and kwargs for this scenario
-	def builder(op_type: type[ast.operator], bound_expressions: list[ast.expr] = expressions, bound_kwargs: ast_attributes = kwargs):
+	def builder(op_type: type[ast.operator], bound_expressions: list[ast.expr] = expressions, bound_kwargs: ast_attributes = kwargs) -> ast.expr:
 		return construct_expected_ast_node(op_type, bound_expressions, bound_kwargs)
 	list_join_method_test_scenarios_params.append(
 		pytest.param(scenario_id, expressions, kwargs, builder, id=scenario_id)
@@ -86,9 +86,9 @@ def test_join_method(
 	keyword_arguments_for_join_method: ast_attributes,
 	expected_ast_constructor: Callable[[type[ast.operator]], ast.expr]
 
-):
-	join_method = getattr(JoinImplementerClass, 'join')
-	actual_ast_node = cast(ast.expr, join_method(expressions_for_join_method, **keyword_arguments_for_join_method))
+) -> None:
+	join_method = JoinImplementerClass.join
+	actual_ast_node = cast("ast.expr", join_method(expressions_for_join_method, **keyword_arguments_for_join_method))
 	expected_ast_node = expected_ast_constructor(ast_operator_type)
 
 	dump_of_actual_ast_node = ast.dump(actual_ast_node)
