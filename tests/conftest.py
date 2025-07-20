@@ -1,18 +1,11 @@
 """SSOT for all tests."""
 
 from collections.abc import Iterator
-from datetime import datetime, UTC
 from functools import cache
 from tests.dataSamples.Make import allSubclasses
 from typing import Any
 import ast  # pyright: ignore[reportUnusedImport]
 import pytest
-
-antiTests: int = 3
-
-shiftByHour: int = datetime.now(UTC).hour
-shiftByDate: int = datetime.now(UTC).day
-shiftTotal: int = shiftByHour * shiftByDate + 1
 
 def generateBeTestData() -> Iterator[tuple[str, str, dict[str, Any]]]:
 	"""Yield test data for positive Be tests. (AI generated docstring).
