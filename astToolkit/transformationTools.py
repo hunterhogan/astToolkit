@@ -25,6 +25,7 @@ These transformation tools form the backbone of the code optimization pipeline, 
 maintaining semantic integrity and performance characteristics.
 """
 
+import io
 from astToolkit import (
 	Be, DOT, Grab, IfThis, IngredientsFunction, IngredientsModule, Make, NodeChanger, NodeTourist, Then, 木)
 from autoflake import fix_code as autoflake_fix_code
@@ -255,6 +256,46 @@ def removeUnusedParameters(ingredientsFunction: IngredientsFunction) -> Ingredie
 
 	return ingredientsFunction
 
+def unjoinBinOP(astAST: ast.AST, operator: type[ast.operator] = ast.operator) -> list[ast.expr]:
+	"""
+	Unjoin a binary operation AST node into a list of expressions.
+
+	(AI generated docstring)
+
+	This function takes an AST node representing a binary operation and recursively
+	unjoins it into a flat list of expressions. It handles both binary operations
+	and unary operations, ensuring that all nested expressions are extracted.
+
+	Parameters
+	----------
+	astAST : ast.AST
+		The AST node to unjoin.
+	operator : type[ast.operator] = ast.operator
+		The type of binary operator to look for in the AST. Defaults to `ast.operator`.
+
+	Returns
+	-------
+	list[ast.expr]
+		A list of expressions extracted from the binary operation AST node.
+	"""
+	list_ast_expr: list[ast.expr] = []
+	workbench: list[ast.expr] = []
+
+	findThis = Be.BinOp.opIs(lambda this_op: isinstance(this_op, operator))
+	doThat = Grab.andDoAllOf([Grab.leftAttribute(Then.appendTo(workbench)), Grab.rightAttribute(Then.appendTo(list_ast_expr))])
+	breakingBinOp = NodeTourist(findThis, doThat)
+
+	breakingBinOp.visit(astAST)
+
+	while workbench:
+		ast_expr = workbench.pop()
+		if isinstance(ast_expr, ast.BinOp):
+			breakingBinOp.visit(ast_expr)
+		else:
+			list_ast_expr.append(ast_expr)
+
+	return list_ast_expr
+
 def unparseFindReplace(astTree: 木, mappingFindReplaceNodes: Mapping[ast.AST, ast.AST]) -> 木:
 	"""
 	Recursively replace AST (Abstract Syntax Tree) nodes based on a mapping of find-replace pairs.
@@ -295,7 +336,7 @@ def unparseFindReplace(astTree: 木, mappingFindReplaceNodes: Mapping[ast.AST, a
 			astTree = deepcopy(newTree)
 	return newTree
 
-def write_astModule(ingredients: IngredientsModule, pathFilename: PathLike[Any] | PurePath, packageName: str | None = None) -> None:
+def write_astModule(ingredients: IngredientsModule, pathFilename: PathLike[Any] | PurePath | io.TextIOBase, packageName: str | None = None) -> None:
 	"""
 	Convert an IngredientsModule to Python source code and write it to a file.
 
@@ -332,43 +373,3 @@ def write_astModule(ingredients: IngredientsModule, pathFilename: PathLike[Any] 
 		autoflake_additional_imports.append(packageName)
 	pythonSource = autoflake_fix_code(pythonSource, autoflake_additional_imports, expand_star_imports=False, remove_all_unused_imports=True, remove_duplicate_keys = False, remove_unused_variables = False)
 	writeStringToHere(pythonSource, pathFilename)
-
-def unjoinBinOP(astAST: ast.AST, operator: type[ast.operator] = ast.operator) -> list[ast.expr]:
-	"""
-	Unjoin a binary operation AST node into a list of expressions.
-
-	(AI generated docstring)
-
-	This function takes an AST node representing a binary operation and recursively
-	unjoins it into a flat list of expressions. It handles both binary operations
-	and unary operations, ensuring that all nested expressions are extracted.
-
-	Parameters
-	----------
-	astAST : ast.AST
-		The AST node to unjoin.
-	operator : type[ast.operator] = ast.operator
-		The type of binary operator to look for in the AST. Defaults to `ast.operator`.
-
-	Returns
-	-------
-	list[ast.expr]
-		A list of expressions extracted from the binary operation AST node.
-	"""
-	list_ast_expr: list[ast.expr] = []
-	workbench: list[ast.expr] = []
-
-	findThis = Be.BinOp.opIs(lambda this_op: isinstance(this_op, operator))
-	doThat = Grab.andDoAllOf([Grab.leftAttribute(Then.appendTo(workbench)), Grab.rightAttribute(Then.appendTo(list_ast_expr))])
-	breakingBinOp = NodeTourist(findThis, doThat)
-
-	breakingBinOp.visit(astAST)
-
-	while workbench:
-		ast_expr = workbench.pop()
-		if isinstance(ast_expr, ast.BinOp):
-			breakingBinOp.visit(ast_expr)
-		else:
-			list_ast_expr.append(ast_expr)
-
-	return list_ast_expr
