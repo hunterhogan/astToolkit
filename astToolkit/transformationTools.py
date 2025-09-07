@@ -244,8 +244,6 @@ def pythonCode2ast_stmt(string: str):
 	findThis = Be.Module
 	doThat = "not today; I can't think through the pain."
 
-
-
 def removeUnusedParameters(ingredientsFunction: IngredientsFunction) -> IngredientsFunction:
 	"""
 	Remove unused parameters from `IngredientsFunction.astFunctionDef`, but not from `import` statements.
