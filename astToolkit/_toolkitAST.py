@@ -71,23 +71,19 @@ def extractClassDef(astAST: ast.AST, identifier: str) -> ast.ClassDef | None:
 
 def extractFunctionDef(astAST: ast.AST, identifier: str) -> ast.FunctionDef | None:
 	"""
-	Extract a function definition with a specific name from an AST module.
-
-	(AI generated docstring)
-
-	This function searches through an AST module for a function definition that matches the provided identifier and returns it if found.
+	Extract the function from `astAST` with `ast.FunctionDef.name == identifier`.
 
 	Parameters
 	----------
 	astAST : ast.AST
-		The AST object to search within.
+		(abstract syntax tree) An `ast.AST` subclass from which to extract the function.
 	identifier : str
-		The name of the function to find.
+		The identifier in `ast.FunctionDef.name`.
 
 	Returns
 	-------
-	astFunctionDef | None
-		The matching function definition AST node, or `None` if not found.
+	astFunctionDef : ast.FunctionDef | None
+		The target function, or `None` if `extractFunctionDef` does not find `ast.FunctionDef.name == identifier`.
 
 	"""
 	return NodeTourist(IfThis.isFunctionDefIdentifier(identifier), Then.extractIt).captureLastMatch(astAST)
@@ -99,7 +95,7 @@ def parseLogicalPath2astModule(logicalPath: identifierDotAttribute, package: str
 	(AI generated docstring)
 
 	This function imports a module using its logical path (e.g., 'scipy.signal.windows') and converts its source code into an
-	`ast.Module` (abstract syntax tree) object. Supports all relevant `ast.parse` parameters.
+	`ast.Module` (abstract syntax tree) `object`. Supports all relevant `ast.parse` parameters.
 
 	Parameters
 	----------

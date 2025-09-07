@@ -25,7 +25,6 @@ These transformation tools form the backbone of the code optimization pipeline, 
 maintaining semantic integrity and performance characteristics.
 """
 
-import io
 from astToolkit import (
 	Be, DOT, Grab, IfThis, IngredientsFunction, IngredientsModule, Make, NodeChanger, NodeTourist, Then, 木)
 from autoflake import fix_code as autoflake_fix_code
@@ -36,6 +35,7 @@ from os import PathLike
 from pathlib import PurePath
 from typing import Any
 import ast
+import io
 
 def makeDictionaryAsyncFunctionDef(astAST: ast.AST) -> dict[str, ast.AsyncFunctionDef]:
 	"""
@@ -128,48 +128,60 @@ def makeDictionaryMosDef(astAST: ast.AST) -> dict[str, ast.AsyncFunctionDef | as
 	dictionaryIdentifier2MosDef.update(makeDictionaryFunctionDef(astAST))
 	return dictionaryIdentifier2MosDef
 
-def inlineFunctionDef(identifierToInline: str, module: ast.Module) -> ast.FunctionDef:  # noqa: C901, PLR0912
+def inlineFunctionDef(identifierToInline: str, astModule: ast.Module) -> ast.FunctionDef:
 	"""
-	Inline function calls within a function definition to create a self-contained function.
+	Synthesize a new function from `identifierToInline` with the logic "inlined" from functions called by `identifierToInline`.
 
-	(AI generated docstring)
+	`inlineFunctionDef` starts with the `ast.FunctionDef` in `astModule` whose `ast.FunctionDef.name == identifierToInline`, then
+	`inlineFunctionDef` searches through `identifierToInline` for calls to functions defined in `astModule`.
 
-	This function takes a function identifier and a module, finds the function definition,
-	and then recursively inlines all function calls within that function with their
-	implementation bodies. This produces a fully inlined function that doesn't depend
-	on other function definitions from the module.
+	More specifically, `inlineFunctionDef` searches for an `ast.Call` to an `ast.Name` (*e.g.*, `Path`, but not the
+	`ast.Attribute`, `pathlib.Path`). The `ast.Name` identifier is in `ast.Name.id`, for example, `ast.Name.id = "Path"`.
+	`inlineFunctionDef` then searches in `astModule` for an `ast.FunctionDef.name` that is the same as the `ast.Name.id`. If
+	`inlineFunctionDef` finds a matching `ast.FunctionDef`, it will replace `ast.Call` with the logic from the called function.
+
+	`inlineFunctionDef` repeats the process until it gets bored or until it cannot find any more functions to inline. Therefore,
+	`inlineFunctionDef` will inline functions that were not called directly by `identifierToInline` in the original `astModule`.
+
+	`inlineFunctionDef`, however, does not inline an `ast.FunctionDef` if the `ast.FunctionDef` calls itself or if a "child" of
+	the `ast.FunctionDef` calls the original `ast.FunctionDef`.
 
 	Parameters
 	----------
 	identifierToInline : str
-		The name of the function to inline.
-	module : ast.Module
-		The AST module containing the function and its dependencies.
+		The identifier of the target function; the `str` must match an `ast.FunctionDef.name` in `astModule`.
+	astModule : ast.Module
+		(abstract syntax tree Module) An `ast.Module` with `ast.FunctionDef.name == identifierToInline` and zero or more other
+		`ast.FunctionDef` to inline.
 
 	Returns
 	-------
 	FunctionDefToInline : ast.FunctionDef
-		The inlined function definition as an `ast.FunctionDef` object.
+		The synthesized function with inlined logic from other functions defined in `astModule`.
 
 	Raises
 	------
-		ValueError: If the function to inline is not found in the module.
+		ValueError: If `identifierToInline` does not match any `ast.FunctionDef.name` in `astModule`.
 	"""
-	dictionaryFunctionDef: dict[str, ast.FunctionDef] = makeDictionaryFunctionDef(module)
+	dictionaryFunctionDef: dict[str, ast.FunctionDef] = makeDictionaryFunctionDef(astModule)
 	try:
 		FunctionDefToInline = dictionaryFunctionDef[identifierToInline]
 	except KeyError as ERRORmessage:
-		message = f"FunctionDefToInline not found in dictionaryIdentifier2FunctionDef: {identifierToInline = }"
+		message = f"I was unable to find an `ast.FunctionDef` with name {identifierToInline = } in {astModule = }."
 		raise ValueError(message) from ERRORmessage
 
 	listIdentifiersCalledFunctions: list[str] = []
+# TODO I probably have the skill now to expand this from only `IfThis.isCallToName` to include more options for `ast.Call.func`,
+# such as attribute and subscript access. `IfThis.isNestedNameIdentifier` might be perfect. BUT, I think this will affect how I
+# key `dictionaryFunctionDef`.
 	findIdentifiersToInline = NodeTourist[ast.Call, ast.expr](IfThis.isCallToName
 		, Grab.funcAttribute(Grab.idAttribute(Then.appendTo(listIdentifiersCalledFunctions))))
 	findIdentifiersToInline.visit(FunctionDefToInline)
 
 	dictionary4Inlining: dict[str, ast.FunctionDef] = {}
 	for identifier in sorted(set(listIdentifiersCalledFunctions).intersection(dictionaryFunctionDef.keys())):
-		if NodeTourist(IfThis.matchesMeButNotAnyDescendant(IfThis.isCallIdentifier(identifier)), Then.extractIt).captureLastMatch(module) is not None:
+# TODO Learn how real programmers avoid infinite loops but still inline recursive functions.
+		if NodeTourist(IfThis.matchesMeButNotAnyDescendant(IfThis.isCallIdentifier(identifier)), Then.extractIt).captureLastMatch(astModule) is not None:
 			dictionary4Inlining[identifier] = dictionaryFunctionDef[identifier]
 
 	keepGoing = True
@@ -182,7 +194,7 @@ def inlineFunctionDef(identifierToInline: str, module: ast.Module) -> ast.Functi
 		if len(listIdentifiersCalledFunctions) > 0:
 			keepGoing = True
 			for identifier in listIdentifiersCalledFunctions:
-				if NodeTourist(IfThis.matchesMeButNotAnyDescendant(IfThis.isCallIdentifier(identifier)), Then.extractIt).captureLastMatch(module) is not None:
+				if NodeTourist(IfThis.matchesMeButNotAnyDescendant(IfThis.isCallIdentifier(identifier)), Then.extractIt).captureLastMatch(astModule) is not None:
 					FunctionDefTarget = dictionaryFunctionDef[identifier]
 					if len(FunctionDefTarget.body) == 1:
 						replacement = NodeTourist(Be.Return, Then.extractIt(DOT.value)).captureLastMatch(FunctionDefTarget)
@@ -205,6 +217,32 @@ def inlineFunctionDef(identifierToInline: str, module: ast.Module) -> ast.Functi
 			inliner.visit(FunctionDefToInline)
 	ast.fix_missing_locations(FunctionDefToInline)
 	return FunctionDefToInline
+
+def pythonCode2ast_expr(string: str) -> ast.expr:
+	"""PROTOTYPE Convert *one* expression-as-a-string of Python code to an `ast.expr`.
+
+	TODO add list of applicable subclasses. Until then, see `Make.expr` for an approximate list.
+
+	Note well
+	---------
+	This prototype "shortcut" function has approximately 482 *implied* constraints and pitfalls. If you can't get it to do what
+	you want, I recommend saving yourself a bunch of stress and not using this shortcut.
+	"""
+	return raiseIfNone(NodeTourist(Be.Expr, Then.extractIt(DOT.value)).captureLastMatch(ast.parse(string)))
+
+def pythonCode2ast_stmt(string: str):
+	"""PROTOTYPE Convert *one* statement-as-a-string of Python code to an `ast.stmt`.
+
+	TODO add list of applicable subclasses. Until then, see `Make.stmt` for an approximate list.
+
+	Note well
+	---------
+	This prototype "shortcut" function has approximately eleventy gazillion *implied* constraints and pitfalls. If you can't get
+	it to do what you want, I recommend saving yourself a bunch of stress and not using this shortcut.
+	"""
+	astModule: ast.Module = ast.parse(string)
+	findThis = Be.Module
+	doThat = "not today; I can't think through the pain."
 
 def removeUnusedParameters(ingredientsFunction: IngredientsFunction) -> IngredientsFunction:
 	"""
@@ -367,9 +405,10 @@ def write_astModule(ingredients: IngredientsModule, pathFilename: PathLike[Any] 
 	"""
 	astModule = Make.Module(ingredients.body, ingredients.type_ignores)
 	ast.fix_missing_locations(astModule)
-	pythonSource: str = raiseIfNone(ast.unparse(astModule))
+	pythonSource: str = ast.unparse(astModule)
 	autoflake_additional_imports: list[str] = ingredients.imports.exportListModuleIdentifiers()
 	if packageName:
 		autoflake_additional_imports.append(packageName)
 	pythonSource = autoflake_fix_code(pythonSource, autoflake_additional_imports, expand_star_imports=False, remove_all_unused_imports=True, remove_duplicate_keys = False, remove_unused_variables = False)
 	writeStringToHere(pythonSource, pathFilename)
+
