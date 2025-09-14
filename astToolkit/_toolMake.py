@@ -2422,25 +2422,7 @@ class Make:
 
     @staticmethod
     def mod() -> ast.mod:
-        """Create an appropriate `ast.mod` (***mod***ule) node based on the body content.
-
-        (AI generated docstring)
-
-        The `mod` method creates the appropriate module type node based on the
-        provided body. This is a convenience method that determines whether to
-        create a `Module`, `Expression`, or `Interactive` node.
-
-        Parameters
-        ----------
-        body : list[ast.stmt] | ast.expr
-            Either a list of statements or a single expression
-
-        Returns
-        -------
-        nodeMod : ast.mod
-            The constructed module node of appropriate type
-
-        """
+        """Create an abstract `ast.mod` (***mod***ule) `object`."""
         return ast.mod()
 
     class Mod(ast.Mod):
