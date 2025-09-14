@@ -40,6 +40,21 @@ class Grab:
         return workhorse
 
     @staticmethod
+    def index(at: int, /, action: Callable[[Any], Any]) -> Callable[[Sequence[个]], list[个]]:
+
+        def workhorse(node: Sequence[个]) -> list[个]:
+            node = list(node)
+            consequences = action(node[at])
+            if consequences is None:
+                node.pop(at)
+            elif isinstance(consequences, list):
+                node = node[0:at] + consequences + node[at + 1:None]
+            else:
+                node[at] = consequences
+            return node
+        return workhorse
+
+    @staticmethod
     def annotationAttribute(action: Callable[[工], 工] | Callable[[工 | None], 工 | None]) -> Callable[[hasDOTannotation], hasDOTannotation]:
 
         def workhorse(node: hasDOTannotation) -> hasDOTannotation:

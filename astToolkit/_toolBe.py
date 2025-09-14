@@ -270,7 +270,7 @@ class Be:
 
     @staticmethod
     def AST(node: ast.AST) -> TypeIs[ast.AST]:
-        """`Be.AST`, Abstract Syntax Tree, matches any of `class` `ast.AST` | `ast._NoParent` | `ast.alias` | `ast.arg` | `ast.arguments` | `ast.boolop` | `ast.cmpop` | `ast.comprehension` | `ast.excepthandler` | `ast.Exec` | `ast.expr_context` | `ast.expr` | `ast.keyword` | `ast.match_case` | `ast.mod` | `ast.operator` | `ast.pattern` | `ast.slice` | `ast.stmt` | `ast.type_ignore` | `ast.type_param` | `ast.unaryop` | `ast.withitem`.
+        """`Be.AST`, Abstract Syntax Tree, matches any of `class` `ast.AST` | `ast.alias` | `ast.arg` | `ast.arguments` | `ast.boolop` | `ast.cmpop` | `ast.comprehension` | `ast.excepthandler` | `ast.expr_context` | `ast.expr` | `ast.keyword` | `ast.match_case` | `ast.mod` | `ast.operator` | `ast.pattern` | `ast.slice` | `ast.stmt` | `ast.type_ignore` | `ast.type_param` | `ast.unaryop` | `ast.withitem`.
 
         It is a subclass of `ast.object`.
         """
