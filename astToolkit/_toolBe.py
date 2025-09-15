@@ -1,5 +1,6 @@
 """Automatically generated file, so changes may be overwritten."""
-from collections.abc import Callable
+from astToolkit import 木
+from collections.abc import Callable, Sequence
 from typing import Any
 from typing_extensions import TypeIs
 import ast
@@ -60,6 +61,13 @@ class Be:
     ```
 
     """
+
+    @staticmethod
+    def at(index: int, predicate: Callable[[Any], TypeIs[木]]) -> Callable[[Sequence[ast.AST]], TypeIs[木]]:
+
+        def workhorse(node: Sequence[ast.AST]) -> TypeIs[木]:
+            return predicate(node[index])
+        return workhorse
 
     @staticmethod
     def Add(node: ast.AST) -> TypeIs[ast.Add]:

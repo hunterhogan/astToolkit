@@ -305,7 +305,7 @@ class IngredientsFunction:
 
 	astFunctionDef: ast.FunctionDef
 	imports: LedgerOfImports = dataclasses.field(default_factory=LedgerOfImports)
-	type_ignores: list[ast.TypeIgnore] = dataclasses.field(default_factory=lambda: list[ast.TypeIgnore]())
+	type_ignores: list[ast.TypeIgnore] = dataclasses.field(default_factory=list[ast.TypeIgnore])
 
 @dataclasses.dataclass
 class IngredientsModule:
@@ -372,7 +372,7 @@ class IngredientsModule:
 
 	Add statements using appendPrologue().
 	"""
-	listIngredientsFunctions: list[IngredientsFunction] = dataclasses.field(default_factory=lambda: list[IngredientsFunction]())
+	listIngredientsFunctions: list[IngredientsFunction] = dataclasses.field(default_factory=list[IngredientsFunction])
 	"""
 	The function definitions that form the core of this module.
 
@@ -404,7 +404,7 @@ class IngredientsModule:
 	"""
 
 	# `ast.TypeIgnore` statements to supplement those in other fields; `type_ignores` is a parameter for `ast.Module` constructor
-	_supplemental_type_ignores: list[ast.TypeIgnore] = dataclasses.field(default_factory=lambda: list[ast.TypeIgnore]())
+	_supplemental_type_ignores: list[ast.TypeIgnore] = dataclasses.field(default_factory=list[ast.TypeIgnore])
 	"""Internal: Additional type ignore directives."""
 
 	def __post_init__(self, ingredientsFunction: Sequence[IngredientsFunction] | IngredientsFunction | None) -> None:
