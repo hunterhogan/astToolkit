@@ -4,18 +4,18 @@ from typing import Any
 import ast
 
 class Then:
-	"""Action functions for AST node transformations in the antecedent-action pattern.
+	"""Apply an action to a `node`, especially in the antecedent-action pattern of `NodeTourist` and `NodeChanger`.
 
-	(AI generated docstring)
+	Keep the `node`:
+	- `appendTo()` a list your provide.
+	- `extractIt()` as a return value.
+	- `updateKeyValueIn()` a dictionary you provide.
 
-	Provides action functions that serve as consequents in the antecedent-action pattern, working with visitor classes like
-	`NodeTourist` and `NodeChanger` as the `doThat` parameter. Each method returns a function that performs a specific operation
-	on AST nodes identified by predicate functions from classes like `IfThis` or `Be`.
-
-	The action functions fall into five categories: collection operations for gathering nodes, identity operations for extraction
-	without modification, insertion operations for adding nodes relative to existing ones, removal operations for deletion, and
-	replacement operations for substitution. These actions enable precise AST transformations while maintaining the composable
-	nature of the toolkit's architecture.
+	Change the `node`:
+	- `insertThisAbove()` the `node`.
+	- `insertThisBelow()` the `node`.
+	- `removeIt()`.
+	- `replaceWith()` an `ast.AST` or appropriate `object`.
 
 	"""
 
