@@ -173,3 +173,14 @@ def ifThisDirectPredicateTestData(request: pytest.FixtureRequest) -> tuple[str, 
 def ifThisComplexPredicateTestData(request: pytest.FixtureRequest) -> tuple[str, tuple[Any, ...], Callable[[], ast.AST], bool]:
 	"""Fixture providing test data for complex IfThis predicate methods."""
 	return request.param
+
+# Then test fixtures
+
+@pytest.fixture(params=[
+	(dict[str, int], lambda node: f"constant_{node.value}", lambda node: node.value * 2, Make.Constant(6765), "constant_6765", 13530),
+	(dict[str, str], lambda node: node.id, lambda node: node.id.upper(), Make.Name("variableSigma"), "variableSigma", "VARIABLESIGMA"),
+	(dict[str, bool], lambda node: f"call_{node.func.id}", lambda _: True, Make.Call(Make.Name("functionTau")), "call_functionTau", True),
+], ids=lambda param: f"{param[0].__name__}_{param[4]}")
+def thenUpdateKeyValueTestData(request: pytest.FixtureRequest) -> tuple[type, Callable, Callable, ast.AST, Any, Any]:
+	"""Fixture providing test data for Then.updateKeyValueIn method tests."""
+	return request.param
