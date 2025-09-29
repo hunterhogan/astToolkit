@@ -1,320 +1,310 @@
 """Tests for the IfThis class predicates using parametrized tests and DRY principles."""
 # pyright: standard
 from astToolkit import Be, IfThis, Make
-from typing import Any, TYPE_CHECKING
+from collections.abc import Callable
+from typing import Any
+import ast
 import pytest
 
-if TYPE_CHECKING:
-    from collections.abc import Callable
-    import ast
+class TestIfThisBasicPredicates:
+	"""Test suite for basic IfThis methods."""
 
-class TestIfThisBasic:
-    """Test suite for basic IfThis methods."""
+	@pytest.mark.parametrize("valueInputTest,expectedPredicateResult", [
+		("identifierNorthward", True),
+		("identifierSouthward", False),
+		(None, False),
+	])
+	def testIsIdentifierWithStringPattern(self, valueInputTest: str | None, expectedPredicateResult: bool) -> None:
+		"""Test isIdentifier with string identifier using cardinal directions."""
+		predicateIdentifier: Callable[[str | None], bool] = IfThis.isIdentifier("identifierNorthward")
+		assert predicateIdentifier(valueInputTest) is expectedPredicateResult
 
-    @pytest.mark.parametrize("valueInput,expectedResult", [
-        ("test_name", True),
-        ("different_name", False),
-        (None, False),
-    ])
-    def testIsIdentifierWithString(self, valueInput: str | None, expectedResult: bool) -> None:
-        """Test isIdentifier with string identifier."""
-        predicate: Callable[[str | None], bool] = IfThis.isIdentifier("test_name")
-        assert predicate(valueInput) is expectedResult
+	@pytest.mark.parametrize("valueInputTest,expectedPredicateResult", [
+		(None, True),
+		("identifierNorthward", False),
+	])
+	def testIsIdentifierWithNonePattern(self, valueInputTest: str | None, expectedPredicateResult: bool) -> None:
+		"""Test isIdentifier with None identifier."""
+		predicateIdentifier: Callable[[str | None], bool] = IfThis.isIdentifier(None)
+		assert predicateIdentifier(valueInputTest) is expectedPredicateResult
 
-    @pytest.mark.parametrize("valueInput,expectedResult", [
-        (None, True),
-        ("some_name", False),
-    ])
-    def testIsIdentifierWithNone(self, valueInput: str | None, expectedResult: bool) -> None:
-        """Test isIdentifier with None identifier."""
-        predicate: Callable[[str | None], bool] = IfThis.isIdentifier(None)
-        assert predicate(valueInput) is expectedResult
+	@pytest.mark.parametrize("valueToTest,valueInNode,expectedPredicateResult", [
+		(233, 233, True),  # Fibonacci number
+		(233, 89, False),  # Different Fibonacci numbers
+		("stringAlpha", "stringAlpha", True),
+		("stringAlpha", "stringBeta", False),
+		(None, None, True),
+		(None, 233, False),
+	])
+	def testIsConstantValueWithVariousTypes(self, valueToTest: Any, valueInNode: Any, expectedPredicateResult: bool) -> None:
+		"""Test isConstant_value with various values using Fibonacci numbers."""
+		nodeConstant: ast.Constant = Make.Constant(valueInNode)
+		predicateConstantValue: Callable[[ast.AST], bool] = IfThis.isConstant_value(valueToTest)
+		assert predicateConstantValue(nodeConstant) is expectedPredicateResult
 
-    @pytest.mark.parametrize("valueTest,valueNode,expectedResult", [
-        (42, 42, True),
-        (42, 24, False),
-        ("hello", "hello", True),
-        ("hello", "world", False),
-        (None, None, True),
-        (None, 42, False),
-    ])
-    def testIsConstantValue(self, valueTest: Any, valueNode: Any, expectedResult: bool) -> None:
-        """Test isConstant_value with various values."""
-        nodeConstant: ast.Constant = Make.Constant(valueNode)
-        predicate: Callable[[ast.AST], bool] = IfThis.isConstant_value(valueTest)
-        assert predicate(nodeConstant) is expectedResult
+	def testIsConstantValueWithWrongNodeType(self) -> None:
+		"""Test isConstant_value with wrong node type."""
+		nodeNameIncorrect: ast.Name = Make.Name("identifierTest")
+		predicateConstantValue: Callable[[ast.AST], bool] = IfThis.isConstant_value(233)
+		assert predicateConstantValue(nodeNameIncorrect) is False
 
-    def testIsConstantValueWrongNodeType(self) -> None:
-        """Test isConstant_value with wrong node type."""
-        nodeName: ast.Name = Make.Name("test")
-        predicate: Callable[[ast.AST], bool] = IfThis.isConstant_value(42)
-        assert predicate(nodeName) is False
+class TestIfThisIdentifierBasedMethods:
+	"""Test suite for identifier-based IfThis methods using fixtures."""
 
+	def testIdentifierBasedMethods(self, ifThisIdentifierTestData: tuple[str, str, Callable[[str], ast.AST], bool]) -> None:
+		"""Test identifier methods using parametrized data."""
+		methodNameIfThis, identifierToTest, factoryNodeAST, expectedPredicateResult = ifThisIdentifierTestData
 
-class TestIfThisIdentifierMethods:
-    """Test suite for identifier-based IfThis methods using fixtures."""
+		# Get the method from IfThis
+		methodIfThis = getattr(IfThis, methodNameIfThis)
 
-    def testIdentifierMethods(self, identifierTestData: tuple[str, str, "Callable[..., Any]", bool]) -> None:
-        """Test identifier methods using parametrized data."""
-        nameMethod, identifierTest, factoryNode, expectedResult = identifierTestData
+		# Create the predicate
+		predicateGenerated = methodIfThis(identifierToTest)
 
-        # Get the method from IfThis
-        method = getattr(IfThis, nameMethod)
+		# Create the test node
+		nodeAST = factoryNodeAST(identifierToTest)
 
-        # Create the predicate
-        predicate = method(identifierTest)
+		# Test the predicate
+		assert predicateGenerated(nodeAST) is expectedPredicateResult, f"{methodNameIfThis}({identifierToTest}) should return {expectedPredicateResult}"
 
-        # Create the test node
-        node = factoryNode(identifierTest)
+	@pytest.mark.parametrize("methodNameIfThis,identifierToTest", [
+		("isNameIdentifier", "variableNorthward"),
+		("isFunctionDefIdentifier", "functionEastward"),
+		("isClassDefIdentifier", "ClassNorthEast"),
+		("isCallIdentifier", "callablePrimary"),
+		("is_argIdentifier", "parameterFibonacci"),
+		("is_keywordIdentifier", "keywordAlpha"),
+	])
+	def testIdentifierMethodsWithWrongNodeType(self, methodNameIfThis: str, identifierToTest: str) -> None:
+		"""Test identifier methods with wrong node types using cardinal directions."""
+		methodIfThis = getattr(IfThis, methodNameIfThis)
+		predicateGenerated = methodIfThis(identifierToTest)
+		nodeWrongType = Make.Constant(233)  # Wrong node type for all these methods (Fibonacci number)
+		assert predicateGenerated(nodeWrongType) is False
 
-        # Test the predicate
-        assert predicate(node) is expectedResult, f"{nameMethod}({identifierTest}) should return {expectedResult}"
+class TestIfThisSimplePredicateMethods:
+	"""Test suite for simple predicate IfThis methods using fixtures."""
 
-    @pytest.mark.parametrize("nameMethod,identifierTest", [
-        ("isNameIdentifier", "test_var"),
-        ("isFunctionDefIdentifier", "test_func"),
-        ("isClassDefIdentifier", "TestClass"),
-        ("isCallIdentifier", "print"),
-        ("is_argIdentifier", "param"),
-        ("is_keywordIdentifier", "key"),
-    ])
-    def testIdentifierMethodsWrongNodeType(self, nameMethod: str, identifierTest: str) -> None:
-        """Test identifier methods with wrong node types."""
-        method = getattr(IfThis, nameMethod)
-        predicate = method(identifierTest)
-        nodeWrong = Make.Constant(42)  # Wrong node type for all these methods
-        assert predicate(nodeWrong) is False
+	def testSimplePredicateMethods(self, ifThisSimplePredicateTestData: tuple[str, tuple[Any, ...], Callable[[], ast.AST], bool]) -> None:
+		"""Test simple predicate methods using parametrized data."""
+		methodNameIfThis, tupleArgumentsTest, factoryNodeAST, expectedPredicateResult = ifThisSimplePredicateTestData
 
+		# Get the method from IfThis
+		methodIfThis = getattr(IfThis, methodNameIfThis)
 
-class TestIfThisSimpleMethods:
-    """Test suite for simple predicate IfThis methods using fixtures."""
+		# Create the predicate
+		predicateGenerated = methodIfThis(*tupleArgumentsTest)
 
-    def testSimpleMethods(self, simplePredicateTestData: tuple[str, tuple[Any, ...], "Callable[[], Any]", bool]) -> None:
-        """Test simple predicate methods using parametrized data."""
-        nameMethod, argumentsList, factoryNode, expectedResult = simplePredicateTestData
+		# Create the test node
+		nodeAST = factoryNodeAST()
 
-        # Get the method from IfThis
-        method = getattr(IfThis, nameMethod)
+		# Test the predicate
+		assert predicateGenerated(nodeAST) is expectedPredicateResult, f"{methodNameIfThis}({tupleArgumentsTest}) should return {expectedPredicateResult}"
 
-        # Create the predicate
-        predicate = method(*argumentsList)
+	def testDirectPredicateMethods(self, ifThisDirectPredicateTestData: tuple[str, Callable[[], ast.AST], bool]) -> None:
+		"""Test direct predicate methods that take node directly."""
+		methodNameIfThis, factoryNodeAST, expectedPredicateResult = ifThisDirectPredicateTestData
 
-        # Create the test node
-        node = factoryNode()
+		# Get the method from IfThis
+		methodIfThis = getattr(IfThis, methodNameIfThis)
 
-        # Test the predicate
-        assert predicate(node) is expectedResult, f"{nameMethod}({argumentsList}) should return {expectedResult}"
+		# Create the test node
+		nodeAST = factoryNodeAST()
 
-    def testDirectMethods(self, directPredicateTestData: tuple[str, "Callable[[], Any]", bool]) -> None:
-        """Test direct predicate methods that take node directly."""
-        nameMethod, factoryNode, expectedResult = directPredicateTestData
+		# Test the method directly
+		resultPredicate = methodIfThis(nodeAST)
+		assert resultPredicate is expectedPredicateResult, f"{methodNameIfThis}(node) should return {expectedPredicateResult}"
 
-        # Get the method from IfThis
-        method = getattr(IfThis, nameMethod)
+class TestIfThisComplexPredicateMethods:
+	"""Test suite for complex predicate IfThis methods using fixtures."""
 
-        # Create the test node
-        node = factoryNode()
+	def testComplexPredicateMethods(self, ifThisComplexPredicateTestData: tuple[str, tuple[Any, ...], Callable[[], ast.AST], bool]) -> None:
+		"""Test complex predicate methods using parametrized data."""
+		methodNameIfThis, tupleArgumentsTest, factoryNodeAST, expectedPredicateResult = ifThisComplexPredicateTestData
 
-        # Test the method directly
-        result = method(node)
-        assert result is expectedResult, f"{nameMethod}(node) should return {expectedResult}"
+		# Get the method from IfThis
+		methodIfThis = getattr(IfThis, methodNameIfThis)
 
+		# Create the predicate
+		predicateGenerated = methodIfThis(*tupleArgumentsTest)
 
-class TestIfThisComplexMethods:
-    """Test suite for complex predicate IfThis methods using fixtures."""
+		# Create the test node
+		nodeAST = factoryNodeAST()
 
-    def testComplexMethods(self, complexPredicateTestData: tuple[str, tuple[Any, ...], "Callable[[], Any]", bool]) -> None:
-        """Test complex predicate methods using parametrized data."""
-        nameMethod, argumentsList, factoryNode, expectedResult = complexPredicateTestData
+		# Test the predicate
+		assert predicateGenerated(nodeAST) is expectedPredicateResult, f"{methodNameIfThis}({tupleArgumentsTest}) should return {expectedPredicateResult}"
 
-        # Get the method from IfThis
-        method = getattr(IfThis, nameMethod)
+	@pytest.mark.parametrize("namespaceObjectTest,identifierAttributeTest", [
+		("objectPrimary", "methodEastward"),
+		("objectSecondary", "valueNorthward"),
+		("classTertiary", "nameWestward"),
+	])
+	def testIsAttributeNamespaceIdentifierPositiveCases(self, namespaceObjectTest: str, identifierAttributeTest: str) -> None:
+		"""Test isAttributeNamespaceIdentifier with matching cases using semantic identifiers."""
+		nodeAttribute = Make.Attribute(Make.Name(namespaceObjectTest), identifierAttributeTest)
+		predicateGenerated = IfThis.isAttributeNamespaceIdentifier(namespaceObjectTest, identifierAttributeTest)
+		assert predicateGenerated(nodeAttribute) is True
 
-        # Create the predicate
-        predicate = method(*argumentsList)
+	def testIsIfUnaryNotAttributeNamespaceIdentifierPositiveCase(self) -> None:
+		"""Test isIfUnaryNotAttributeNamespaceIdentifier with matching case."""
+		nodeIf = Make.If(
+			test=Make.UnaryOp(
+				op=Make.Not(),
+				operand=Make.Attribute(Make.Name("objectTarget"), "flagEnabled")
+			),
+			body=[Make.Pass()]
+		)
+		predicateGenerated = IfThis.isIfUnaryNotAttributeNamespaceIdentifier("objectTarget", "flagEnabled")
+		assert predicateGenerated(nodeIf) is True
 
-        # Create the test node
-        node = factoryNode()
+	def testIsIfUnaryNotAttributeNamespaceIdentifierNegativeCase(self) -> None:
+		"""Test isIfUnaryNotAttributeNamespaceIdentifier with non-matching case."""
+		nodeIf = Make.If(test=Make.Name("conditionAlternate"), body=[Make.Pass()])
+		predicateGenerated = IfThis.isIfUnaryNotAttributeNamespaceIdentifier("objectTarget", "flagEnabled")
+		assert predicateGenerated(nodeIf) is False
 
-        # Test the predicate
-        assert predicate(node) is expectedResult, f"{nameMethod}({argumentsList}) should return {expectedResult}"
+class TestIfThisLogicalCombinationMethods:
+	"""Test suite for logical combination IfThis methods."""
 
-    @pytest.mark.parametrize("namespaceObject,identifierAttribute", [
-        ("obj", "method"),
-        ("self", "value"),
-        ("cls", "name"),
-    ])
-    def testIsAttributeNamespaceIdentifierPositive(self, namespaceObject: str, identifierAttribute: str) -> None:
-        """Test isAttributeNamespaceIdentifier with matching cases."""
-        nodeAttribute = Make.Attribute(Make.Name(namespaceObject), identifierAttribute)
-        predicate = IfThis.isAttributeNamespaceIdentifier(namespaceObject, identifierAttribute)
-        assert predicate(nodeAttribute) is True
+	@pytest.mark.parametrize("listPredicatesTest,nodeASTTest,expectedPredicateResult", [
+		# All predicates match
+		([Be.Name, lambda nodeTarget: hasattr(nodeTarget, 'id') and nodeTarget.id == "identifierNorthward"], Make.Name("identifierNorthward"), True),
+		# Some predicates don't match
+		([Be.Name, lambda nodeTarget: hasattr(nodeTarget, 'id') and nodeTarget.id == "identifierSouthward"], Make.Name("identifierNorthward"), False),
+		([], Make.Name("identifierNorthward"), True), # Empty predicates list - all() returns True for empty sequence
+	])
+	def testIsAllOfWithVariousPredicateCombinations(self, listPredicatesTest: list[Callable[..., Any]], nodeASTTest: ast.AST, expectedPredicateResult: bool) -> None:
+		"""Test isAllOf with various predicate combinations using semantic identifiers."""
+		predicateCombined = IfThis.isAllOf(*listPredicatesTest)
+		assert predicateCombined(nodeASTTest) is expectedPredicateResult
 
-    def testIsIfUnaryNotAttributeNamespaceIdentifierPositive(self) -> None:
-        """Test isIfUnaryNotAttributeNamespaceIdentifier with matching case."""
-        nodeIf = Make.If(
-            test=Make.UnaryOp(
-                op=Make.Not(),
-                operand=Make.Attribute(Make.Name("obj"), "flag")
-            ),
-            body=[Make.Pass()]
-        )
-        predicate = IfThis.isIfUnaryNotAttributeNamespaceIdentifier("obj", "flag")
-        assert predicate(nodeIf) is True
+	@pytest.mark.parametrize("listPredicatesTest,nodeASTTest,expectedPredicateResult", [
+		# At least one predicate matches
+		([Be.Constant, Be.Name], Make.Name("identifierNorthward"), True),
+		# No predicates match
+		([Be.Constant, Be.FunctionDef], Make.Name("identifierNorthward"), False),
+		([], Make.Name("identifierNorthward"), False), # Empty predicates list - any() returns False for empty sequence
+	])
+	def testIsAnyOfWithVariousPredicateCombinations(self, listPredicatesTest: list[Callable[..., Any]], nodeASTTest: ast.AST, expectedPredicateResult: bool) -> None:
+		"""Test isAnyOf with various predicate combinations using semantic identifiers."""
+		predicateCombined = IfThis.isAnyOf(*listPredicatesTest)
+		assert predicateCombined(nodeASTTest) is expectedPredicateResult
 
-    def testIsIfUnaryNotAttributeNamespaceIdentifierNegative(self) -> None:
-        """Test isIfUnaryNotAttributeNamespaceIdentifier with non-matching case."""
-        nodeIf = Make.If(test=Make.Name("condition"), body=[Make.Pass()])
-        predicate = IfThis.isIfUnaryNotAttributeNamespaceIdentifier("obj", "flag")
-        assert predicate(nodeIf) is False
+class TestIfThisTreeAnalysisMethods:
+	"""Test suite for tree analysis IfThis methods."""
 
+	def testMatchesNoDescendantPositiveCase(self) -> None:
+		"""Test matchesNoDescendant when no descendant matches predicate."""
+		nodeAssignTarget = Make.Assign(
+			targets=[Make.Name("variableAlpha", context=Make.Store())],
+			value=Make.Constant(233)  # Fibonacci number
+		)
+		def predicateNameMatching(nodeTarget: ast.AST) -> bool:
+			return Be.Name(nodeTarget) and getattr(nodeTarget, 'id', None) == "variableBeta"
+		predicateGenerated = IfThis.matchesNoDescendant(predicateNameMatching)
+		assert predicateGenerated(nodeAssignTarget) is True
 
-class TestIfThisLogicalMethods:
-    """Test suite for logical combination IfThis methods."""
+	def testMatchesNoDescendantNegativeCase(self) -> None:
+		"""Test matchesNoDescendant when a descendant matches predicate."""
+		nodeAssignTarget = Make.Assign(
+			targets=[Make.Name("variableAlpha", context=Make.Store())],
+			value=Make.Constant(233)  # Fibonacci number
+		)
+		def predicateNameMatching(nodeTarget: ast.AST) -> bool:
+			return Be.Name(nodeTarget) and getattr(nodeTarget, 'id', None) == "variableAlpha"
+		predicateGenerated = IfThis.matchesNoDescendant(predicateNameMatching)
+		assert predicateGenerated(nodeAssignTarget) is False
 
-    @pytest.mark.parametrize("listPredicates,nodeTest,expectedResult", [
-        # All predicates match
-        ([Be.Name, lambda node: hasattr(node, 'id') and node.id == "test"], Make.Name("test"), True),
-        # Some predicates don't match
-        ([Be.Name, lambda node: hasattr(node, 'id') and node.id == "other"], Make.Name("test"), False),
-        # No predicates (edge case)
-        ([], Make.Name("test"), True),  # all() returns True for empty sequence
-    ])
-    def testIsAllOf(self, listPredicates: list["Callable[..., Any]"], nodeTest: "ast.AST", expectedResult: bool) -> None:
-        """Test isAllOf with various predicate combinations."""
-        combined = IfThis.isAllOf(*listPredicates)
-        assert combined(nodeTest) is expectedResult
+	def testMatchesMeButNotAnyDescendantPositiveCase(self) -> None:
+		"""Test matchesMeButNotAnyDescendant when node matches but descendants don't."""
+		nodeAssignTarget = Make.Assign(
+			targets=[Make.Name("variableAlpha", context=Make.Store())],
+			value=Make.Constant(233)  # Fibonacci number
+		)
+		predicateAssignmentMatching = Be.Assign
+		predicateGenerated = IfThis.matchesMeButNotAnyDescendant(predicateAssignmentMatching)
+		assert predicateGenerated(nodeAssignTarget) is True
 
-    @pytest.mark.parametrize("listPredicates,nodeTest,expectedResult", [
-        # At least one predicate matches
-        ([Be.Constant, Be.Name], Make.Name("test"), True),
-        # No predicates match
-        ([Be.Constant, Be.FunctionDef], Make.Name("test"), False),
-        # No predicates (edge case)
-        ([], Make.Name("test"), False),  # any() returns False for empty sequence
-    ])
-    def testIsAnyOf(self, listPredicates: list["Callable[..., Any]"], nodeTest: "ast.AST", expectedResult: bool) -> None:
-        """Test isAnyOf with various predicate combinations."""
-        combined = IfThis.isAnyOf(*listPredicates)
-        assert combined(nodeTest) is expectedResult
+	def testMatchesMeButNotAnyDescendantNegativeCase(self) -> None:
+		"""Test matchesMeButNotAnyDescendant when node doesn't match."""
+		nodeNameTarget = Make.Name("variableAlpha")
+		predicateAssignmentMatching = Be.Assign
+		predicateGenerated = IfThis.matchesMeButNotAnyDescendant(predicateAssignmentMatching)
+		assert predicateGenerated(nodeNameTarget) is False
 
+	@pytest.mark.parametrize("nodeFirst,nodeSecond,expectedPredicateResult", [
+		(Make.Name("variableAlpha"), Make.Name("variableAlpha"), True),
+		(Make.Name("variableAlpha"), Make.Name("variableBeta"), False),
+		(Make.Constant(233), Make.Constant(233), True),  # Fibonacci numbers
+		(Make.Constant(233), Make.Constant(89), False),  # Different Fibonacci numbers
+	])
+	def testUnparseIsWithVariousNodeCombinations(self, nodeFirst: ast.AST, nodeSecond: ast.AST, expectedPredicateResult: bool) -> None:
+		"""Test unparseIs with various node combinations using semantic identifiers and Fibonacci numbers."""
+		predicateGenerated = IfThis.unparseIs(nodeFirst)
+		assert predicateGenerated(nodeSecond) is expectedPredicateResult
 
-class TestIfThisTreeMethods:
-    """Test suite for tree analysis IfThis methods."""
+class TestIfThisAdvancedUsageScenarios:
+	"""Test suite for advanced IfThis usage scenarios."""
 
-    def testMatchesNoDescendantPositive(self) -> None:
-        """Test matchesNoDescendant when no descendant matches predicate."""
-        nodeAssign = Make.Assign(
-            targets=[Make.Name("x", context=Make.Store())],
-            value=Make.Constant(42)
-        )
-        def predicateNameMatching(node: "ast.AST") -> bool:
-            return Be.Name(node) and getattr(node, 'id', None) == "y"
-        predicate = IfThis.matchesNoDescendant(predicateNameMatching)
-        assert predicate(nodeAssign) is True
+	def testNestedIdentifierPatternsWithVariousNodeTypes(self) -> None:
+		"""Test isNestedNameIdentifier with various node types."""
+		identifierToTest = "variableTargetAlpha"
+		predicateGenerated = IfThis.isNestedNameIdentifier(identifierToTest)
 
-    def testMatchesNoDescendantNegative(self) -> None:
-        """Test matchesNoDescendant when a descendant matches predicate."""
-        nodeAssign = Make.Assign(
-            targets=[Make.Name("x", context=Make.Store())],
-            value=Make.Constant(42)
-        )
-        def predicateNameMatching(node: "ast.AST") -> bool:
-            return Be.Name(node) and getattr(node, 'id', None) == "x"
-        predicate = IfThis.matchesNoDescendant(predicateNameMatching)
-        assert predicate(nodeAssign) is False
+		# Should match Name
+		nodeName = Make.Name(identifierToTest)
+		assert predicateGenerated(nodeName) is True
 
-    def testMatchesMeButNotAnyDescendantPositive(self) -> None:
-        """Test matchesMeButNotAnyDescendant when node matches but descendants don't."""
-        nodeAssign = Make.Assign(
-            targets=[Make.Name("x", context=Make.Store())],
-            value=Make.Constant(42)
-        )
-        predicateAssign = Be.Assign
-        predicate = IfThis.matchesMeButNotAnyDescendant(predicateAssign)
-        assert predicate(nodeAssign) is True
+		# Should match Attribute with matching value
+		nodeAttributeMatching = Make.Attribute(Make.Name(identifierToTest), "methodSecondary")
+		assert predicateGenerated(nodeAttributeMatching) is True
 
-    def testMatchesMeButNotAnyDescendantNegative(self) -> None:
-        """Test matchesMeButNotAnyDescendant when node doesn't match."""
-        nodeName = Make.Name("x")
-        predicateAssign = Be.Assign
-        predicate = IfThis.matchesMeButNotAnyDescendant(predicateAssign)
-        assert predicate(nodeName) is False
+		# Should not match Attribute with non-matching value
+		nodeAttributeNonMatching = Make.Attribute(Make.Name("variableTargetBeta"), "methodSecondary")
+		assert predicateGenerated(nodeAttributeNonMatching) is False
 
-    @pytest.mark.parametrize("nodeFirst,nodeSecond,expectedResult", [
-        (Make.Name("x"), Make.Name("x"), True),
-        (Make.Name("x"), Make.Name("y"), False),
-        (Make.Constant(42), Make.Constant(42), True),
-        (Make.Constant(42), Make.Constant(24), False),
-    ])
-    def testUnparseIs(self, nodeFirst: "ast.AST", nodeSecond: "ast.AST", expectedResult: bool) -> None:
-        """Test unparseIs with various node combinations."""
-        predicate = IfThis.unparseIs(nodeFirst)
-        assert predicate(nodeSecond) is expectedResult
+	def testIsAssignAndTargets0IsWithVariousTargetPredicates(self) -> None:
+		"""Test isAssignAndTargets0Is with various target predicates."""
+		nodeAssignTarget = Make.Assign(
+			targets=[Make.Name("variableGamma", context=Make.Store())],
+			value=Make.Constant(233)  # Fibonacci number
+		)
 
+		# Matching target predicate
+		def predicateTargetMatching(nodeTarget: ast.AST) -> bool:
+			return Be.Name(nodeTarget) and getattr(nodeTarget, 'id', None) == "variableGamma"
+		predicateGenerated = IfThis.isAssignAndTargets0Is(predicateTargetMatching)
+		assert predicateGenerated(nodeAssignTarget) is True
 
-class TestIfThisAdvancedCases:
-    """Test suite for advanced IfThis usage scenarios."""
+		# Non-matching target predicate
+		def predicateTargetWrong(nodeTarget: ast.AST) -> bool:
+			return Be.Name(nodeTarget) and getattr(nodeTarget, 'id', None) == "variableDelta"
+		predicateWrong = IfThis.isAssignAndTargets0Is(predicateTargetWrong)
+		assert predicateWrong(nodeAssignTarget) is False
 
-    def testNestedIdentifierPatterns(self) -> None:
-        """Test isNestedNameIdentifier with various node types."""
-        identifierTest = "test_var"
-        predicate = IfThis.isNestedNameIdentifier(identifierTest)
+		# Wrong node type
+		nodeNameWrongType = Make.Name("variableGamma")
+		assert predicateGenerated(nodeNameWrongType) is False
 
-        # Should match Name
-        nodeName = Make.Name(identifierTest)
-        assert predicate(nodeName) is True
+	def testComplexPredicateCompositionWithRealWorldScenarios(self) -> None:
+		"""Test complex predicate compositions with real-world scenarios."""
+		# Create a function with assignment in body
+		nodeFunctionWithAssignment = Make.FunctionDef(
+			name="functionProcessor",
+			body=[Make.Assign(
+				targets=[Make.Name("variableResult", context=Make.Store())],
+				value=Make.Constant(233)  # Fibonacci number
+			)]
+		)
 
-        # Should match Attribute with matching value
-        nodeAttribute = Make.Attribute(Make.Name(identifierTest), "method")
-        assert predicate(nodeAttribute) is True
+		# Complex predicate combining multiple conditions
+		predicateComplexCombination = IfThis.isAllOf(
+			Be.FunctionDef,
+			lambda nodeTarget: getattr(nodeTarget, 'name', None) == "functionProcessor",
+			lambda nodeTarget: len(getattr(nodeTarget, 'body', [])) > 0
+		)
+		assert predicateComplexCombination(nodeFunctionWithAssignment) is True
 
-        # Should not match Attribute with non-matching value
-        nodeAttributeNoMatch = Make.Attribute(Make.Name("other_var"), "method")
-        assert predicate(nodeAttributeNoMatch) is False
-
-    def testIsAssignAndTargets0IsPatterns(self) -> None:
-        """Test isAssignAndTargets0Is with various target predicates."""
-        nodeAssign = Make.Assign(
-            targets=[Make.Name("x", context=Make.Store())],
-            value=Make.Constant(42)
-        )
-
-        # Matching target predicate
-        def predicateTargetMatching(node: "ast.AST") -> bool:
-            return Be.Name(node) and getattr(node, 'id', None) == "x"
-        predicate = IfThis.isAssignAndTargets0Is(predicateTargetMatching)
-        assert predicate(nodeAssign) is True
-
-        # Non-matching target predicate
-        def predicateTargetWrong(node: "ast.AST") -> bool:
-            return Be.Name(node) and getattr(node, 'id', None) == "y"
-        predicateWrong = IfThis.isAssignAndTargets0Is(predicateTargetWrong)
-        assert predicateWrong(nodeAssign) is False
-
-        # Wrong node type
-        nodeName = Make.Name("x")
-        assert predicate(nodeName) is False
-
-    def testComplexPredicateComposition(self) -> None:
-        """Test complex predicate compositions with real-world scenarios."""
-        # Create a function with assignment in body
-        nodeFunction = Make.FunctionDef(
-            name="test_func",
-            body=[Make.Assign(
-                targets=[Make.Name("x", context=Make.Store())],
-                value=Make.Constant(42)
-            )]
-        )
-
-        # Complex predicate combining multiple conditions
-        predicateComplex = IfThis.isAllOf(
-            Be.FunctionDef,
-            lambda node: getattr(node, 'name', None) == "test_func",
-            lambda node: len(getattr(node, 'body', [])) > 0
-        )
-        assert predicateComplex(nodeFunction) is True
-
-        # Should fail if any condition doesn't match
-        functionDifferent = Make.FunctionDef(name="other_func", body=[Make.Pass()])
-        assert predicateComplex(functionDifferent) is False
+		# Should fail if any condition doesn't match
+		functionDifferentName = Make.FunctionDef(name="functionAlternate", body=[Make.Pass()])
+		assert predicateComplexCombination(functionDifferentName) is False
