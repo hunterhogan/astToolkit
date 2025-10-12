@@ -1,5 +1,4 @@
-from astToolkit import identifierDotAttribute, IfThis, IngredientsFunction, LedgerOfImports, NodeTourist, Then
-from hunterMakesPy import raiseIfNone
+from astToolkit import identifierDotAttribute, IfThis, NodeTourist, Then
 from inspect import getsource as inspect_getsource
 from os import PathLike
 from pathlib import Path, PurePath
@@ -23,30 +22,6 @@ else:
 
 if TYPE_CHECKING:
 	from types import ModuleType
-
-def astModuleToIngredientsFunction(astAST: ast.AST, identifier: str) -> IngredientsFunction:
-	"""
-	Extract a function definition from an AST module and create an `IngredientsFunction`.
-
-	(AI generated docstring)
-
-	This function finds a function definition with the specified identifier in the given AST module, extracts it, and stores all module imports in the `LedgerOfImports`.
-
-	Parameters
-	----------
-	astAST : ast.AST
-		The AST module containing the function definition.
-	identifier : str
-		The name of the function to extract.
-
-	Returns
-	-------
-	ingredientsFunction
-		`IngredientsFunction` object containing the `ast.FunctionDef` and all imports from the source module.
-
-	"""
-	astFunctionDef: ast.FunctionDef = raiseIfNone(extractFunctionDef(astAST, identifier))
-	return IngredientsFunction(astFunctionDef, LedgerOfImports(astAST))
 
 def extractClassDef(astAST: ast.AST, identifier: str) -> ast.ClassDef | None:
 	"""

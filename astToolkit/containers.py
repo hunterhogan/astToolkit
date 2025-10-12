@@ -1,7 +1,48 @@
-from astToolkit import identifierDotAttribute, Make
+"""
+Container classes for programmatic Python module assembly and code generation.
+
+(AI generated docstring)
+
+This module provides the foundational container classes for building Python modules
+programmatically through an assembly line approach. The containers track import dependencies,
+organize code components, and generate complete, executable Python modules.
+
+The module implements three core container classes that work together to enable sophisticated
+code generation and transformation workflows:
+
+1. `LedgerOfImports`: Smart dependency tracking for import statements, consolidating and
+	deduplicating imports from multiple sources while maintaining proper organization.
+
+2. `IngredientsFunction`: Encapsulates a function definition with its import dependencies,
+	creating a portable, transformable unit that can be analyzed, optimized, and transplanted
+	between modules.
+
+3. `IngredientsModule`: The complete module builder that assembles imports, functions, and
+	supporting code sections into executable Python modules with proper formatting and
+	optimization.
+
+These containers follow the assembly line pattern where components are collected, transformed,
+and systematically assembled into final output. This approach is particularly useful for:
+
+- Extracting functions from existing modules and reassembling them with transformations.
+- Building optimized code variants through function inlining and parameter optimization.
+- Generating complete Python modules from templates or programmatic specifications.
+- Research workflows requiring systematic code modification and testing.
+
+The containers handle the mechanical details of import management, code organization, and
+formatting, allowing transformation logic to focus on semantic changes rather than syntactic
+concerns.
+"""
+
+from astToolkit import extractFunctionDef, identifierDotAttribute, Make
+from astToolkit.transformationTools import removeUnusedParameters, write_astModule
 from collections import defaultdict
 from collections.abc import Sequence
-from hunterMakesPy import updateExtendPolishDictionaryLists
+from hunterMakesPy import raiseIfNone, updateExtendPolishDictionaryLists
+from hunterMakesPy.filesystemToolkit import settings_autoflakeDEFAULT, settings_isortDEFAULT
+from os import PathLike
+from pathlib import PurePath
+from typing import Any
 import ast
 import dataclasses
 
@@ -307,6 +348,17 @@ class IngredientsFunction:
 	imports: LedgerOfImports = dataclasses.field(default_factory=LedgerOfImports)
 	type_ignores: list[ast.TypeIgnore] = dataclasses.field(default_factory=list[ast.TypeIgnore])
 
+	def removeUnusedParameters(self) -> None:
+		"""
+		Remove unused parameters from the function definition.
+
+		This method analyzes the function's AST and removes any parameters that are not used
+		in the function body. It also updates the function's return type and any relevant
+		type annotations.
+
+		"""
+		removeUnusedParameters(self.astFunctionDef)
+
 @dataclasses.dataclass
 class IngredientsModule:
 	"""Build complete Python modules programmatically from organized components.
@@ -403,11 +455,15 @@ class IngredientsModule:
 	Add statements using appendLauncher().
 	"""
 
+	settings_autoflake: dict[str, Any] | None = dataclasses.field(default_factory=lambda: settings_autoflakeDEFAULT.copy())
+	settings_isort: dict[str, Any] | None = dataclasses.field(default_factory=lambda: settings_isortDEFAULT.copy())
+
 	# `ast.TypeIgnore` statements to supplement those in other fields; `type_ignores` is a parameter for `ast.Module` constructor
 	_supplemental_type_ignores: list[ast.TypeIgnore] = dataclasses.field(default_factory=list[ast.TypeIgnore])
 	"""Internal: Additional type ignore directives."""
 
 	def __post_init__(self, ingredientsFunction: Sequence[IngredientsFunction] | IngredientsFunction | None) -> None:
+		"""Who cares?."""
 		if ingredientsFunction is not None:
 			if isinstance(ingredientsFunction, IngredientsFunction):
 				self.appendIngredientsFunction(ingredientsFunction)
@@ -629,3 +685,58 @@ class IngredientsModule:
 		listTypeIgnore.extend(self.epilogue.type_ignores)
 		listTypeIgnore.extend(self.launcher.type_ignores)
 		return listTypeIgnore
+
+	def write_astModule(self, pathFilename: PathLike[Any] | PurePath, identifierPackage: str='') -> None:
+		"""
+		Convert this module to Python source code and write it to a file.
+
+		(AI generated docstring)
+
+		This method assembles all components of the `IngredientsModule` into a complete Python module,
+		converts it to formatted source code, and writes it to the specified file. The generated code
+		includes properly organized imports, function definitions, and all supporting code sections.
+
+		The method automatically applies code formatting and optimization through `autoflake` and `isort`,
+		ensuring clean, properly organized output. Import statements are consolidated and deduplicated,
+		and the final code follows Python style conventions.
+
+		Parameters
+		----------
+		pathFilename : PathLike[Any] | PurePath
+			The file path where the generated Python module should be written.
+		identifierPackage : str = ''
+			Optional package identifier to add to the autoflake additional imports list, ensuring
+			the specified package is preserved during import optimization.
+
+		"""
+		settings: dict[str, dict[str, Any]] ={
+		'autoflake': self.settings_autoflake or {},
+		'isort': self.settings_isort or {}
+		}
+		if identifierPackage:
+			settings['autoflake']['additional_imports'].append(identifierPackage)
+		write_astModule(Make.Module(self.body, self.type_ignores), pathFilename, settings)
+
+def astModuleToIngredientsFunction(astAST: ast.AST, identifier: str) -> IngredientsFunction:
+	"""
+	Extract a function definition from an AST module and create an `IngredientsFunction`.
+
+	(AI generated docstring)
+
+	This function finds a function definition with the specified identifier in the given AST module, extracts it, and stores all module imports in the `LedgerOfImports`.
+
+	Parameters
+	----------
+	astAST : ast.AST
+		The AST module containing the function definition.
+	identifier : str
+		The name of the function to extract.
+
+	Returns
+	-------
+	ingredientsFunction
+		`IngredientsFunction` object containing the `ast.FunctionDef` and all imports from the source module.
+
+	"""
+	astFunctionDef: ast.FunctionDef = raiseIfNone(extractFunctionDef(astAST, identifier))
+	return IngredientsFunction(astFunctionDef, LedgerOfImports(astAST))

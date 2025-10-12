@@ -127,14 +127,7 @@ from astToolkit._prototypeFind import Find as Find
 from astToolkit._toolIfThis import IfThis as IfThis
 from astToolkit._toolThen import Then as Then
 
-from astToolkit._toolkitContainers import (
-	IngredientsFunction as IngredientsFunction,
-	IngredientsModule as IngredientsModule,
-	LedgerOfImports as LedgerOfImports,
-)
-
 from astToolkit._toolkitAST import (
-	astModuleToIngredientsFunction as astModuleToIngredientsFunction,
 	extractClassDef as extractClassDef,
 	extractFunctionDef as extractFunctionDef,
 	parseLogicalPath2astModule as parseLogicalPath2astModule,

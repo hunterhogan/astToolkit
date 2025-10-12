@@ -25,12 +25,11 @@ These transformation tools form the backbone of the code optimization pipeline, 
 maintaining semantic integrity and performance characteristics.
 """
 
-from astToolkit import (
-	Be, DOT, Grab, IfThis, IngredientsFunction, IngredientsModule, Make, NodeChanger, NodeTourist, Then, 木)
-from autoflake import fix_code as autoflake_fix_code
+from astToolkit import Be, DOT, Grab, IfThis, Make, NodeChanger, NodeTourist, Then, 木
 from collections.abc import Mapping
 from copy import deepcopy
-from hunterMakesPy import raiseIfNone, writeStringToHere
+from hunterMakesPy import raiseIfNone
+from hunterMakesPy.filesystemToolkit import settings_autoflakeDEFAULT, writePython
 from os import PathLike
 from pathlib import PurePath
 from typing import Any
@@ -230,29 +229,13 @@ def pythonCode2ast_expr(string: str) -> ast.expr:
 	"""
 	return raiseIfNone(NodeTourist(Be.Expr, Then.extractIt(DOT.value)).captureLastMatch(ast.parse(string)))
 
-def pythonCode2ast_stmt(string: str):
-	"""PROTOTYPE Convert *one* statement-as-a-string of Python code to an `ast.stmt`.
-
-	TODO add list of applicable subclasses. Until then, see `Make.stmt` for an approximate list.
-
-	Note well
-	---------
-	This prototype "shortcut" function has approximately eleventy gazillion *implied* constraints and pitfalls. If you can't get
-	it to do what you want, I recommend saving yourself a bunch of stress and not using this shortcut.
+def removeUnusedParameters(FunctionDef: ast.FunctionDef) -> ast.FunctionDef:
 	"""
-	astModule: ast.Module = ast.parse(string)
-	findThis = Be.Module
-	doThat = "not today; I can't think through the pain."
-
-def removeUnusedParameters(ingredientsFunction: IngredientsFunction) -> IngredientsFunction:
-	"""
-	Remove unused parameters from `IngredientsFunction.astFunctionDef`, but not from `import` statements.
-
-	This function, like the other components in the `IngredientsFunction` ecosystem, is overly specific.
+	Remove unused parameters from `FunctionDef`.
 
 	The `removeUnusedParameters` function removes `ast.arg` (abstract syntax tree ***arg***ument) parameters from the
 	`ast.arguments` argument specification of the `ast.FunctionDef` (Function ***Def***inition) function in
-	`IngredientsFunction.astFunctionDef` that are are not referenced in the `ast.FunctionDef.body` or that are only referenced in
+	`FunctionDef` that are are not referenced in the `ast.FunctionDef.body` or that are only referenced in
 	`ast.Return` return statements.
 
 	This function will replace every `return` statement with a new `return` statement that returns all of the remaining
@@ -260,39 +243,38 @@ def removeUnusedParameters(ingredientsFunction: IngredientsFunction) -> Ingredie
 
 	Parameters
 	----------
-	ingredientsFunction : IngredientsFunction
+	FunctionDef : ast.FunctionDef
 		An object containing the AST representation of a function to be processed.
 
 	Returns
 	-------
-	IngredientsFunction : IngredientsFunction
-		The modified IngredientsFunction object with unused parameters and corresponding return
-		elements/annotations removed from its AST.
+	ast.FunctionDef : ast.FunctionDef
+		The modified `ast.FunctionDef` object with unused parameters and corresponding return elements/annotations removed from its AST.
 	"""
-	list_argCuzMyBrainRefusesToThink = ingredientsFunction.astFunctionDef.args.args + ingredientsFunction.astFunctionDef.args.posonlyargs + ingredientsFunction.astFunctionDef.args.kwonlyargs
+	list_argCuzMyBrainRefusesToThink = FunctionDef.args.args + FunctionDef.args.posonlyargs + FunctionDef.args.kwonlyargs
 	list_arg_arg: list[str] = [ast_arg.arg for ast_arg in list_argCuzMyBrainRefusesToThink]
 	listName: list[ast.Name] = []
-	fauxFunctionDef = deepcopy(ingredientsFunction.astFunctionDef)
+	fauxFunctionDef = deepcopy(FunctionDef)
 	NodeChanger(Be.Return, Then.removeIt).visit(fauxFunctionDef)
 	NodeTourist(Be.Name, Then.appendTo(listName)).visit(fauxFunctionDef)
 	listIdentifiers: list[str] = [astName.id for astName in listName]
 	listIdentifiersNotUsed: list[str] = list(set(list_arg_arg) - set(listIdentifiers))
 	for argIdentifier in listIdentifiersNotUsed:
 		remove_arg = NodeChanger(IfThis.is_argIdentifier(argIdentifier), Then.removeIt)
-		remove_arg.visit(ingredientsFunction.astFunctionDef)
+		remove_arg.visit(FunctionDef)
 
-	list_argCuzMyBrainRefusesToThink = ingredientsFunction.astFunctionDef.args.args + ingredientsFunction.astFunctionDef.args.posonlyargs + ingredientsFunction.astFunctionDef.args.kwonlyargs
+	list_argCuzMyBrainRefusesToThink = FunctionDef.args.args + FunctionDef.args.posonlyargs + FunctionDef.args.kwonlyargs
 
 	listName = [Make.Name(ast_arg.arg) for ast_arg in list_argCuzMyBrainRefusesToThink]
 	replaceReturn = NodeChanger(Be.Return, Then.replaceWith(Make.Return(Make.Tuple(listName))))
-	replaceReturn.visit(ingredientsFunction.astFunctionDef)
+	replaceReturn.visit(FunctionDef)
 
 	list_annotation: list[ast.expr] = [ast_arg.annotation for ast_arg in list_argCuzMyBrainRefusesToThink if ast_arg.annotation is not None]
-	ingredientsFunction.astFunctionDef.returns = Make.Subscript(Make.Name('tuple'), Make.Tuple(list_annotation))
+	FunctionDef.returns = Make.Subscript(Make.Name('tuple'), Make.Tuple(list_annotation))
 
-	ast.fix_missing_locations(ingredientsFunction.astFunctionDef)
+	ast.fix_missing_locations(FunctionDef)
 
-	return ingredientsFunction
+	return FunctionDef
 
 def unjoinBinOP(astAST: ast.AST, operator: type[ast.operator] = ast.operator) -> list[ast.expr]:
 	"""
@@ -374,41 +356,38 @@ def unparseFindReplace(astTree: 木, mappingFindReplaceNodes: Mapping[ast.AST, a
 			astTree = deepcopy(newTree)
 	return newTree
 
-def write_astModule(ingredients: IngredientsModule, pathFilename: PathLike[Any] | PurePath | io.TextIOBase, packageName: str | None = None) -> None:
+def write_astModule(astModule: ast.Module, pathFilename: PathLike[Any] | PurePath | io.TextIOBase, settings: dict[str, dict[str, Any]] | None = None, identifierPackage: str='') -> None:
 	"""
-	Convert an IngredientsModule to Python source code and write it to a file.
+	Convert an AST module to Python source code and write it to a file or stream.
 
 	(AI generated docstring)
 
-	This function renders an IngredientsModule into executable Python code,
-	applies code quality improvements like import organization via autoflake,
-	and writes the result to the specified file path.
+	This function takes an AST module structure, converts it to formatted Python source code,
+	and writes the result to a file or text stream. The function ensures all AST node locations
+	are properly fixed before conversion and applies code formatting and optimization through
+	configurable settings.
 
-	The function performs several key steps:
-	1. Converts the AST module structure to a valid Python AST
-	2. Fixes location attributes in the AST for proper formatting
-	3. Converts the AST to Python source code
-	4. Optimizes imports using autoflake
-	5. Writes the final source code to the specified file location
-
-	This is typically the final step in the code generation assembly line,
-	producing optimized Python modules ready for execution.
+	By default, the function uses `autoflake` to remove unused imports and variables, and `isort`
+	to organize import statements. Custom formatting settings can be provided to control this behavior.
 
 	Parameters
 	----------
-	ingredients : IngredientsModule
-		The IngredientsModule containing the module definition.
-	pathFilename : PathLike[Any] | PurePath
-		The file path where the module should be written.
-	packageName : str | None = None
-		Optional package name to preserve in import optimization.
+	astModule : ast.Module
+		The AST module to convert and write. This should be a complete module structure with
+		all necessary imports, statements, and definitions.
+	pathFilename : PathLike[Any] | PurePath | io.TextIOBase
+		The destination for the generated Python code. Can be a file path or an open text stream.
+	settings : dict[str, dict[str, Any]] | None = None
+		Optional configuration for code formatting tools. Should contain nested dictionaries with
+		keys like `'autoflake'` and `'isort'`, each mapping to their respective tool settings.
+	identifierPackage : str = ''
+		Optional package identifier to add to the autoflake additional imports list when no
+		settings are provided, ensuring the specified package is preserved during import optimization.
+
 	"""
-	astModule = Make.Module(ingredients.body, ingredients.type_ignores)
 	ast.fix_missing_locations(astModule)
 	pythonSource: str = ast.unparse(astModule)
-	autoflake_additional_imports: list[str] = ingredients.imports.exportListModuleIdentifiers()
-	if packageName:
-		autoflake_additional_imports.append(packageName)
-	pythonSource = autoflake_fix_code(pythonSource, autoflake_additional_imports, expand_star_imports=False, remove_all_unused_imports=True, remove_duplicate_keys = False, remove_unused_variables = False)
-	writeStringToHere(pythonSource, pathFilename)
-
+	if identifierPackage and not settings:
+		settings = {'autoflake': settings_autoflakeDEFAULT}
+		settings['autoflake']['additional_imports'].append(identifierPackage)
+	writePython(pythonSource, pathFilename, settings)

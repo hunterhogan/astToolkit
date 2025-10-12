@@ -4,7 +4,7 @@ import sys
 
 if sys.version_info >= (3, 13):
 
-	def dump(node: ast.AST, *, annotate_fields: bool = True, include_attributes: bool = False, indent: int | str | None = None, show_empty: bool = False) -> str:  # noqa: C901, PLR0915
+	def dump(node: ast.AST, *, annotate_fields: bool = True, include_attributes: bool = False, indent: int | str | None = None, show_empty: bool = False) -> str:
 		"""Return a formatted string representation of an `ast.AST` node.
 
 		Parameters
@@ -28,7 +28,7 @@ if sys.version_info >= (3, 13):
 			String representation of the `ast.AST` node with specified formatting.
 
 		"""
-		def _format(node: astASTattributes, level: int = 0) -> tuple[str, bool]:  # noqa: C901, PLR0912, PLR0915
+		def _format(node: astASTattributes, level: int = 0) -> tuple[str, bool]:
 			if indentString is not None:
 				level += 1
 				ImaIndent: str = '\n' + indentString * level

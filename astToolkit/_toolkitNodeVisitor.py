@@ -102,7 +102,7 @@ class NodeTourist(ast.NodeVisitor, Generic[木, 归个]):  # noqa: UP046
 
 		"""
 		if self.findThis(node):
-			self.nodeCaptured = self.doThat(cast('木', node))
+			self.nodeCaptured = self.doThat(cast(木, node))
 		self.generic_visit(node)
 
 	def captureLastMatch(self, node: ast.AST) -> 归个 | None:
@@ -216,5 +216,5 @@ class NodeChanger(ast.NodeTransformer, Generic[木, 归个]):  # noqa: UP046
 
 		"""
 		if self.findThis(node):
-			return self.doThat(cast("木", node))
+			return self.doThat(cast(木, node))
 		return super().visit(node)
