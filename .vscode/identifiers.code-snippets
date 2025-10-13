@@ -1,9 +1,8 @@
 {
-	// astToolkit workspace
 	// snippet name: `scope`, `prefix`, `body`, `description`
-	// `scope`: The scope of VS Code-defined languages to which the snippet is limited. An omitted or empty `scope`: no limit, therefore all languages. Otherwise, one or more comma-separated VS Code language-ids. Why did they not use an array ([a list]) here? Elehpino.
+	// `scope`: limit snippet to comma-separated VS Code language-ids. Omit or create an empty `scope`: no limit, therefore all languages.
 	// `prefix`: The special string that will be replaced by the snippet. It can be a string or an [array of strings].
-	// `body`: The body of the snippet. It can be a string or an [array of strings]. If it is an [array], each element, which are separated by commas, will be joined with a newline character: effectively, the commas are newlines.
+	// `body`: The body of the snippet: a string or an [array of comma-separated strings]. Each [array] element is joined with a newline character: effectively, the commas are newlines.
 	// 		Tab stops are numbered placeholders that allow you to navigate through the snippet. They are represented by $1, $2, etc. The final cursor position is represented by $0.
 	// 		Placeholders are represented by ${1:label}, ${2:another}, etc. Placeholders with the same ids are connected.
 	// 		`body` variables are represented by ${variableName}. The variable name can be a string or an array of strings, with an optional default value, ${variableName:defaultValue}.
@@ -21,155 +20,98 @@
 	// 	"description": "Log output to console"
 	// },
 	"本": {
-		"scope": "markdown,plaintext,python",
 		"prefix": "ben",
-		"body": [
-			"本"
-		],
+		"body": "本",
 		"description": "本 (běn): module"
 	},
 	"比符": {
-		"scope": "markdown,plaintext,python",
 		"prefix": "bifu",
-		"body": [
-			"比符"
-		],
+		"body": "比符",
 		"description": "比符 (bǐfú): comparison operator (cmpop)"
 	},
 	"布尔符": {
-		"scope": "markdown,plaintext,python",
 		"prefix": "buerfu",
-		"body": [
-			"布尔符"
-		],
+		"body": "布尔符",
 		"description": "布尔符 (bùěrfú): boolean operator (boolop)"
 	},
 	"常": {
-		"scope": "markdown,plaintext,python",
 		"prefix": "chang",
-		"body": [
-			"常"
-		],
+		"body": "常",
 		"description": "常 (cháng): constant"
 	},
 	"二符": {
-		"scope": "markdown,plaintext,python",
 		"prefix": "erfu",
-		"body": [
-			"二符"
-		],
+		"body": "二符",
 		"description": "二符 (èrfú): binary operator"
 	},
 	"个": {
-		"scope": "markdown,plaintext,python",
 		"prefix": "ge",
-		"body": [
-			"个"
-		],
+		"body": "个",
 		"description": "个 (gè): generic measure word"
 	},
 	"工": {
-		"scope": "markdown,plaintext,python",
 		"prefix": "gong",
-		"body": [
-			"工"
-		],
+		"body": "工",
 		"description": "工 (gōng): expression (expr)"
 	},
 	"工位": {
-		"scope": "markdown,plaintext,python",
 		"prefix": "gongwei",
-		"body": [
-			"工位"
-		],
+		"body": "工位",
 		"description": "工位 (gōngwèi): expression context (expr_context)"
 	},
 	"归": {
-		"scope": "markdown,plaintext,python",
 		"prefix": "gui",
-		"body": [
-			"归"
-		],
+		"body": "归",
 		"description": "归 (guī): return"
 	},
 	"忽": {
-		"scope": "markdown,plaintext,python",
 		"prefix": "hu",
-		"body": [
-			"忽"
-		],
+		"body": "忽",
 		"description": "忽 (hū): ignore"
 	},
 	"口": {
-		"scope": "markdown,plaintext,python",
 		"prefix": "kou",
-		"body": [
-			"口"
-		],
+		"body": "口",
 		"description": "口 (kǒu): statement (stmt)"
 	},
 	"拦": {
-		"scope": "markdown,plaintext,python",
 		"prefix": "lan",
-		"body": [
-			"拦"
-		],
+		"body": "拦",
 		"description": "拦 (lán): exception handler"
 	},
 	"俪": {
-		"scope": "markdown,plaintext,python",
 		"prefix": "li",
-		"body": [
-			"俪"
-		],
+		"body": "俪",
 		"description": "俪 (lì): pattern"
 	},
 	"木": {
-		"scope": "markdown,plaintext,python",
 		"prefix": "mu",
-		"body": [
-			"木"
-		],
+		"body": "木",
 		"description": "木 (mù): tree, short for abstract syntax tree (AST)"
 	},
 	"是": {
-		"scope": "markdown,plaintext,python",
 		"prefix": "shi",
-		"body": [
-			"是"
-		],
+		"body": "是",
 		"description": "是 (shì): is, to be"
 	},
 	"形": {
-		"scope": "markdown,plaintext,python",
 		"prefix": "xing",
-		"body": [
-			"形"
-		],
+		"body": "形",
 		"description": "形 (xíng): type parameter"
 	},
 	"文件": {
-		"scope": "markdown,plaintext,python",
 		"prefix": "wenjian",
-		"body": [
-			"文件"
-		],
-		"description": "文件 (wénjiàn): (dictionary key)"
+		"body": "文件",
+		"description": "文件 (wénjiàn): dictionary key"
 	},
 	"文义": {
-		"scope": "markdown,plaintext,python",
 		"prefix": "wenyi",
-		"body": [
-			"文义"
-		],
-		"description": "文义 (wényì): meaning (dictionary value)"
+		"body": "文义",
+		"description": "文义 (wényì): dictionary value"
 	},
 	"一符": {
-		"scope": "markdown,plaintext,python",
 		"prefix": "yifu",
-		"body": [
-			"一符"
-		],
+		"body": "一符",
 		"description": "一符 (yīfú): unary operator"
 	},
 }

@@ -122,7 +122,6 @@ from astToolkit._toolBe import Be as Be
 from astToolkit._toolDOT import DOT as DOT
 from astToolkit._toolGrab import Grab as Grab
 from astToolkit._toolMake import Make as Make
-from astToolkit._prototypeFind import Find as Find
 
 from astToolkit._toolIfThis import IfThis as IfThis
 from astToolkit._toolThen import Then as Then

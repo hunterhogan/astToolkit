@@ -8,23 +8,41 @@ type ConstantValueType = bool | bytes | complex | EllipsisType | float | int | N
 type astASTattributes = ast.AST | ConstantValueType | list[ast.AST] | list[ast.AST | None] | list[str]
 type identifierDotAttribute = str
 个 = typing_TypeVar('个', covariant=True)
+"Generic `TypeVar` (Type ***Var***iable).\n\n(AI generated docstring.)\n\nThe ideograph '个' (gè) is a generic measure word. Its decimal unicode is 20010.\n"
 归个 = typing_TypeVar('归个', covariant=True)
+"Generic `return` `TypeVar` (Type ***Var***iable).\n\n(AI generated docstring.)\n\nThe ideograph '归' (guī) means 'return'. Its decimal unicode is 24402. The ideograph '个' (gè) is a generic measure word.\nIts decimal unicode is 20010. `归个` is often paired with `个` when the `return` type may differ from the parameter type.\n"
 文件 = typing_TypeVar('文件', covariant=True)
+"Dictionary key `TypeVar` (Type ***Var***iable).\n\n(AI generated docstring.)\n\nThe ideograph '文件' (wénjiàn) means 'dictionary key'. Its decimal unicode is 25991 and 20214.\n"
 文义 = typing_TypeVar('文义', covariant=True)
+"Dictionary value `TypeVar` (Type ***Var***iable).\n\n(AI generated docstring.)\n\nThe ideograph '文义' (wényì) means 'dictionary value'. Its decimal unicode is 25991 and 20041. `文义` is often paired with\n`文件` for dictionary type parameters.\n"
 木 = typing_TypeVar('木', bound=ast.AST, covariant=True)
-布尔符 = typing_TypeVar('布尔符', bound=ast.boolop, covariant=True)
-比符 = typing_TypeVar('比符', bound=ast.cmpop, covariant=True)
-常 = typing_TypeVar('常', bound=ast.Constant, covariant=True)
-拦 = typing_TypeVar('拦', bound=ast.excepthandler, covariant=True)
-工位 = typing_TypeVar('工位', bound=ast.expr_context, covariant=True)
-工 = typing_TypeVar('工', bound=ast.expr, covariant=True)
+"`AST` `TypeVar` (Type ***Var***iable) bound to `ast.AST`.\n\n(AI generated docstring.)\n\nThe ideograph '木' (mù) means 'tree', short for abstract syntax tree. Its decimal unicode is 26408. This `covariant`\n`TypeVar` is bound to `ast.AST`, the base class for all AST nodes, and its subclasses, `ast.alias`, `ast.arg`,\n`ast.arguments`, `ast.boolop`, `ast.cmpop`, `ast.comprehension`, `ast.excepthandler`, `ast.expr`, `ast.expr_context`,\n`ast.keyword`, `ast.match_case`, `ast.mod`, `ast.operator`, `ast.pattern`, `ast.slice`, `ast.stmt`, `ast.type_ignore`,\n`ast.type_param`, `ast.unaryop`, and `ast.withitem`.\n"
 本 = typing_TypeVar('本', bound=ast.mod, covariant=True)
-二符 = typing_TypeVar('二符', bound=ast.operator, covariant=True)
-俪 = typing_TypeVar('俪', bound=ast.pattern, covariant=True)
+"`mod` `TypeVar` (Type ***Var***iable) bound to `ast.mod`.\n\n(AI generated docstring.)\n\nThe ideograph '本' (běn) means 'module'. Its decimal unicode is 26412. This `covariant` `TypeVar` is bound to `ast.mod`,\nthe base class for module-level AST nodes, and its subclasses, `ast.Expression`, `ast.FunctionType`, `ast.Interactive`,\n`ast.Module`, and `ast.Suite`.\n"
 口 = typing_TypeVar('口', bound=ast.stmt, covariant=True)
-忽 = typing_TypeVar('忽', bound=ast.type_ignore, covariant=True)
-形 = typing_TypeVar('形', bound=ast.type_param, covariant=True)
+"`stmt` `TypeVar` (Type ***Var***iable) bound to `ast.stmt`.\n\n(AI generated docstring.)\n\nThe ideograph '口' (kǒu) means 'statement'. Its decimal unicode is 21475. This `covariant` `TypeVar` is bound to\n`ast.stmt` and its subclasses, `ast.AnnAssign`, `ast.Assert`, `ast.Assign`, `ast.AsyncFor`, `ast.AsyncFunctionDef`,\n`ast.AsyncWith`, `ast.AugAssign`, `ast.Break`, `ast.ClassDef`, `ast.Continue`, `ast.Delete`, `ast.Expr`, `ast.For`,\n`ast.FunctionDef`, `ast.Global`, `ast.If`, `ast.Import`, `ast.ImportFrom`, `ast.Match`, `ast.Nonlocal`, `ast.Pass`,\n`ast.Raise`, `ast.Return`, `ast.Try`, `ast.TryStar`, `ast.TypeAlias`, `ast.While`, and `ast.With`.\n"
+工 = typing_TypeVar('工', bound=ast.expr, covariant=True)
+"`expr` `TypeVar` (Type ***Var***iable) bound to `ast.expr`.\n\n(AI generated docstring.)\n\nThe ideograph '工' (gōng) means 'expression'. Its decimal unicode is 24037. This `covariant` `TypeVar` is bound to\n`ast.expr`, the base class for all expression nodes, and its subclasses, `ast.Attribute`, `ast.Await`, `ast.BinOp`,\n`ast.BoolOp`, `ast.Call`, `ast.Compare`, `ast.Constant`, `ast.Dict`, `ast.DictComp`, `ast.FormattedValue`,\n`ast.GeneratorExp`, `ast.IfExp`, `ast.JoinedStr`, `ast.Lambda`, `ast.List`, `ast.ListComp`, `ast.Name`, `ast.NamedExpr`,\n`ast.Set`, `ast.SetComp`, `ast.Slice`, `ast.Starred`, `ast.Subscript`, `ast.Tuple`, `ast.UnaryOp`, `ast.Yield`, and\n`ast.YieldFrom`.\n"
+工位 = typing_TypeVar('工位', bound=ast.expr_context, covariant=True)
+"`expr_context` `TypeVar` (Type ***Var***iable) bound to `ast.expr_context`.\n\n(AI generated docstring.)\n\nThe ideograph '工位' (gōngwèi) means 'expression context'. Its decimal unicode is 24037 and 20301. This `covariant`\n`TypeVar` is bound to `ast.expr_context`, representing whether an expression appears in loading, storing, or deleting\ncontext, and its subclasses, `ast.AugLoad`, `ast.AugStore`, `ast.Del`, `ast.Load`, `ast.Param`, and `ast.Store`.\n"
 一符 = typing_TypeVar('一符', bound=ast.unaryop, covariant=True)
+"`unaryop` `TypeVar` (Type ***Var***iable) bound to `ast.unaryop`.\n\n(AI generated docstring.)\n\nThe ideograph '一符' (yīfú) means 'unary operator'. Its decimal unicode is 19968 and 31526. This `covariant` `TypeVar` is\nbound to `ast.unaryop`, representing unary operators like negation and bitwise NOT, and its subclasses, `ast.Invert`,\n`ast.Not`, `ast.UAdd`, and `ast.USub`.\n"
+二符 = typing_TypeVar('二符', bound=ast.operator, covariant=True)
+"`operator` `TypeVar` (Type ***Var***iable) bound to `ast.operator`.\n\n(AI generated docstring.)\n\nThe ideograph '二符' (èrfú) means 'binary operator'. Its decimal unicode is 20108 and 31526. This `covariant` `TypeVar` is\nbound to `ast.operator`, representing binary operators like addition and multiplication, and its subclasses, `ast.Add`,\n`ast.BitAnd`, `ast.BitOr`, `ast.BitXor`, `ast.Div`, `ast.FloorDiv`, `ast.LShift`, `ast.MatMult`, `ast.Mod`, `ast.Mult`,\n`ast.Pow`, `ast.RShift`, and `ast.Sub`.\n"
+比符 = typing_TypeVar('比符', bound=ast.cmpop, covariant=True)
+"`cmpop` `TypeVar` (Type ***Var***iable) bound to `ast.cmpop`.\n\n(AI generated docstring.)\n\nThe ideograph '比符' (bǐfú) means 'comparison operator'. Its decimal unicode is 27604 and 31526. This `covariant`\n`TypeVar` is bound to `ast.cmpop`, representing comparison operators like less than and equality, and its subclasses,\n`ast.Eq`, `ast.Gt`, `ast.GtE`, `ast.In`, `ast.Is`, `ast.IsNot`, `ast.Lt`, `ast.LtE`, `ast.NotEq`, and `ast.NotIn`.\nTogether with '一符' (unary), '二符' (binary), and '布尔符' (boolean), these form a semiotic system for operator types.\n"
+布尔符 = typing_TypeVar('布尔符', bound=ast.boolop, covariant=True)
+"`boolop` `TypeVar` (Type ***Var***iable) bound to `ast.boolop`.\n\n(AI generated docstring.)\n\nThe ideograph '布尔符' (bùěrfú) means 'boolean operator'. Its decimal unicode is 24067, 23572, and 31526. This `covariant`\n`TypeVar` is bound to `ast.boolop`, representing boolean operators `and` and `or`, and its subclasses, `ast.And` and\n`ast.Or`. Together with '一符' (unary), '二符' (binary), and '比符' (comparison), these form a semiotic system for operator\ntypes.\n"
+常 = typing_TypeVar('常', bound=ast.Constant, covariant=True)
+"`Constant` `TypeVar` (Type ***Var***iable) bound to `ast.Constant`.\n\n(AI generated docstring.)\n\nThe ideograph '常' (cháng) means 'constant'. Its decimal unicode is 24120. This `covariant` `TypeVar` is bound to\n`ast.Constant`, representing literal constant values in Python code, and its subclasses, `ast.Bytes`, `ast.Ellipsis`,\n`ast.NameConstant`, `ast.Num`, and `ast.Str`.\n"
+拦 = typing_TypeVar('拦', bound=ast.excepthandler, covariant=True)
+"`excepthandler` `TypeVar` (Type ***Var***iable) bound to `ast.excepthandler`.\n\n(AI generated docstring.)\n\nThe ideograph '拦' (lán) means 'exception handler'. Its decimal unicode is 25318. This `covariant` `TypeVar` is bound to\n`ast.excepthandler`, representing `except` clauses in try statements, and its subclasses, `ast.ExceptHandler`.\n"
+俪 = typing_TypeVar('俪', bound=ast.pattern, covariant=True)
+"`pattern` `TypeVar` (Type ***Var***iable) bound to `ast.pattern`.\n\n(AI generated docstring.)\n\nThe ideograph '俪' (lì) means 'pattern'. Its decimal unicode is 20458. This `covariant` `TypeVar` is bound to\n`ast.pattern`, representing patterns used in structural pattern matching, and its subclasses, `ast.MatchAs`,\n`ast.MatchClass`, `ast.MatchMapping`, `ast.MatchOr`, `ast.MatchSequence`, `ast.MatchSingleton`, `ast.MatchStar`, and\n`ast.MatchValue`.\n"
+忽 = typing_TypeVar('忽', bound=ast.type_ignore, covariant=True)
+"`type_ignore` `TypeVar` (Type ***Var***iable) bound to `ast.type_ignore`.\n\n(AI generated docstring.)\n\nThe ideograph '忽' (hū) means 'ignore'. Its decimal unicode is 24573. This `covariant` `TypeVar` is bound to\n`ast.type_ignore`, representing type checker ignore comments, and its subclasses, `ast.TypeIgnore`.\n"
+形 = typing_TypeVar('形', bound=ast.type_param, covariant=True)
+"`type_param` `TypeVar` (Type ***Var***iable) bound to `ast.type_param`.\n\n(AI generated docstring.)\n\nThe ideograph '形' (xíng) means 'type parameter'. Its decimal unicode is 24418. This `covariant` `TypeVar` is bound to\n`ast.type_param`, representing type parameters in generic classes and functions, and its subclasses, `ast.ParamSpec`,\n`ast.TypeVar`, and `ast.TypeVarTuple`.\n"
 
 class _attributes(TypedDict, total=False):
     lineno: int
