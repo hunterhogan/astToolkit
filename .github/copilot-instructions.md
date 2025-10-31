@@ -200,7 +200,8 @@ pip install astToolkit
 
 ### Working with Type Guards
 
-- Type guards use `TypeIs` from `typing` (Python 3.10+) or `typing_extensions`
+- Type guards use `TypeIs` from `typing_extensions` (available in Python 3.10+, added to standard `typing` module in Python 3.13+)
+- This codebase uses `from typing_extensions import TypeIs` for compatibility with Python 3.12
 - Pattern: `def Be.SomeNode(node: ast.AST) -> TypeIs[ast.SomeNode]:`
 - Always check isinstance() inside type guards
 - Type guards enable static type checkers to narrow types
