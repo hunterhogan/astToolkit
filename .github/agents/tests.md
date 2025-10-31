@@ -1,6 +1,6 @@
 ---
 name: Tests
-description:
+description: How to make tests.
 ---
 
 # My Agent
