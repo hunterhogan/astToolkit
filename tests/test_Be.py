@@ -60,6 +60,46 @@ def test_BeAttributeMethod(beAttributeMethodTestData: tuple[str, str, str, Any, 
         dictionaryKwargs.setdefault("value", ast.Name(id="objectDefault", ctx=ast.Load()))
         dictionaryKwargs.setdefault("attr", "attrDefault")
         dictionaryKwargs.setdefault("ctx", ast.Load())
+    elif identifierClass == "Return":
+        # Return can have None as value - already set in dictionaryKwargs
+        pass
+    elif identifierClass == "Expr":
+        dictionaryKwargs.setdefault("value", ast.Constant(value=0))
+    elif identifierClass == "Global":
+        dictionaryKwargs.setdefault("names", [])
+    elif identifierClass == "Nonlocal":
+        dictionaryKwargs.setdefault("names", [])
+    elif identifierClass == "Delete":
+        dictionaryKwargs.setdefault("targets", [])
+    elif identifierClass == "Import":
+        dictionaryKwargs.setdefault("names", [])
+    elif identifierClass == "Lambda":
+        dictionaryKwargs.setdefault("args", ast.arguments(
+            posonlyargs=[], args=[], kwonlyargs=[], kw_defaults=[], defaults=[]
+        ))
+        dictionaryKwargs.setdefault("body", ast.Constant(value=0))
+    elif identifierClass == "Yield":
+        # Yield can have None as value
+        pass
+    elif identifierClass == "YieldFrom":
+        dictionaryKwargs.setdefault("value", ast.Name(id="defaultGenerator", ctx=ast.Load()))
+    elif identifierClass == "NamedExpr":
+        dictionaryKwargs.setdefault("target", ast.Name(id="defaultTarget", ctx=ast.Store()))
+        dictionaryKwargs.setdefault("value", ast.Constant(value=0))
+    elif identifierClass == "Starred":
+        dictionaryKwargs.setdefault("value", ast.Name(id="defaultValue", ctx=ast.Load()))
+        dictionaryKwargs.setdefault("ctx", ast.Load())
+    elif identifierClass == "List":
+        dictionaryKwargs.setdefault("elts", [])
+        dictionaryKwargs.setdefault("ctx", ast.Load())
+    elif identifierClass == "Set":
+        dictionaryKwargs.setdefault("elts", [])
+    elif identifierClass == "Tuple":
+        dictionaryKwargs.setdefault("elts", [])
+        dictionaryKwargs.setdefault("ctx", ast.Load())
+    elif identifierClass == "Dict":
+        dictionaryKwargs.setdefault("keys", [])
+        dictionaryKwargs.setdefault("values", [])
     
     # Create the node
     try:

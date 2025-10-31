@@ -109,41 +109,164 @@ def generateBeAttributeMethodTestData() -> Iterator[tuple[str, str, str, Any, An
 	"""
 	# Test cases using non-contiguous values per instructions
 	# Format: (class, method, attribute, node_value, check_value, expected)
-	listTestCases: list[tuple[str, str, str, Any, Any, bool]] = [
-		# alias tests
+	# NOTE: For AST objects, use the same object for positive tests (not Make calls which create new objects)
+	listTestCases: list[tuple[str, str, str, Any, Any, bool]] = []
+	
+	# alias tests
+	listTestCases.extend([
 		("alias", "nameIs", "name", "moduleNorth", "moduleNorth", True),
 		("alias", "nameIs", "name", "moduleNorth", "moduleSouth", False),
 		("alias", "asnameIs", "asname", "aliasEast", "aliasEast", True),
 		("alias", "asnameIs", "asname", "aliasEast", "aliasWest", False),
-		
-		# arg tests
+	])
+	
+	# arg tests
+	listTestCases.extend([
 		("arg", "argIs", "arg", "parameterFibonacci", "parameterFibonacci", True),
 		("arg", "argIs", "arg", "parameterFibonacci", "parameterPrime", False),
-		
-		# Constant tests  
+	])
+	
+	# Constant tests (primitives can be compared directly)
+	listTestCases.extend([
 		("Constant", "valueIs", "value", 233, 233, True),
 		("Constant", "valueIs", "value", 233, 377, False),
-		
-		# Name tests
+		("Constant", "kindIs", "kind", "u", "u", True),
+		("Constant", "kindIs", "kind", "u", "r", False),
+	])
+	
+	# Name tests
+	listTestCases.extend([
 		("Name", "idIs", "id", "identifierNorth", "identifierNorth", True),
 		("Name", "idIs", "id", "identifierNorth", "identifierSouth", False),
-		
-		# ClassDef tests
+	])
+	
+	# ClassDef tests
+	listTestCases.extend([
 		("ClassDef", "nameIs", "name", "ClassNorthEast", "ClassNorthEast", True),
 		("ClassDef", "nameIs", "name", "ClassNorthEast", "ClassSouthWest", False),
-		
-		# FunctionDef tests
+	])
+	
+	# FunctionDef tests
+	listTestCases.extend([
 		("FunctionDef", "nameIs", "name", "functionNorthward", "functionNorthward", True),
 		("FunctionDef", "nameIs", "name", "functionNorthward", "functionSouthward", False),
-		
-		# keyword tests
+	])
+	
+	# keyword tests
+	listTestCases.extend([
 		("keyword", "argIs", "arg", "keywordPrime", "keywordPrime", True),
 		("keyword", "argIs", "arg", "keywordPrime", "keywordComposite", False),
-		
-		# Attribute tests
+	])
+	
+	# Attribute tests
+	listTestCases.extend([
 		("Attribute", "attrIs", "attr", "attributeEast", "attributeEast", True),
 		("Attribute", "attrIs", "attr", "attributeEast", "attributeWest", False),
-	]
+	])
+	
+	# Global tests (list of strings)
+	listTestCases.extend([
+		("Global", "namesIs", "names", ["variableAlpha"], ["variableAlpha"], True),
+		("Global", "namesIs", "names", ["variableAlpha"], ["variableBeta"], False),
+	])
+	
+	# Nonlocal tests (list of strings)
+	listTestCases.extend([
+		("Nonlocal", "namesIs", "names", ["variableGamma"], ["variableGamma"], True),
+		("Nonlocal", "namesIs", "names", ["variableGamma"], ["variableDelta"], False),
+	])
+	
+	# For AST object attributes, we need to use the same object instance for positive tests
+	# Return tests
+	nodeReturnConstant = Make.Constant(89)
+	listTestCases.extend([
+		("Return", "valueIs", "value", nodeReturnConstant, nodeReturnConstant, True),
+		("Return", "valueIs", "value", nodeReturnConstant, Make.Constant(144), False),
+	])
+	
+	# Expr tests
+	nodeExprConstant = Make.Constant(13)
+	listTestCases.extend([
+		("Expr", "valueIs", "value", nodeExprConstant, nodeExprConstant, True),
+		("Expr", "valueIs", "value", nodeExprConstant, Make.Constant(17), False),
+	])
+	
+	# Delete tests  
+	nodeDeleteTarget = Make.Name("targetPrimary")
+	listTestCases.extend([
+		("Delete", "targetsIs", "targets", [nodeDeleteTarget], [nodeDeleteTarget], True),
+		("Delete", "targetsIs", "targets", [nodeDeleteTarget], [Make.Name("targetSecondary")], False),
+	])
+	
+	# Import tests
+	nodeImportAlias = Make.alias("modulePi")
+	listTestCases.extend([
+		("Import", "namesIs", "names", [nodeImportAlias], [nodeImportAlias], True),
+		("Import", "namesIs", "names", [nodeImportAlias], [Make.alias("moduleEuler")], False),
+	])
+	
+	# Lambda tests
+	nodeLambdaBody = Make.Constant(5)
+	listTestCases.extend([
+		("Lambda", "bodyIs", "body", nodeLambdaBody, nodeLambdaBody, True),
+		("Lambda", "bodyIs", "body", nodeLambdaBody, Make.Constant(8), False),
+	])
+	
+	# Yield tests
+	nodeYieldValue = Make.Constant(21)
+	listTestCases.extend([
+		("Yield", "valueIs", "value", nodeYieldValue, nodeYieldValue, True),
+		("Yield", "valueIs", "value", nodeYieldValue, Make.Constant(34), False),
+	])
+	
+	# YieldFrom tests
+	nodeYieldFromValue = Make.Name("generatorNorth")
+	listTestCases.extend([
+		("YieldFrom", "valueIs", "value", nodeYieldFromValue, nodeYieldFromValue, True),
+		("YieldFrom", "valueIs", "value", nodeYieldFromValue, Make.Name("generatorSouth"), False),
+	])
+	
+	# NamedExpr tests
+	nodeNamedExprTarget = Make.Name("walrusAlpha")
+	listTestCases.extend([
+		("NamedExpr", "targetIs", "target", nodeNamedExprTarget, nodeNamedExprTarget, True),
+		("NamedExpr", "targetIs", "target", nodeNamedExprTarget, Make.Name("walrusBeta"), False),
+	])
+	
+	# Starred tests
+	nodeStarredValue = Make.Name("argsCollection")
+	listTestCases.extend([
+		("Starred", "valueIs", "value", nodeStarredValue, nodeStarredValue, True),
+		("Starred", "valueIs", "value", nodeStarredValue, Make.Name("kwargsMapping"), False),
+	])
+	
+	# List tests
+	nodeListElt = Make.Constant(3)
+	listTestCases.extend([
+		("List", "eltsIs", "elts", [nodeListElt], [nodeListElt], True),
+		("List", "eltsIs", "elts", [nodeListElt], [Make.Constant(5)], False),
+	])
+	
+	# Set tests
+	nodeSetElt = Make.Constant(11)
+	listTestCases.extend([
+		("Set", "eltsIs", "elts", [nodeSetElt], [nodeSetElt], True),
+		("Set", "eltsIs", "elts", [nodeSetElt], [Make.Constant(13)], False),
+	])
+	
+	# Tuple tests
+	nodeTupleElt = Make.Constant(7)
+	listTestCases.extend([
+		("Tuple", "eltsIs", "elts", [nodeTupleElt], [nodeTupleElt], True),
+		("Tuple", "eltsIs", "elts", [nodeTupleElt], [Make.Constant(11)], False),
+	])
+	
+	# Dict tests
+	nodeDictKey = Make.Constant("keyAlpha")
+	listTestCases.extend([
+		("Dict", "keysIs", "keys", [nodeDictKey], [nodeDictKey], True),
+		("Dict", "keysIs", "keys", [nodeDictKey], [Make.Constant("keyBeta")], False),
+	])
 	
 	yield from listTestCases
 
