@@ -7,8 +7,7 @@ antecedent-action pattern through specialized AST traversal classes. These class
 operations by combining predicate functions (antecedents) with action functions (consequents).
 
 The antecedent-action pattern forms the conceptual core of astToolkit's design. Antecedents are predicate functions
-that identify target nodes using tools like `Be` type guards, `IfThis` predicates, or `ClassIsAndAttribute`
-conditions. Actions are consequent functions that specify operations to perform on matched nodes using tools like
+that identify target nodes using tools like `Be` type guards, `IfThis` predicates. Actions are consequent functions that specify operations to perform on matched nodes using tools like
 `Then` actions, `Grab` transformations, or custom operations.
 
 This module contains two complementary visitor classes that extend Python's built-in AST visitor pattern:
