@@ -377,3 +377,43 @@ def ifThisDirectPredicateTestData(request: pytest.FixtureRequest) -> tuple[str, 
 def ifThisComplexPredicateTestData(request: pytest.FixtureRequest) -> tuple[str, tuple[Any, ...], Callable[[], ast.AST], bool]:
 	"""Fixture providing test data for complex IfThis predicate methods."""
 	return request.param
+
+# Grab test data and fixtures
+
+def generateGrabAttributeTestCases() -> Iterator[tuple[str, Callable[[], ast.AST], Callable[[Any], Any], Any]]:
+	"""Generate test data for Grab attribute modification methods using unique test values."""
+
+	listTestCases: list[tuple[str, Callable[[], ast.AST], Callable[[Any], Any], Any]] = [
+		# methodNameGrab, factoryNodeOriginal, actionTransform, expectedAttributeValue
+		("idAttribute", lambda: Make.Name("identifierNorthward"), lambda identifierOld: identifierOld + "Eastward", "identifierNorthwardEastward"),
+		("argAttribute", lambda: Make.arg("parameterPrime"), lambda identifierOld: identifierOld + "Secondary", "parameterPrimeSecondary"),
+		("attrAttribute", lambda: Make.Attribute(Make.Name("objectAlpha"), "methodBeta"), lambda identifierOld: identifierOld + "Gamma", "methodBetaGamma"),
+		("nameAttribute", lambda: Make.FunctionDef(name="functionFibonacci"), lambda identifierOld: identifierOld + "Prime", "functionFibonacciPrime"),
+		("moduleAttribute", lambda: Make.ImportFrom("packageAlpha", [Make.alias("itemBeta")]), lambda identifierOld: (identifierOld or "") + "Extended", "packageAlphaExtended"),
+		("levelAttribute", lambda: Make.ImportFrom("packageDelta", [Make.alias("itemEpsilon")], level=3), lambda valueOld: valueOld + 5, 8),
+		("linenoAttribute", lambda: Make.Name("variableGamma", lineno=13), lambda valueOld: valueOld + 8, 21),  # Fibonacci numbers
+	]
+
+	yield from listTestCases
+
+def generateGrabIndexTestCases() -> Iterator[tuple[str, Callable[[], list[ast.AST]], int, Callable[[ast.AST], ast.AST | list[ast.AST] | None], list[str]]]:
+	"""Generate test data for Grab.index method using cardinal directions and primes."""
+
+	listTestCases: list[tuple[str, Callable[[], list[ast.AST]], int, Callable[[ast.AST], ast.AST | list[ast.AST] | None], list[str]]] = [
+		# descriptionTest, factoryListOriginal, indexTarget, actionTransform, listExpectedIdentifiers
+		("modify_element", lambda: [Make.Name("North"), Make.Name("South"), Make.Name("East")], 1, lambda node: Make.Name(node.id.upper()), ["North", "SOUTH", "East"]),
+		("delete_element", lambda: [Make.Name("alpha"), Make.Name("beta"), Make.Name("gamma")], 1, lambda node: None, ["alpha", "gamma"]),
+		("expand_element", lambda: [Make.Name("prime2"), Make.Name("prime3"), Make.Name("prime5")], 1, lambda node: [Make.Name("expanded7"), Make.Name("expanded11")], ["prime2", "expanded7", "expanded11", "prime5"]),
+	]
+
+	yield from listTestCases
+
+@pytest.fixture(params=list(generateGrabAttributeTestCases()), ids=lambda parametersTest: f"{parametersTest[0]}")
+def grabAttributeTestData(request: pytest.FixtureRequest) -> tuple[str, Callable[[], ast.AST], Callable[[Any], Any], Any]:
+	"""Fixture providing test data for Grab attribute modification methods."""
+	return request.param
+
+@pytest.fixture(params=list(generateGrabIndexTestCases()), ids=lambda parametersTest: f"{parametersTest[0]}")
+def grabIndexTestData(request: pytest.FixtureRequest) -> tuple[str, Callable[[], list[ast.AST]], int, Callable[[ast.AST], ast.AST | list[ast.AST] | None], list[str]]:
+	"""Fixture providing test data for Grab.index method."""
+	return request.param
