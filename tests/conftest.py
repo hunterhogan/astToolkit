@@ -87,6 +87,86 @@ def beNegativeTestData(request: pytest.FixtureRequest) -> tuple[str, str, str, d
 	"""
 	return request.param
 
+# Be attribute method test data and fixtures
+
+def generateBeAttributeMethodTestData() -> Iterator[tuple[str, str, str, Any, Any, bool]]:
+	"""Generate test data for Be attribute methods.
+	
+	Yields
+	------
+	identifierClass : str
+		Name of the Be class (e.g., 'alias', 'FunctionDef')
+	nameMethod : str
+		Name of the attribute method (e.g., 'nameIs', 'valueIs')
+	nameAttribute : str
+		Name of the attribute being tested (e.g., 'name', 'value')
+	valueAttributeNode : Any
+		Actual value to set in the node
+	valueAttributeCheck : Any
+		Value to check against in the predicate
+	expectedResult : bool
+		Expected result of the attribute check
+	"""
+	# Test cases using non-contiguous values per instructions
+	# Format: (class, method, attribute, node_value, check_value, expected)
+	listTestCases: list[tuple[str, str, str, Any, Any, bool]] = [
+		# alias tests
+		("alias", "nameIs", "name", "moduleNorth", "moduleNorth", True),
+		("alias", "nameIs", "name", "moduleNorth", "moduleSouth", False),
+		("alias", "asnameIs", "asname", "aliasEast", "aliasEast", True),
+		("alias", "asnameIs", "asname", "aliasEast", "aliasWest", False),
+		
+		# arg tests
+		("arg", "argIs", "arg", "parameterFibonacci", "parameterFibonacci", True),
+		("arg", "argIs", "arg", "parameterFibonacci", "parameterPrime", False),
+		
+		# Constant tests  
+		("Constant", "valueIs", "value", 233, 233, True),
+		("Constant", "valueIs", "value", 233, 377, False),
+		
+		# Name tests
+		("Name", "idIs", "id", "identifierNorth", "identifierNorth", True),
+		("Name", "idIs", "id", "identifierNorth", "identifierSouth", False),
+		
+		# ClassDef tests
+		("ClassDef", "nameIs", "name", "ClassNorthEast", "ClassNorthEast", True),
+		("ClassDef", "nameIs", "name", "ClassNorthEast", "ClassSouthWest", False),
+		
+		# FunctionDef tests
+		("FunctionDef", "nameIs", "name", "functionNorthward", "functionNorthward", True),
+		("FunctionDef", "nameIs", "name", "functionNorthward", "functionSouthward", False),
+		
+		# keyword tests
+		("keyword", "argIs", "arg", "keywordPrime", "keywordPrime", True),
+		("keyword", "argIs", "arg", "keywordPrime", "keywordComposite", False),
+		
+		# Attribute tests
+		("Attribute", "attrIs", "attr", "attributeEast", "attributeEast", True),
+		("Attribute", "attrIs", "attr", "attributeEast", "attributeWest", False),
+	]
+	
+	yield from listTestCases
+
+@pytest.fixture(
+	params=list(generateBeAttributeMethodTestData()), 
+	ids=lambda param: f"{param[0]}_{param[1]}_{param[5]}"
+)
+def beAttributeMethodTestData(request: pytest.FixtureRequest) -> tuple[str, str, str, Any, Any, bool]:
+	"""Fixture providing Be attribute method test data.
+	
+	Parameters
+	----------
+	request : pytest.FixtureRequest
+		Pytest request object for the fixture.
+		
+	Returns
+	-------
+	tuple[str, str, str, Any, Any, bool]
+		Tuple containing identifierClass, nameMethod, nameAttribute, valueAttributeNode, 
+		valueAttributeCheck, expectedResult.
+	"""
+	return request.param
+
 # IfThis test data and fixtures
 
 def generateIfThisIdentifierTestCases() -> Iterator[tuple[str, str, Callable[[str], ast.AST], bool]]:
