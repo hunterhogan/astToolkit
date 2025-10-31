@@ -173,3 +173,170 @@ def ifThisDirectPredicateTestData(request: pytest.FixtureRequest) -> tuple[str, 
 def ifThisComplexPredicateTestData(request: pytest.FixtureRequest) -> tuple[str, tuple[Any, ...], Callable[[], ast.AST], bool]:
 	"""Fixture providing test data for complex IfThis predicate methods."""
 	return request.param
+
+# transformationTools test fixtures
+
+@pytest.fixture
+def moduleSampleFunctions() -> ast.Module:
+	"""Fixture providing a module with sample function definitions."""
+	return Make.Module([
+		Make.FunctionDef(
+			name="functionPrimary",
+			argumentSpecification=Make.arguments(),
+			body=[Make.Return(Make.Constant(233))]  # Fibonacci number
+		),
+		Make.FunctionDef(
+			name="functionSecondary",
+			argumentSpecification=Make.arguments(),
+			body=[Make.Pass()]
+		),
+	])
+
+@pytest.fixture
+def moduleSampleClasses() -> ast.Module:
+	"""Fixture providing a module with sample class definitions."""
+	return Make.Module([
+		Make.ClassDef(
+			name="ClassAlpha",
+			body=[Make.Pass()]
+		),
+		Make.ClassDef(
+			name="ClassBeta",
+			body=[Make.Pass()]
+		),
+	])
+
+@pytest.fixture
+def moduleSampleAsyncFunctions() -> ast.Module:
+	"""Fixture providing a module with sample async function definitions."""
+	return Make.Module([
+		Make.AsyncFunctionDef(
+			name="asyncFunctionNorth",
+			argumentSpecification=Make.arguments(),
+			body=[Make.Return(Make.Constant(89))]  # Fibonacci number
+		),
+		Make.AsyncFunctionDef(
+			name="asyncFunctionSouth",
+			argumentSpecification=Make.arguments(),
+			body=[Make.Pass()]
+		),
+	])
+
+@pytest.fixture
+def moduleSampleMixed() -> ast.Module:
+	"""Fixture providing a module with mixed definition types."""
+	return Make.Module([
+		Make.AsyncFunctionDef(
+			name="asyncFunctionPrimary",
+			argumentSpecification=Make.arguments(),
+			body=[Make.Pass()]
+		),
+		Make.ClassDef(
+			name="ClassPrimary",
+			body=[Make.Pass()]
+		),
+		Make.FunctionDef(
+			name="functionPrimary",
+			argumentSpecification=Make.arguments(),
+			body=[Make.Pass()]
+		),
+	])
+
+@pytest.fixture
+def moduleInliningBasic() -> ast.Module:
+	"""Fixture providing a module for basic function inlining tests."""
+	return Make.Module([
+		Make.FunctionDef(
+			name="functionHelper",
+			argumentSpecification=Make.arguments(),
+			body=[Make.Return(Make.Constant(233))]  # Fibonacci number
+		),
+		Make.FunctionDef(
+			name="functionTarget",
+			argumentSpecification=Make.arguments(),
+			body=[
+				Make.Assign(
+					targets=[Make.Name("valueHelper", context=Make.Store())],
+					value=Make.Call(Make.Name("functionHelper"))
+				),
+				Make.Return(Make.Name("valueHelper"))
+			]
+		),
+	])
+
+@pytest.fixture
+def moduleInliningNone() -> ast.Module:
+	"""Fixture providing a module with a function that needs no inlining."""
+	return Make.Module([
+		Make.FunctionDef(
+			name="functionStandalone",
+			argumentSpecification=Make.arguments(),
+			body=[Make.Return(Make.Constant(377))]  # Fibonacci number
+		),
+	])
+
+@pytest.fixture
+def functionDefUnusedParameters() -> ast.FunctionDef:
+	"""Fixture providing a function with unused parameters."""
+	return Make.FunctionDef(
+		name="functionWithUnused",
+		argumentSpecification=Make.arguments(list_arg=[
+			Make.arg("parameterUsed"),
+			Make.arg("parameterUnused"),
+		]),
+		body=[
+			Make.Assign(
+				targets=[Make.Name("resultValue", context=Make.Store())],
+				value=Make.Name("parameterUsed")
+			),
+			Make.Return(Make.Name("resultValue"))
+		]
+	)
+
+@pytest.fixture
+def functionDefAllParametersUsed() -> ast.FunctionDef:
+	"""Fixture providing a function with all parameters used."""
+	return Make.FunctionDef(
+		name="functionAllUsed",
+		argumentSpecification=Make.arguments(list_arg=[
+			Make.arg("parameterAlpha"),
+			Make.arg("parameterBeta"),
+		]),
+		body=[
+			Make.Assign(
+				targets=[Make.Name("resultSum", context=Make.Store())],
+				value=Make.BinOp(
+					left=Make.Name("parameterAlpha"),
+					op=Make.Add(),
+					right=Make.Name("parameterBeta")
+				)
+			),
+			Make.Return(Make.Name("resultSum"))
+		]
+	)
+
+@pytest.fixture
+def binOpChained() -> ast.BinOp:
+	"""Fixture providing a chained binary operation."""
+	return Make.BinOp(
+		left=Make.BinOp(
+			left=Make.Constant(233),  # Fibonacci number
+			op=Make.Add(),
+			right=Make.Constant(89)  # Fibonacci number
+		),
+		op=Make.Add(),
+		right=Make.Constant(144)  # Fibonacci number
+	)
+
+@pytest.fixture
+def moduleSampleSimple() -> ast.Module:
+	"""Fixture providing a simple module for write tests."""
+	module = Make.Module([
+		Make.FunctionDef(
+			name="functionSimple",
+			argumentSpecification=Make.arguments(),
+			body=[Make.Return(Make.Constant(610))]  # Fibonacci number
+		),
+	])
+	ast.fix_missing_locations(module)
+	return module
