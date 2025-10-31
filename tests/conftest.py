@@ -87,6 +87,210 @@ def beNegativeTestData(request: pytest.FixtureRequest) -> tuple[str, str, str, d
 	"""
 	return request.param
 
+# Be attribute method test data and fixtures
+
+def generateBeAttributeMethodTestData() -> Iterator[tuple[str, str, str, Any, Any, bool]]:
+	"""Generate test data for Be attribute methods.
+	
+	Yields
+	------
+	identifierClass : str
+		Name of the Be class (e.g., 'alias', 'FunctionDef')
+	nameMethod : str
+		Name of the attribute method (e.g., 'nameIs', 'valueIs')
+	nameAttribute : str
+		Name of the attribute being tested (e.g., 'name', 'value')
+	valueAttributeNode : Any
+		Actual value to set in the node
+	valueAttributeCheck : Any
+		Value to check against in the predicate
+	expectedResult : bool
+		Expected result of the attribute check
+	"""
+	# Test cases using non-contiguous values per instructions
+	# Format: (class, method, attribute, node_value, check_value, expected)
+	# NOTE: For AST objects in positive tests, we use the same object instance (not separate Make calls)
+	# to ensure proper object identity comparison. For negative tests, we use different objects.
+	listTestCases: list[tuple[str, str, str, Any, Any, bool]] = []
+	
+	# alias tests
+	listTestCases.extend([
+		("alias", "nameIs", "name", "moduleNorth", "moduleNorth", True),
+		("alias", "nameIs", "name", "moduleNorth", "moduleSouth", False),
+		("alias", "asnameIs", "asname", "aliasEast", "aliasEast", True),
+		("alias", "asnameIs", "asname", "aliasEast", "aliasWest", False),
+	])
+	
+	# arg tests
+	listTestCases.extend([
+		("arg", "argIs", "arg", "parameterFibonacci", "parameterFibonacci", True),
+		("arg", "argIs", "arg", "parameterFibonacci", "parameterPrime", False),
+	])
+	
+	# Constant tests (primitives can be compared directly)
+	listTestCases.extend([
+		("Constant", "valueIs", "value", 233, 233, True),
+		("Constant", "valueIs", "value", 233, 377, False),
+		("Constant", "kindIs", "kind", "u", "u", True),
+		("Constant", "kindIs", "kind", "u", "r", False),
+	])
+	
+	# Name tests
+	listTestCases.extend([
+		("Name", "idIs", "id", "identifierNorth", "identifierNorth", True),
+		("Name", "idIs", "id", "identifierNorth", "identifierSouth", False),
+	])
+	
+	# ClassDef tests
+	listTestCases.extend([
+		("ClassDef", "nameIs", "name", "ClassNorthEast", "ClassNorthEast", True),
+		("ClassDef", "nameIs", "name", "ClassNorthEast", "ClassSouthWest", False),
+	])
+	
+	# FunctionDef tests
+	listTestCases.extend([
+		("FunctionDef", "nameIs", "name", "functionNorthward", "functionNorthward", True),
+		("FunctionDef", "nameIs", "name", "functionNorthward", "functionSouthward", False),
+	])
+	
+	# keyword tests
+	listTestCases.extend([
+		("keyword", "argIs", "arg", "keywordPrime", "keywordPrime", True),
+		("keyword", "argIs", "arg", "keywordPrime", "keywordComposite", False),
+	])
+	
+	# Attribute tests
+	listTestCases.extend([
+		("Attribute", "attrIs", "attr", "attributeEast", "attributeEast", True),
+		("Attribute", "attrIs", "attr", "attributeEast", "attributeWest", False),
+	])
+	
+	# Global tests (list of strings)
+	listTestCases.extend([
+		("Global", "namesIs", "names", ["variableAlpha"], ["variableAlpha"], True),
+		("Global", "namesIs", "names", ["variableAlpha"], ["variableBeta"], False),
+	])
+	
+	# Nonlocal tests (list of strings)
+	listTestCases.extend([
+		("Nonlocal", "namesIs", "names", ["variableGamma"], ["variableGamma"], True),
+		("Nonlocal", "namesIs", "names", ["variableGamma"], ["variableDelta"], False),
+	])
+	
+	# For AST object attributes, we need to use the same object instance for positive tests
+	# Return tests
+	nodeReturnConstant = Make.Constant(89)
+	listTestCases.extend([
+		("Return", "valueIs", "value", nodeReturnConstant, nodeReturnConstant, True),
+		("Return", "valueIs", "value", nodeReturnConstant, Make.Constant(144), False),
+	])
+	
+	# Expr tests
+	nodeExprConstant = Make.Constant(13)
+	listTestCases.extend([
+		("Expr", "valueIs", "value", nodeExprConstant, nodeExprConstant, True),
+		("Expr", "valueIs", "value", nodeExprConstant, Make.Constant(17), False),
+	])
+	
+	# Delete tests  
+	nodeDeleteTarget = Make.Name("targetPrimary")
+	listTestCases.extend([
+		("Delete", "targetsIs", "targets", [nodeDeleteTarget], [nodeDeleteTarget], True),
+		("Delete", "targetsIs", "targets", [nodeDeleteTarget], [Make.Name("targetSecondary")], False),
+	])
+	
+	# Import tests
+	nodeImportAlias = Make.alias("modulePi")
+	listTestCases.extend([
+		("Import", "namesIs", "names", [nodeImportAlias], [nodeImportAlias], True),
+		("Import", "namesIs", "names", [nodeImportAlias], [Make.alias("moduleEuler")], False),
+	])
+	
+	# Lambda tests
+	nodeLambdaBody = Make.Constant(5)
+	listTestCases.extend([
+		("Lambda", "bodyIs", "body", nodeLambdaBody, nodeLambdaBody, True),
+		("Lambda", "bodyIs", "body", nodeLambdaBody, Make.Constant(8), False),
+	])
+	
+	# Yield tests
+	nodeYieldValue = Make.Constant(21)
+	listTestCases.extend([
+		("Yield", "valueIs", "value", nodeYieldValue, nodeYieldValue, True),
+		("Yield", "valueIs", "value", nodeYieldValue, Make.Constant(34), False),
+	])
+	
+	# YieldFrom tests
+	nodeYieldFromValue = Make.Name("generatorNorth")
+	listTestCases.extend([
+		("YieldFrom", "valueIs", "value", nodeYieldFromValue, nodeYieldFromValue, True),
+		("YieldFrom", "valueIs", "value", nodeYieldFromValue, Make.Name("generatorSouth"), False),
+	])
+	
+	# NamedExpr tests
+	nodeNamedExprTarget = Make.Name("walrusAlpha")
+	listTestCases.extend([
+		("NamedExpr", "targetIs", "target", nodeNamedExprTarget, nodeNamedExprTarget, True),
+		("NamedExpr", "targetIs", "target", nodeNamedExprTarget, Make.Name("walrusBeta"), False),
+	])
+	
+	# Starred tests
+	nodeStarredValue = Make.Name("argsCollection")
+	listTestCases.extend([
+		("Starred", "valueIs", "value", nodeStarredValue, nodeStarredValue, True),
+		("Starred", "valueIs", "value", nodeStarredValue, Make.Name("kwargsMapping"), False),
+	])
+	
+	# List tests
+	nodeListElt = Make.Constant(3)
+	listTestCases.extend([
+		("List", "eltsIs", "elts", [nodeListElt], [nodeListElt], True),
+		("List", "eltsIs", "elts", [nodeListElt], [Make.Constant(5)], False),
+	])
+	
+	# Set tests
+	nodeSetElt = Make.Constant(11)
+	listTestCases.extend([
+		("Set", "eltsIs", "elts", [nodeSetElt], [nodeSetElt], True),
+		("Set", "eltsIs", "elts", [nodeSetElt], [Make.Constant(13)], False),
+	])
+	
+	# Tuple tests
+	nodeTupleElt = Make.Constant(7)
+	listTestCases.extend([
+		("Tuple", "eltsIs", "elts", [nodeTupleElt], [nodeTupleElt], True),
+		("Tuple", "eltsIs", "elts", [nodeTupleElt], [Make.Constant(11)], False),
+	])
+	
+	# Dict tests
+	nodeDictKey = Make.Constant("keyAlpha")
+	listTestCases.extend([
+		("Dict", "keysIs", "keys", [nodeDictKey], [nodeDictKey], True),
+		("Dict", "keysIs", "keys", [nodeDictKey], [Make.Constant("keyBeta")], False),
+	])
+	
+	yield from listTestCases
+
+@pytest.fixture(
+	params=list(generateBeAttributeMethodTestData()), 
+	ids=lambda param: f"{param[0]}_{param[1]}_{param[5]}"
+)
+def beAttributeMethodTestData(request: pytest.FixtureRequest) -> tuple[str, str, str, Any, Any, bool]:
+	"""Fixture providing Be attribute method test data.
+	
+	Parameters
+	----------
+	request : pytest.FixtureRequest
+		Pytest request object for the fixture.
+		
+	Returns
+	-------
+	tuple[str, str, str, Any, Any, bool]
+		Tuple containing identifierClass, nameMethod, nameAttribute, valueAttributeNode, 
+		valueAttributeCheck, expectedResult.
+	"""
+	return request.param
+
 # IfThis test data and fixtures
 
 def generateIfThisIdentifierTestCases() -> Iterator[tuple[str, str, Callable[[str], ast.AST], bool]]:
@@ -172,4 +376,44 @@ def ifThisDirectPredicateTestData(request: pytest.FixtureRequest) -> tuple[str, 
 @pytest.fixture(params=list(generateIfThisComplexPredicateTestCases()), ids=lambda parametersTest: f"{parametersTest[0]}_{parametersTest[3]}")
 def ifThisComplexPredicateTestData(request: pytest.FixtureRequest) -> tuple[str, tuple[Any, ...], Callable[[], ast.AST], bool]:
 	"""Fixture providing test data for complex IfThis predicate methods."""
+	return request.param
+
+# Grab test data and fixtures
+
+def generateGrabAttributeTestCases() -> Iterator[tuple[str, Callable[[], ast.AST], Callable[[Any], Any], Any]]:
+	"""Generate test data for Grab attribute modification methods using unique test values."""
+
+	listTestCases: list[tuple[str, Callable[[], ast.AST], Callable[[Any], Any], Any]] = [
+		# methodNameGrab, factoryNodeOriginal, actionTransform, expectedAttributeValue
+		("idAttribute", lambda: Make.Name("identifierNorthward"), lambda identifierOld: identifierOld + "Eastward", "identifierNorthwardEastward"),
+		("argAttribute", lambda: Make.arg("parameterPrime"), lambda identifierOld: identifierOld + "Secondary", "parameterPrimeSecondary"),
+		("attrAttribute", lambda: Make.Attribute(Make.Name("objectAlpha"), "methodBeta"), lambda identifierOld: identifierOld + "Gamma", "methodBetaGamma"),
+		("nameAttribute", lambda: Make.FunctionDef(name="functionFibonacci"), lambda identifierOld: identifierOld + "Prime", "functionFibonacciPrime"),
+		("moduleAttribute", lambda: Make.ImportFrom("packageAlpha", [Make.alias("itemBeta")]), lambda identifierOld: (identifierOld or "") + "Extended", "packageAlphaExtended"),
+		("levelAttribute", lambda: Make.ImportFrom("packageDelta", [Make.alias("itemEpsilon")], level=3), lambda valueOld: valueOld + 5, 8),
+		("linenoAttribute", lambda: Make.Name("variableGamma", lineno=13), lambda valueOld: valueOld + 8, 21),  # Fibonacci numbers
+	]
+
+	yield from listTestCases
+
+def generateGrabIndexTestCases() -> Iterator[tuple[str, Callable[[], list[ast.AST]], int, Callable[[ast.AST], ast.AST | list[ast.AST] | None], list[str]]]:
+	"""Generate test data for Grab.index method using cardinal directions and primes."""
+
+	listTestCases: list[tuple[str, Callable[[], list[ast.AST]], int, Callable[[ast.AST], ast.AST | list[ast.AST] | None], list[str]]] = [
+		# descriptionTest, factoryListOriginal, indexTarget, actionTransform, listExpectedIdentifiers
+		("modify_element", lambda: [Make.Name("North"), Make.Name("South"), Make.Name("East")], 1, lambda node: Make.Name(node.id.upper()), ["North", "SOUTH", "East"]),
+		("delete_element", lambda: [Make.Name("alpha"), Make.Name("beta"), Make.Name("gamma")], 1, lambda node: None, ["alpha", "gamma"]),
+		("expand_element", lambda: [Make.Name("prime2"), Make.Name("prime3"), Make.Name("prime5")], 1, lambda node: [Make.Name("expanded7"), Make.Name("expanded11")], ["prime2", "expanded7", "expanded11", "prime5"]),
+	]
+
+	yield from listTestCases
+
+@pytest.fixture(params=list(generateGrabAttributeTestCases()), ids=lambda parametersTest: f"{parametersTest[0]}")
+def grabAttributeTestData(request: pytest.FixtureRequest) -> tuple[str, Callable[[], ast.AST], Callable[[Any], Any], Any]:
+	"""Fixture providing test data for Grab attribute modification methods."""
+	return request.param
+
+@pytest.fixture(params=list(generateGrabIndexTestCases()), ids=lambda parametersTest: f"{parametersTest[0]}")
+def grabIndexTestData(request: pytest.FixtureRequest) -> tuple[str, Callable[[], list[ast.AST]], int, Callable[[ast.AST], ast.AST | list[ast.AST] | None], list[str]]:
+	"""Fixture providing test data for Grab.index method."""
 	return request.param
