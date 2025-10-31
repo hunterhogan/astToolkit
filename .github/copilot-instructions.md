@@ -52,7 +52,6 @@ astToolkit/
 3. **Composable APIs** (Antecedent-Action Pattern):
    - `IfThis`: Predicate functions to identify nodes
    - `Then`: Action functions to specify operations on matched nodes
-   - `ClassIsAndAttribute`: Powerful antecedent constructor
 
 4. **Higher-level Tools**:
    - `_toolkitAST.py`: Common operations (extract functions, imports)
@@ -87,9 +86,8 @@ NodeChanger(
 
 ### Naming Conventions
 
-- **Classes**: PascalCase (e.g., `NodeTourist`, `ClassIsAndAttribute`)
+- **Classes**: PascalCase (e.g., `NodeTourist`)
 - **Functions/Methods**: camelCase (e.g., `extractFunctionDef`, `parseLogicalPath2astModule`)
-- **Constants**: UPPER_SNAKE_CASE
 - **Private members**: Leading underscore (e.g., `_theSSOT.py`)
 
 ### Code Style

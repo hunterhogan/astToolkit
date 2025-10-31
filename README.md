@@ -26,7 +26,6 @@ astToolkit implements a layered architecture designed for composability and type
    - `NodeChanger`: Extends `ast.NodeTransformer` to selectively transform nodes that match antecedents.
 
 3. **Composable APIs** - The antecedent-action pattern:
-   - `ClassIsAndAttribute`: A powerful antecedent constructor: it confirms the class type of `node`, then applies whatever condition check you want to an attribute of `node`. As long as you listen to your type checker, you won't accidentally pair an attribute to a class that doesn't have that attribute. Furthermore, your IDE's hover type hints will tell you which classes are valid for the attribute you are checking.
    - `IfThis`: Generates predicate functions that identify nodes based on structure, content, or relationships.
    - `Then`: Creates action functions that specify what to do with matched nodes (extract, replace, modify).
 
