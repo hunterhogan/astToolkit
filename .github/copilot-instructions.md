@@ -81,7 +81,7 @@ NodeChanger(
 
 - **Requires Python 3.12+**
 - **Type hints are mandatory** - all functions must have complete type annotations
-- Use `TypeIs`, `TypeGuard` from `typing` for type narrowing
+- Use `TypeIs`, `TypeGuard` from `typing_extensions` for type narrowing (this ensures compatibility)
 - Listen to your type checker - it prevents pairing wrong attributes with classes
 - IDE hover hints should guide you to valid class-attribute combinations
 
