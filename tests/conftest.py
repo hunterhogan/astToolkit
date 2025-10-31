@@ -3,6 +3,7 @@
 from astToolkit import Be, Make
 from collections.abc import Callable, Iterator
 from functools import cache
+from pathlib import Path
 from tests.dataSamples.Make import allSubclasses
 from typing import Any
 import ast  # pyright: ignore[reportUnusedImport]
@@ -177,8 +178,7 @@ def ifThisComplexPredicateTestData(request: pytest.FixtureRequest) -> tuple[str,
 # _toolkitAST test fixtures
 
 @pytest.fixture
-def pathFilenameSampleModule() -> Iterator[Any]:
+def pathFilenameSampleModule() -> Path:
 	"""Fixture providing path to sample module for parsePathFilename2astModule tests."""
-	from pathlib import Path
 	pathFilename = Path(__file__).parent / "dataSamples" / "sampleModuleForParsing.py"
-	yield pathFilename
+	return pathFilename
