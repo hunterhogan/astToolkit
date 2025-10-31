@@ -173,3 +173,12 @@ def ifThisDirectPredicateTestData(request: pytest.FixtureRequest) -> tuple[str, 
 def ifThisComplexPredicateTestData(request: pytest.FixtureRequest) -> tuple[str, tuple[Any, ...], Callable[[], ast.AST], bool]:
 	"""Fixture providing test data for complex IfThis predicate methods."""
 	return request.param
+
+# _toolkitAST test fixtures
+
+@pytest.fixture
+def pathFilenameSampleModule() -> Iterator[Any]:
+	"""Fixture providing path to sample module for parsePathFilename2astModule tests."""
+	from pathlib import Path
+	pathFilename = Path(__file__).parent / "dataSamples" / "sampleModuleForParsing.py"
+	yield pathFilename
