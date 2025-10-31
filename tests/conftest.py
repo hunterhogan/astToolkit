@@ -109,7 +109,8 @@ def generateBeAttributeMethodTestData() -> Iterator[tuple[str, str, str, Any, An
 	"""
 	# Test cases using non-contiguous values per instructions
 	# Format: (class, method, attribute, node_value, check_value, expected)
-	# NOTE: For AST objects, use the same object for positive tests (not Make calls which create new objects)
+	# NOTE: For AST objects in positive tests, we use the same object instance (not separate Make calls)
+	# to ensure proper object identity comparison. For negative tests, we use different objects.
 	listTestCases: list[tuple[str, str, str, Any, Any, bool]] = []
 	
 	# alias tests
