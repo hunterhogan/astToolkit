@@ -237,7 +237,7 @@ pip install astToolkit
 
 ### GitHub Actions Workflows
 
-- **pythonTests.yml**: Runs tests on multiple Python versions (3.12+)
+- **pythonTests.yml**: Runs tests on all supported Python versions (dynamically determined from pyproject.toml)
 - **pypiRelease.yml**: Publishes to PyPI
 - **githubRelease.yml**: Creates GitHub releases
 - **updateCitation.yml**: Maintains CITATION.cff
