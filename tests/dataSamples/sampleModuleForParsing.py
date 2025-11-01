@@ -11,12 +11,12 @@ def functionBeta() -> None:
 
 class ClassGamma:
 	"""A sample class for testing extractClassDef."""
-	
+
 	def methodDelta(self) -> int:
 		"""A method within the class."""
 		return 13
 
 class ClassEpsilon:
 	"""Another sample class."""
-	
+
 	attributeZeta: str = "valueTest"

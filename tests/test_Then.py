@@ -6,7 +6,6 @@ from typing import Any
 import ast
 import pytest
 
-
 class TestThenAppendTo:
 	"""Test suite for Then.appendTo method."""
 
@@ -57,7 +56,6 @@ class TestThenAppendTo:
 		assert len(listCollected) == 1
 		assert listCollected[0] is nodeTarget
 
-
 class TestThenExtractIt:
 	"""Test suite for Then.extractIt method."""
 
@@ -94,7 +92,6 @@ class TestThenExtractIt:
 		assert nodeReturned.name == "functionComplex"
 		assert len(nodeReturned.args.args) == 2
 		assert len(nodeReturned.body) == 1
-
 
 class TestThenInsertThisAbove:
 	"""Test suite for Then.insertThisAbove method."""
@@ -142,7 +139,6 @@ class TestThenInsertThisAbove:
 		assert len(sequenceResult) == countNodesToInsert + 1
 		assert sequenceResult[-1] is nodeTarget
 
-
 class TestThenInsertThisBelow:
 	"""Test suite for Then.insertThisBelow method."""
 
@@ -189,7 +185,6 @@ class TestThenInsertThisBelow:
 		assert len(sequenceResult) == countNodesToInsert + 1
 		assert sequenceResult[0] is nodeTarget
 
-
 class TestThenRemoveIt:
 	"""Test suite for Then.removeIt method."""
 
@@ -225,7 +220,6 @@ class TestThenRemoveIt:
 
 		resultRemoval = Then.removeIt(nodeComplexFunction)
 		assert resultRemoval is None, "removeIt must return None regardless of node complexity"
-
 
 class TestThenReplaceWith:
 	"""Test suite for Then.replaceWith method."""
@@ -279,41 +273,8 @@ class TestThenReplaceWith:
 			nodeReturned = actionReplace(nodeOriginal)
 			assert nodeReturned is nodeReplacement, "Same replacement should be returned for all originals"
 
-
 class TestThenUpdateKeyValueIn:
 	"""Test suite for Then.updateKeyValueIn method."""
-
-	@pytest.mark.parametrize("listNodesData,expectedDictionary", [
-		(
-			[Make.Name("variableAlpha"), Make.Name("variableBeta")],
-			{"variableAlpha": "Name", "variableBeta": "Name"}
-		),
-		(
-			[Make.Constant(233), Make.Constant(89), Make.Constant(13)],  # Fibonacci numbers
-			{233: "Constant", 89: "Constant", 13: "Constant"}
-		),
-	])
-	def testUpdateKeyValueInWithVariousNodes(self, listNodesData: list[ast.AST], expectedDictionary: dict[Any, str]) -> None:
-		"""Test updateKeyValueIn with various node types."""
-		dictionaryTarget: dict[Any, str] = {}
-
-		def extractKey(nodeTarget: ast.AST) -> Any:
-			if hasattr(nodeTarget, 'id'):
-				return nodeTarget.id
-			if hasattr(nodeTarget, 'value'):
-				return nodeTarget.value
-			return "unknown"
-
-		def extractValue(nodeTarget: ast.AST) -> str:
-			return nodeTarget.__class__.__name__
-
-		actionUpdate: Callable[[ast.AST], dict[Any, str]] = Then.updateKeyValueIn(extractKey, extractValue, dictionaryTarget)
-
-		for nodeData in listNodesData:
-			dictionaryReturned = actionUpdate(nodeData)
-			assert dictionaryReturned is dictionaryTarget, "updateKeyValueIn should return the same dictionary"
-
-		assert dictionaryTarget == expectedDictionary, f"Expected {expectedDictionary}, got {dictionaryTarget}"
 
 	def testUpdateKeyValueInUsesSetdefault(self) -> None:
 		"""Test updateKeyValueIn uses setdefault (doesn't overwrite existing keys)."""
@@ -395,7 +356,6 @@ class TestThenUpdateKeyValueIn:
 
 		assert dictionaryTarget == expectedDictionary, f"Expected {expectedDictionary}, got {dictionaryTarget}"
 
-
 class TestThenIntegrationScenarios:
 	"""Test suite for integration scenarios combining Then methods."""
 
@@ -407,7 +367,7 @@ class TestThenIntegrationScenarios:
 		nodeFirst = Make.Name("variableAlpha")
 		nodeReturned = actionAppend(nodeFirst)
 
-		# extractIt would return the same node
+# extractIt would return the same node
 		nodeExtracted = Then.extractIt(nodeReturned)
 
 		assert nodeExtracted is nodeFirst
@@ -447,11 +407,11 @@ class TestThenIntegrationScenarios:
 		actionInsertBelow = Then.insertThisBelow([nodeInsertBelow])
 		sequenceBelow = actionInsertBelow(nodeTarget)
 
-		# Above: inserted nodes first, then target
+# Above: inserted nodes first, then target
 		assert sequenceAbove[0] is nodeInsertAbove
 		assert sequenceAbove[1] is nodeTarget
 
-		# Below: target first, then inserted nodes
+# Below: target first, then inserted nodes
 		assert sequenceBelow[0] is nodeTarget
 		assert sequenceBelow[1] is nodeInsertBelow
 

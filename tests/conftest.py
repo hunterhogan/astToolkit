@@ -108,10 +108,9 @@ def generateBeAttributeMethodTestData() -> Iterator[tuple[str, str, str, Any, An
 	expectedResult : bool
 		Expected result of the attribute check
 	"""
-	# Test cases using non-contiguous values per instructions
-	# Format: (class, method, attribute, node_value, check_value, expected)
-	# NOTE: For AST objects in positive tests, we use the same object instance (not separate Make calls)
-	# to ensure proper object identity comparison. For negative tests, we use different objects.
+# Format: (class, method, attribute, node_value, check_value, expected)
+# NOTE: For AST objects in positive tests, we use the same object instance (not separate Make calls)
+# to ensure proper object identity comparison. For negative tests, we use different objects.
 	listTestCases: list[tuple[str, str, str, Any, Any, bool]] = []
 
 	# alias tests
@@ -128,7 +127,6 @@ def generateBeAttributeMethodTestData() -> Iterator[tuple[str, str, str, Any, An
 		("arg", "argIs", "arg", "parameterFibonacci", "parameterPrime", False),
 	])
 
-	# Constant tests (primitives can be compared directly)
 	listTestCases.extend([
 		("Constant", "valueIs", "value", 233, 233, True),
 		("Constant", "valueIs", "value", 233, 377, False),
@@ -142,37 +140,31 @@ def generateBeAttributeMethodTestData() -> Iterator[tuple[str, str, str, Any, An
 		("Name", "idIs", "id", "identifierNorth", "identifierSouth", False),
 	])
 
-	# ClassDef tests
 	listTestCases.extend([
 		("ClassDef", "nameIs", "name", "ClassNorthEast", "ClassNorthEast", True),
 		("ClassDef", "nameIs", "name", "ClassNorthEast", "ClassSouthWest", False),
 	])
 
-	# FunctionDef tests
 	listTestCases.extend([
 		("FunctionDef", "nameIs", "name", "functionNorthward", "functionNorthward", True),
 		("FunctionDef", "nameIs", "name", "functionNorthward", "functionSouthward", False),
 	])
 
-	# keyword tests
 	listTestCases.extend([
 		("keyword", "argIs", "arg", "keywordPrime", "keywordPrime", True),
 		("keyword", "argIs", "arg", "keywordPrime", "keywordComposite", False),
 	])
 
-	# Attribute tests
 	listTestCases.extend([
 		("Attribute", "attrIs", "attr", "attributeEast", "attributeEast", True),
 		("Attribute", "attrIs", "attr", "attributeEast", "attributeWest", False),
 	])
 
-	# Global tests (list of strings)
 	listTestCases.extend([
 		("Global", "namesIs", "names", ["variableAlpha"], ["variableAlpha"], True),
 		("Global", "namesIs", "names", ["variableAlpha"], ["variableBeta"], False),
 	])
 
-	# Nonlocal tests (list of strings)
 	listTestCases.extend([
 		("Nonlocal", "namesIs", "names", ["variableGamma"], ["variableGamma"], True),
 		("Nonlocal", "namesIs", "names", ["variableGamma"], ["variableDelta"], False),
@@ -402,7 +394,7 @@ def generateGrabIndexTestCases() -> Iterator[tuple[str, Callable[[], list[ast.AS
 
 	listTestCases: list[tuple[str, Callable[[], list[ast.AST]], int, Callable[[ast.AST], ast.AST | list[ast.AST] | None], list[str]]] = [
 		# descriptionTest, factoryListOriginal, indexTarget, actionTransform, listExpectedIdentifiers
-		("modify_element", lambda: [Make.Name("North"), Make.Name("South"), Make.Name("East")], 1, lambda node: Make.Name(node.id.upper()), ["North", "SOUTH", "East"]),
+		("modify_element", lambda: [Make.Name("North"), Make.Name("South"), Make.Name("East")], 1, lambda node: Make.Name(node.id.upper()), ["North", "SOUTH", "East"]), # pyright: ignore[reportAttributeAccessIssue]
 		("delete_element", lambda: [Make.Name("alpha"), Make.Name("beta"), Make.Name("gamma")], 1, lambda node: None, ["alpha", "gamma"]),
 		("expand_element", lambda: [Make.Name("prime2"), Make.Name("prime3"), Make.Name("prime5")], 1, lambda node: [Make.Name("expanded7"), Make.Name("expanded11")], ["prime2", "expanded7", "expanded11", "prime5"]),
 	]

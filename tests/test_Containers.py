@@ -2,18 +2,13 @@
 # pyright: standard
 from astToolkit import Make
 from astToolkit.containers import (
-	IngredientsFunction,
-	IngredientsModule,
-	LedgerOfImports,
-	astModuleToIngredientsFunction,
-)
+	astModuleToIngredientsFunction, IngredientsFunction, IngredientsModule, LedgerOfImports)
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 import ast
 import pytest
 import tempfile
-
 
 class TestLedgerOfImports:
 	"""Test suite for LedgerOfImports class."""
@@ -26,7 +21,7 @@ class TestLedgerOfImports:
 		"""Test LedgerOfImports initialization with various inputs."""
 		ledgerImports = LedgerOfImports(startWith=startWithParameter)
 		listModuleIdentifiers = ledgerImports.exportListModuleIdentifiers()
-		
+
 		for identifierModule in expectedListModules:
 			assert identifierModule in listModuleIdentifiers
 		assert len(ledgerImports.type_ignores) == expectedCountTypeIgnores
@@ -61,12 +56,11 @@ class TestLedgerOfImports:
 		# Check if the module and name combination exists
 		predicateFoundCombination = False
 		for astImportStatement in listAstImports:
-			if isinstance(astImportStatement, ast.ImportFrom):
-				if astImportStatement.module == identifierModuleTest:
-					for aliasNode in astImportStatement.names:
-						if aliasNode.name == nameIdentifierTest:
-							predicateFoundCombination = True
-							break
+			if isinstance(astImportStatement, ast.ImportFrom) and astImportStatement.module == identifierModuleTest:
+				for aliasNode in astImportStatement.names:
+					if aliasNode.name == nameIdentifierTest:
+						predicateFoundCombination = True
+						break
 		assert predicateFoundCombination is expectedPredicateResult
 
 	@pytest.mark.parametrize("identifierModule,nameIdentifier,asNameIdentifier,expectedPredicateFound", [
@@ -82,11 +76,10 @@ class TestLedgerOfImports:
 
 		predicateFoundAlias = False
 		for astImportStatement in listAstImports:
-			if isinstance(astImportStatement, ast.ImportFrom):
-				if astImportStatement.module == identifierModule:
-					for aliasNode in astImportStatement.names:
-						if aliasNode.name == nameIdentifier and aliasNode.asname == asNameIdentifier:
-							predicateFoundAlias = True
+			if isinstance(astImportStatement, ast.ImportFrom) and astImportStatement.module == identifierModule:
+				for aliasNode in astImportStatement.names:
+					if aliasNode.name == nameIdentifier and aliasNode.asname == asNameIdentifier:
+						predicateFoundAlias = True
 		assert predicateFoundAlias is expectedPredicateFound
 
 	@pytest.mark.parametrize("identifierModule,expectedPredicateInList", [
@@ -133,14 +126,14 @@ class TestLedgerOfImports:
 	def testExportListModuleIdentifiersReturnsUniqueValues(self, listOperations: list[tuple[str, ...]], expectedCountUnique: int) -> None:
 		"""Test exportListModuleIdentifiers returns unique, sorted module names."""
 		ledgerImports = LedgerOfImports()
-		
+
 		for operation in listOperations:
 			methodName = operation[0]
 			if methodName == "addImport_asStr":
-				ledgerImports.addImport_asStr(operation[1])  # type: ignore
+				ledgerImports.addImport_asStr(operation[1])
 			elif methodName == "addImportFrom_asStr":
-				ledgerImports.addImportFrom_asStr(operation[1], operation[2])  # type: ignore
-		
+				ledgerImports.addImportFrom_asStr(operation[1], operation[2])
+
 		listModuleIdentifiers = ledgerImports.exportListModuleIdentifiers()
 		# Should be sorted and unique
 		assert listModuleIdentifiers == sorted(set(listModuleIdentifiers))
@@ -154,18 +147,18 @@ class TestLedgerOfImports:
 	def testMakeListAstGeneratesImportStatements(self, listOperations: list[tuple[str, ...]], expectedCountImportStatements: int, expectedCountImportFromStatements: int) -> None:
 		"""Test makeList_ast generates correct import statement nodes."""
 		ledgerImports = LedgerOfImports()
-		
+
 		for operation in listOperations:
 			methodName = operation[0]
 			if methodName == "addImport_asStr":
-				ledgerImports.addImport_asStr(operation[1])  # type: ignore
+				ledgerImports.addImport_asStr(operation[1])
 			elif methodName == "addImportFrom_asStr":
-				ledgerImports.addImportFrom_asStr(operation[1], operation[2])  # type: ignore
-		
+				ledgerImports.addImportFrom_asStr(operation[1], operation[2])
+
 		listAstImports = ledgerImports.makeList_ast()
 		countImport = sum(1 for astImport in listAstImports if isinstance(astImport, ast.Import))
 		countImportFrom = sum(1 for astImport in listAstImports if isinstance(astImport, ast.ImportFrom))
-		
+
 		assert countImport == expectedCountImportStatements
 		assert countImportFrom == expectedCountImportFromStatements
 
@@ -176,14 +169,14 @@ class TestLedgerOfImports:
 	def testMakeListAstDeduplicatesImports(self, listOperations: list[tuple[str, ...]], expectedCountImportFrom: int, expectedCountNames: int) -> None:
 		"""Test makeList_ast deduplicates repeated import requests."""
 		ledgerImports = LedgerOfImports()
-		
+
 		for operation in listOperations:
-			ledgerImports.addImportFrom_asStr(operation[1], operation[2])  # type: ignore
-		
+			ledgerImports.addImportFrom_asStr(operation[1], operation[2])
+
 		listAstImports = ledgerImports.makeList_ast()
 		countImportFrom = sum(1 for astImport in listAstImports if isinstance(astImport, ast.ImportFrom))
 		assert countImportFrom == expectedCountImportFrom
-		
+
 		importFromNode = next(astImport for astImport in listAstImports if isinstance(astImport, ast.ImportFrom))
 		assert len(importFromNode.names) == expectedCountNames
 
@@ -211,16 +204,16 @@ class TestLedgerOfImports:
 		ledgerImports = LedgerOfImports()
 		for nameToAdd in listNamesToAdd:
 			ledgerImports.addImportFrom_asStr(identifierModule, nameToAdd)
-		
+
 		ledgerImports.removeImportFrom(identifierModule, nameToRemove, asNameToRemove)
-		
+
 		# Check remaining names
 		listAstImports = ledgerImports.makeList_ast()
 		listNamesFound: list[str] = []
 		for astImportStatement in listAstImports:
 			if isinstance(astImportStatement, ast.ImportFrom) and astImportStatement.module == identifierModule:
 				listNamesFound = [aliasNode.name for aliasNode in astImportStatement.names]
-		
+
 		for nameExpected in listNamesExpectedRemaining:
 			assert nameExpected in listNamesFound
 		assert nameToRemove not in listNamesFound
@@ -234,16 +227,16 @@ class TestLedgerOfImports:
 		ledgerImports = LedgerOfImports()
 		for nameToAdd, asNameToAdd in listNamesToAdd:
 			ledgerImports.addImportFrom_asStr(identifierModule, nameToAdd, asName=asNameToAdd)
-		
+
 		ledgerImports.removeImportFrom(identifierModule, nameToRemove, asNameToRemove)
-		
+
 		# Check remaining names
 		listAstImports = ledgerImports.makeList_ast()
 		listNamesFound: list[str] = []
 		for astImportStatement in listAstImports:
 			if isinstance(astImportStatement, ast.ImportFrom) and astImportStatement.module == identifierModule:
 				listNamesFound = [aliasNode.name for aliasNode in astImportStatement.names]
-		
+
 		for nameExpected in listNamesExpectedRemaining:
 			assert nameExpected in listNamesFound
 		assert nameToRemove not in listNamesFound
@@ -256,20 +249,20 @@ class TestLedgerOfImports:
 	def testUpdateMergesMultipleLedgers(self, listLedgerOperations: list[list[list[tuple[str, ...]]]], expectedListModules: list[str]) -> None:
 		"""Test update merges imports from multiple ledgers."""
 		listLedgers: list[LedgerOfImports] = []
-		
+
 		for ledgerOperations in listLedgerOperations[0]:
 			ledger = LedgerOfImports()
 			for operation in ledgerOperations:
 				methodName = operation[0]
 				if methodName == "addImport_asStr":
-					ledger.addImport_asStr(operation[1])  # type: ignore
+					ledger.addImport_asStr(operation[1])
 				elif methodName == "addImportFrom_asStr":
-					ledger.addImportFrom_asStr(operation[1], operation[2])  # type: ignore
+					ledger.addImportFrom_asStr(operation[1], operation[2])
 			listLedgers.append(ledger)
-		
+
 		ledgerTarget = LedgerOfImports()
 		ledgerTarget.update(*listLedgers)
-		
+
 		listModuleIdentifiers = ledgerTarget.exportListModuleIdentifiers()
 		for identifierModule in expectedListModules:
 			assert identifierModule in listModuleIdentifiers
@@ -281,16 +274,16 @@ class TestLedgerOfImports:
 	])
 	def testWalkThisDiscoversImports(self, listStatementsInModule: list[ast.stmt], expectedListModules: list[str]) -> None:
 		"""Test walkThis automatically discovers imports in AST."""
-		# Add a non-import statement to ensure walkThis filters correctly
+# Add a non-import statement to ensure walkThis filters correctly
 		listStatementsInModule.append(Make.Assign(
 			targets=[Make.Name('variableAlpha', context=Make.Store())],
 			value=Make.Constant(233)
 		))
 		moduleWithImports = Make.Module(listStatementsInModule)
-		
+
 		ledgerImports = LedgerOfImports()
 		ledgerImports.walkThis(moduleWithImports)
-		
+
 		listModuleIdentifiers = ledgerImports.exportListModuleIdentifiers()
 		for identifierModule in expectedListModules:
 			assert identifierModule in listModuleIdentifiers
@@ -425,10 +418,9 @@ class TestIngredientsModule:
 		# The added statement should be an Expr with our specific call
 		predicateFoundOurStatement = False
 		for statement in ingredientsModule.epilogue.body:
-			if isinstance(statement, ast.Expr) and isinstance(statement.value, ast.Call):
-				if hasattr(statement.value.func, 'id') and statement.value.func.id == nameFunctionToCall:
-					predicateFoundOurStatement = True
-					break
+			if isinstance(statement, ast.Expr) and isinstance(statement.value, ast.Call) and hasattr(statement.value.func, 'id') and statement.value.func.id == nameFunctionToCall:
+				predicateFoundOurStatement = True
+				break
 		assert predicateFoundOurStatement
 
 	@pytest.mark.parametrize("nameFunctionToCall", [
@@ -448,10 +440,9 @@ class TestIngredientsModule:
 		# The added statement should be an Expr with our specific call
 		predicateFoundOurStatement = False
 		for statement in ingredientsModule.launcher.body:
-			if isinstance(statement, ast.Expr) and isinstance(statement.value, ast.Call):
-				if hasattr(statement.value.func, 'id') and statement.value.func.id == nameFunctionToCall:
-					predicateFoundOurStatement = True
-					break
+			if isinstance(statement, ast.Expr) and isinstance(statement.value, ast.Call) and hasattr(statement.value.func, 'id') and statement.value.func.id == nameFunctionToCall:
+				predicateFoundOurStatement = True
+				break
 		assert predicateFoundOurStatement
 
 	@pytest.mark.parametrize("nameFunctionTest,expectedCountFunctions", [
@@ -496,11 +487,11 @@ class TestIngredientsModule:
 		"""Test removeImportFromModule removes from-imports from module and all functions."""
 		ingredientsModule = IngredientsModule()
 
-		# Add module-level from-imports
+# Add module-level from-imports
 		for nameToAdd in listNamesModuleLevel:
 			ingredientsModule.imports.addImportFrom_asStr(identifierModule, nameToAdd)
 
-		# Add function with from-imports
+# Add function with from-imports
 		astFunctionDefTest = Make.FunctionDef(name='functionTest', body=[Make.Pass()])
 		ingredientsFunctionTest = IngredientsFunction(astFunctionDef=astFunctionDefTest)
 		for nameToAdd in listNamesFunctionLevel:
@@ -522,7 +513,7 @@ class TestIngredientsModule:
 		"""Test body property assembles all components in correct order."""
 		ingredientsModule = IngredientsModule()
 
-		# Add import
+# Add import
 		ingredientsModule.imports.addImport_asStr(identifierModule)
 
 		# Add prologue
@@ -557,19 +548,18 @@ class TestIngredientsModule:
 				indexPrologue = indexStatement
 			elif isinstance(statement, ast.FunctionDef) and statement.name == nameFunction:
 				indexFunction = indexStatement
-			elif isinstance(statement, ast.Expr) and isinstance(statement.value, ast.Call):
-				if hasattr(statement.value.func, 'id'):
-					if statement.value.func.id == nameFunctionEpilogue:
-						indexEpilogue = indexStatement
-					elif statement.value.func.id == nameFunctionLauncher:
-						indexLauncher = indexStatement
+			elif isinstance(statement, ast.Expr) and isinstance(statement.value, ast.Call) and hasattr(statement.value.func, 'id'):
+				if statement.value.func.id == nameFunctionEpilogue:
+					indexEpilogue = indexStatement
+				elif statement.value.func.id == nameFunctionLauncher:
+					indexLauncher = indexStatement
 
-		# Verify correct ordering: prologue < function < epilogue < launcher
+# Verify correct ordering: prologue < function < epilogue < launcher
 		assert indexPrologue < indexFunction, "Prologue should come before function"
 		assert indexFunction < indexEpilogue, "Function should come before epilogue"
 		assert indexEpilogue < indexLauncher, "Epilogue should come before launcher"
 
-		# Also verify imports come first
+# Also verify imports come first
 		assert isinstance(listBodyStatements[0], (ast.Import, ast.ImportFrom)), "Imports should come first"
 
 	@pytest.mark.parametrize("lineNumberFirst,textIgnoreFirst,lineNumberSecond,textIgnoreSecond,expectedMinimumCount", [
@@ -600,7 +590,7 @@ class TestIngredientsModule:
 	])
 	def testWriteAstModuleCreatesFile(self, nameFunction: str, nameParameter: str, valueReturn: int, expectedTextImport: str, expectedTextFunction: str) -> None:
 		"""Test write_astModule creates a valid Python file using extracted function."""
-		# Use a real module with a function that actually uses the import
+# Use a real module with a function that actually uses the import
 		moduleSource = f"""
 from typing import Any
 
@@ -676,7 +666,7 @@ class TestAstModuleToIngredientsFunction:
 		"""Test astModuleToIngredientsFunction captures all imports from module."""
 		listStatements: list[ast.stmt] = [Make.Import(identifierModule) for identifierModule in listModulesToImport]
 		listStatements.append(Make.FunctionDef(name=nameFunction, body=[Make.Pass()]))
-		
+
 		moduleWithMultipleImports = Make.Module(listStatements)
 
 		ingredientsFunction = astModuleToIngredientsFunction(moduleWithMultipleImports, nameFunction)
