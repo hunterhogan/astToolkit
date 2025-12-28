@@ -21,10 +21,10 @@ keywords:
 - ast-predicate
 - ast-traversal
 - ast-visitor
-- code generation
-- code transformation
 - code-analysis
 - code-refactoring
+- code generation
+- code transformation
 - composable-apis
 - function-inlining
 - metaprogramming
