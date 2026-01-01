@@ -740,7 +740,7 @@ class Be:
                 return isinstance(node, ast.Constant) and attributeCondition(node.kind)
             return workhorse
     Constant = _Constant()
-    '`Be.Constant` matches any of `class` `ast.Constant` | `ast.Bytes` | `ast.Ellipsis` | `ast.NameConstant` | `ast.Num` | `ast.Str`.\n\n        It is a subclass of `ast.expr`.\n        '
+    '`Be.Constant` matches `class` `ast.Constant`.\n\n        It is a subclass of `ast.expr`.\n        '
 
     @staticmethod
     def Continue(node: ast.AST) -> TypeIs[ast.Continue]:
@@ -878,7 +878,7 @@ class Be:
 
     @staticmethod
     def expr(node: ast.AST) -> TypeIs[ast.expr]:
-        """`Be.expr`, ***expr***ession, matches any of `class` `ast.expr` | `ast.Attribute` | `ast.Await` | `ast.BinOp` | `ast.BoolOp` | `ast.Call` | `ast.Compare` | `ast.Constant` | `ast.Dict` | `ast.DictComp` | `ast.FormattedValue` | `ast.GeneratorExp` | `ast.IfExp` | `ast.JoinedStr` | `ast.Lambda` | `ast.List` | `ast.ListComp` | `ast.Name` | `ast.NamedExpr` | `ast.Set` | `ast.SetComp` | `ast.Slice` | `ast.Starred` | `ast.Subscript` | `ast.Tuple` | `ast.UnaryOp` | `ast.Yield` | `ast.YieldFrom`.
+        """`Be.expr`, ***expr***ession, matches any of `class` `ast.expr` | `ast.Attribute` | `ast.Await` | `ast.BinOp` | `ast.BoolOp` | `ast.Call` | `ast.Compare` | `ast.Constant` | `ast.Dict` | `ast.DictComp` | `ast.FormattedValue` | `ast.GeneratorExp` | `ast.IfExp` | `ast.Interpolation` | `ast.JoinedStr` | `ast.Lambda` | `ast.List` | `ast.ListComp` | `ast.Name` | `ast.NamedExpr` | `ast.Set` | `ast.SetComp` | `ast.Slice` | `ast.Starred` | `ast.Subscript` | `ast.TemplateStr` | `ast.Tuple` | `ast.UnaryOp` | `ast.Yield` | `ast.YieldFrom`.
 
         It is a subclass of `ast.AST`.
         """
