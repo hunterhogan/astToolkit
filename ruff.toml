@@ -1,0 +1,63 @@
+extend = "pyproject.toml"
+
+[lint]
+ignore = [
+  "ANN401",
+  "C901",
+  "COM812",
+  "D206",
+  "D401",
+  "F401",
+  "FIX",
+  "I001",
+  "N",
+  "PGH004",
+  "PLC0105",
+  "PLC0414",
+  "PLC2401",
+  "PLC2403",
+  "PLR0912",
+  "PLR0913",
+  "PLR0915",
+  "PLR2004",
+  "PLW0120",
+  "PYI021",
+  "PYI041",
+  "PYI042",
+  "Q000",
+  "RET505",
+  "RET507",
+  "RUF010",
+  "S603",
+  "SIM108",
+  "SIM300",
+  "TC006",
+  "TD",
+  "W191",
+  "W292",
+]
+select = ["ALL"]
+task-tags = ["NOTE", "TODO"]
+
+[lint.flake8-import-conventions]
+aliases = { numpy = "numpy", pandas = "pandas" }
+banned-aliases = { numpy = ["np"], pandas = ["pd"] }
+
+[lint.per-file-ignores]
+"__init__.py" = ["PLC0414"]
+"*test*.py" = [
+  "ARG",
+  "BLE",
+  "D",
+  "FBT",
+  "PT",
+  "S101",
+  "TRY",
+  "DTZ",
+]
+
+[lint.pydocstyle]
+convention = "numpy"
+
+[format]
+indent-style = "tab"
