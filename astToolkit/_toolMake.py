@@ -2639,24 +2639,24 @@ class Make:
         def ParamSpec(name: str, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.ParamSpec:
             """Make a parameter specification type parameter for generic callable types.
 
-            (AI generated docstring.)
+        (AI generated docstring.)
 
-            The `ast.ParamSpec` (***Param***eter ***Spec***ification) object represents parameter specification type
-            parameters used in generic callable types. Captures both positional and keyword argument signatures for type-
-            safe function composition and higher-order functions.
+        The `ast.ParamSpec` (***Param***eter ***Spec***ification) object represents parameter specification type
+        parameters used in generic callable types. Captures both positional and keyword argument signatures for type-
+        safe function composition and higher-order functions.
 
-            Parameters
-            ----------
-            name :
+        Parameters
+        ----------
+        name :
             Type parameter name as string identifier.
-            default_value :
+        default_value :
             Optional default type expression (Python 3.13+).
 
-            Returns
-            -------
-            parameterSpecification : ast.ParamSpec
+        Returns
+        -------
+        parameterSpecification : ast.ParamSpec
             AST object representing a parameter specification type parameter.
-            """
+        """
             return ast.ParamSpec(name=name, default_value=default_value, **keywordArguments)
     else:
 
@@ -2664,24 +2664,24 @@ class Make:
         def ParamSpec(name: str, **keywordArguments: Unpack[ast_attributes_int]) -> ast.ParamSpec:
             """Make a parameter specification type parameter for generic callable types.
 
-            (AI generated docstring.)
+        (AI generated docstring.)
 
-            The `ast.ParamSpec` (***Param***eter ***Spec***ification) object represents parameter specification type
-            parameters used in generic callable types. Captures both positional and keyword argument signatures for type-
-            safe function composition and higher-order functions.
+        The `ast.ParamSpec` (***Param***eter ***Spec***ification) object represents parameter specification type
+        parameters used in generic callable types. Captures both positional and keyword argument signatures for type-
+        safe function composition and higher-order functions.
 
-            Parameters
-            ----------
-            name :
+        Parameters
+        ----------
+        name :
             Type parameter name as string identifier.
-            default_value :
+        default_value :
             Optional default type expression (Python 3.13+).
 
-            Returns
-            -------
-            parameterSpecification : ast.ParamSpec
+        Returns
+        -------
+        parameterSpecification : ast.ParamSpec
             AST object representing a parameter specification type parameter.
-            """
+        """
             return ast.ParamSpec(name=name, **keywordArguments)
 
     @staticmethod
@@ -3231,26 +3231,26 @@ class Make:
         def TypeVar(name: str, bound: ast.expr | None=None, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVar:
             """Make a type variable parameter for generic types with optional bounds and defaults.
 
-            (AI generated docstring.)
+        (AI generated docstring.)
 
-            The `ast.TypeVar` (Type ***Var***iable) object represents type variable parameters used in generic classes,
-            functions, and type aliases. Supports type bounds, constraints, and default values for flexible generic
-            programming.
+        The `ast.TypeVar` (Type ***Var***iable) object represents type variable parameters used in generic classes,
+        functions, and type aliases. Supports type bounds, constraints, and default values for flexible generic
+        programming.
 
-            Parameters
-            ----------
-            name :
+        Parameters
+        ----------
+        name :
             Type variable name as string identifier.
-            bound :
+        bound :
             Optional type expression constraining allowed types.
-            default_value :
+        default_value :
             Optional default type expression (Python 3.13+).
 
-            Returns
-            -------
-            typeVariable : ast.TypeVar
+        Returns
+        -------
+        typeVariable : ast.TypeVar
             AST object representing a type variable with optional constraints.
-            """
+        """
             return ast.TypeVar(name=name, bound=bound, default_value=default_value, **keywordArguments)
     else:
 
@@ -3258,26 +3258,26 @@ class Make:
         def TypeVar(name: str, bound: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVar:
             """Make a type variable parameter for generic types with optional bounds and defaults.
 
-            (AI generated docstring.)
+        (AI generated docstring.)
 
-            The `ast.TypeVar` (Type ***Var***iable) object represents type variable parameters used in generic classes,
-            functions, and type aliases. Supports type bounds, constraints, and default values for flexible generic
-            programming.
+        The `ast.TypeVar` (Type ***Var***iable) object represents type variable parameters used in generic classes,
+        functions, and type aliases. Supports type bounds, constraints, and default values for flexible generic
+        programming.
 
-            Parameters
-            ----------
-            name :
+        Parameters
+        ----------
+        name :
             Type variable name as string identifier.
-            bound :
+        bound :
             Optional type expression constraining allowed types.
-            default_value :
+        default_value :
             Optional default type expression (Python 3.13+).
 
-            Returns
-            -------
-            typeVariable : ast.TypeVar
+        Returns
+        -------
+        typeVariable : ast.TypeVar
             AST object representing a type variable with optional constraints.
-            """
+        """
             return ast.TypeVar(name=name, bound=bound, **keywordArguments)
     if sys.version_info >= (3, 13):
 
@@ -3285,24 +3285,24 @@ class Make:
         def TypeVarTuple(name: str, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVarTuple:
             """Make a type variable tuple for variadic generic types.
 
-            (AI generated docstring.)
+        (AI generated docstring.)
 
-            The `ast.TypeVarTuple` (Type ***Var***iable ***Tuple***) object represents type variable tuples used for
-            variadic generic types that accept variable numbers of type arguments. Enables generic types that work with
-            arbitrary-length type sequences.
+        The `ast.TypeVarTuple` (Type ***Var***iable ***Tuple***) object represents type variable tuples used for
+        variadic generic types that accept variable numbers of type arguments. Enables generic types that work with
+        arbitrary-length type sequences.
 
-            Parameters
-            ----------
-            name :
+        Parameters
+        ----------
+        name :
             Type variable tuple name as string identifier.
-            default_value :
+        default_value :
             Optional default type tuple expression (Python 3.13+).
 
-            Returns
-            -------
-            typeVariableTuple : ast.TypeVarTuple
+        Returns
+        -------
+        typeVariableTuple : ast.TypeVarTuple
             AST object representing a variadic type variable.
-            """
+        """
             return ast.TypeVarTuple(name=name, default_value=default_value, **keywordArguments)
     else:
 
@@ -3310,24 +3310,24 @@ class Make:
         def TypeVarTuple(name: str, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVarTuple:
             """Make a type variable tuple for variadic generic types.
 
-            (AI generated docstring.)
+        (AI generated docstring.)
 
-            The `ast.TypeVarTuple` (Type ***Var***iable ***Tuple***) object represents type variable tuples used for
-            variadic generic types that accept variable numbers of type arguments. Enables generic types that work with
-            arbitrary-length type sequences.
+        The `ast.TypeVarTuple` (Type ***Var***iable ***Tuple***) object represents type variable tuples used for
+        variadic generic types that accept variable numbers of type arguments. Enables generic types that work with
+        arbitrary-length type sequences.
 
-            Parameters
-            ----------
-            name :
+        Parameters
+        ----------
+        name :
             Type variable tuple name as string identifier.
-            default_value :
+        default_value :
             Optional default type tuple expression (Python 3.13+).
 
-            Returns
-            -------
-            typeVariableTuple : ast.TypeVarTuple
+        Returns
+        -------
+        typeVariableTuple : ast.TypeVarTuple
             AST object representing a variadic type variable.
-            """
+        """
             return ast.TypeVarTuple(name=name, **keywordArguments)
 
     @staticmethod
