@@ -347,6 +347,8 @@ class IfThis:
 			return Be.Name.idIs(IfThis.isIdentifier(identifier))(node)
 		return workhorse
 
+# TODO I wanted `Be.Call.funcIs(IfThis.isNestedNameIdentifier('TypeVar'))` to match typing_extensions.TypeVar(), typing.TypeVar(), or TypeVar().
+# Is that a good idea?
 	@staticmethod
 	def isNestedNameIdentifier(identifier: str) -> Callable[[ast.AST], TypeIs[ast.Attribute | ast.Starred | ast.Subscript]]:
 		"""Return a predicate matching an `ast.Name`, `ast.Attribute`, `ast.Subscript`, or `ast.Starred` node with a specific identifier.
