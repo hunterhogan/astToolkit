@@ -1,0 +1,5 @@
+[analysis]
+respect-type-ignore-comments = false
+
+[environment]
+python-platform = "all"

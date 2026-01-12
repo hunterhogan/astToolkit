@@ -18,6 +18,8 @@ import sys
 
 if sys.version_info >= (3, 13):
     from astToolkit import hasDOTdefault_value
+if sys.version_info >= (3, 14):
+    from astToolkit import hasDOTstr
 
 class Grab:
     """Modify specific attributes of AST nodes while preserving the node structure.
@@ -554,26 +556,26 @@ class Grab:
         def default_valueAttribute(action: Callable[[工 | None], 工 | None]) -> Callable[[hasDOTdefault_value], hasDOTdefault_value]:
             """Apply a function to the `default_value` attribute of a 'node' of `type` `hasDOTdefault_value`.
 
-        The `type` of the `default_value` attribute is `something` for [any of] `class` `ast.IDK`.  If `type` were
-        represented by a `TypeVar`, I would tell you what the ideogram is.  If `default_value` could be a second type, I
-        would tell you it is `type` `somethingElse` for [any of] `class` `ast.FML`.
+            The `type` of the `default_value` attribute is `something` for [any of] `class` `ast.IDK`.  If `type` were
+            represented by a `TypeVar`, I would tell you what the ideogram is.  If `default_value` could be a second type, I
+            would tell you it is `type` `somethingElse` for [any of] `class` `ast.FML`.
 
-        Parameters
-        ----------
-        action : Callable[[工 | None], 工 | None]
+            Parameters
+            ----------
+            action : Callable[[工 | None], 工 | None]
             A function with one parameter and a `return` of the same `type`.
 
-        Returns
-        -------
-        workhorse : Callable[[hasDOTdefault_value], hasDOTdefault_value]
+            Returns
+            -------
+            workhorse : Callable[[hasDOTdefault_value], hasDOTdefault_value]
             A function with one parameter for a 'node' of `type` `hasDOTdefault_value` and a `return` of the same
             `type`.
 
-        Type Checker Error?
-        -------------------
-        If you use `Grab` with one level of complexity, your type checker will give you accurate guidance. With two levels of complexity, such as nesting `Grab`
-        in another `Grab`, your type checker will be angry. I recommend `typing.cast()`. The fault is mine: the 'type safety' of `Grab` is inherently limited.
-        """
+            Type Checker Error?
+            -------------------
+            If you use `Grab` with one level of complexity, your type checker will give you accurate guidance. With two levels of complexity, such as nesting `Grab`
+            in another `Grab`, your type checker will be angry. I recommend `typing.cast()`. The fault is mine: the 'type safety' of `Grab` is inherently limited.
+            """
 
             def workhorse(node: hasDOTdefault_value) -> hasDOTdefault_value:
                 setattr(node, 'default_value', action(getattr(node, 'default_value')))
@@ -1914,6 +1916,36 @@ class Grab:
             setattr(node, 'step', action(getattr(node, 'step')))
             return node
         return workhorse
+    if sys.version_info >= (3, 14):
+
+        @staticmethod
+        def strAttribute(action: Callable[[str], str]) -> Callable[[hasDOTstr], hasDOTstr]:
+            """Apply a function to the `str` attribute of a 'node' of `type` `hasDOTstr`.
+
+            The `type` of the `str` attribute is `something` for [any of] `class` `ast.IDK`.  If `type` were represented by
+            a `TypeVar`, I would tell you what the ideogram is.  If `str` could be a second type, I would tell you it is
+            `type` `somethingElse` for [any of] `class` `ast.FML`.
+
+            Parameters
+            ----------
+            action : Callable[[str], str]
+            A function with one parameter and a `return` of the same `type`.
+
+            Returns
+            -------
+            workhorse : Callable[[hasDOTstr], hasDOTstr]
+            A function with one parameter for a 'node' of `type` `hasDOTstr` and a `return` of the same `type`.
+
+            Type Checker Error?
+            -------------------
+            If you use `Grab` with one level of complexity, your type checker will give you accurate guidance. With two levels of complexity, such as nesting `Grab`
+            in another `Grab`, your type checker will be angry. I recommend `typing.cast()`. The fault is mine: the 'type safety' of `Grab` is inherently limited.
+            """
+
+            def workhorse(node: hasDOTstr) -> hasDOTstr:
+                setattr(node, 'str', action(getattr(node, 'str')))
+                return node
+            return workhorse
 
     @staticmethod
     def subjectAttribute(action: Callable[[工], 工]) -> Callable[[hasDOTsubject], hasDOTsubject]:

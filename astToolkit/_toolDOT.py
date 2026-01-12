@@ -20,10 +20,13 @@ from astToolkit import (
 from collections.abc import Sequence
 from typing import overload
 import ast
+import builtins
 import sys
 
 if sys.version_info >= (3, 13):
     from astToolkit import hasDOTdefault_value
+if sys.version_info >= (3, 14):
+    from astToolkit import hasDOTstr
 
 class DOT:
     """Access attributes and sub-nodes of AST elements via consistent accessor methods.
@@ -418,6 +421,11 @@ class DOT:
     @staticmethod
     def step(node: hasDOTstep) -> ast.expr | None:
         return node.step
+    if sys.version_info >= (3, 14):
+
+        @staticmethod
+        def str(node: hasDOTstr) -> builtins.str:
+            return node.str
 
     @staticmethod
     def subject(node: hasDOTsubject) -> ast.expr:
