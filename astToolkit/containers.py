@@ -213,7 +213,7 @@ class LedgerOfImports:
 		"""
 		listImportFrom: list[ast.ImportFrom] = []
 		for dotModule, list_nameTuples in sorted(self._dictionaryImportFrom.items()):
-			list_nameTuples: list[tuple[str, str | None]] = sorted(set(list_nameTuples), key=lambda nameTuple: nameTuple[0])  # noqa: PLW2901
+			list_nameTuples: list[tuple[str, str | None]] = sorted(set(list_nameTuples), key=lambda nameTuple: nameTuple[0])
 			list_alias: list[ast.alias] = []
 			for name, asName in list_nameTuples:
 				list_alias.append(Make.alias(name, asName))

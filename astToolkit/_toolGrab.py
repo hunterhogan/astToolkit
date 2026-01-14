@@ -3,21 +3,20 @@
 from astToolkit import (
 	ConstantValueType, hasDOTannotation, hasDOTarg, hasDOTargs, hasDOTargtypes, hasDOTasname, hasDOTattr, hasDOTbases,
 	hasDOTbody, hasDOTbound, hasDOTcases, hasDOTcause, hasDOTcls, hasDOTcomparators, hasDOTcontext_expr, hasDOTconversion,
-	hasDOTctx, hasDOTdecorator_list, hasDOTdefaults, hasDOTelt, hasDOTelts, hasDOTexc, hasDOTfinalbody, hasDOTformat_spec,
-	hasDOTfunc, hasDOTgenerators, hasDOTguard, hasDOThandlers, hasDOTid, hasDOTifs, hasDOTis_async, hasDOTitems,
-	hasDOTiter, hasDOTkey, hasDOTkeys, hasDOTkeywords, hasDOTkind, hasDOTkw_defaults, hasDOTkwarg, hasDOTkwd_attrs,
-	hasDOTkwd_patterns, hasDOTkwonlyargs, hasDOTleft, hasDOTlevel, hasDOTlineno, hasDOTlower, hasDOTmodule, hasDOTmsg,
-	hasDOTname, hasDOTnames, hasDOTop, hasDOToperand, hasDOTops, hasDOToptional_vars, hasDOTorelse, hasDOTpattern,
-	hasDOTpatterns, hasDOTposonlyargs, hasDOTrest, hasDOTreturns, hasDOTright, hasDOTsimple, hasDOTslice, hasDOTstep,
-	hasDOTsubject, hasDOTtag, hasDOTtarget, hasDOTtargets, hasDOTtest, hasDOTtype, hasDOTtype_comment, hasDOTtype_ignores,
-	hasDOTtype_params, hasDOTupper, hasDOTvalue, hasDOTvalues, hasDOTvararg, 一符, 个, 二符, 俪, 口, 工, 工位, 布尔符, 形, 比符)
+	hasDOTctx, hasDOTdecorator_list, hasDOTdefault_value, hasDOTdefaults, hasDOTelt, hasDOTelts, hasDOTexc,
+	hasDOTfinalbody, hasDOTformat_spec, hasDOTfunc, hasDOTgenerators, hasDOTguard, hasDOThandlers, hasDOTid, hasDOTifs,
+	hasDOTis_async, hasDOTitems, hasDOTiter, hasDOTkey, hasDOTkeys, hasDOTkeywords, hasDOTkind, hasDOTkw_defaults,
+	hasDOTkwarg, hasDOTkwd_attrs, hasDOTkwd_patterns, hasDOTkwonlyargs, hasDOTleft, hasDOTlevel, hasDOTlineno, hasDOTlower,
+	hasDOTmodule, hasDOTmsg, hasDOTname, hasDOTnames, hasDOTop, hasDOToperand, hasDOTops, hasDOToptional_vars,
+	hasDOTorelse, hasDOTpattern, hasDOTpatterns, hasDOTposonlyargs, hasDOTrest, hasDOTreturns, hasDOTright, hasDOTsimple,
+	hasDOTslice, hasDOTstep, hasDOTsubject, hasDOTtag, hasDOTtarget, hasDOTtargets, hasDOTtest, hasDOTtype,
+	hasDOTtype_comment, hasDOTtype_ignores, hasDOTtype_params, hasDOTupper, hasDOTvalue, hasDOTvalues, hasDOTvararg, 一符, 个,
+	二符, 俪, 口, 工, 工位, 布尔符, 形, 比符)
 from collections.abc import Callable, Sequence
 from typing import Any
 import ast
 import sys
 
-if sys.version_info >= (3, 13):
-    from astToolkit import hasDOTdefault_value
 if sys.version_info >= (3, 14):
     from astToolkit import hasDOTstr
 
@@ -550,37 +549,36 @@ class Grab:
             setattr(node, 'decorator_list', action(getattr(node, 'decorator_list')))
             return node
         return workhorse
-    if sys.version_info >= (3, 13):
 
-        @staticmethod
-        def default_valueAttribute(action: Callable[[工 | None], 工 | None]) -> Callable[[hasDOTdefault_value], hasDOTdefault_value]:
-            """Apply a function to the `default_value` attribute of a 'node' of `type` `hasDOTdefault_value`.
+    @staticmethod
+    def default_valueAttribute(action: Callable[[工 | None], 工 | None]) -> Callable[[hasDOTdefault_value], hasDOTdefault_value]:
+        """Apply a function to the `default_value` attribute of a 'node' of `type` `hasDOTdefault_value`.
 
-            The `type` of the `default_value` attribute is `something` for [any of] `class` `ast.IDK`.  If `type` were
-            represented by a `TypeVar`, I would tell you what the ideogram is.  If `default_value` could be a second type, I
-            would tell you it is `type` `somethingElse` for [any of] `class` `ast.FML`.
+        The `type` of the `default_value` attribute is `something` for [any of] `class` `ast.IDK`.  If `type` were
+        represented by a `TypeVar`, I would tell you what the ideogram is.  If `default_value` could be a second type, I
+        would tell you it is `type` `somethingElse` for [any of] `class` `ast.FML`.
 
-            Parameters
-            ----------
-            action : Callable[[工 | None], 工 | None]
+        Parameters
+        ----------
+        action : Callable[[工 | None], 工 | None]
             A function with one parameter and a `return` of the same `type`.
 
-            Returns
-            -------
-            workhorse : Callable[[hasDOTdefault_value], hasDOTdefault_value]
+        Returns
+        -------
+        workhorse : Callable[[hasDOTdefault_value], hasDOTdefault_value]
             A function with one parameter for a 'node' of `type` `hasDOTdefault_value` and a `return` of the same
             `type`.
 
-            Type Checker Error?
-            -------------------
-            If you use `Grab` with one level of complexity, your type checker will give you accurate guidance. With two levels of complexity, such as nesting `Grab`
-            in another `Grab`, your type checker will be angry. I recommend `typing.cast()`. The fault is mine: the 'type safety' of `Grab` is inherently limited.
-            """
+        Type Checker Error?
+        -------------------
+        If you use `Grab` with one level of complexity, your type checker will give you accurate guidance. With two levels of complexity, such as nesting `Grab`
+        in another `Grab`, your type checker will be angry. I recommend `typing.cast()`. The fault is mine: the 'type safety' of `Grab` is inherently limited.
+        """
 
-            def workhorse(node: hasDOTdefault_value) -> hasDOTdefault_value:
-                setattr(node, 'default_value', action(getattr(node, 'default_value')))
-                return node
-            return workhorse
+        def workhorse(node: hasDOTdefault_value) -> hasDOTdefault_value:
+            setattr(node, 'default_value', action(getattr(node, 'default_value')))
+            return node
+        return workhorse
 
     @staticmethod
     def defaultsAttribute(action: Callable[[list[工]], list[工]]) -> Callable[[hasDOTdefaults], hasDOTdefaults]:

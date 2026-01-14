@@ -5,23 +5,15 @@ from pathlib import Path, PurePath
 from typing import Any, Literal, TYPE_CHECKING, TypedDict, Unpack
 import ast
 import importlib
-import sys
-
-if sys.version_info >= (3, 13):
-	# The 'optimize' parameter is only available in Python 3.13+
-	class astParseParameters(TypedDict, total=False):
-		mode: Literal['exec']
-		type_comments: bool
-		feature_version: int | tuple[int, int] | None
-		optimize: Literal[-1, 0, 1, 2]
-else:
-	class astParseParameters(TypedDict, total=False):
-		mode: Literal['exec']
-		type_comments: bool
-		feature_version: int | tuple[int, int] | None
 
 if TYPE_CHECKING:
 	from types import ModuleType
+
+class astParseParameters(TypedDict, total=False):
+	mode: Literal['exec']
+	type_comments: bool
+	feature_version: int | tuple[int, int] | None
+	optimize: Literal[-1, 0, 1, 2]
 
 def extractClassDef(astAST: ast.AST, identifier: str) -> ast.ClassDef | None:
 	"""

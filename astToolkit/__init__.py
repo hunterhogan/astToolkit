@@ -76,17 +76,18 @@ from astToolkit._astTypes import (
 	hasDOTbody_list_stmt as hasDOTbody_list_stmt, hasDOTbound as hasDOTbound, hasDOTcases as hasDOTcases,
 	hasDOTcause as hasDOTcause, hasDOTcls as hasDOTcls, hasDOTcomparators as hasDOTcomparators,
 	hasDOTcontext_expr as hasDOTcontext_expr, hasDOTconversion as hasDOTconversion, hasDOTctx as hasDOTctx,
-	hasDOTdecorator_list as hasDOTdecorator_list, hasDOTdefaults as hasDOTdefaults, hasDOTelt as hasDOTelt,
-	hasDOTelts as hasDOTelts, hasDOTexc as hasDOTexc, hasDOTfinalbody as hasDOTfinalbody,
-	hasDOTformat_spec as hasDOTformat_spec, hasDOTfunc as hasDOTfunc, hasDOTgenerators as hasDOTgenerators,
-	hasDOTguard as hasDOTguard, hasDOThandlers as hasDOThandlers, hasDOTid as hasDOTid, hasDOTifs as hasDOTifs,
-	hasDOTis_async as hasDOTis_async, hasDOTitems as hasDOTitems, hasDOTiter as hasDOTiter, hasDOTkey as hasDOTkey,
-	hasDOTkeys as hasDOTkeys, hasDOTkeys_list_expr as hasDOTkeys_list_expr,
-	hasDOTkeys_list_exprOrNone as hasDOTkeys_list_exprOrNone, hasDOTkeywords as hasDOTkeywords, hasDOTkind as hasDOTkind,
-	hasDOTkw_defaults as hasDOTkw_defaults, hasDOTkwarg as hasDOTkwarg, hasDOTkwd_attrs as hasDOTkwd_attrs,
-	hasDOTkwd_patterns as hasDOTkwd_patterns, hasDOTkwonlyargs as hasDOTkwonlyargs, hasDOTleft as hasDOTleft,
-	hasDOTlevel as hasDOTlevel, hasDOTlineno as hasDOTlineno, hasDOTlower as hasDOTlower, hasDOTmodule as hasDOTmodule,
-	hasDOTmsg as hasDOTmsg, hasDOTname as hasDOTname, hasDOTname_Name as hasDOTname_Name, hasDOTname_str as hasDOTname_str,
+	hasDOTdecorator_list as hasDOTdecorator_list, hasDOTdefault_value as hasDOTdefault_value,
+	hasDOTdefaults as hasDOTdefaults, hasDOTelt as hasDOTelt, hasDOTelts as hasDOTelts, hasDOTexc as hasDOTexc,
+	hasDOTfinalbody as hasDOTfinalbody, hasDOTformat_spec as hasDOTformat_spec, hasDOTfunc as hasDOTfunc,
+	hasDOTgenerators as hasDOTgenerators, hasDOTguard as hasDOTguard, hasDOThandlers as hasDOThandlers,
+	hasDOTid as hasDOTid, hasDOTifs as hasDOTifs, hasDOTis_async as hasDOTis_async, hasDOTitems as hasDOTitems,
+	hasDOTiter as hasDOTiter, hasDOTkey as hasDOTkey, hasDOTkeys as hasDOTkeys,
+	hasDOTkeys_list_expr as hasDOTkeys_list_expr, hasDOTkeys_list_exprOrNone as hasDOTkeys_list_exprOrNone,
+	hasDOTkeywords as hasDOTkeywords, hasDOTkind as hasDOTkind, hasDOTkw_defaults as hasDOTkw_defaults,
+	hasDOTkwarg as hasDOTkwarg, hasDOTkwd_attrs as hasDOTkwd_attrs, hasDOTkwd_patterns as hasDOTkwd_patterns,
+	hasDOTkwonlyargs as hasDOTkwonlyargs, hasDOTleft as hasDOTleft, hasDOTlevel as hasDOTlevel,
+	hasDOTlineno as hasDOTlineno, hasDOTlower as hasDOTlower, hasDOTmodule as hasDOTmodule, hasDOTmsg as hasDOTmsg,
+	hasDOTname as hasDOTname, hasDOTname_Name as hasDOTname_Name, hasDOTname_str as hasDOTname_str,
 	hasDOTname_strOrNone as hasDOTname_strOrNone, hasDOTnames as hasDOTnames,
 	hasDOTnames_list_alias as hasDOTnames_list_alias, hasDOTnames_list_str as hasDOTnames_list_str, hasDOTop as hasDOTop,
 	hasDOTop_boolop as hasDOTop_boolop, hasDOTop_operator as hasDOTop_operator, hasDOTop_unaryop as hasDOTop_unaryop,
@@ -109,11 +110,6 @@ from astToolkit._astTypes import (
 	布尔符 as 布尔符, 常 as 常, 归个 as 归个, 形 as 形, 忽 as 忽, 拦 as 拦, 文义 as 文义, 文件 as 文件, 木 as 木, 本 as 本, 比符 as 比符)
 
 # isort: split
-if sys.version_info >= (3, 13):
-	from astToolkit._astTypes import hasDOTdefault_value as hasDOTdefault_value
-	from astToolkit._dumpHandmade import dump as dump
-
-# isort: split
 if sys.version_info >= (3, 14):
 	from astToolkit._astTypes import hasDOTstr as hasDOTstr
 
@@ -121,6 +117,7 @@ if sys.version_info >= (3, 14):
 from astToolkit._toolkitNodeVisitor import NodeChanger as NodeChanger, NodeTourist as NodeTourist
 
 # isort: split
+from astToolkit._dumpHandmade import dump as dump
 from astToolkit._toolBe import Be as Be
 from astToolkit._toolDOT import DOT as DOT
 from astToolkit._toolGrab import Grab as Grab

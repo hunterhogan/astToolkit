@@ -87,8 +87,7 @@ else:
     type hasDOTconversion = ast.FormattedValue
 type hasDOTctx = ast.Attribute | ast.List | ast.Name | ast.Starred | ast.Subscript | ast.Tuple
 type hasDOTdecorator_list = ast.AsyncFunctionDef | ast.ClassDef | ast.FunctionDef
-if sys.version_info >= (3, 13):
-    type hasDOTdefault_value = ast.ParamSpec | ast.TypeVar | ast.TypeVarTuple
+type hasDOTdefault_value = ast.ParamSpec | ast.TypeVar | ast.TypeVarTuple
 type hasDOTdefaults = ast.arguments
 type hasDOTelt = ast.GeneratorExp | ast.ListComp | ast.SetComp
 type hasDOTelts = ast.List | ast.Set | ast.Tuple

@@ -1,8 +1,7 @@
 """Automatically generated file, so changes may be overwritten."""
 from astToolkit import 木
 from collections.abc import Callable, Sequence
-from typing import Any
-from typing_extensions import TypeIs
+from typing import Any, TypeIs
 import ast
 import sys
 
@@ -64,9 +63,9 @@ class Be:
     """
 
     @staticmethod
-    def at(index: int, predicate: Callable[[Any], TypeIs[木]]) -> Callable[[Sequence[木]], TypeIs[木]]:
+    def at(index: int, predicate: Callable[[Any], TypeIs[木]]) -> Callable[[Sequence[ast.AST]], TypeIs[木]]:
 
-        def workhorse(node: Sequence[木]) -> TypeIs[木]: # pyright: ignore[reportGeneralTypeIssues]
+        def workhorse(node: Sequence[ast.AST]) -> TypeIs[木]:
             return predicate(node[index])
         return workhorse
 

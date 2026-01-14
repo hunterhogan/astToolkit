@@ -29,8 +29,7 @@ code.
 
 from astToolkit import 归个, 木
 from collections.abc import Callable
-from typing import cast, Generic
-from typing_extensions import TypeIs
+from typing import cast, Generic, TypeIs
 import ast
 
 class NodeTourist(ast.NodeVisitor, Generic[木, 归个]):  # noqa: UP046

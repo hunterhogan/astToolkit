@@ -9,8 +9,7 @@ type-safe, composable AST analysis and transformation workflows.
 """
 from astToolkit import Be
 from collections.abc import Callable
-from typing import Any
-from typing_extensions import TypeIs
+from typing import Any, TypeIs
 import ast
 
 class IfThis:
@@ -479,6 +478,7 @@ class IfThis:
 			return all(not (descendant is not node and predicate(descendant)) for descendant in ast.walk(node))
 		return workhorse
 
+# TODO Py3.14 has a new feature for comparing two nodes. Investigate.
 	@staticmethod
 	def unparseIs(astAST: ast.AST) -> Callable[[ast.AST], bool]:
 		"""Return a predicate that matches a node if its unparsed code matches the unparsed code of a given AST node.

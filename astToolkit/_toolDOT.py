@@ -4,10 +4,10 @@ from astToolkit import (
 	hasDOTarg_strOrNone, hasDOTargs, hasDOTargs_arguments, hasDOTargs_list_arg, hasDOTargs_list_expr, hasDOTargtypes,
 	hasDOTasname, hasDOTattr, hasDOTbases, hasDOTbody, hasDOTbody_expr, hasDOTbody_list_stmt, hasDOTbound, hasDOTcases,
 	hasDOTcause, hasDOTcls, hasDOTcomparators, hasDOTcontext_expr, hasDOTconversion, hasDOTctx, hasDOTdecorator_list,
-	hasDOTdefaults, hasDOTelt, hasDOTelts, hasDOTexc, hasDOTfinalbody, hasDOTformat_spec, hasDOTfunc, hasDOTgenerators,
-	hasDOTguard, hasDOThandlers, hasDOTid, hasDOTifs, hasDOTis_async, hasDOTitems, hasDOTiter, hasDOTkey, hasDOTkeys,
-	hasDOTkeys_list_expr, hasDOTkeys_list_exprOrNone, hasDOTkeywords, hasDOTkind, hasDOTkw_defaults, hasDOTkwarg,
-	hasDOTkwd_attrs, hasDOTkwd_patterns, hasDOTkwonlyargs, hasDOTleft, hasDOTlevel, hasDOTlineno, hasDOTlower,
+	hasDOTdefault_value, hasDOTdefaults, hasDOTelt, hasDOTelts, hasDOTexc, hasDOTfinalbody, hasDOTformat_spec, hasDOTfunc,
+	hasDOTgenerators, hasDOTguard, hasDOThandlers, hasDOTid, hasDOTifs, hasDOTis_async, hasDOTitems, hasDOTiter, hasDOTkey,
+	hasDOTkeys, hasDOTkeys_list_expr, hasDOTkeys_list_exprOrNone, hasDOTkeywords, hasDOTkind, hasDOTkw_defaults,
+	hasDOTkwarg, hasDOTkwd_attrs, hasDOTkwd_patterns, hasDOTkwonlyargs, hasDOTleft, hasDOTlevel, hasDOTlineno, hasDOTlower,
 	hasDOTmodule, hasDOTmsg, hasDOTname, hasDOTname_Name, hasDOTname_str, hasDOTname_strOrNone, hasDOTnames,
 	hasDOTnames_list_alias, hasDOTnames_list_str, hasDOTop, hasDOTop_boolop, hasDOTop_operator, hasDOTop_unaryop,
 	hasDOToperand, hasDOTops, hasDOToptional_vars, hasDOTorelse, hasDOTorelse_expr, hasDOTorelse_list_stmt, hasDOTpattern,
@@ -23,8 +23,6 @@ import ast
 import builtins
 import sys
 
-if sys.version_info >= (3, 13):
-    from astToolkit import hasDOTdefault_value
 if sys.version_info >= (3, 14):
     from astToolkit import hasDOTstr
 
@@ -56,16 +54,16 @@ class DOT:
 
     @staticmethod
     @overload
-    def arg(node: hasDOTarg_str) -> str:
+    def arg(node: hasDOTarg_str) -> builtins.str:
         ...
 
     @staticmethod
     @overload
-    def arg(node: hasDOTarg_strOrNone) -> str | None:
+    def arg(node: hasDOTarg_strOrNone) -> builtins.str | None:
         ...
 
     @staticmethod
-    def arg(node: hasDOTarg) -> None | str:
+    def arg(node: hasDOTarg) -> builtins.str | None:
         return node.arg
 
     @staticmethod
@@ -92,11 +90,11 @@ class DOT:
         return node.argtypes
 
     @staticmethod
-    def asname(node: hasDOTasname) -> None | str:
+    def asname(node: hasDOTasname) -> builtins.str | None:
         return node.asname
 
     @staticmethod
-    def attr(node: hasDOTattr) -> str:
+    def attr(node: hasDOTattr) -> builtins.str:
         return node.attr
 
     @staticmethod
@@ -152,11 +150,10 @@ class DOT:
     @staticmethod
     def decorator_list(node: hasDOTdecorator_list) -> Sequence[ast.expr]:
         return node.decorator_list
-    if sys.version_info >= (3, 13):
 
-        @staticmethod
-        def default_value(node: hasDOTdefault_value) -> ast.expr | None:
-            return node.default_value
+    @staticmethod
+    def default_value(node: hasDOTdefault_value) -> ast.expr | None:
+        return node.default_value
 
     @staticmethod
     def defaults(node: hasDOTdefaults) -> Sequence[ast.expr]:
@@ -199,7 +196,7 @@ class DOT:
         return node.handlers
 
     @staticmethod
-    def id(node: hasDOTid) -> str:
+    def id(node: hasDOTid) -> builtins.str:
         return node.id
 
     @staticmethod
@@ -241,7 +238,7 @@ class DOT:
         return node.keywords
 
     @staticmethod
-    def kind(node: hasDOTkind) -> None | str:
+    def kind(node: hasDOTkind) -> builtins.str | None:
         return node.kind
 
     @staticmethod
@@ -253,7 +250,7 @@ class DOT:
         return node.kwarg
 
     @staticmethod
-    def kwd_attrs(node: hasDOTkwd_attrs) -> list[str]:
+    def kwd_attrs(node: hasDOTkwd_attrs) -> list[builtins.str]:
         return node.kwd_attrs
 
     @staticmethod
@@ -281,7 +278,7 @@ class DOT:
         return node.lower
 
     @staticmethod
-    def module(node: hasDOTmodule) -> None | str:
+    def module(node: hasDOTmodule) -> builtins.str | None:
         return node.module
 
     @staticmethod
@@ -295,16 +292,16 @@ class DOT:
 
     @staticmethod
     @overload
-    def name(node: hasDOTname_str) -> str:
+    def name(node: hasDOTname_str) -> builtins.str:
         ...
 
     @staticmethod
     @overload
-    def name(node: hasDOTname_strOrNone) -> str | None:
+    def name(node: hasDOTname_strOrNone) -> builtins.str | None:
         ...
 
     @staticmethod
-    def name(node: hasDOTname) -> ast.Name | None | str:
+    def name(node: hasDOTname) -> ast.Name | builtins.str | None:
         return node.name
 
     @staticmethod
@@ -314,11 +311,11 @@ class DOT:
 
     @staticmethod
     @overload
-    def names(node: hasDOTnames_list_str) -> list[str]:
+    def names(node: hasDOTnames_list_str) -> list[builtins.str]:
         ...
 
     @staticmethod
-    def names(node: hasDOTnames) -> list[ast.alias] | list[str]:
+    def names(node: hasDOTnames) -> list[ast.alias] | list[builtins.str]:
         return node.names
 
     @staticmethod
@@ -389,7 +386,7 @@ class DOT:
         return node.posonlyargs
 
     @staticmethod
-    def rest(node: hasDOTrest) -> None | str:
+    def rest(node: hasDOTrest) -> builtins.str | None:
         return node.rest
 
     @staticmethod
@@ -432,7 +429,7 @@ class DOT:
         return node.subject
 
     @staticmethod
-    def tag(node: hasDOTtag) -> str:
+    def tag(node: hasDOTtag) -> builtins.str:
         return node.tag
 
     @staticmethod
@@ -467,7 +464,7 @@ class DOT:
         return node.type
 
     @staticmethod
-    def type_comment(node: hasDOTtype_comment) -> None | str:
+    def type_comment(node: hasDOTtype_comment) -> builtins.str | None:
         return node.type_comment
 
     @staticmethod
