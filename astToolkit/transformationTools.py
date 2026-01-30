@@ -170,16 +170,12 @@ def inlineFunctionDef(identifierToInline: str, astModule: ast.Module) -> ast.Fun
 		raise ValueError(message) from ERRORmessage
 
 	listIdentifiersCalledFunctions: list[str] = []
-# TODO I probably have the skill now to expand this from only `IfThis.isCallToName` to include more options for `ast.Call.func`,
-# such as attribute and subscript access. `IfThis.isNestedNameIdentifier` might be perfect. BUT, I think this will affect how I
-# key `dictionaryFunctionDef`.
 	findIdentifiersToInline = NodeTourist[ast.Call, ast.expr](IfThis.isCallToName
 		, Grab.funcAttribute(Grab.idAttribute(Then.appendTo(listIdentifiersCalledFunctions))))
 	findIdentifiersToInline.visit(FunctionDefToInline)
 
 	dictionary4Inlining: dict[str, ast.FunctionDef] = {}
 	for identifier in sorted(set(listIdentifiersCalledFunctions).intersection(dictionaryFunctionDef.keys())):
-# TODO Learn how real programmers avoid infinite loops but still inline recursive functions.
 		if NodeTourist(IfThis.matchesMeButNotAnyDescendant(IfThis.isCallIdentifier(identifier)), Then.extractIt).captureLastMatch(astModule) is not None:
 			dictionary4Inlining[identifier] = dictionaryFunctionDef[identifier]
 
