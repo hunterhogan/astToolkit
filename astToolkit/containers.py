@@ -38,7 +38,8 @@ from astToolkit import extractFunctionDef, identifierDotAttribute, Make
 from astToolkit.transformationTools import removeUnusedParameters, write_astModule
 from collections import defaultdict
 from collections.abc import Sequence
-from hunterMakesPy import raiseIfNone, updateExtendPolishDictionaryLists
+from hunterMakesPy import raiseIfNone
+from hunterMakesPy.dataStructures import updateExtendPolishDictionaryLists
 from hunterMakesPy.filesystemToolkit import settings_autoflakeDEFAULT, settings_isortDEFAULT
 from os import PathLike
 from pathlib import PurePath

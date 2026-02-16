@@ -6,6 +6,7 @@ ignore = [
   "C901",
   "COM812",
   "D206",
+  "D400",
   "D401",
   "F401",
   "E501",
@@ -40,11 +41,11 @@ ignore = [
   "W292",
 ]
 select = ["ALL"]
-task-tags = ["NOTE", "TODO"]
+task-tags = ["DEVELOPMENT", "NOTE", "SEMIOTICS", "TODO"]
 
 [lint.flake8-import-conventions]
-aliases = { numpy = "numpy", pandas = "pandas" }
-banned-aliases = { numpy = ["np"], pandas = ["pd"] }
+aliases = { numpy = "numpy", pandas = "pandas", "re" = "regex" }
+banned-aliases = { numpy = ["np"], pandas = ["pd"], regex=["re"] }
 
 [lint.per-file-ignores]
 "__init__.py" = ["PLC0414"]
