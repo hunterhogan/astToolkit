@@ -37,7 +37,7 @@ concerns.
 from astToolkit import extractFunctionDef, identifierDotAttribute, Make
 from astToolkit.transformationTools import removeUnusedParameters, write_astModule
 from collections import defaultdict
-from collections.abc import Sequence
+from collections.abc import Iterable, Sequence
 from hunterMakesPy import raiseIfNone
 from hunterMakesPy.dataStructures import updateExtendPolishDictionaryLists
 from hunterMakesPy.filesystemToolkit import settings_autoflakeDEFAULT, settings_isortDEFAULT
@@ -456,8 +456,8 @@ class IngredientsModule:
 	Add statements using appendLauncher().
 	"""
 
-	settings_autoflake: dict[str, Any] | None = dataclasses.field(default_factory=lambda: settings_autoflakeDEFAULT.copy())
-	settings_isort: dict[str, Any] | None = dataclasses.field(default_factory=lambda: settings_isortDEFAULT.copy())
+	settings_autoflake: dict[str, Any] | None = dataclasses.field(default_factory=settings_autoflakeDEFAULT.copy)
+	settings_isort: dict[str, Any] | None = dataclasses.field(default_factory=settings_isortDEFAULT.copy)
 
 	# `ast.TypeIgnore` statements to supplement those in other fields; `type_ignores` is a parameter for `ast.Module` constructor
 	_supplemental_type_ignores: list[ast.TypeIgnore] = dataclasses.field(default_factory=list[ast.TypeIgnore])
@@ -471,7 +471,7 @@ class IngredientsModule:
 			else:
 				self.appendIngredientsFunction(*ingredientsFunction)
 
-	def _append_astModule(self, self_astModule: ast.Module, astModule: ast.Module | None, statement: Sequence[ast.stmt] | ast.stmt | None, type_ignores: list[ast.TypeIgnore] | None) -> None:
+	def _append_astModule(self, self_astModule: ast.Module, astModule: ast.Module | None, statement: Iterable[ast.stmt] | ast.stmt | None, type_ignores: list[ast.TypeIgnore] | None) -> None:
 		list_body: list[ast.stmt] = []
 		listTypeIgnore: list[ast.TypeIgnore] = []
 		if astModule is not None and isinstance(astModule, ast.Module): # pyright: ignore[reportUnnecessaryIsInstance]
@@ -480,7 +480,7 @@ class IngredientsModule:
 		if type_ignores is not None:
 			listTypeIgnore.extend(type_ignores)
 		if statement is not None:
-			if isinstance(statement, Sequence):
+			if isinstance(statement, Iterable) and not isinstance(statement, ast.stmt):
 				list_body.extend(statement)
 			else:
 				list_body.append(statement)

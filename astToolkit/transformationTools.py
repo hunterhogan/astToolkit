@@ -25,7 +25,7 @@ These transformation tools form the backbone of the code optimization pipeline, 
 maintaining semantic integrity and performance characteristics.
 """
 
-from astToolkit import Be, DOT, Grab, IfThis, Make, NodeChanger, NodeTourist, Then, 木
+from astToolkit import Be, DOT, Grab, IfThis, Make, NodeChanger, NodeTourist, Then
 from collections.abc import Mapping
 from copy import deepcopy
 from hunterMakesPy import raiseIfNone
@@ -312,7 +312,7 @@ def unjoinBinOP(astAST: ast.AST, operator: type[ast.operator] = ast.operator) ->
 
 	return list_ast_expr
 
-def unparseFindReplace(astTree: 木, mappingFindReplaceNodes: Mapping[ast.AST, ast.AST]) -> 木:
+def unparseFindReplace[木: ast.AST, 文件: ast.AST, 文义](astTree: 木, mappingFindReplaceNodes: Mapping[文件, 文义]) -> 木:
 	"""
 	Recursively replace AST (Abstract Syntax Tree) nodes based on a mapping of find-replace pairs.
 

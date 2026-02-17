@@ -2,37 +2,33 @@
 
 (AI generated docstring)
 
-This module provides the foundational visitor infrastructure for the astToolkit package, implementing the
-antecedent-action pattern through specialized AST traversal classes. These classes enable precise, type-safe AST
-operations by combining predicate functions (antecedents) with action functions (consequents).
+This module provides the foundational visitor infrastructure for the astToolkit package, implementing the antecedent-action
+pattern through specialized AST traversal classes. These classes enable precise, type-safe AST operations by combining predicate
+functions (antecedents) with action functions (consequents).
 
-The antecedent-action pattern forms the conceptual core of astToolkit's design. Antecedents are predicate functions
-that identify target nodes using tools like `Be` type guards, `IfThis` predicates. Actions are consequent functions that specify operations to perform on matched nodes using tools like
-`Then` actions, `Grab` transformations, or custom operations.
+The antecedent-action pattern forms the conceptual core of astToolkit's design. Antecedents are predicate functions that identify
+target nodes using tools like `Be` type guards, `IfThis` predicates. Actions are consequent functions that specify operations to
+perform on matched nodes using tools like `Then` actions, `Grab` transformations, or custom operations.
 
 This module contains two complementary visitor classes that extend Python's built-in AST visitor pattern:
 
-`NodeTourist` extends `ast.NodeVisitor` for read-only AST traversal and information extraction. It applies action
-functions to nodes that satisfy predicate conditions, capturing results without modifying the original AST
-structure. This class enables analysis workflows, validation operations, and data extraction tasks where the AST
-should remain unmodified.
+`NodeTourist` extends `ast.NodeVisitor` for read-only AST traversal and information extraction. It applies action functions to
+nodes that satisfy predicate conditions, capturing results without modifying the original AST structure. This class enables
+analysis workflows, validation operations, and data extraction tasks where the AST should remain unmodified.
 
-`NodeChanger` extends `ast.NodeTransformer` for destructive AST modification and code transformation. It
-selectively transforms nodes that satisfy predicate conditions, enabling targeted changes while preserving overall
-tree structure and semantics. This class forms the foundation for code optimization, refactoring, and generation
-workflows.
+`NodeChanger` extends `ast.NodeTransformer` for destructive AST modification and code transformation. It selectively transforms
+nodes that satisfy predicate conditions, enabling targeted changes while preserving overall tree structure and semantics. This
+class forms the foundation for code optimization, refactoring, and generation workflows.
 
-Both classes support generic type parameters for type-safe node matching and result handling, integrating
-seamlessly with astToolkit's type system and atomic classes to create composable, maintainable AST manipulation
-code.
+Both classes support generic type parameters for type-safe node matching and result handling, integrating seamlessly with
+astToolkit's type system and atomic classes to create composable, maintainable AST manipulation code.
 """
 
-from astToolkit import 归个, 木
 from collections.abc import Callable
-from typing import cast, Generic, TypeIs
+from typing import cast, TypeIs
 import ast
 
-class NodeTourist(ast.NodeVisitor, Generic[木, 归个]):  # noqa: UP046
+class NodeTourist[木: ast.AST, 归个](ast.NodeVisitor):
 	"""Read-only AST visitor that extracts information from nodes matching predicate conditions.
 
 	(AI generated docstring)
@@ -75,8 +71,8 @@ class NodeTourist(ast.NodeVisitor, Generic[木, 归个]):  # noqa: UP046
 	"""
 
 	def __init__(self, findThis: Callable[[ast.AST], TypeIs[木] | bool], doThat: Callable[[木], 归个]) -> None:
-		self.findThis = findThis
-		self.doThat = doThat
+		self.findThis: Callable[[ast.AST], TypeIs[木] | bool] = findThis
+		self.doThat: Callable[[木], 归个] = doThat
 		self.nodeCaptured: 归个 | None = None
 
 	def visit(self, node: ast.AST) -> None:
@@ -133,7 +129,7 @@ class NodeTourist(ast.NodeVisitor, Generic[木, 归个]):  # noqa: UP046
 		self.visit(node)
 		return self.nodeCaptured
 
-class NodeChanger(ast.NodeTransformer, Generic[木, 归个]):  # noqa: UP046
+class NodeChanger[木: ast.AST, 归个](ast.NodeTransformer):
 	"""Destructive AST transformer that selectively modifies nodes matching predicate conditions.
 
 	(AI generated docstring)
@@ -182,8 +178,8 @@ class NodeChanger(ast.NodeTransformer, Generic[木, 归个]):  # noqa: UP046
 	"""
 
 	def __init__(self, findThis: Callable[[ast.AST], TypeIs[木] | bool], doThat: Callable[[木], 归个]) -> None:
-		self.findThis = findThis
-		self.doThat = doThat
+		self.findThis: Callable[[ast.AST], TypeIs[木] | bool] = findThis
+		self.doThat: Callable[[木], 归个] = doThat
 
 	def visit(self, node: ast.AST) -> 归个 | ast.AST:
 		"""Apply predicate and action functions during AST transformation.

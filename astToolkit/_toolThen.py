@@ -1,4 +1,3 @@
-from astToolkit import 归个
 from collections.abc import Callable, Mapping, Sequence
 from typing import Any
 import ast
@@ -134,7 +133,7 @@ class Then:
 		return
 
 	@staticmethod
-	def replaceWith(this: 归个) -> Callable[[Any], 归个]:
+	def replaceWith[归个](this: 归个) -> Callable[[Any], 归个]:
 		"""Replace matched nodes with a specified replacement node.
 
 		(AI generated docstring)
