@@ -93,7 +93,7 @@ class IfThis:
 			Predicate returning `True` if the node is an `ast.Assign` and its first target matches `targets0Predicate`.
 		"""
 		def workhorse(node: ast.AST) -> TypeIs[ast.Assign]:
-			return Be.Assign(node) and targets0Predicate(node.targets[0])
+			return Be.Assign(node) and targets0Predicate(node.targets[0])  # ty:ignore[unresolved-attribute]
 		return workhorse
 
 	@staticmethod
@@ -432,8 +432,8 @@ class IfThis:
 		"""
 		def workhorse(node: ast.AST) -> TypeIs[ast.UnaryOp]:
 			return (Be.UnaryOp(node)
-					and Be.Not(node.op)
-					and IfThis.isAttributeNamespaceIdentifier(namespace, identifier)(node.operand))
+					and Be.Not(node.op)  # ty:ignore[unresolved-attribute]
+					and IfThis.isAttributeNamespaceIdentifier(namespace, identifier)(node.operand))  # ty:ignore[unresolved-attribute]
 		return workhorse
 
 	@staticmethod

@@ -27,6 +27,13 @@
 		],
 		"description": "Anything (个, gè)"
 	},
+	"火": {
+		"prefix": "huo",
+		"body": [
+			"火"
+		],
+		"description": "Fire (火, Chinese: huǒ, Cantonese: fo2, Japanese: hi, Korean: hwa, Vietnamese: hỏa)"
+	},
 	"九": {
 		"prefix": "jiu",
 		"body": [
