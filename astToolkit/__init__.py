@@ -128,6 +128,6 @@ from astToolkit._toolIfThis import IfThis as IfThis
 from astToolkit._toolThen import Then as Then
 
 # isort: split
-from astToolkit._toolkitAST import (
+from astToolkit.getIt import (
 	extractClassDef as extractClassDef, extractFunctionDef as extractFunctionDef,
 	parseLogicalPath2astModule as parseLogicalPath2astModule, parsePathFilename2astModule as parsePathFilename2astModule)

@@ -1724,27 +1724,27 @@ class Make:
         def Interpolation(value: ast.expr, string: builtins.str, conversion: int, format_spec: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Interpolation:
             """Make an interpolation AST `object` for template strings.
 
-            (AI generated docstring.)
+        (AI generated docstring.)
 
-            The `ast.Interpolation` `object` represents a single interpolation within a template string. It captures the
-            expression being interpolated, along with any conversion flags and format specifiers.
+        The `ast.Interpolation` `object` represents a single interpolation within a template string. It captures the
+        expression being interpolated, along with any conversion flags and format specifiers.
 
-            Parameters
-            ----------
-            value : ast.expr
+        Parameters
+        ----------
+        value : ast.expr
             The expression to be evaluated and interpolated.
-            string : builtins.str
+        string : builtins.str
             The original string representation of the interpolation. https://github.com/python/cpython/issues/143661
-            conversion : int
+        conversion : int
             The conversion flag (e.g., -1 for none, 115 for 's', 114 for 'r', 97 for 'a').
-            format_spec : ast.expr | None = None
+        format_spec : ast.expr | None = None
             Optional format specifier expression.
 
-            Returns
-            -------
-            nodeInterpolation : ast.Interpolation
+        Returns
+        -------
+        nodeInterpolation : ast.Interpolation
             AST `object` representing an interpolation component of a template string.
-            """
+        """
             return ast.Interpolation(value=value, str=string, conversion=conversion, format_spec=format_spec, **keywordArguments)
 
     @staticmethod
@@ -3068,21 +3068,21 @@ class Make:
         def TemplateStr(values: Sequence[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.TemplateStr:
             """Make a template string AST `object`.
 
-            (AI generated docstring.)
+        (AI generated docstring.)
 
-            The `ast.TemplateStr` `object` represents a template string. It consists of a sequence of components which can
-            be constant strings or interpolations.
+        The `ast.TemplateStr` `object` represents a template string. It consists of a sequence of components which can
+        be constant strings or interpolations.
 
-            Parameters
-            ----------
-            values : Sequence[ast.expr]
+        Parameters
+        ----------
+        values : Sequence[ast.expr]
             A sequence of nodes (typically `ast.Constant` or `ast.Interpolation`) forming the template string.
 
-            Returns
-            -------
-            templateString : ast.TemplateStr
+        Returns
+        -------
+        templateString : ast.TemplateStr
             AST `object` representing a template string.
-            """
+        """
             return ast.TemplateStr(values=list(values), **keywordArguments)
 
     @staticmethod

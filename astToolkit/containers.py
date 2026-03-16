@@ -3,35 +3,31 @@ Container classes for programmatic Python module assembly and code generation.
 
 (AI generated docstring)
 
-This module provides the foundational container classes for building Python modules
-programmatically through an assembly line approach. The containers track import dependencies,
-organize code components, and generate complete, executable Python modules.
+This module provides the foundational container classes for building Python modules programmatically through an assembly line
+approach. The containers track import dependencies, organize code components, and generate complete, executable Python modules.
 
-The module implements three core container classes that work together to enable sophisticated
-code generation and transformation workflows:
+The module implements three core container classes that work together to enable sophisticated code generation and transformation
+workflows:
 
 1. `LedgerOfImports`: Smart dependency tracking for import statements, consolidating and
-	deduplicating imports from multiple sources while maintaining proper organization.
+    deduplicating imports from multiple sources while maintaining proper organization.
 
 2. `IngredientsFunction`: Encapsulates a function definition with its import dependencies,
-	creating a portable, transformable unit that can be analyzed, optimized, and transplanted
-	between modules.
+    creating a portable, transformable unit that can be analyzed, optimized, and transplanted between modules.
 
 3. `IngredientsModule`: The complete module builder that assembles imports, functions, and
-	supporting code sections into executable Python modules with proper formatting and
-	optimization.
+    supporting code sections into executable Python modules with proper formatting and optimization.
 
-These containers follow the assembly line pattern where components are collected, transformed,
-and systematically assembled into final output. This approach is particularly useful for:
+These containers follow the assembly line pattern where components are collected, transformed, and systematically assembled into
+final output. This approach is particularly useful for:
 
 - Extracting functions from existing modules and reassembling them with transformations.
 - Building optimized code variants through function inlining and parameter optimization.
 - Generating complete Python modules from templates or programmatic specifications.
 - Research workflows requiring systematic code modification and testing.
 
-The containers handle the mechanical details of import management, code organization, and
-formatting, allowing transformation logic to focus on semantic changes rather than syntactic
-concerns.
+The containers handle the mechanical details of import management, code organization, and formatting, allowing transformation
+logic to focus on semantic changes rather than syntactic concerns.
 """
 
 from astToolkit import extractFunctionDef, identifierDotAttribute, Make

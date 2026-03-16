@@ -31,8 +31,8 @@ from copy import deepcopy
 from hunterMakesPy import raiseIfNone
 from hunterMakesPy.filesystemToolkit import settings_autoflakeDEFAULT, writePython
 from os import PathLike
-from pathlib import PurePath
-from typing import Any
+from pathlib import Path, PurePath
+from typing import Any, overload
 import ast
 import io
 
@@ -55,7 +55,7 @@ def makeDictionaryAsyncFunctionDef(astAST: ast.AST) -> dict[str, ast.AsyncFuncti
 		A dictionary of identifier to `ast.AsyncFunctionDef`.
 	"""
 	dictionaryIdentifier2AsyncFunctionDef: dict[str, ast.AsyncFunctionDef] = {}
-	NodeTourist(Be.AsyncFunctionDef, Then.updateKeyValueIn(DOT.name, Then.extractIt, dictionaryIdentifier2AsyncFunctionDef)).visit(astAST)
+	NodeTourist(Be.AsyncFunctionDef, Then.updateKeyValueIn(DOT.name, Then.extractIt, dictionaryIdentifier2AsyncFunctionDef)).visit(astAST)  # ty:ignore[invalid-argument-type] https://github.com/astral-sh/ty/issues/2799
 	return dictionaryIdentifier2AsyncFunctionDef
 
 def makeDictionaryClassDef(astAST: ast.AST) -> dict[str, ast.ClassDef]:
@@ -77,7 +77,7 @@ def makeDictionaryClassDef(astAST: ast.AST) -> dict[str, ast.ClassDef]:
 		A dictionary of identifier to `ast.ClassDef`.
 	"""
 	dictionaryIdentifier2ClassDef: dict[str, ast.ClassDef] = {}
-	NodeTourist(Be.ClassDef, Then.updateKeyValueIn(DOT.name, Then.extractIt, dictionaryIdentifier2ClassDef)).visit(astAST)
+	NodeTourist(Be.ClassDef, Then.updateKeyValueIn(DOT.name, Then.extractIt, dictionaryIdentifier2ClassDef)).visit(astAST)  # ty:ignore[invalid-argument-type]
 	return dictionaryIdentifier2ClassDef
 
 def makeDictionaryFunctionDef(astAST: ast.AST) -> dict[str, ast.FunctionDef]:
@@ -99,7 +99,7 @@ def makeDictionaryFunctionDef(astAST: ast.AST) -> dict[str, ast.FunctionDef]:
 		A dictionary of identifier to `ast.FunctionDef`.
 	"""
 	dictionaryIdentifier2FunctionDef: dict[str, ast.FunctionDef] = {}
-	NodeTourist(Be.FunctionDef, Then.updateKeyValueIn(DOT.name, Then.extractIt, dictionaryIdentifier2FunctionDef)).visit(astAST)
+	NodeTourist(Be.FunctionDef, Then.updateKeyValueIn(DOT.name, Then.extractIt, dictionaryIdentifier2FunctionDef)).visit(astAST)  # ty:ignore[invalid-argument-type]
 	return dictionaryIdentifier2FunctionDef
 
 def makeDictionaryMosDef(astAST: ast.AST) -> dict[str, ast.AsyncFunctionDef | ast.ClassDef | ast.FunctionDef]:
@@ -223,7 +223,7 @@ def pythonCode2ast_expr(string: str) -> ast.expr:
 	This prototype "shortcut" function has approximately 482 *implied* constraints and pitfalls. If you can't get it to do what
 	you want, I recommend saving yourself a bunch of stress and not using this shortcut.
 	"""
-	return raiseIfNone(NodeTourist(Be.Expr, Then.extractIt(DOT.value)).captureLastMatch(ast.parse(string)))
+	return raiseIfNone(NodeTourist(Be.Expr, Then.extractIt(DOT.value)).captureLastMatch(ast.parse(string)))  # ty:ignore[invalid-return-type]
 
 def removeUnusedParameters(FunctionDef: ast.FunctionDef) -> ast.FunctionDef:
 	"""
@@ -352,7 +352,11 @@ def unparseFindReplace[木: ast.AST, 文件: ast.AST, 文义](astTree: 木, mapp
 			astTree = deepcopy(newTree)
 	return newTree
 
-def write_astModule(astModule: ast.Module, pathFilename: PathLike[Any] | PurePath | io.TextIOBase, settings: dict[str, dict[str, Any]] | None = None, identifierPackage: str='') -> None:
+@overload
+def write_astModule(astModule: ast.Module, pathFilename: PathLike[Any] | PurePath, settings: dict[str, dict[str, Any]] | None = None, identifierPackage: str='') -> Path: ...
+@overload
+def write_astModule(astModule: ast.Module, pathFilename: io.TextIOBase, settings: dict[str, dict[str, Any]] | None = None, identifierPackage: str='') ->  io.TextIOBase: ...
+def write_astModule(astModule: ast.Module, pathFilename: PathLike[Any] | PurePath | io.TextIOBase, settings: dict[str, dict[str, Any]] | None = None, identifierPackage: str='') -> Path | io.TextIOBase:
 	"""
 	Convert an AST module to Python source code and write it to a file or stream.
 
@@ -385,5 +389,5 @@ def write_astModule(astModule: ast.Module, pathFilename: PathLike[Any] | PurePat
 	pythonSource: str = ast.unparse(astModule)
 	if identifierPackage and not settings:
 		settings = {'autoflake': settings_autoflakeDEFAULT}
-		settings['autoflake']['additional_imports'].append(identifierPackage)
-	writePython(pythonSource, pathFilename, settings)
+		settings['autoflake']['additional_imports'].append(identifierPackage)  # ty:ignore[unresolved-attribute]
+	return writePython(pythonSource, pathFilename, settings)

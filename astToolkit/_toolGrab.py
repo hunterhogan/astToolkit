@@ -1920,25 +1920,25 @@ class Grab:
         def strAttribute(action: Callable[[str], str]) -> Callable[[hasDOTstr], hasDOTstr]:
             """Apply a function to the `str` attribute of a 'node' of `type` `hasDOTstr`.
 
-            The `type` of the `str` attribute is `something` for [any of] `class` `ast.IDK`.  If `type` were represented by
-            a `TypeVar`, I would tell you what the ideogram is.  If `str` could be a second type, I would tell you it is
-            `type` `somethingElse` for [any of] `class` `ast.FML`.
+        The `type` of the `str` attribute is `something` for [any of] `class` `ast.IDK`.  If `type` were represented by
+        a `TypeVar`, I would tell you what the ideogram is.  If `str` could be a second type, I would tell you it is
+        `type` `somethingElse` for [any of] `class` `ast.FML`.
 
-            Parameters
-            ----------
-            action : Callable[[str], str]
+        Parameters
+        ----------
+        action : Callable[[str], str]
             A function with one parameter and a `return` of the same `type`.
 
-            Returns
-            -------
-            workhorse : Callable[[hasDOTstr], hasDOTstr]
+        Returns
+        -------
+        workhorse : Callable[[hasDOTstr], hasDOTstr]
             A function with one parameter for a 'node' of `type` `hasDOTstr` and a `return` of the same `type`.
 
-            Type Checker Error?
-            -------------------
-            If you use `Grab` with one level of complexity, your type checker will give you accurate guidance. With two levels of complexity, such as nesting `Grab`
-            in another `Grab`, your type checker will be angry. I recommend `typing.cast()`. The fault is mine: the 'type safety' of `Grab` is inherently limited.
-            """
+        Type Checker Error?
+        -------------------
+        If you use `Grab` with one level of complexity, your type checker will give you accurate guidance. With two levels of complexity, such as nesting `Grab`
+        in another `Grab`, your type checker will be angry. I recommend `typing.cast()`. The fault is mine: the 'type safety' of `Grab` is inherently limited.
+        """
 
             def workhorse(node: hasDOTstr) -> hasDOTstr:
                 setattr(node, 'str', action(getattr(node, 'str')))

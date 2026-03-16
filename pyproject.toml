@@ -1,6 +1,6 @@
 [project]
 name = "astToolkit"
-version = "0.11.0"
+version = "0.11.1"
 description = "A powerfully composable, type-safe toolkit for Python abstract syntax tree (AST) manipulation, analysis, transformation, and code generation with a layered architecture designed for building sophisticated code processing assembly-lines."
 readme = "README.md"
 requires-python = ">=3.13"
@@ -46,7 +46,7 @@ classifiers = [
 ]
 urls = { Donate = "https://www.patreon.com/integrated", Homepage = "https://github.com/hunterhogan/astToolkit", Issues = "https://github.com/hunterhogan/astToolkit/issues", Repository = "https://github.com/hunterhogan/astToolkit.git" }
 dependencies = [
-  "hunterMakesPy>=0.3.0",
+  "hunterMakesPy>=0.4.3",
 ]
 optional-dependencies = { testing = [
   "pytest-cov",
@@ -79,7 +79,7 @@ testpaths = ["tests"]
 
 [tool.setuptools]
 package-data = { "*" = ["py.typed"] }
-packages = { find = {  } }
+packages = { find = {} }
 
 [tool.updateCitation]
 filenameCitationDOTcff = "CITATION.cff"
