@@ -31,6 +31,9 @@ logic to focus on semantic changes rather than syntactic concerns.
 """
 
 from astToolkit import extractFunctionDef, identifierDotAttribute, Make
+from astToolkit._namespaceUncertainty import (
+	makeDictionaryAsyncFunctionDef as makeDictionaryAsyncFunctionDef, makeDictionaryClassDef as makeDictionaryClassDef,
+	makeDictionaryFunctionDef as makeDictionaryFunctionDef, makeDictionaryMosDef as makeDictionaryMosDef)
 from astToolkit.transformationTools import removeUnusedParameters, write_astModule
 from collections import defaultdict
 from collections.abc import Iterable, Sequence

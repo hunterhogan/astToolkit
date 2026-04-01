@@ -16,17 +16,12 @@ jobs:
   updateCitation:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
-          python-version: ">=3.11"
-
-      - name: Cache, pip
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: pip-a-dee-doo-dah
-          restore-keys: pip-a-dee-doo-dah
+          python-version: '>=3.13'
+          cache: pip
+          cache-dependency-path: pyproject.toml
 
       - name: Install and run updateCitation
         run: |

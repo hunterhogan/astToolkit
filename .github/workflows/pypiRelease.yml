@@ -15,16 +15,16 @@ permissions:
 
 jobs:
   check-version:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' || github.event_name == 'release' }}
     runs-on: ubuntu-latest
     outputs:
       should_publish: ${{ steps.check.outputs.should_publish }}
       url: ${{ steps.check.outputs.url }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
-          python-version: "3.11"
+          python-version: '>=3.13'
       - name: Check PyPI version
         id: check
         run: |
@@ -39,24 +39,8 @@ jobs:
               appendStream.write(f'url=https://pypi.org/project/{name}/{version}\n')
           "
 
-  release-build:
-    needs: check-version
-    if: needs.check-version.outputs.should_publish == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
-      - run: pipx run build
-      - name: Upload distributions
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-dists
-          path: dist/
-
   pypi-publish:
-    needs: [check-version, release-build]
+    needs: check-version
     if: needs.check-version.outputs.should_publish == 'true'
     runs-on: ubuntu-latest
     environment:
@@ -65,12 +49,13 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - name: Retrieve release distributions
-        uses: actions/download-artifact@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
-          name: release-dists
-          path: dist/
+          python-version: '>=3.13'
+      - run: pipx run build --sdist
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@76f52bc884231f62b9a034ebfe128415bbaabdfc #v1.12.2
+        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e #v1.13.0
         with:
+          attestations: false
           packages-dir: dist/

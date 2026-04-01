@@ -1,5 +1,5 @@
 """Automatically generated file, so changes may be overwritten."""
-from astToolkit import 木
+from astToolkit.theTypes import 木
 from collections.abc import Callable, Sequence
 from typing import Any, TypeIs
 import ast

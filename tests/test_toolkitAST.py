@@ -1,7 +1,6 @@
 """Tests for the _toolkitAST module using parametrized tests and DRY principles."""
 # pyright: standard
-from astToolkit import (
-	extractClassDef, extractFunctionDef, Make, parseLogicalPath2astModule, parsePathFilename2astModule)
+from astToolkit import extractClassDef, extractFunctionDef, Make, parseLogicalPath2astModule, parsePathFilename2astModule
 from pathlib import Path
 from typing import Any
 import ast
@@ -25,13 +24,13 @@ class TestParseLogicalPath2astModule:
 
 	def testParseLogicalPathProjectModule(self) -> None:
 		"""Test parseLogicalPath2astModule with project's own module."""
-		resultModule = parseLogicalPath2astModule("astToolkit._toolkitAST")
+		resultModule = parseLogicalPath2astModule("astToolkit._namespaceUncertainty")
 
-		assert resultModule is not None, "parseLogicalPath2astModule should parse astToolkit._toolkitAST"
+		assert resultModule is not None, "parseLogicalPath2astModule should parse astToolkit._namespaceUncertainty"
 		assert isinstance(resultModule, ast.Module), "Result should be ast.Module"
 		assert len(resultModule.body) > 0, "Module body should not be empty"
 
-		# Verify we can find the functions we know exist in _toolkitAST
+		# Verify we can find the functions we know exist in _namespaceUncertainty
 		functionExtractClassDef = extractFunctionDef(resultModule, "extractClassDef")
 		assert functionExtractClassDef is not None, "Should find extractClassDef function"
 
