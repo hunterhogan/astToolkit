@@ -1,6 +1,25 @@
 extend = "pyproject.toml"
 
+line-length = 140
+
 [lint]
+preview = true
+allowed-confusables = [
+  "′",
+  "×",
+  "−",
+  "∨",
+  "∪",
+  "⊗",
+  "ℓ",
+  "–",
+  "ℒ",
+  "ℝ",
+  "α",
+  "γ",
+  "ρ",
+  "σ",
+]
 ignore = [
   "ANN401",
   "C901",
@@ -13,7 +32,7 @@ ignore = [
   "F401",
   "FIX",
   "FLY002",
-  "I001",
+  "I",
   "N",
   "PGH004",
   "PLC0105",
@@ -38,20 +57,40 @@ ignore = [
   "S603",
   "SIM108",
   "SIM300",
-  "TC001",
-  "TC002",
-  "TC003",
-  "TC006",
   "TD",
   "W191",
   "W292",
+  # preview rules
+  "CPY001",
+  "D420",
+  "DOC102",
+  "E265",
+  "E302",
+  "E303",
+  "E305",
+  "PLR0914",
+  "PLR0917",
+  "S403",
 ]
 select = ["ALL"]
 task-tags = ["DEVELOPMENT", "NOTE", "SEMIOTICS", "TODO"]
 
 [lint.flake8-import-conventions]
-aliases = { numpy = "numpy", pandas = "pandas", "re" = "regex" }
-banned-aliases = { numpy = ["np"], pandas = ["pd"], regex=["re"] }
+banned-aliases = { numpy = ["np"], pandas = ["pd"], regex = ["re"] }
+
+[lint.flake8-import-conventions.aliases]
+"accelerate.utils.dataclasses" = "accelerate_dataclasses"
+"fs.path" = "fs_path"
+"itertools.product" = "CartesianProduct"
+"torch.autograd.grad" = "torch_grad"
+"torch.nn.functional" = "F"
+"torch.nn.parallel.DistributedDataParallel" = "DDP"
+numpy = "numpy"
+pandas = "pandas"
+re = "regex"
+
+[lint.flake8-quotes]
+inline-quotes = "single"
 
 [lint.per-file-ignores]
 "__init__.py" = ["PLC0414"]
@@ -70,4 +109,7 @@ banned-aliases = { numpy = ["np"], pandas = ["pd"], regex=["re"] }
 convention = "numpy"
 
 [format]
+docstring-code-format = true
+quote-style = "single"
 indent-style = "tab"
+skip-magic-trailing-comma = true

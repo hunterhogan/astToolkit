@@ -49,7 +49,7 @@ message: str = f"I received `{dimensionLength = }`, but I need a value greater t
 message: str = f"I received '{computationDivisionsAsString}' for `computationDivisions`, but this value is not supported."
 ```
 
-Wrap identifiers in backticks within the message string for visual distinction.
+Enclose identifiers in backticks within the message string for visual distinction.
 
 ## Message Content Principles
 
@@ -151,6 +151,6 @@ Never use ANSI codes in exception messages or log entries—only for direct term
 
 ### Backtick Usage
 
-- Wrap all identifiers in backticks: `` `parameterName` ``, `` `ValueError` ``
-- Wrap Python keywords in backticks: `` `None` ``, `` `True` ``
+- Enclose all identifiers in backticks: `` `parameterName` ``, `` `ValueError` ``
+- Enclose Python keywords in backticks: `` `None` ``, `` `True` ``
 - Use backticks for code elements referenced in prose

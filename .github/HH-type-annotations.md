@@ -2,6 +2,10 @@
 
 Standards for Python type annotations emphasizing precision, completeness, modern syntax (PEP 585/604), and paradigm improvements (TypedDict, Protocol, TypeVar, overload).
 
+## DO NOT CHANGE THE LOGIC OR FORMATTING OR DOCSTRINGS OR IDENTIFIERS
+
+Your job is type annotations. Full stop.
+
 ## Core Philosophy
 
 Type annotations are engineering tools that prevent bugs, communicate intent to human readers, and enable editor/tooling assistance. Every annotation must carry practical value. Completeness matters: annotate everything precisely—every function signature (all parameters and return types), every variable binding, every class attribute.

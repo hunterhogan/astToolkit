@@ -2,25 +2,64 @@
 name: Docstring Standards
 description: Standards for Python docstrings.
 ---
-# Python Docstring Standards
+# Write Consistent, Precise NumPy-style Docstrings
 
-Standards for Python docstrings. These standards conform to NumPy style [1] with the following modifications.
+Use [NumPy v1.10 style](https://numpydoc.readthedocs.io/en/v1.10.0/format.html#docstring-standard) with the following modifications and additions.
+
+## Modifications to the NumPy Docstring Standards
 
 1. Replace the generic "Notes" section with one or more semantic section names instead.
 2. Public, non-method attributes must be documented.
 3. Use Unicode for all mathematical symbols, not LaTeX.
 4. Use plain text with NumPy-style section headers, not reStructuredText.
+5. In a `class` docstring, put the Parameters section in the `__init__` method docstring, not the class docstring.
 
-[1] numpydoc v1.10.0 Style guide
-    <https://numpydoc.readthedocs.io/en/v1.10.0/format.html#docstring-standard>
+## Technical Syntax
 
-**Audience.** The audience for docstrings includes human developers (two-thirds of whom are non-native English speakers), machine translation tools, and AI assistants that consume docstrings for code generation, analysis, and retrieval.
+- **Triple double quotes.** Always use `"""`, never `'''`.
+- **Full stops.** End every sentence with a full stop, including the summary line.
+- **No end-of-line colons in prose.** Machine parsers may interpret a trailing colon as syntax. Restructure the sentence instead.
+- **No LaTeX.** Use Unicode characters for all mathematical symbols (e.g., ×, ÷, √, ∑, ≤, ∈, →).
+- **No reST.** Do not use reStructuredText directives, roles, or markup (e.g., no `.. note::`, no `:param:`, no `:math:`). Write plain text with NumPy-style section headers.
+- **Indentation.** Follow the project `.editorconfig` for indentation width and type. Within a docstring, indent continuation lines by one level relative to the section entry.
+- **Line length.** Aim for about 102 characters per docstring line. Break earlier when it improves scanning.
 
 ## Docstring Layout
 
-This section shows the structural template for each kind of Python identifier. All examples use four-space indentation; follow the project `.editorconfig` for the actual indentation width and type.
+### Sections and their Order Within a Docstring
 
-### Functions
+1. Summary line (on the same line as the opening triple quotes)
+2. (AI generated docstring) marker, if applicable
+3. Non-technical description
+4. Technical section(s), when applicable
+5. `Parameters`
+6. `Returns` or `Yields`
+7. `Raises`, judicious, not comprehensive
+8. `Warns`, judicious, not comprehensive
+9. `Other Parameters`
+10. `See Also`
+11. Extended discussions, details, warnings, gotchas, notes, and other information too lengthy or too narrow to put in a description: section names should have semantic value. Never use "Notes".
+12. `Examples`
+13. `References`
+
+### Formatting a Docstring Section
+
+Use this structure for named sections unless a later subsection defines a specialized layout:
+
+```text
+[blank line]
+Section Name
+------------
+entry : datatype
+    Definition or description.
+entry : datatype = defaultValue
+    Definition or description.
+```
+
+For `Mathematics` entries, the description may be a fenced block. Align the opening and closing
+fences with the entry label, and indent the fenced contents one additional level.
+
+### Formatting a Function
 
 ```python
 def exampleFunction(parameterFirst: int, parameterSecond: str = "default") -> bool:
@@ -51,71 +90,7 @@ def exampleFunction(parameterFirst: int, parameterSecond: str = "default") -> bo
     """
 ```
 
-#### Section order within a function docstring
-
-1. Summary line (on the same line as the opening triple quotes)
-2. (AI generated docstring) marker, if applicable
-3. Extended description
-4. `Parameters`
-5. `Returns` or `Yields`
-6. `Raises`
-7. `Warns`
-8. `Other Parameters`
-9. `See Also`
-10. Custom-named sections (e.g., `Mathematical Basis`, `Algorithm Details`)
-11. `Examples`
-12. `References`
-
-#### Section Formatting
-
-Use this exact structure for all named sections:
-
-```text
-[blank line]
-Section Name
-------------
-entry : datatype
-    Definition or description.
-entry : datatype = defaultValue
-    Definition or description.
-```
-
-### Classes
-
-Document the constructor (`__init__`) parameters in the class docstring. An `Attributes` section lists all public, non-method attributes.
-
-```python
-class ExampleClass:
-    """Manage map folding computation state.
-
-    (AI generated docstring)
-
-    You can use this class to encapsulate and manage the state needed for parallel
-    map-folding computations. Extended description of behavior and usage.
-
-    Parameters
-    ----------
-    dimensionCount : int
-        Number of dimensions in the map.
-
-    Attributes
-    ----------
-    attributeName : type
-        Description of the attribute.
-    """
-```
-
-If the class has many methods and only a few are central to typical usage, an optional `Methods` section may list those key methods with one-line descriptions.
-
-### Methods
-
-Document methods the same way as functions. Do not include `self` or `cls` in the `Parameters` section. If a method has an equivalent module-level function, the function docstring should contain the detailed documentation; the method docstring should provide a brief summary and a `See Also` reference.
-
-### Class Constructor (`__init__`)
-
-The class docstring is the primary location for constructor documentation. An optional, separate `__init__` docstring may be added when the initialization logic is complex enough to warrant its own extended description. Do not duplicate parameter documentation between the class docstring and `__init__`.
-
-### Modules
+### Formatting a Module
 
 Place the module docstring at the very top of the file, before imports. Include a table of contents listing all public identifiers.
 
@@ -144,7 +119,7 @@ Classes
 import ...
 ```
 
-**Include all public identifiers in the table of contents.**
+#### Include all public identifiers in the table of contents
 
 - List all public functions, classes, and other exported identifiers.
 - If there are sections (`#======== Boolean filters ====`) and subsections (`#---- Specific filters ----`), reflect that hierarchy.
@@ -152,7 +127,7 @@ import ...
 - Provide one-line descriptions for each item.
 - Omit private identifiers (those starting with `_`).
 
-### Package `__init__.py`
+### Formatting a Package `__init__.py`
 
 Document what the package exposes and its organizational purpose. Include a table of contents of public modules and subpackages.
 
@@ -183,20 +158,20 @@ _e
 """
 ```
 
-**Include all public modules and subpackages in the table of contents.**
+#### Include all public modules and subpackages in the table of contents
 
 - List public modules with brief descriptions.
 - List subpackages with brief descriptions.
 - Use section headers (`Modules`, `Subpackages`) with dashed underlines.
 - Omit private modules (starting with `_`) unless they are documented internal APIs.
 
-### Top-Level Package `__init__.py`
+### Formatting a Top-Level Package `__init__.py`
 
 The top-level `__init__.py` follows the same format as any package `__init__.py`, but the extended description should also state the package's purpose and scope for users encountering it for the first time.
 
-### Variables and Constants
+### Documenting and Formatting Variables and ~~Constants~~
 
-Public class-level and instance-level variables must be documented, either in the class `Attributes` section, as an inline docstring immediately after the assignment, or both.
+Public class-level and instance-level variables must be documented, either in the class `Attributes` section, as an inline docstring immediately after the assignment, or both. Python does not have constants: never describe something as a constant.
 
 ```python
 class Configuration:
@@ -216,18 +191,7 @@ class Configuration:
     """The default setting value applied when no override is provided."""
 ```
 
-Module-level constants follow the same sections as functions where applicable: summary, extended description, `See Also`, `References`, `Examples`.
-
-## Technical Syntax
-
-These rules are mechanical and require no interpretation.
-
-- **Triple double quotes.** Always use `"""`, never `'''`.
-- **Full stops.** End every sentence with a full stop, including the summary line.
-- **No end-of-line colons in prose.** Machine parsers may interpret a trailing colon as syntax. Restructure the sentence instead.
-- **No LaTeX.** Use Unicode characters for all mathematical symbols (e.g., ×, ÷, √, ∑, ≤, ∈, →).
-- **No reST.** Do not use reStructuredText directives, roles, or markup (e.g., no `.. note::`, no `:param:`, no `:math:`). Write plain text with NumPy-style section headers.
-- **Indentation.** Follow the project `.editorconfig` for indentation width and type. Within a docstring, indent continuation lines by one level relative to the section entry.
+Module-level variables follow the same sections as functions where applicable: summary, extended description, `See Also`, `References`, `Examples`.
 
 ## Docstring Sections
 
@@ -235,18 +199,11 @@ These rules are mechanical and require no interpretation.
 
 **For public identifiers** (functions, classes, methods, variables without leading underscore):
 
-The summary line must be written as **a second-person declarative clause expressing dynamic modality with an implied subject**.
+Write the summary line as an implied `You can ...` sentence without the words `You can`.
 
-- **Second person with implied subject**: Address the reader as "you" implicitly, omitting the explicit subject pronoun.
-- **Declarative**: State a fact or capability, not issue a command.
-- **Dynamic modality**: Express ability, possibility, or permission using modal verbs like "can", "may", "will", or present tense with capability implications.
-- **Terse**: Keep the summary line concise by using Subject-Verb-Object structure with the subject implied.
-
-**Start with the verb on the opening `"""` line and end with a full stop.**
-
-- Start the summary on the same line as the opening triple quotes.
-- Start with the verb directly (implied "you can" or "you may").
-- Follow with the object and any essential modifiers.
+- Start with a verb on the opening `"""` line.
+- State what the identifier lets the reader do, inspect, compute, or obtain.
+- Keep the summary short.
 - End with a full stop.
 
 - ✅ Correct: "Express descending iteration or a reverse direction."
@@ -254,18 +211,24 @@ The summary line must be written as **a second-person declarative clause express
 - ✅ Correct: "Convert a pile range to an iterator of individual leaves."
 - ✅ Correct: "Validate folding constraints before computation."
 
+- **Tie the summary line to the signature.** If the signature contains opaque names such as `t`, `q`,
+  `k`, `x`, or `freqs`, include the role-bearing value in the summary line. The reader should learn
+  what the identifier acts on, produces, or exposes before reading the next sentence.
+
 - ❌ Incorrect: "You can express descending iteration." (explicit subject - too verbose for summary)
-- ❌ Incorrect: "Compute the total number of distinct map foldings." (imperative mood without modal - sounds commanding)
+- ❌ Incorrect: "Do the map-folding computation." (command-like and too vague)
 - ❌ Incorrect: "Computes foldings." (third person, not second person)
 - ❌ Incorrect: "Returns the iterator." (too passive, not focused on reader capability)
 
 **For private identifiers** (functions, classes, methods, variables with leading underscore):
 
-The summary line must be written in **first-person descriptive voice** explaining how the identifier functions within the codebase architecture.
+Write the summary line as an `I use this ...` sentence that explains the private identifier's role
+in the codebase.
 
-- **First person**: Use "I use this..." from the developer's perspective.
-- **Descriptive**: Explain the identifier's role in relation to other code, such as control flow, shared subroutines, or something else.
-- **Architectural focus**: Clarify how this private component fits into the larger system.
+- Use first person from the maintainer's perspective.
+- Explain how the identifier supports other code, such as control flow, caching, validation, or
+    adaptation.
+- Focus on architectural role, not just local behavior.
 
 - ✅ Correct: "I use this shared subroutine for validating input across multiple public methods."
 - ✅ Correct: "I use this to manage control flow between the preprocessing and computation phases."
@@ -275,13 +238,28 @@ The summary line must be written in **first-person descriptive voice** explainin
 - ❌ Incorrect: "Validates input." (third person - too passive, doesn't explain architectural role)
 - ❌ Incorrect: "Validate input before processing." (imperative - doesn't explain usage context)
 
-### Extended Description
-
-After the terse summary line, start the body text with an **explicit subject** ("You can...", "The identifier...", "This function...") to provide context and smooth the transition from the concise summary to the detailed explanation. The extended description should clarify functionality, not discuss implementation detail or background theory.
-
 ### AI-Generated Marker
 
 When creating a new docstring, place "(AI generated docstring)" on its own line after the summary line and a blank line. When reformatting an existing docstring, do NOT add or remove "(AI generated docstring)".
+
+### Non-technical Description for Non-specialists
+
+After the summary line, start the body text with an **explicit subject** such as "You can...",
+"This function...", or "The identifier...". Use the first paragraph to explain purpose, not
+implementation detail or background theory.
+
+Write this description for readers who may not know Python, PyTorch, the package, or the domain.
+The first paragraph should answer three questions:
+
+- What is the identifier for?
+- Which value does the identifier act on?
+- What does the identifier return or expose?
+
+Name opaque identifiers in plain language, for example query `Tensor` `q`, key `Tensor` `k`, input
+`Tensor` `t`, or angle `Tensor` `freqs`.
+
+Leave notation, broadcasting, cache windows, dtype rules, and other expert mechanics to technical
+sections unless those mechanics are the main user-facing point.
 
 ### Parameters
 
@@ -299,30 +277,102 @@ When creating a new docstring, place "(AI generated docstring)" on its own line 
 - Format: `meaningfulName : returnType`
 - For generators, use `Yields` instead of `Returns`.
 
-### Raises
-
-List exceptions that are non-obvious or have a significant chance of being raised.
-
 ### See Also
 
-Direct users to related functions they may not be aware of. Format:
+- Use `See Also` only when a reader could reasonably choose the referenced symbol instead of the
+    current symbol.
+- Do not use `See Also` for caller-callee relationships, implementation-detail relationships,
+    containment relationships, or dependency relationships. Use the non-technical description or
+    `References` instead.
+- Always format each `See Also` entry on two lines because formatters and IDE renderers are more
+    reliable with this layout.
 
 ```text
 See Also
 --------
-relatedFunction : One-line description of relatedFunction.
-anotherFunction, thirdFunction
+`alternativeSymbol`
+        One-line description.
+`package.other_module.AlternativeClass`
+        One-line description.
 ```
 
-### Use Descriptive Section Names Instead of "Notes"
+- When the referenced symbol is in the same module, use the local symbol name in backticks.
+- When the referenced symbol is in another module of the same package, use the full package path in
+    backticks.
 
-When additional information is needed beyond the standard sections, create a section with a descriptive name. Examples: `Mathematical Basis`, `Algorithm Details`, `Thread Safety`, `Concurrency`, `Memory Management`.
+### Make Section Names Predict Their Contents
 
-**Write `Mathematical Basis` sections for academic experts without simplification.** Use precise academic terms, standard Unicode notation, and establishing statements ("Let p be...") to bridge code identifiers and academic nomenclature.
+When additional information is needed beyond the standard sections, choose a section name that lets
+the reader predict the content before reading the body. Never use `Notes`.
 
-**Keep mathematical notation out of general sections.** Summary, Parameters, and Returns must remain accessible to non-specialists. Reserve dense notation for dedicated custom sections.
+- Good section names name one concrete topic, for example `Mathematics`, `PyTorch`,
+    `Shape Transformation`, `Caching`, `Position Alignment`, `Sequence Trimming`,
+    `Head-Axis Broadcasting`, or `Autocast Behavior`.
+- Avoid catch-all labels such as `Algorithm Details`, `Implementation Notes`, or `Technical Notes`.
+- Avoid broad systems labels such as `Concurrency` or `Memory Management` unless the section is
+    literally about concurrency or memory management.
 
-### Draw Examples from Real Usage, Never from Invention
+#### Use `Mathematics` for formal notation
+
+- Write `Mathematics` sections for academic experts without simplification.
+- A `Mathematics` entry should usually do three things in order: bridge from Python identifiers to
+    symbols, state the mathematics in pure notation, then bridge from symbols back to Python
+    identifiers.
+- Within a `Mathematics` entry, avoid prose sentences. Use establishing lines and equations.
+- Keep mathematical notation out of summary, non-technical description, parameters, and returns.
+- Because IDE renderers are finicky, use fenced blocks with the fences aligned to the entry label and
+    the fenced contents indented one additional level.
+
+##### Example 1
+
+quarter turn : equation
+```
+    Let  d ≜ `x.shape[-1]`,  y ≜ `rotated`
+
+    R(π/2) ≜ [[0, −1], [1, 0]]
+    (y₂ⱼ, y₂ⱼ₊₁) = R(π/2) · (x₂ⱼ, x₂ⱼ₊₁)   ∀ j ∈ {0, …, d/2 − 1}
+```
+
+last-axis reshaping : transformation
+```
+    Let  m ≜ d / 2
+
+    x ∈ ℝ^{…, 2m}
+    x ↦ x̃ ∈ ℝ^{…, m, 2}
+    (a, b) ↦ (−b, a)
+    x̃ ↦ y ∈ ℝ^{…, 2m}
+```
+
+##### Example 2
+
+rotated block : equation
+```
+    Let  Ω ≜ `freqs`,  s ≜ `scale`,  J ≜ `rotate_half()`
+         n ≜ `start_index`,  m ≜ n + `freqs.shape[-1]`
+         t = [tˡ ‖ tᵐ ‖ tʳ]
+
+    y = [tˡ ‖ tᵐ ⊙ cos Ω ⊙ s + J(tᵐ) ⊙ sin Ω ⊙ s ‖ tʳ]
+
+    where  y ≜ `out`
+```
+
+sequence trimming : equation
+```
+    Let  Ω₀ ≜ `freqs`,  L ≜ `t.shape[seq_dim]`
+         σ ≜ `freqs_seq_dim`,  N ≜ |Ω₀|_σ
+
+    N > L  ⟹  Ω = Ω₀_[N − L, N)
+    N ≤ L  ⟹  Ω = Ω₀
+```
+
+#### Use `PyTorch` for library-specific behavior
+
+- Use a `PyTorch` section when the detail is specific to torch semantics, broadcasting, buffers,
+    autocast, device placement, or API behavior.
+- If a PyTorch behavior can also be expressed mathematically, put the notation in `Mathematics` as
+    well. Use `PyTorch` to explain the torch-specific part.
+
+### Draw Examples from Real Usage, Never from Invention or Tests
 
 Private identifiers (starting with `_`) do not require an `Examples` section.
 
@@ -337,6 +387,7 @@ Examples must be drawn from actual usage in the codebase. To find examples, sear
 
 - Examples must follow the identifier and style conventions of the codebase.
 - Include context if needed for clarity (imports, setup, etc.).
+- Use triple-backtick code fences for all code examples, not REPL-style `>>>` prompts. Indent the code fence block one level deeper than the surrounding explanatory text.
 
 ### References
 
@@ -399,7 +450,7 @@ def exampleFunction(data: list[int]) -> int:
         Seminumerical Algorithms (3rd ed.). Addison-Wesley.
     [3] gmpy2 - Context7
         https://gmpy2.readthedocs.io/en/latest/
-    [4] mapFolding.basecamp.countFolds
+    [4] `mapFolding.basecamp.countFolds`
     """
 ```
 
@@ -409,10 +460,15 @@ def exampleFunction(data: list[int]) -> int:
 - Cite references in the text using `[1]`, `[2]`, etc., immediately after the relevant term or concept.
 - Multiple references for one concept: `[1, 2]` or `[1][2]` (be consistent within a docstring).
 - List references in order of first citation.
+- For same-package references, enclose the referenced module path or symbol name in backticks.
+- When the referenced symbol is in the same module, use only the local symbol name in backticks.
+- When the referenced symbol is in another module of the same package, use the full package path in
+    backticks.
+- Leave one blank line after each same-package reference entry because some IDE renderers collapse
+    consecutive one-line entries.
 - Include both title/description and URL for web resources.
 - For packages: prefer Context7 links when available.
 - For academic papers: include full citation (author, year, title, publication).
-- For internal package references: use module path, note "Internal package reference".
 
 **Prefer these documentation URLs when referencing these packages.** Add other packages as needed using the same pattern (Context7 when available, official documentation otherwise).
 
@@ -423,20 +479,25 @@ def exampleFunction(data: list[int]) -> int:
 - `gmpy2`: <https://gmpy2.readthedocs.io/en/latest/>
 - `numba`: <https://numba.readthedocs.io/en/stable/>
 
-## Writing Standards
+## Write Consistent, Precise Technical Documentation
+
+Technical documentation requires consistency and precision. Literary prose avoids repetition through synonyms and pronouns.
+
+### Write for Non-Native Speakers, Machine Translation, and AI Assistants
+
+The audience for these docstrings includes developers, researchers using Python as a tool, hobbyists, machine translators, and AI assistants. Two-thirds of the human audience are non-native English speakers, and half will use some machine translation.
+
+- **Use active voice**: "This function returns X" rather than "X is returned by this function".
+- **Use technical terms, not idioms or colloquialisms**: "fails quickly" not "bails out", "prevents errors" not "catches issues".
+- **Use consistent terms**: Machine translation and AI retrieval work better with repeated exact phrases.
+- **Be explicit and precise**: Avoid pronouns, cultural context, and implied knowledge.
+- **Short, complete sentences**: Better for parsing and translation than long, flowing prose.
 
 ### Repeat Identifiers Instead of Using Pronouns
 
-Literary prose avoids repetition through synonyms and pronouns. Technical documentation requires consistency and precision.
-
 - **Repeat nouns instead of using pronouns**: Write "`parameterFirst`" every time, not "it" or "the parameter".
 - **Repeat exact identifiers**: Don't vary between "`handler`", "the handler", or "this callback".
-- **Avoid synonyms for precision**: Don't alternate between "function" and "routine", or "list" and "sequence" unless they mean different things.
-- **Consistency aids comprehension**: Non-native speakers, machine translation tools, and AI assistants rely on consistent terminology.
-
-- Pronouns create ambiguity: "it" can refer to multiple prior nouns.
-- Synonyms suggest false distinctions: readers wonder if "handler" and "callback" mean different things.
-- Repetition in technical writing establishes clear, unambiguous reference chains.
+- **Use _the_ technical term, not synonyms**: Don't alternate, for example, between "function" and "routine". Synonyms suggest false distinctions: some readers will wonder if "handler" and "callback" mean different things.
 
 ❌ **Bad** (prose-style with pronouns and synonyms):
 
@@ -448,7 +509,7 @@ and pass the result to the callback, which processes it further.
 > Process `data` using `handler`. The `handler` transforms `data`
 and passes `data` to `handler`, which processes `data` further.
 
-### Use Backticks
+### Always Use Backticks for Code
 
 - Always use backticks when referring to:
   - Identifiers and other labels: `parameterName`, `className`
@@ -469,33 +530,25 @@ and passes `data` to `handler`, which processes `data` further.
   - ✅ Correct: "Enumerate each `dimensionIndex`." (Quantifier "each" precedes `dimensionIndex`)
 - **Reinforce meaning through context** rather than breaking identifiers for prose.
 
-### Qualify Ambiguous Terms
+### Say What an Ambiguous Term Refers To
 
-- Qualify ambiguous terms: "Python keyword `try`" not just "`try`".
+- Say what an ambiguous term refers to: "Python keyword `try`" not just "`try`".
 - Maintain precision: "`class` `Exception`" rather than "the `Exception` `class`".
-- Avoid compound hyphenation with technical terms: not "`Exception`-free" but "successful completion".
+- Avoid compound hyphenation with technical terms: not "`Exception`-free" "completion without an `Exception`".
 
 ### Never Use "Pipeline"
 
 - Never use "pipeline". Use "assembly line" if describing a sequence of transformations.
 
-### Separate General and Expert-Level Documentation
+### Put Purpose in Non-technical Sections and Mechanics in Technical Sections
 
-- **General Sections (Summary, Parameters, Returns)**: Write for a competent developer who may not be a domain expert. Avoid implementation-specific jargon (e.g., "mutable object", "thread-safe", "atomic") unless it is the primary function of the code.
-- **Technical Detail Sections**: Put implementation details, hardware constraints, or expert-level warnings in well-named custom sections (e.g., `Concurrency`, `Memory Management`, `Algorithm Details`).
-  - **Audience**: Experts who need to know.
-  - **Tone**: Efficient, precise, technical.
-  - **Constraint**: Do not explain standard concepts (like "don't share mutable objects between threads") to experts. Only document non-obvious behaviors or critical constraints.
+Use non-technical sections to answer **when and why** a reader would use the identifier. Use
+technical sections to answer **exactly how** the identifier works.
 
-### Write for Non-Native Speakers and Machine Translation
-
-Two-thirds of the human audience are non-native English speakers, half will use machine translation, and AI assistants consume docstrings for code generation and retrieval. Every guideline below serves these readers.
-
-- **Use simple sentence structures**: Avoid complex subordinate clauses when possible.
-- **Prefer active voice**: "This function returns X" rather than "X is returned by this function".
-- **Avoid idioms and colloquialisms**: "fails quickly" not "bails out", "prevents errors" not "catches issues".
-- **Use consistent terminology**: Machine translation and AI retrieval work better with repeated exact phrases.
-- **Minimize ambiguity**: Pronouns confuse both humans and translation systems.
-- **Be explicit**: Don't rely on cultural context or implied knowledge.
-- **Short, complete sentences**: Better for parsing and translation than long, flowing prose.
-- **Test your writing**: If a sentence would be difficult to translate word-by-word, rewrite it more explicitly.
+- **Non-technical sections** (`Summary`, non-technical description, `Parameters`, `Returns`,
+    `Raises`) explain purpose, inputs, outputs, and user-facing behavior.
+- **Technical sections** (`Mathematics`, `PyTorch`, `Caching`, `Shape Transformation`, and similar
+    concrete section names) explain notation, tensor algebra, broadcasting, cache alignment,
+    precision rules, and other expert mechanics.
+- If a reader can decide whether to call the identifier without reading the technical sections, the
+    split is correct.

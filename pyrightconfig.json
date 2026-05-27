@@ -1,4 +1,8 @@
 {
+	"deprecateTypingAliases": true,
+	"disableBytesTypePromotions": true,
+	"enableReachabilityAnalysis": true,
+	"enableTypeIgnoreComments": false,
 	"reportConstantRedefinition": false,
 	"reportInvalidTypeVarUse": false,
 	"reportPrivateUsage": false,
@@ -9,12 +13,8 @@
 	"reportUnusedFunction": "information",
 	"reportUnusedImport": "information",
 	"reportUnusedVariable": "information",
-	"typeCheckingMode": "strict",
-	"deprecateTypingAliases": true,
-	"disableBytesTypePromotions": true,
-	"enableReachabilityAnalysis": true,
-	"enableTypeIgnoreComments": false,
 	"strictDictionaryInference": true,
 	"strictListInference": true,
 	"strictSetInference": true,
+	"typeCheckingMode": "strict",
 }

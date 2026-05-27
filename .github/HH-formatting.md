@@ -19,7 +19,7 @@ Structure code so that readers encounter syntactic signals before the elements t
 ### Line Length
 
 - Prefer keeping function and method signatures on a single line when possible.
-- If a signature must wrap, apply semantic line breaking (see below), not arbitrary character-count breaking.
+- If a signature must span multiple lines, apply semantic line breaking (see below), not arbitrary character-count breaking.
 - Do not use automated formatters (Black, yapf, autopep8) unless the repository already uses them consistently.
 
 ### Line Continuation
