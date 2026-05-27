@@ -1,0 +1,13 @@
+- Prefer editor/MCP diagnostics, searches, and test runs over shell commands when tool coverage exists.
+- Environment setup:
+  - `python -m pip install -e .[testing]`
+- Common project commands:
+  - `pytest`
+  - `pytest tests/test_Grab.py -q` (swap in the touched test file)
+  - `pytest --cov=. --cov-report=term --cov-report=xml`
+  - `python -m pyright`
+  - `ruff check .`
+- Windows shell equivalents when a raw shell is necessary:
+  - list files: `Get-ChildItem`
+  - grep-like search: `Select-String`
+- Keep command scope tight; prefer targeted test files before full-suite runs.
