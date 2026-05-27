@@ -30,6 +30,8 @@ The containers handle the mechanical details of import management, code organiza
 logic to focus on semantic changes rather than syntactic concerns.
 """
 
+from __future__ import annotations
+
 from astToolkit import extractFunctionDef, identifierDotAttribute, Make
 from astToolkit._namespaceUncertainty import (
 	makeDictionaryAsyncFunctionDef as makeDictionaryAsyncFunctionDef, makeDictionaryClassDef as makeDictionaryClassDef,
@@ -40,11 +42,13 @@ from collections.abc import Iterable, Sequence
 from hunterMakesPy import raiseIfNone
 from hunterMakesPy.dataStructures import updateExtendPolishDictionaryLists
 from hunterMakesPy.filesystemToolkit import settings_autoflakeDEFAULT, settings_isortDEFAULT
-from os import PathLike
-from pathlib import PurePath
-from typing import Any
+from typing import Any, TYPE_CHECKING
 import ast
 import dataclasses
+
+if TYPE_CHECKING:
+	from os import PathLike
+	from pathlib import PurePath
 
 class LedgerOfImports:
 	"""
@@ -128,6 +132,8 @@ class LedgerOfImports:
 				# of course this involves the same package/module context problem as above.
 				if astImport____.module is None:
 					astImport____.module = '.'
+				elif 0 < astImport____.level:
+					astImport____.module = f"{'.' * astImport____.level}{astImport____.module}"
 				for alias in astImport____.names:
 					self._dictionaryImportFrom[astImport____.module].append((alias.name, alias.asname))
 			case _:
@@ -213,7 +219,7 @@ class LedgerOfImports:
 		"""
 		listImportFrom: list[ast.ImportFrom] = []
 		for dotModule, list_nameTuples in sorted(self._dictionaryImportFrom.items()):
-			list_nameTuples: list[tuple[str, str | None]] = sorted(set(list_nameTuples), key=lambda nameTuple: nameTuple[0])
+			list_nameTuples: list[tuple[str, str | None]] = sorted(set(list_nameTuples))
 			list_alias: list[ast.alias] = []
 			for name, asName in list_nameTuples:
 				list_alias.append(Make.alias(name, asName))
@@ -221,6 +227,7 @@ class LedgerOfImports:
 				listImportFrom.append(Make.ImportFrom(dotModule, list_alias))
 		list_astImport: list[ast.Import] = [Make.Import(dotModule) for dotModule in sorted(set(self._listImport))]
 		return listImportFrom + list_astImport
+
 	def removeImportFromModule(self, dotModule: identifierDotAttribute) -> None:
 		"""
 		Remove all recorded dependencies on a specific module.
@@ -276,7 +283,7 @@ class LedgerOfImports:
 				if not self._dictionaryImportFrom[dotModule]:
 					self._dictionaryImportFrom.pop(dotModule)
 
-	def update(self, *fromLedger: 'LedgerOfImports') -> None:
+	def update(self, *fromLedger: LedgerOfImports) -> None:
 		"""
 		Merge import dependencies from other Ledgers into this one.
 
@@ -473,7 +480,7 @@ class IngredientsModule:
 	def _append_astModule(self, self_astModule: ast.Module, astModule: ast.Module | None, statement: Iterable[ast.stmt] | ast.stmt | None, type_ignores: list[ast.TypeIgnore] | None) -> None:
 		list_body: list[ast.stmt] = []
 		listTypeIgnore: list[ast.TypeIgnore] = []
-		if astModule is not None and isinstance(astModule, ast.Module): # pyright: ignore[reportUnnecessaryIsInstance]
+		if astModule is not None and isinstance(astModule, ast.Module):  # pyright: ignore[reportUnnecessaryIsInstance]
 			list_body.extend(astModule.body)
 			listTypeIgnore.extend(astModule.type_ignores)
 		if type_ignores is not None:
@@ -658,7 +665,7 @@ class IngredientsModule:
 		list_stmt.extend(ingredientsFunction.astFunctionDef for ingredientsFunction in self.listIngredientsFunctions)
 		list_stmt.extend(self.epilogue.body)
 		list_stmt.extend(self.launcher.body)
-		# TODO `launcher`, if it exists, must start with `if __name__ == '__main__':` and be indented  # noqa: ERA001
+		# TODO `launcher`, if it exists, must start with `if __name__ == '__main__':` and be indented
 		return list_stmt
 
 	@property
@@ -686,7 +693,7 @@ class IngredientsModule:
 		listTypeIgnore.extend(self.launcher.type_ignores)
 		return listTypeIgnore
 
-	def write_astModule(self, pathFilename: PathLike[Any] | PurePath, identifierPackage: str='') -> None:
+	def write_astModule(self, pathFilename: PathLike[Any] | PurePath, identifierPackage: str = '') -> None:
 		"""
 		Convert this module to Python source code and write it to a file.
 
@@ -709,7 +716,7 @@ class IngredientsModule:
 			the specified package is preserved during import optimization.
 
 		"""
-		settings: dict[str, dict[str, Any]] ={
+		settings: dict[str, dict[str, Any]] = {
 		'autoflake': self.settings_autoflake or {},
 		'isort': self.settings_isort or {}
 		}

@@ -1,17 +1,34 @@
 """SSOT for all tests."""
 # pyright: standard
-from astToolkit import Be, Make
-from collections.abc import Callable, Iterator
+from __future__ import annotations
+
+from astToolkit import Be, Make, packageSettings
 from functools import cache
-from pathlib import Path
 from tests.dataSamples.Make import allSubclasses
-from typing import Any
+from typing import Any, TYPE_CHECKING
 import ast  # pyright: ignore[reportUnusedImport]
 import datetime
 import pytest
 
+if TYPE_CHECKING:
+	from collections.abc import Callable, Iterator
+	from pathlib import Path
+
 negativeTestsPerClass: int = 3
+pathDataSamples: Path = packageSettings.pathPackage.parent / 'tests' / 'dataSamples'
 stepSize: int = (32 - datetime.date.today().weekday()) * (datetime.date.today().day + 1)
+
+@pytest.fixture
+def astModuleTorchRelativeImports() -> ast.Module:
+	return ast.parse((pathDataSamples / 'torchRelativeImports.py').read_text())
+
+@pytest.fixture
+def astModuleDoubleRelativeImport() -> ast.Module:
+	return ast.parse('from ..utils import check_no_gap')
+
+@pytest.fixture
+def listExpectedRelativeImportModules() -> list[str]:
+	return ['torch', 'torch.nn.modules', 'torch.utils.checkpoint', '.utils']
 
 def generateBeTestData() -> Iterator[tuple[str, str, dict[str, Any]]]:
 	"""Yield test data for positive Be tests. (AI generated docstring).
@@ -35,7 +52,7 @@ def getTestData(vsClass: str, testName: str) -> dict[str, Any]:
 	return allSubclasses[vsClass][testName]
 
 def generateBeNegativeTestData() -> Iterator[tuple[str, str, str, dict[str, Any]]]:
-	for class2test, *list_vsClass in [(C, *list(set(allSubclasses)-{C}-{c.__name__ for c in eval('ast.'+C).__subclasses__()})) for C in allSubclasses]:  # noqa: S307
+	for class2test, *list_vsClass in [(C, *list(set(allSubclasses) - {C} - {c.__name__ for c in eval('ast.' + C).__subclasses__()})) for C in allSubclasses]:  # noqa: S307
 		testName = "class Make, maximally empty parameters"
 
 		list_vsClass.sort()
@@ -394,7 +411,7 @@ def generateGrabIndexTestCases() -> Iterator[tuple[str, Callable[[], list[ast.AS
 
 	listTestCases: list[tuple[str, Callable[[], list[ast.AST]], int, Callable[[ast.AST], ast.AST | list[ast.AST] | None], list[str]]] = [
 		# descriptionTest, factoryListOriginal, indexTarget, actionTransform, listExpectedIdentifiers
-		("modify_element", lambda: [Make.Name("North"), Make.Name("South"), Make.Name("East")], 1, lambda node: Make.Name(node.id.upper()), ["North", "SOUTH", "East"]), # pyright: ignore[reportAttributeAccessIssue]
+		("modify_element", lambda: [Make.Name("North"), Make.Name("South"), Make.Name("East")], 1, lambda node: Make.Name(node.id.upper()), ["North", "SOUTH", "East"]),  # pyright: ignore[reportAttributeAccessIssue]
 		("delete_element", lambda: [Make.Name("alpha"), Make.Name("beta"), Make.Name("gamma")], 1, lambda node: None, ["alpha", "gamma"]),
 		("expand_element", lambda: [Make.Name("prime2"), Make.Name("prime3"), Make.Name("prime5")], 1, lambda node: [Make.Name("expanded7"), Make.Name("expanded11")], ["prime2", "expanded7", "expanded11", "prime5"]),
 	]

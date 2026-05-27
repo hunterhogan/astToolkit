@@ -1,16 +1,17 @@
-"""Sample Python module for testing parsePathFilename2astModule."""
+"""Sample Python module."""
+
+from __future__ import annotations
 
 def functionAlpha(parameterFirst: int, parameterSecond: str) -> str:
-	"""A sample function for testing extractFunctionDef."""
+	"""A sample function."""
 	resultComputed = f"{parameterFirst}: {parameterSecond}"
 	return resultComputed
 
 def functionBeta() -> None:
 	"""Another sample function."""
-	pass
 
 class ClassGamma:
-	"""A sample class for testing extractClassDef."""
+	"""A sample class."""
 
 	def methodDelta(self) -> int:
 		"""A method within the class."""

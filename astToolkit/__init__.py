@@ -61,6 +61,8 @@ Transform multiplication to addition:
 """
 
 # isort: split
+from __future__ import annotations
+
 import sys
 
 # isort: split
