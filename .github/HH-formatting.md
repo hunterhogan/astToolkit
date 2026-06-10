@@ -150,10 +150,10 @@ When element order is meaningful (positional correspondence, algorithmic sequenc
 
 ```python
 @pytest.mark.parametrize("inputValue", [
-    caseAlpha
+    caseAlfa
     , caseBeta
     , caseGamma
-], ids=["alpha", "beta", "gamma"])
+], ids=["alfa", "beta", "gamma"])
 ```
 
 Leading commas create a visual marker at the semantic boundary and cause syntax errors if elements are accidentally reordered.

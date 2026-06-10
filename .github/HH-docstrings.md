@@ -106,14 +106,14 @@ of module purpose and organization.
 Contents
 --------
 Functions
-    functionAlpha
-        One-line description of functionAlpha.
+    functionAlfa
+        One-line description of functionAlfa.
     functionBeta
         One-line description of functionBeta.
 
 Classes
-    ClassAlpha
-        One-line description of ClassAlpha.
+    ClassAlfa
+        One-line description of ClassAlfa.
 
 """
 import ...
