@@ -13,7 +13,7 @@ jobs:
       tests-python-versions: ${{ steps.get-project-info.outputs.versions }}
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v6
         with:
           python-version: '>=3.13'
@@ -49,7 +49,7 @@ jobs:
       matrix:
         tests-python-versions: ${{ fromJson(needs.get-project-info.outputs.tests-python-versions) }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.tests-python-versions }}
