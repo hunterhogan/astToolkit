@@ -67,10 +67,8 @@ ignore = [
   "TD",
   "W191",
   "W292",
-  # preview rules
   "CPY001",
   "D420",
-  "DOC102",
   "E265",
   "E302",
   "E303",
@@ -80,7 +78,7 @@ ignore = [
   "S403",
 ]
 select = ["ALL"]
-task-tags = ["DEVELOPMENT", "NOTE", "SEMIOTICS", "TODO"]
+task-tags = ["DEVELOPMENT", "FailEarly", "NOTE", "SEMIOTICS", "TODO"]
 
 [lint.flake8-comprehensions]
 allow-dict-calls-with-keyword-arguments = true
@@ -108,11 +106,12 @@ inline-quotes = "single"
   "ARG",
   "BLE",
   "D",
+  "DTZ",
   "FBT",
   "PT",
   "S101",
   "TRY",
-  "DTZ",
+  "DOC201",
 ]
 
 [lint.pydocstyle]

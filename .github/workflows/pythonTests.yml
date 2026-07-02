@@ -20,23 +20,23 @@ jobs:
           cache: pip
           cache-dependency-path: pyproject.toml
 
-      - run: pip install packaging requests
+      - run: pip install packaging
 
       - id: get-project-info
         run: |
           python -c "
-          import itertools, json, os, packaging.specifiers, packaging.version, pathlib, requests, tomllib
+          import itertools, json, os, packaging.specifiers, packaging.version, pathlib, tomllib, urllib.request
 
           dictionaryProject = tomllib.loads(pathlib.Path('pyproject.toml').read_text())['project']
 
           listPythonVersions = [str(max(group))
             for _key, group in itertools.groupby(
               packaging.specifiers.SpecifierSet(dictionaryProject['requires-python']).filter(
-                packaging.version.Version(manifest['version'])
-              for manifest in requests.get(
+                (packaging.version.Version(manifest['version'])
+                for manifest in json.loads(urllib.request.urlopen(
                 'https://raw.githubusercontent.com/actions/python-versions/main/versions-manifest.json'
-                ).json())
-              , lambda V: V.release[0:-1])]
+                ).read())), prereleases=False)
+              , lambda V: (V.major, V.minor))]
 
           with open(os.environ['GITHUB_OUTPUT'], 'a') as writeStream:
             writeStream.write(f'versions={json.dumps(listPythonVersions)}\n')
@@ -55,6 +55,5 @@ jobs:
           python-version: ${{ matrix.tests-python-versions }}
           cache: pip
           cache-dependency-path: pyproject.toml
-
-      - run: pipx run uv sync --all-extras
-      - run: .venv/bin/python -m pytest
+      - run: pip install -e .[testing]
+      - run: pytest

@@ -34,6 +34,6 @@ jobs:
             urllib.request.urlopen(urllib.request.Request(f'{url}/tags/{tag}', headers=headers))
           except urllib.error.HTTPError as thisIsAStupidSystem:
             if thisIsAStupidSystem.code != 404:
-              raise
+              raise urllib.error.HTTPError from thisIsAStupidSystem
             urllib.request.urlopen(urllib.request.Request(url,json.dumps({'tag_name': tag, 'name': tag}).encode(),headers, method='POST'))
           "
