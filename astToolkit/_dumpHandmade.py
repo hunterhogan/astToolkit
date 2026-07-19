@@ -1,5 +1,10 @@
-from astToolkit import astASTattributes
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 import ast
+
+if TYPE_CHECKING:
+	from astToolkit import astASTattributes
 
 def dump(node: ast.AST, *, annotate_fields: bool = True, include_attributes: bool = False, indent: int | str | None = None, show_empty: bool = False) -> str:
 	"""Return a formatted string representation of an `ast.AST` node.
@@ -24,6 +29,10 @@ def dump(node: ast.AST, *, annotate_fields: bool = True, include_attributes: boo
 	formattedString : str
 		String representation of the `ast.AST` node with specified formatting.
 
+	Raises
+	------
+	TypeError
+		If the provided `node` is not an instance of `ast.AST`.
 	"""
 	def _format(node: astASTattributes, level: int = 0) -> tuple[str, bool]:
 		if indentString is not None:
@@ -52,7 +61,7 @@ def dump(node: ast.AST, *, annotate_fields: bool = True, include_attributes: boo
 					continue
 				if not show_empty:
 					if value == []:
-						field_type: astASTattributes = astAST._field_types.get(name, object)  # noqa: SLF001
+						field_type: astASTattributes = astAST._field_types.get(name, object)  # ruff:ignore[private-member-access]
 						if getattr(field_type, '__origin__', ...) is list:
 							if not showAnnotations:
 								attributeStaging.append(repr(value))
@@ -66,8 +75,8 @@ def dump(node: ast.AST, *, annotate_fields: bool = True, include_attributes: boo
 					listAttributes.append(f'{name}={valueFormatted}')
 				else:
 					listAttributes.append(valueFormatted)
-			if include_attributes and node._attributes:  # noqa: SLF001
-				for name_attributes in node._attributes:  # noqa: SLF001
+			if include_attributes and node._attributes:  # ruff:ignore[private-member-access]
+				for name_attributes in node._attributes:  # ruff:ignore[private-member-access]
 					try:
 						value_attributes = getattr(node, name_attributes)
 					except AttributeError:
@@ -94,4 +103,3 @@ def dump(node: ast.AST, *, annotate_fields: bool = True, include_attributes: boo
 	else:
 		indentString = indent
 	return _format(node)[0]
-

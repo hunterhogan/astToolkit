@@ -2,9 +2,9 @@
 
 (AI generated docstring)
 
-The `astToolkit` package provides a layered architecture designed for composability and type safety in AST
-operations. It implements the antecedent-action pattern where predicates identify nodes and actions operate
-on matched nodes through visitor classes.
+The `astToolkit` package provides a layered architecture designed for composability and type safety in
+AST operations. It implements the antecedent-action pattern where predicates identify nodes and
+actions operate on matched nodes through visitor classes.
 
 Core Architecture Layers
 ------------------------
@@ -31,11 +31,13 @@ Core Architecture Layers
 Type System
 -----------
 The package includes 120+ specialized type aliases (`hasDOT*` types) that map AST node attributes to
-their containing node types, enabling type-safe attribute access and powering the `DOT` and related classes.
+their containing node types, enabling type-safe attribute access and powering the `DOT` and related
+classes.
 
 Antecedent-Action Pattern
 -------------------------
-The core pattern follows: **Predicate** (identifies nodes) + **Action** (operates on nodes) via visitor classes.
+The core pattern follows: **Predicate** (identifies nodes) + **Action** (operates on nodes) via
+visitor classes.
 
 - **Antecedents**: `Be.*`, `IfThis.*`, `DOT.*` methods for node identification
 - **Actions**: `Then.*`, `Make.*`, `Grab.*` methods for node operations
@@ -104,7 +106,7 @@ from astToolkit.theTypes import (
 	工位 as 工位, 布尔符 as 布尔符, 常 as 常, 归个 as 归个, 形 as 形, 忽 as 忽, 拦 as 拦, 文义 as 文义, 文件 as 文件, 木 as 木, 本 as 本, 比符 as 比符)
 
 # isort: split
-if sys.version_info >= (3, 14):
+if (3, 14) <= sys.version_info:
 	from astToolkit.theTypes import hasDOTstr as hasDOTstr
 
 # isort: split
