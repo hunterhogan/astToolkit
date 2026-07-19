@@ -59,7 +59,7 @@ run = { branch = true, concurrency = ["multiprocessing"], data_file = "tests/cov
 ], parallel = true, source = ["."] }
 
 [tool.pytest]
-addopts = ["--color=auto"]
+addopts = ["--color=yes"]
 log_auto_indent = "On"
 testpaths = ["tests"]
 

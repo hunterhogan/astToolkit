@@ -102,7 +102,7 @@ inline-quotes = "single"
 
 [lint.per-file-ignores]
 "__init__.py" = ["PLC0414"]
-"test*.py" = [
+"*test*.py" = [
   "ARG",
   "BLE",
   "D",
@@ -110,6 +110,7 @@ inline-quotes = "single"
   "FBT",
   "PT",
   "S101",
+  "S311",
   "TRY",
   "DOC201",
 ]

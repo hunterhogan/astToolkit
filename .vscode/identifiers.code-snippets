@@ -1,227 +1,192 @@
 {
-	"八": {
-		"prefix": "ba",
-		"body": [
-			"八"
-		],
-		"description": "Eight (八, bā)"
-	},
-	"大于": {
-		"prefix": "dayu",
-		"body": [
-			"大于"
-		],
-		"description": "'greater than', '>' (大于, dàyú)"
-	},
-	"二": {
-		"prefix": "er",
-		"body": [
-			"二"
-		],
-		"description": "Two (二, èr)"
-	},
-	"个": {
-		"prefix": "ge",
-		"body": [
-			"个"
-		],
-		"description": "Anything (个, gè)"
-	},
-	"火": {
-		"prefix": "huo",
-		"body": [
-			"火"
-		],
-		"description": "Fire (火, Chinese: huǒ, Cantonese: fo2, Japanese: hi, Korean: hwa, Vietnamese: hỏa)"
-	},
-	"九": {
-		"prefix": "jiu",
-		"body": [
-			"九"
-		],
-		"description": "Nine (九, jiǔ)"
-	},
-	"零": {
-		"prefix": "ling",
-		"body": [
-			"零"
-		],
-		"description": "Zero (零, líng)"
-	},
-	"六": {
-		"prefix": "liu",
-		"body": [
-			"六"
-		],
-		"description": "Six (六, liù)"
-	},
-	"吗": {
-		"prefix": "ma",
-		"body": [
-			"吗"
-		],
-		"description": "True/False question (吗, ma)"
-	},
-	"木": {
-		"prefix": "mu",
-		"body": [
-			"木"
-		],
-		"description": "Tree (木, mù), short for abstract syntax tree (AST)"
-	},
-	"Ω": {
-		"prefix": "Omega",
-		"body": [
-			"Ω"
-		],
-		"description": "Last letter of Greek alphabet (Ω, Ōmega)"
-	},
-	"七": {
-		"prefix": "qi",
-		"body": [
-			"七"
-		],
-		"description": "Seven (七, qī)"
-	},
-	"三": {
-		"prefix": "san",
-		"body": [
-			"三"
-		],
-		"description": "Three (三, sān)"
-	},
-	"上": {
-		"prefix": "shang",
-		"body": [
-			"上"
-		],
-		"description": "'above', 'on', 'superior', 'superscript', 'raised' (上, shàng)"
-	},
-	"首": {
-		"prefix": "shou",
-		"body": [
-			"首"
-		],
-		"description": "First, head (首, shǒu)"
-	},
-	"四": {
-		"prefix": "si",
-		"body": [
-			"四"
-		],
-		"description": "Four (四, sì)"
-	},
-	"文件": {
-		"prefix": "wenjian",
-		"body": "文件",
-		"description": "文件 (wénjiàn): dictionary key"
-	},
-	"文义": {
-		"prefix": "wenyi",
-		"body": "文义",
-		"description": "文义 (wényì): dictionary value"
-	},
-	"五": {
-		"prefix": "wu",
-		"body": [
-			"五"
-		],
-		"description": "Five (五, wǔ)"
-	},
-	"下": {
-		"prefix": "xia",
-		"body": [
-			"下"
-		],
-		"description": "'below', 'under', 'subscript', 'sub' (下, xià)"
-	},
-	"小于": {
-		"prefix": "xiaoyu",
-		"body": [
-			"小于"
-		],
-		"description": "'less than', '<' (小于, xiǎoyú)"
-	},
-	"一": {
-		"prefix": "yi",
-		"body": [
-			"一"
-		],
-		"description": "One (一, yī)"
-	},
-	"本": {
-		"prefix": "ben",
-		"body": "本",
-		"description": "本 (běn): module"
-	},
-	"比符": {
-		"prefix": "bifu",
-		"body": "比符",
-		"description": "比符 (bǐfú): comparison operator (cmpop)"
-	},
-	"布尔符": {
-		"prefix": "buerfu",
-		"body": "布尔符",
-		"description": "布尔符 (bùěrfú): boolean operator (boolop)"
-	},
-	"常": {
-		"prefix": "chang",
+	"cháng 常": {
 		"body": "常",
-		"description": "常 (cháng): constant"
+		"description": "Constant. Mark variable as a CONSTANT; also `ast.Constant`. 常 Chinese: cháng",
+		"prefix": "Z Constant"
 	},
-	"二符": {
-		"prefix": "erfu",
-		"body": "二符",
-		"description": "二符 (èrfú): binary operator"
-	},
-	"工": {
-		"prefix": "gong",
-		"body": "工",
-		"description": "工 (gōng): expression (expr)"
-	},
-	"工位": {
-		"prefix": "gongwei",
-		"body": "工位",
-		"description": "工位 (gōngwèi): expression context (expr_context)"
-	},
-	"归": {
-		"prefix": "gui",
-		"body": "归",
-		"description": "归 (guī): return"
-	},
-	"忽": {
-		"prefix": "hu",
-		"body": "忽",
-		"description": "忽 (hū): ignore"
-	},
-	"口": {
-		"prefix": "kou",
-		"body": "口",
-		"description": "口 (kǒu): statement (stmt)"
-	},
-	"拦": {
-		"prefix": "lan",
+	"lán 拦": {
 		"body": "拦",
-		"description": "拦 (lán): exception handler"
+		"description": "Exception. Mark variable as an `Exception`; also `ast.excepthandler`. 拦 Chinese: lán",
+		"prefix": "Z Exception"
 	},
-	"俪": {
-		"prefix": "li",
+	"huǒ 火": {
+		"body": "火",
+		"description": "Fire. See the font, Integrated Code 火. 火 Chinese: huǒ, Cantonese: fo2, Japanese: hi, Korean: hwa, Vietnamese: hỏa",
+		"prefix": "Z Fire"
+	},
+	"líng 零": {
+		"body": "零",
+		"description": "Zero. 零 Chinese: líng",
+		"prefix": "Z number 0"
+	},
+	"yī 一": {
+		"body": "一",
+		"description": "One. 一 Chinese: yī",
+		"prefix": "Z number 1"
+	},
+	"èr 二": {
+		"body": "二",
+		"description": "Two. 二 Chinese: èr",
+		"prefix": "Z number 2"
+	},
+	"sān 三": {
+		"body": "三",
+		"description": "Three. 三 Chinese: sān",
+		"prefix": "Z number 3"
+	},
+	"sì 四": {
+		"body": "四",
+		"description": "Four. 四 Chinese: sì",
+		"prefix": "Z number 4"
+	},
+	"wǔ 五": {
+		"body": "五",
+		"description": "Five. 五 Chinese: wǔ",
+		"prefix": "Z number 5"
+	},
+	"liù 六": {
+		"body": "六",
+		"description": "Six. 六 Chinese: liù",
+		"prefix": "Z number 6"
+	},
+	"qī 七": {
+		"body": "七",
+		"description": "Seven. 七 Chinese: qī",
+		"prefix": "Z number 7"
+	},
+	"bā 八": {
+		"body": "八",
+		"description": "Eight. 八 Chinese: bā",
+		"prefix": "Z number 8"
+	},
+	"jiǔ 九": {
+		"body": "九",
+		"description": "Nine. 九 Chinese: jiǔ",
+		"prefix": "Z number 9"
+	},
+	"shǒu 首": {
+		"body": "首",
+		"description": "First, head. 首 Chinese: shǒu",
+		"prefix": "Z order First"
+	},
+	"dàyú 大于": {
+		"body": "大于",
+		"description": "Greater Than. `>`. 大 means big. 大于 Chinese: dàyú",
+		"prefix": "Z order Greater Than"
+	},
+	"cì 次": {
+		"body": "次",
+		"description": "Ordered, sequence. 次 Chinese: cì",
+		"prefix": "Z order Index"
+	},
+	"Ōmega Ω": {
+		"body": "Ω",
+		"description": "Final. Last. Previous. Last letter of Greek alphabet. Ω Greek: Ōmega",
+		"prefix": "Z order Last"
+	},
+	"xiǎoyú 小于": {
+		"body": "小于",
+		"description": "Less Than. `<`. 小 means small. 小于 Chinese: xiǎoyú",
+		"prefix": "Z order Less Than"
+	},
+	"xià 下": {
+		"body": "下",
+		"description": "Subscript. Below, under, sub. 下 Chinese: xià",
+		"prefix": "Z order Subscript"
+	},
+	"shàng 上": {
+		"body": "上",
+		"description": "Superscript. Above, on, superior, raised, to the power of. 上 Chinese: shàng",
+		"prefix": "Z order Superscript"
+	},
+	"lì 俪": {
 		"body": "俪",
-		"description": "俪 (lì): pattern"
+		"description": "Pattern. Mark variable as a pattern, such as regex; also `ast.pattern`. 俪 Chinese: lì",
+		"prefix": "Z Pattern"
 	},
-	"是": {
-		"prefix": "shi",
+	"ma 吗": {
+		"body": "吗",
+		"description": "Question. Mark a function as answering True/False. 吗 Chinese: ma",
+		"prefix": "Z Question"
+	},
+	"shì 是": {
 		"body": "是",
-		"description": "是 (shì): is, to be"
+		"description": "Is, to be. 是 Chinese: shì",
+		"prefix": "Z To Be"
 	},
-	"形": {
-		"prefix": "xing",
-		"body": "形",
-		"description": "形 (xíng): type parameter"
+	"gè 个": {
+		"body": "个",
+		"description": "Anything. 个 Chinese: gè",
+		"prefix": "Z types Anything"
 	},
-	"一符": {
-		"prefix": "yifu",
+	"wénjiàn 文件": {
+		"body": "文件",
+		"description": "Dictionary Key. 文 means language. 文件 Chinese: wénjiàn",
+		"prefix": "Z types Dictionary Key"
+	},
+	"wényì 文义": {
+		"body": "文义",
+		"description": "Dictionary Value. 文 means language. 文义 Chinese: wényì",
+		"prefix": "Z types Dictionary Value"
+	},
+	"gōng 工": {
+		"body": "工",
+		"description": "Expression; especially `ast.expr`. 工 Chinese: gōng",
+		"prefix": "Z types Expression"
+	},
+	"gōngwèi 工位": {
+		"body": "工位",
+		"description": "Expression Context; especially `ast.expr_context`. 工位 Chinese: gōngwèi",
+		"prefix": "Z types Expression Context"
+	},
+	"hū 忽": {
+		"body": "忽",
+		"description": "Ignore; especially `ast.type_ignore`. 忽 Chinese: hū",
+		"prefix": "Z types Ignore"
+	},
+	"běn 本": {
+		"body": "本",
+		"description": "Module; good for `types.ModuleType`, `ast.mod`. 本 Chinese: běn",
+		"prefix": "Z types Module"
+	},
+	"èrfú 二符": {
+		"body": "二符",
+		"description": "Binary Operator; especially `ast.binop`. 二 means two, and 符 means operator. 二符 Chinese: èrfú",
+		"prefix": "Z types operator Binary"
+	},
+	"bùěrfú 布尔符": {
+		"body": "布尔符",
+		"description": "Boolean Operator; especially `ast.boolop`. bùěr is bool transliterated, and 符 means operator. 布尔符 Chinese: bùěrfú",
+		"prefix": "Z types operator Boolean"
+	},
+	"bǐfú 比符": {
+		"body": "比符",
+		"description": "Comparison Operator; especially `ast.cmpop`. 符 means operator. 比符 Chinese: bǐfú",
+		"prefix": "Z types operator Comparison"
+	},
+	"yīfú 一符": {
 		"body": "一符",
-		"description": "一符 (yīfú): unary operator"
+		"description": "Unary Operator; especially `ast.unaryop`. 一 means one, and 符 means operator. 一符 Chinese: yīfú",
+		"prefix": "Z types operator Unary"
 	},
+	"guī 归": {
+		"body": "归",
+		"description": "Return; especially combined with other types. 归 Chinese: guī",
+		"prefix": "Z types Return"
+	},
+	"kǒu 口": {
+		"body": "口",
+		"description": "Statement; especially `ast.stmt`. 口 Chinese: kǒu",
+		"prefix": "Z types Statement"
+	},
+	"mù 木": {
+		"body": "木",
+		"description": "Tree; such as data tree or Abstract Syntax Tree, `ast.AST`. 木 Chinese: mù",
+		"prefix": "Z types Tree"
+	},
+	"xíng 形": {
+		"body": "形",
+		"description": "Form. Type. Kind. Good for `typing.TypeVar` and `ast.type_param`. 形 Chinese: xíng",
+		"prefix": "Z types Type"
+	}
 }
