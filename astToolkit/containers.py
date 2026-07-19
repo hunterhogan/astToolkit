@@ -296,8 +296,9 @@ class LedgerOfImports:
 		"""
 		self._dictionaryImportFrom = defaultdict(list, updateExtendPolishDictionaryLists(self._dictionaryImportFrom, *map(attrgetter('_dictionaryImportFrom'), fromLedger)
 					, destroyDuplicates=True, reorderLists=True))
-		self._listImport.extend(map(attrgetter('_listImport'), fromLedger))
-		self.type_ignores.extend(map(attrgetter('type_ignores'), fromLedger))
+		for ledger in fromLedger:
+			self._listImport.extend(ledger._listImport)  # ruff:ignore[private-member-access]
+			self.type_ignores.extend(ledger.type_ignores)
 
 	def walkThis(self, walkThis: ast.AST, type_ignores: list[ast.TypeIgnore] | None = None) -> None:
 		"""

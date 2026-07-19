@@ -1,17 +1,23 @@
 """IDK how I want to organize the namespace."""
+from __future__ import annotations
+
 from astToolkit import Be, DOT, Grab, identifierDotAttribute, IfThis, Make, NodeChanger, NodeTourist, Then
-from collections.abc import Mapping
 from copy import deepcopy
 from hunterMakesPy import raiseIfNone
 from hunterMakesPy.filesystemToolkit import settings_autoflakeDEFAULT, writePython
 from inspect import getsource as inspect_getsource
-from os import PathLike
-from pathlib import Path, PurePath
-from types import ModuleType
-from typing import Any, Literal, overload, TypedDict, Unpack
+from pathlib import Path
+from typing import overload, TYPE_CHECKING, TypedDict
 import ast
 import importlib
-import io
+
+if TYPE_CHECKING:
+	from collections.abc import Mapping
+	from os import PathLike
+	from pathlib import PurePath
+	from types import ModuleType
+	from typing import Any, Literal, Unpack
+	import io
 
 def makeDictionaryAsyncFunctionDef(astAST: ast.AST) -> dict[str, ast.AsyncFunctionDef]:
 	"""Make a `dict` (***dict***ionary) mapping each `async def` (***async***hronous ***def***inition) function name to its `ast.AsyncFunctionDef` (***Async***hronous Function ***Def***inition) `object`.
@@ -40,7 +46,7 @@ def makeDictionaryAsyncFunctionDef(astAST: ast.AST) -> dict[str, ast.AsyncFuncti
 		https://context7.com/hunterhogan/asttoolkit
 	"""
 	dictionaryIdentifier2AsyncFunctionDef: dict[str, ast.AsyncFunctionDef] = {}
-	NodeTourist(Be.AsyncFunctionDef, Then.updateKeyValueIn(DOT.name, Then.extractIt, dictionaryIdentifier2AsyncFunctionDef)).visit(astAST)  # ty:ignore[invalid-argument-type]
+	NodeTourist(Be.AsyncFunctionDef, Then.updateKeyValueIn(DOT.name, Then.extractIt, dictionaryIdentifier2AsyncFunctionDef)).visit(astAST)
 	return dictionaryIdentifier2AsyncFunctionDef
 
 def makeDictionaryClassDef(astAST: ast.AST) -> dict[str, ast.ClassDef]:
@@ -69,7 +75,7 @@ def makeDictionaryClassDef(astAST: ast.AST) -> dict[str, ast.ClassDef]:
 		https://context7.com/hunterhogan/asttoolkit
 	"""
 	dictionaryIdentifier2ClassDef: dict[str, ast.ClassDef] = {}
-	NodeTourist(Be.ClassDef, Then.updateKeyValueIn(DOT.name, Then.extractIt, dictionaryIdentifier2ClassDef)).visit(astAST)  # ty:ignore[invalid-argument-type]
+	NodeTourist(Be.ClassDef, Then.updateKeyValueIn(DOT.name, Then.extractIt, dictionaryIdentifier2ClassDef)).visit(astAST)
 	return dictionaryIdentifier2ClassDef
 
 def makeDictionaryFunctionDef(astAST: ast.AST) -> dict[str, ast.FunctionDef]:
@@ -99,7 +105,7 @@ def makeDictionaryFunctionDef(astAST: ast.AST) -> dict[str, ast.FunctionDef]:
 		https://context7.com/hunterhogan/asttoolkit
 	"""
 	dictionaryIdentifier2FunctionDef: dict[str, ast.FunctionDef] = {}
-	NodeTourist(Be.FunctionDef, Then.updateKeyValueIn(DOT.name, Then.extractIt, dictionaryIdentifier2FunctionDef)).visit(astAST)  # ty:ignore[invalid-argument-type]
+	NodeTourist(Be.FunctionDef, Then.updateKeyValueIn(DOT.name, Then.extractIt, dictionaryIdentifier2FunctionDef)).visit(astAST)
 	return dictionaryIdentifier2FunctionDef
 
 def makeDictionaryMosDef(astAST: ast.AST) -> dict[str, ast.AsyncFunctionDef | ast.ClassDef | ast.FunctionDef]:
@@ -177,16 +183,19 @@ def inlineFunctionDef(identifierToInline: str, astModule: ast.Module) -> ast.Fun
 		The synthesized `ast.FunctionDef` (Function ***Def***inition) with inlined logic from
 		other functions defined in `astModule`.
 
+	Recursive Functions
+	-------------------
+	Direct recursion
+		If an `ast.FunctionDef` calls itself, it is not inlined.
+
+	Mutual recursion
+		If any function transitively reachable from `identifierToInline` calls back to
+		`identifierToInline`, it is not inlined.
+
 	Raises
 	------
 	ValueError
-		Raised when `identifierToInline` does not match any `ast.FunctionDef.name` in `astModule`.
-
-	Inlining Restrictions
-	---------------------
-	`inlineFunctionDef` does not inline an `ast.FunctionDef` if that `ast.FunctionDef` calls itself
-	(direct recursion), or if any function transitively reachable from `identifierToInline` calls
-	back to `identifierToInline` (mutual recursion). Recursive call graphs are left unchanged.
+		If `identifierToInline` does not match any `ast.FunctionDef.name` in `astModule`.
 
 	References
 	----------
@@ -202,12 +211,12 @@ def inlineFunctionDef(identifierToInline: str, astModule: ast.Module) -> ast.Fun
 	dictionaryFunctionDef: dict[str, ast.FunctionDef] = makeDictionaryFunctionDef(astModule)
 	try:
 		FunctionDefToInline = dictionaryFunctionDef[identifierToInline]
-	except KeyError as ERRORmessage:
-		message = f"I was unable to find an `ast.FunctionDef` with name {identifierToInline = } in {astModule = }."
-		raise ValueError(message) from ERRORmessage
+	except KeyError as 拦message:
+		message: str = f"I was unable to find an `ast.FunctionDef` with name {identifierToInline = } in {astModule = }."
+		raise ValueError(message) from 拦message
 
 	listIdentifiersCalledFunctions: list[str] = []
-	findIdentifiersToInline = NodeTourist[ast.Call, ast.expr](IfThis.isCallToName
+	findIdentifiersToInline = NodeTourist[ast.Call, ast.Call](IfThis.isCallToName
 		, Grab.funcAttribute(Grab.idAttribute(Then.appendTo(listIdentifiersCalledFunctions))))
 	findIdentifiersToInline.visit(FunctionDefToInline)
 
@@ -230,8 +239,8 @@ def inlineFunctionDef(identifierToInline: str, astModule: ast.Module) -> ast.Fun
 					FunctionDefTarget = dictionaryFunctionDef[identifier]
 					if len(FunctionDefTarget.body) == 1:
 						replacement = NodeTourist(Be.Return, Then.extractIt(DOT.value)).captureLastMatch(FunctionDefTarget)
-						inliner = NodeChanger[ast.Call, ast.expr | None](
-							findThis = IfThis.isCallIdentifier(identifier), doThat = Then.replaceWith(replacement))
+						inliner = NodeChanger(
+							findThis=IfThis.isCallIdentifier(identifier), doThat=Then.replaceWith(replacement))
 						for astFunctionDef in dictionary4Inlining.values():
 							inliner.visit(astFunctionDef)
 					else:
@@ -287,7 +296,7 @@ def pythonCode2ast_expr(string: str) -> ast.expr:
 	[3] hunterMakesPy raiseIfNone - Context7
 		https://context7.com/hunterhogan/huntermakespy
 	"""
-	return raiseIfNone(NodeTourist(Be.Expr, Then.extractIt(DOT.value)).captureLastMatch(ast.parse(string)))  # ty:ignore[invalid-return-type]
+	return raiseIfNone(NodeTourist(Be.Expr, Then.extractIt(DOT.value)).captureLastMatch(ast.parse(string)))
 
 def removeUnusedParameters(FunctionDef: ast.FunctionDef) -> ast.FunctionDef:
 	"""Remove unused `ast.arg` (***arg***ument) parameters from an `ast.FunctionDef` (Function ***Def***inition).
@@ -411,7 +420,7 @@ def unjoinBinOP(astAST: ast.AST, operator: type[ast.operator] = ast.operator) ->
 
 	return list_ast_expr
 
-def unparseFindReplace[木: ast.AST, 文件: ast.AST, 文义](astTree: 木, mappingFindReplaceNodes: Mapping[文件, 文义]) -> 木:
+def unparseFindReplace[木: ast.AST, 文件: ast.AST, 文义: ast.AST](astTree: 木, mappingFindReplaceNodes: Mapping[文件, 文义]) -> 木:
 	"""Replace `ast.AST` (Abstract Syntax Tree) nodes in `astTree` using a find-replace `Mapping`.
 
 	(AI generated docstring)
@@ -454,7 +463,7 @@ def unparseFindReplace[木: ast.AST, 文件: ast.AST, 文义](astTree: 木, mapp
 		https://context7.com/hunterhogan/asttoolkit
 	"""
 	keepGoing = True
-	newTree = deepcopy(astTree)
+	newTree: 木 = deepcopy(astTree)
 
 	while keepGoing:
 		for nodeFind, nodeReplace in mappingFindReplaceNodes.items():
@@ -467,10 +476,10 @@ def unparseFindReplace[木: ast.AST, 文件: ast.AST, 文义](astTree: 木, mapp
 	return newTree
 
 @overload
-def write_astModule(astModule: ast.Module, pathFilename: PathLike[Any] | PurePath, settings: dict[str, dict[str, Any]] | None = None, identifierPackage: str='') -> Path: ...
+def write_astModule(astModule: ast.Module, pathFilename: PathLike[Any] | PurePath, settings: dict[str, dict[str, Any]] | None = None, identifierPackage: str = '') -> Path: ...
 @overload
-def write_astModule(astModule: ast.Module, pathFilename: io.TextIOBase, settings: dict[str, dict[str, Any]] | None = None, identifierPackage: str='') ->  io.TextIOBase: ...
-def write_astModule(astModule: ast.Module, pathFilename: PathLike[Any] | PurePath | io.TextIOBase, settings: dict[str, dict[str, Any]] | None = None, identifierPackage: str='') -> Path | io.TextIOBase:
+def write_astModule(astModule: ast.Module, pathFilename: io.TextIOBase, settings: dict[str, dict[str, Any]] | None = None, identifierPackage: str = '') ->  io.TextIOBase: ...
+def write_astModule(astModule: ast.Module, pathFilename: PathLike[Any] | PurePath | io.TextIOBase, settings: dict[str, dict[str, Any]] | None = None, identifierPackage: str = '') -> Path | io.TextIOBase:
 	"""Convert an `ast.Module` (Module) to Python source code and write it to a file or stream.
 
 	(AI generated docstring)
@@ -762,4 +771,3 @@ def parsePathFilename2astModule(pathFilename: PathLike[Any] | PurePath, **keywor
 		https://docs.python.org/3/whatsnew/3.13.html
 	"""
 	return ast.parse(Path(pathFilename).read_text(encoding="utf-8"), **keywordArguments)
-

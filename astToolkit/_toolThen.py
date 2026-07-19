@@ -1,6 +1,11 @@
-from collections.abc import Callable, Mapping, Sequence
-from typing import Any
-import ast
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+	from collections.abc import Callable, Mapping, Sequence
+	from typing import Any
+	import ast
 
 class Then:
 	"""Apply an action to a `node`, especially in the antecedent-action pattern of `NodeTourist` and `NodeChanger`.
@@ -19,7 +24,7 @@ class Then:
 	"""
 
 	@staticmethod
-	def appendTo[个](listOfAny: list[Any]) -> Callable[[个],  个]:
+	def appendTo[个](listOfAny: list[Any]) -> Callable[[个], 个]:
 		"""Append matched nodes to a collection while preserving them in the AST.
 
 		(AI generated docstring)
@@ -123,12 +128,6 @@ class Then:
 		----------
 		_removeMe : ast.AST
 			AST node to be deleted (parameter ignored).
-
-		Returns
-		-------
-		None
-			Signals node deletion to the transformer.
-
 		"""
 		return
 
