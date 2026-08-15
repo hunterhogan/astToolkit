@@ -84,7 +84,7 @@ task-tags = ["DEVELOPMENT", "FailEarly", "NOTE", "SEMIOTICS", "TODO"]
 allow-dict-calls-with-keyword-arguments = true
 
 [lint.flake8-import-conventions]
-banned-aliases = { numpy = ["np"], pandas = ["pd"], regex = ["re"] }
+banned-aliases = { numpy = ["np"], optype = ["op"], pandas = ["pd"], regex = ["re"] }
 
 [lint.flake8-import-conventions.aliases]
 "accelerate.utils.dataclasses" = "accelerate_dataclasses"

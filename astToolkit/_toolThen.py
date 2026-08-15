@@ -50,7 +50,7 @@ class Then:
 		return workhorse
 
 	@staticmethod
-	def extractIt[个](node: 个) -> 个:
+	def extractIt[个, 归个](node: 个) -> 归个:
 		"""Extract and return nodes unchanged for identity operations.
 
 		(AI generated docstring)

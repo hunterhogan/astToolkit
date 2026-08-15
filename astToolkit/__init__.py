@@ -113,7 +113,7 @@ if (3, 14) <= sys.version_info:
 from astToolkit._theSSOT import packageSettings  # pyright: ignore[reportUnusedImport]
 
 # isort: split
-from astToolkit._toolkitNodeVisitor import NodeChanger as NodeChanger, NodeTourist as NodeTourist
+from astToolkit._kitNodeTours import NodeChanger as NodeChanger, NodeTourist as NodeTourist
 
 # isort: split
 from astToolkit._dumpHandmade import dump as dump
