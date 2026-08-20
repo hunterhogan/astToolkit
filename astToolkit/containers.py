@@ -586,7 +586,7 @@ class IngredientsModule:
 		"""
 		self.removeImportFrom(dotModule, None, None)
 
-	def removeImportFrom(self, dotModule: identifierDotAttribute, name: str | None, asName: str | None = None) -> None:
+	def removeImportFrom(self, dotModule: identifierDotAttribute | None, name: str | None, asName: str | None = None) -> None:
 		"""
 		Remove specific import dependencies across this module and all its functions.
 
