@@ -1,10 +1,14 @@
 """Tests for the IfThis class predicates using parametrized tests and DRY principles."""
-# pyright: standard
+from __future__ import annotations
+
 from astToolkit import Be, IfThis, Make
-from collections.abc import Callable
-from typing import Any
-import ast
+from typing import TYPE_CHECKING
 import pytest
+
+if TYPE_CHECKING:
+	from collections.abc import Callable
+	from typing import Any
+	import ast
 
 class TestIfThisBasicPredicates:
 	"""Test suite for basic IfThis methods."""
@@ -171,7 +175,7 @@ class TestIfThisLogicalCombinationMethods:
 		([Be.Name, lambda nodeTarget: hasattr(nodeTarget, 'id') and nodeTarget.id == "identifierNorthward"], Make.Name("identifierNorthward"), True),
 		# Some predicates don't match
 		([Be.Name, lambda nodeTarget: hasattr(nodeTarget, 'id') and nodeTarget.id == "identifierSouthward"], Make.Name("identifierNorthward"), False),
-		([], Make.Name("identifierNorthward"), True), # Empty predicates list - all() returns True for empty sequence
+		([], Make.Name("identifierNorthward"), True),  # Empty predicates list - all() returns True for empty sequence
 	])
 	def testIsAllOfWithVariousPredicateCombinations(self, listPredicatesTest: list[Callable[..., Any]], nodeASTTest: ast.AST, expectedPredicateResult: bool) -> None:
 		"""Test isAllOf with various predicate combinations using semantic identifiers."""
@@ -183,7 +187,7 @@ class TestIfThisLogicalCombinationMethods:
 		([Be.Constant, Be.Name], Make.Name("identifierNorthward"), True),
 		# No predicates match
 		([Be.Constant, Be.FunctionDef], Make.Name("identifierNorthward"), False),
-		([], Make.Name("identifierNorthward"), False), # Empty predicates list - any() returns False for empty sequence
+		([], Make.Name("identifierNorthward"), False),  # Empty predicates list - any() returns False for empty sequence
 	])
 	def testIsAnyOfWithVariousPredicateCombinations(self, listPredicatesTest: list[Callable[..., Any]], nodeASTTest: ast.AST, expectedPredicateResult: bool) -> None:
 		"""Test isAnyOf with various predicate combinations using semantic identifiers."""
@@ -199,6 +203,7 @@ class TestIfThisTreeAnalysisMethods:
 			targets=[Make.Name("variableAlpha", context=Make.Store())],
 			value=Make.Constant(233)  # Fibonacci number
 		)
+
 		def predicateNameMatching(nodeTarget: ast.AST) -> bool:
 			return Be.Name(nodeTarget) and getattr(nodeTarget, 'id', None) == "variableBeta"
 		predicateGenerated = IfThis.matchesNoDescendant(predicateNameMatching)
@@ -210,6 +215,7 @@ class TestIfThisTreeAnalysisMethods:
 			targets=[Make.Name("variableAlpha", context=Make.Store())],
 			value=Make.Constant(233)  # Fibonacci number
 		)
+
 		def predicateNameMatching(nodeTarget: ast.AST) -> bool:
 			return Be.Name(nodeTarget) and getattr(nodeTarget, 'id', None) == "variableAlpha"
 		predicateGenerated = IfThis.matchesNoDescendant(predicateNameMatching)

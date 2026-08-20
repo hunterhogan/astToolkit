@@ -106,7 +106,7 @@ from astToolkit.theTypes import (
 	工位 as 工位, 布尔符 as 布尔符, 常 as 常, 归个 as 归个, 形 as 形, 忽 as 忽, 拦 as 拦, 文义 as 文义, 文件 as 文件, 木 as 木, 本 as 本, 比符 as 比符)
 
 # isort: split
-if (3, 14) <= sys.version_info:
+if (3, 14) <= sys.version_info:  # ruff: ignore[non-empty-init-module]
 	from astToolkit.theTypes import hasDOTstr as hasDOTstr
 
 # isort: split
@@ -127,7 +127,6 @@ from astToolkit._toolIfThis import IfThis as IfThis
 from astToolkit._toolThen import Then as Then
 
 # isort: split
-from astToolkit._namespaceUncertainty import (
-	extractClassDef as extractClassDef, extractFunctionDef as extractFunctionDef, parseLogicalPath2astModule as parseLogicalPath2astModule,
-	parsePathFilename2astModule as parsePathFilename2astModule)
-import astToolkit._namespaceUncertainty  # pyright: ignore[reportUnusedImport]
+from astToolkit.changeDef import extractClassDef, extractFunctionDef  # pyright: ignore[reportUnusedImport]
+from astToolkit.filesystem import parseLogicalPath2astModule, parsePathFilename2astModule  # pyright: ignore[reportUnusedImport]
+import astToolkit.changeDef  # pyright: ignore[reportUnusedImport]

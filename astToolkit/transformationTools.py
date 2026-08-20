@@ -27,7 +27,8 @@ code transformations while maintaining semantic integrity and performance charac
 from __future__ import annotations
 
 from astToolkit._namespaceUncertainty import (
-	inlineFunctionDef as inlineFunctionDef, makeDictionaryAsyncFunctionDef as makeDictionaryAsyncFunctionDef,
-	makeDictionaryClassDef as makeDictionaryClassDef, makeDictionaryFunctionDef as makeDictionaryFunctionDef,
-	makeDictionaryMosDef as makeDictionaryMosDef, pythonCode2ast_expr as pythonCode2ast_expr, removeUnusedParameters as removeUnusedParameters,
-	unjoinBinOP as unjoinBinOP, unparseFindReplace as unparseFindReplace, write_astModule as write_astModule)
+	pythonCode2ast_expr as pythonCode2ast_expr, unjoinBinOP as unjoinBinOP, unparseFindReplace as unparseFindReplace)
+from astToolkit.changeDef import removeUnusedParameters  # pyright: ignore[reportUnusedImport]
+from astToolkit.changeDef import (  # pyright: ignore[reportUnusedImport]
+	inlineFunctionDef, makeDictionaryAsyncFunctionDef, makeDictionaryClassDef, makeDictionaryFunctionDef, makeDictionaryMosDef)
+from astToolkit.filesystem import write_astModule  # pyright: ignore[reportUnusedImport]

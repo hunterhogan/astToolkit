@@ -1,6 +1,7 @@
+from __future__ import annotations
+
 from astToolkit import Be
 from typing import Any
-import ast
 
 def test_BeIdentifierClassPositive(beTestData: tuple[str, str, dict[str, Any]]) -> None:
     identifierClass, subtestName, dictTest = beTestData

@@ -188,5 +188,10 @@
 		"body": "形",
 		"description": "Form. Type. Kind. Good for `typing.TypeVar` and `ast.type_param`. 形 Chinese: xíng",
 		"prefix": "Z types Type"
-	}
+	},
+	"míng 名": {
+		"body": "名",
+		"description": "Name. Good for identifiers and variable names. 名 Chinese: míng",
+		"prefix": "Z name"
+	},
 }

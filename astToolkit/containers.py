@@ -34,10 +34,11 @@ allowing transformation logic to focus on semantic changes rather than syntactic
 from __future__ import annotations
 
 from astToolkit import extractFunctionDef, identifierDotAttribute, Make
-from astToolkit._namespaceUncertainty import (
+from astToolkit.changeDef import (
 	makeDictionaryAsyncFunctionDef as makeDictionaryAsyncFunctionDef, makeDictionaryClassDef as makeDictionaryClassDef,
 	makeDictionaryFunctionDef as makeDictionaryFunctionDef, makeDictionaryMosDef as makeDictionaryMosDef)
-from astToolkit.transformationTools import removeUnusedParameters, write_astModule
+from astToolkit.filesystem import write_astModule
+from astToolkit.transformationTools import removeUnusedParameters
 from collections import defaultdict
 from collections.abc import Iterable
 from hunterMakesPy import raiseIfNone
@@ -240,7 +241,7 @@ class LedgerOfImports:
 		"""
 		self.removeImportFrom(dotModule, None, None)
 
-	def removeImportFrom(self, dotModule: identifierDotAttribute, name: str | None, asName: str | None = None) -> None:
+	def removeImportFrom(self, dotModule: identifierDotAttribute | None, name: str | None, asName: str | None = None) -> None:
 		"""
 		Remove specific import dependency records from a module.
 
@@ -280,6 +281,9 @@ class LedgerOfImports:
 
 				if not self._dictionaryImportFrom[dotModule]:
 					self._dictionaryImportFrom.pop(dotModule)
+		elif (dotModule is None) and (name is not None or asName is not None):
+			for module in list(self._dictionaryImportFrom):
+				self.removeImportFrom(module, name, asName)
 
 	def update(self, *fromLedger: LedgerOfImports) -> None:
 		"""
@@ -468,7 +472,7 @@ class IngredientsModule:
 			else:
 				self.appendIngredientsFunction(*ingredientsFunction)
 
-	def _append_astModule(self, self_astModule: ast.Module, astModule: ast.Module | None, statement: Iterable[ast.stmt] | ast.stmt | None, type_ignores: list[ast.TypeIgnore] | None) -> None:
+	def _append_astModule(self, self_astModule: ast.Module, astModule: ast.Module | None, statement: Iterable[ast.stmt] | ast.stmt | None, type_ignores: list[ast.TypeIgnore] | None) -> None:  # ruff: ignore[no-self-use]
 		list_body: list[ast.stmt] = []
 		listTypeIgnore: list[ast.TypeIgnore] = []
 		if astModule is not None and isinstance(astModule, ast.Module):

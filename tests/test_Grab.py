@@ -1,10 +1,14 @@
 """Tests for the Grab class using parametrized tests and DRY principles."""
-# pyright: standard
+from __future__ import annotations
+
 from astToolkit import Grab, Make
-from collections.abc import Callable
-from typing import Any
+from typing import TYPE_CHECKING
 import ast
 import pytest
+
+if TYPE_CHECKING:
+	from collections.abc import Callable
+	from typing import Any
 
 class TestGrabAttributeMethods:
 	"""Test suite for Grab attribute modification methods."""
@@ -29,7 +33,7 @@ class TestGrabAttributeMethods:
 		assert nodeModified is nodeOriginal, f"{methodNameGrab} should modify node in place"
 
 		# Get the attribute name (remove "Attribute" suffix)
-		attributeName = methodNameGrab[:-9] if methodNameGrab.endswith("Attribute") else methodNameGrab
+		attributeName = methodNameGrab.removesuffix("Attribute")
 
 		# Verify the attribute value
 		actualAttributeValue = getattr(nodeModified, attributeName)
@@ -53,7 +57,7 @@ class TestGrabAttributeMethods:
 		nodeModified = actionGrab(nodeOriginal)
 
 		# Get the modified attribute name
-		attributeNameModified = methodNameGrab[:-9] if methodNameGrab.endswith("Attribute") else methodNameGrab
+		attributeNameModified = methodNameGrab.removesuffix("Attribute")
 
 		# Verify other attributes are unchanged
 		for attributeName, valueOriginal in dictionaryOriginalAttributes.items():

@@ -1,8 +1,7 @@
 """SSOT for all tests."""
-# pyright: standard
 from __future__ import annotations
 
-from astToolkit import Be, Make, packageSettings
+from astToolkit import Make, packageSettings
 from functools import cache
 from tests.dataSamples.Make import allSubclasses
 from typing import Any, TYPE_CHECKING
@@ -52,7 +51,7 @@ def getTestData(vsClass: str, testName: str) -> dict[str, Any]:
 	return allSubclasses[vsClass][testName]
 
 def generateBeNegativeTestData() -> Iterator[tuple[str, str, str, dict[str, Any]]]:
-	for class2test, *list_vsClass in [(C, *list(set(allSubclasses) - {C} - {c.__name__ for c in eval('ast.' + C).__subclasses__()})) for C in allSubclasses]:  # noqa: S307
+	for class2test, *list_vsClass in [(C, *list(set(allSubclasses) - {C} - {c.__name__ for c in eval('ast.' + C).__subclasses__()})) for C in allSubclasses]:  # ruff: ignore[suspicious-eval-usage]
 		testName = "class Make, maximally empty parameters"
 
 		list_vsClass.sort()

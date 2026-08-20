@@ -1,10 +1,14 @@
 """Tests for the Then class action functions using parametrized tests and DRY principles."""
-# pyright: standard
+from __future__ import annotations
+
 from astToolkit import Make, Then
-from collections.abc import Callable, Sequence
-from typing import Any
-import ast
+from typing import TYPE_CHECKING
 import pytest
+
+if TYPE_CHECKING:
+	from collections.abc import Callable, Sequence
+	from typing import Any
+	import ast
 
 class TestThenAppendTo:
 	"""Test suite for Then.appendTo method."""
