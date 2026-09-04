@@ -7,12 +7,17 @@ node patterns. These predicates are designed for use with the antecedent-action 
 type-safe, composable AST analysis and transformation workflows.
 
 """
+from __future__ import annotations
+
 from astToolkit import Be
-from collections.abc import Callable
-from typing import Any, TypeIs
+from typing import overload, TYPE_CHECKING
 import ast
 
-class IfThis:
+if TYPE_CHECKING:
+	from collections.abc import Callable
+	from typing import Any, TypeIs
+
+class IfThis:  # ruff: ignore[too-many-public-methods]
 	"""Composable predicate generators for AST node identification in antecedent-action workflows.
 
 	(AI generated docstring)
@@ -24,9 +29,15 @@ class IfThis:
 
 	"""
 
+	@overload
 	@staticmethod
-	def isAllOf[归个](*predicate: Callable[[ast.AST], TypeIs[归个] | bool]) -> Callable[[ast.AST], TypeIs[归个] | bool]:
-		def workhorse(node: ast.AST) -> TypeIs[归个] | bool:
+	def isAllOf[归木: ast.AST](*predicate: Callable[[ast.AST], TypeIs[归木]]) -> Callable[[ast.AST], TypeIs[归木]]: ...
+	@overload
+	@staticmethod
+	def isAllOf(*predicate: Callable[[ast.AST], bool]) -> Callable[[ast.AST], bool]: ...
+	@staticmethod
+	def isAllOf[归木: ast.AST](*predicate: Callable[[ast.AST], TypeIs[归木]] | Callable[[ast.AST], bool]) -> Callable[[ast.AST], TypeIs[归木]] | Callable[[ast.AST], bool]:
+		def workhorse(node: ast.AST) -> TypeIs[归木] | bool:
 			return all(antecedent(node) for antecedent in predicate)
 		return workhorse
 
@@ -93,7 +104,7 @@ class IfThis:
 			Predicate returning `True` if the node is an `ast.Assign` and its first target matches `targets0Predicate`.
 		"""
 		def workhorse(node: ast.AST) -> TypeIs[ast.Assign]:
-			return Be.Assign(node) and targets0Predicate(node.targets[0])  # ty:ignore[unresolved-attribute]
+			return Be.Assign(node) and targets0Predicate(node.targets[0])
 		return workhorse
 
 	@staticmethod
@@ -432,8 +443,8 @@ class IfThis:
 		"""
 		def workhorse(node: ast.AST) -> TypeIs[ast.UnaryOp]:
 			return (Be.UnaryOp(node)
-					and Be.Not(node.op)  # ty:ignore[unresolved-attribute]
-					and IfThis.isAttributeNamespaceIdentifier(namespace, identifier)(node.operand))  # ty:ignore[unresolved-attribute]
+					and Be.Not(node.op)
+					and IfThis.isAttributeNamespaceIdentifier(namespace, identifier)(node.operand))
 		return workhorse
 
 	@staticmethod
