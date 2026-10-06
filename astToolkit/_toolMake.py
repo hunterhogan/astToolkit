@@ -1327,27 +1327,6 @@ class Make:
         return ast.excepthandler(**keywordArguments)
 
     @staticmethod
-    def expr(**keywordArguments: Unpack[ast_attributes]) -> ast.expr:
-        """Abstract ***expr***ession `object` for base expression operations.
-
-        (AI generated docstring.)
-
-        The `ast.expr` class serves as the abstract base class for all expression objects in Python's AST. Unlike
-        `ast.stmt` which represents statements that perform actions, `ast.expr` represents expressions that evaluate to
-        values and can be used within larger expressions or as parts of statements.          Expressions vs Statements:
-        - **expr**: Evaluates to a value and can be composed into larger expressions. Examples include literals (`42`,
-        `"hello"`), operations (`x + y`), function calls (`len(data)`), and attribute access (`obj.method`).         -
-        **stmt**: Performs an action and does not evaluate to a usable value. Examples include assignments (`x = 5`),
-        control flow (`if`, `for`, `while`), function definitions (`def`), and imports (`import`).
-
-        Returns
-        -------
-        expression :
-            Abstract expression `object` that serves as the base class for all Python expressions in AST structures.
-        """
-        return ast.expr(**keywordArguments)
-
-    @staticmethod
     def Expr(value: ast.expr, **keywordArguments: Unpack[ast_attributes]) -> ast.Expr:
         """Create an `ast.Expr` node for expression statements.
 
@@ -1367,6 +1346,27 @@ class Make:
             The constructed expression statement node.
         """
         return ast.Expr(value=value, **keywordArguments)
+
+    @staticmethod
+    def expr(**keywordArguments: Unpack[ast_attributes]) -> ast.expr:
+        """Abstract ***expr***ession `object` for base expression operations.
+
+        (AI generated docstring.)
+
+        The `ast.expr` class serves as the abstract base class for all expression objects in Python's AST. Unlike
+        `ast.stmt` which represents statements that perform actions, `ast.expr` represents expressions that evaluate to
+        values and can be used within larger expressions or as parts of statements.          Expressions vs Statements:
+        - **expr**: Evaluates to a value and can be composed into larger expressions. Examples include literals (`42`,
+        `"hello"`), operations (`x + y`), function calls (`len(data)`), and attribute access (`obj.method`).         -
+        **stmt**: Performs an action and does not evaluate to a usable value. Examples include assignments (`x = 5`),
+        control flow (`if`, `for`, `while`), function definitions (`def`), and imports (`import`).
+
+        Returns
+        -------
+        expression :
+            Abstract expression `object` that serves as the base class for all Python expressions in AST structures.
+        """
+        return ast.expr(**keywordArguments)
 
     @staticmethod
     def expr_context() -> ast.expr_context:
@@ -2495,11 +2495,6 @@ class Make:
             """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
-    @staticmethod
-    def mod() -> ast.mod:
-        """Create an abstract `ast.mod` (***mod***ule) `object`."""
-        return ast.mod()
-
     class Mod(ast.Mod):
         """Identical to the `ast` (abstract syntax tree) class but with a method, `join()`, that 'joins' expressions using the `ast.BinOp` (***Bin***ary ***Op***eration) class."""
 
@@ -2542,6 +2537,11 @@ class Make:
             ```
             """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
+
+    @staticmethod
+    def mod() -> ast.mod:
+        """Create an abstract `ast.mod` (***mod***ule) `object`."""
+        return ast.mod()
 
     @staticmethod
     def Module(body: Sequence[ast.stmt], type_ignores: list[ast.TypeIgnore] | None=None) -> ast.Module:

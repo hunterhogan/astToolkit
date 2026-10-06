@@ -168,16 +168,14 @@ type hasDOTtype_comment = ast.arg | ast.Assign | ast.AsyncFor | ast.AsyncFunctio
 type hasDOTtype_ignores = ast.Module
 type hasDOTtype_params = ast.AsyncFunctionDef | ast.ClassDef | ast.FunctionDef | ast.TypeAlias
 type hasDOTupper = ast.Slice
-if sys.version_info >= (3, 14):
-    type hasDOTvalue = hasDOTvalue_boolOrNone | hasDOTvalue_ConstantValueType | hasDOTvalue_expr | hasDOTvalue_exprOrNone
-else:
-    type hasDOTvalue = hasDOTvalue_boolOrNone | hasDOTvalue_ConstantValueType | hasDOTvalue_expr | hasDOTvalue_exprOrNone
+type hasDOTvalue = hasDOTvalue_boolOrNone | hasDOTvalue_ConstantValueType | hasDOTvalue_expr | hasDOTvalue_exprOrNone
 type hasDOTvalue_ConstantValueType = ast.Constant
 type hasDOTvalue_boolOrNone = ast.MatchSingleton
 if sys.version_info >= (3, 14):
     type hasDOTvalue_expr = ast.Assign | ast.Attribute | ast.AugAssign | ast.Await | ast.DictComp | ast.Expr | ast.FormattedValue | ast.Interpolation | ast.keyword | ast.MatchValue | ast.NamedExpr | ast.Starred | ast.Subscript | ast.TypeAlias | ast.YieldFrom
 else:
-    type hasDOTvalue_expr = ast.Assign | ast.Attribute | ast.AugAssign | ast.Await | ast.DictComp | ast.Expr | ast.FormattedValue | ast.keyword | ast.MatchValue | ast.NamedExpr | ast.Starred | ast.Subscript | ast.TypeAlias | ast.YieldFrom
+    type hasDOTvalue_expr = ast.Assign | ast.Attribute | ast.AugAssign | ast.Await | ast.DictComp | ast.Expr | ast.FormattedValue | ast.keyword | ast.MatchValue | ast.NamedExpr | ast.Starred | ast.Subscript | ast.YieldFrom
+type hasDOTvalue_expr = ast.Assign | ast.Attribute | ast.AugAssign | ast.Await | ast.DictComp | ast.Expr | ast.FormattedValue | ast.keyword | ast.MatchValue | ast.NamedExpr | ast.Starred | ast.Subscript | ast.TypeAlias | ast.YieldFrom
 type hasDOTvalue_exprOrNone = ast.AnnAssign | ast.Return | ast.Yield
 if sys.version_info >= (3, 14):
     type hasDOTvalues = ast.BoolOp | ast.Dict | ast.JoinedStr | ast.TemplateStr

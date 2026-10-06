@@ -876,14 +876,6 @@ class Be:
         """
         return isinstance(node, ast.excepthandler)
 
-    @staticmethod
-    def expr(node: ast.AST) -> TypeIs[ast.expr]:
-        """`Be.expr`, ***expr***ession, matches any of `class` `ast.expr` | `ast.Attribute` | `ast.Await` | `ast.BinOp` | `ast.BoolOp` | `ast.Call` | `ast.Compare` | `ast.Constant` | `ast.Dict` | `ast.DictComp` | `ast.FormattedValue` | `ast.GeneratorExp` | `ast.IfExp` | `ast.Interpolation` | `ast.JoinedStr` | `ast.Lambda` | `ast.List` | `ast.ListComp` | `ast.Name` | `ast.NamedExpr` | `ast.Set` | `ast.SetComp` | `ast.Slice` | `ast.Starred` | `ast.Subscript` | `ast.TemplateStr` | `ast.Tuple` | `ast.UnaryOp` | `ast.Yield` | `ast.YieldFrom`.
-
-        It is a subclass of `ast.AST`.
-        """
-        return isinstance(node, ast.expr)
-
     class _Expr:
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Expr]:
@@ -897,6 +889,14 @@ class Be:
             return workhorse
     Expr = _Expr()
     '`Be.Expr`, ***Expr***ession, matches `class` `ast.Expr`.\n\n        It is a subclass of `ast.stmt`.\n        '
+
+    @staticmethod
+    def expr(node: ast.AST) -> TypeIs[ast.expr]:
+        """`Be.expr`, ***expr***ession, matches any of `class` `ast.expr` | `ast.Attribute` | `ast.Await` | `ast.BinOp` | `ast.BoolOp` | `ast.Call` | `ast.Compare` | `ast.Constant` | `ast.Dict` | `ast.DictComp` | `ast.FormattedValue` | `ast.GeneratorExp` | `ast.IfExp` | `ast.Interpolation` | `ast.JoinedStr` | `ast.Lambda` | `ast.List` | `ast.ListComp` | `ast.Name` | `ast.NamedExpr` | `ast.Set` | `ast.SetComp` | `ast.Slice` | `ast.Starred` | `ast.Subscript` | `ast.TemplateStr` | `ast.Tuple` | `ast.UnaryOp` | `ast.Yield` | `ast.YieldFrom`.
+
+        It is a subclass of `ast.AST`.
+        """
+        return isinstance(node, ast.expr)
 
     @staticmethod
     def expr_context(node: ast.AST) -> TypeIs[ast.expr_context]:
@@ -1658,14 +1658,6 @@ class Be:
         return isinstance(node, ast.MatMult)
 
     @staticmethod
-    def mod(node: ast.AST) -> TypeIs[ast.mod]:
-        """`Be.mod`, ***mod***ule, matches any of `class` `ast.mod` | `ast.Expression` | `ast.FunctionType` | `ast.Interactive` | `ast.Module` | `ast.Suite`.
-
-        It is a subclass of `ast.AST`.
-        """
-        return isinstance(node, ast.mod)
-
-    @staticmethod
     def Mod(node: ast.AST) -> TypeIs[ast.Mod]:
         """`Be.Mod`, ***Mod***ulo, matches `class` `ast.Mod`.
 
@@ -1673,6 +1665,14 @@ class Be:
         It is a subclass of `ast.operator`.
         """
         return isinstance(node, ast.Mod)
+
+    @staticmethod
+    def mod(node: ast.AST) -> TypeIs[ast.mod]:
+        """`Be.mod`, ***mod***ule, matches any of `class` `ast.mod` | `ast.Expression` | `ast.FunctionType` | `ast.Interactive` | `ast.Module` | `ast.Suite`.
+
+        It is a subclass of `ast.AST`.
+        """
+        return isinstance(node, ast.mod)
 
     class _Module:
 
