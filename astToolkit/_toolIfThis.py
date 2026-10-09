@@ -37,12 +37,14 @@ class IfThis:  # ruff: ignore[too-many-public-methods]
 	def isAllOf(*predicate: Callable[[ast.AST], bool]) -> Callable[[ast.AST], bool]: ...
 	@staticmethod
 	def isAllOf[归木: ast.AST](*predicate: Callable[[ast.AST], TypeIs[归木]] | Callable[[ast.AST], bool]) -> Callable[[ast.AST], TypeIs[归木]] | Callable[[ast.AST], bool]:
+		# DOCUMENT Try nesting instead of this.
 		def workhorse(node: ast.AST) -> TypeIs[归木] | bool:
 			return all(antecedent(node) for antecedent in predicate)
 		return workhorse
 
 	@staticmethod
-	def isAnyOf[归个](*predicate: Callable[[ast.AST], TypeIs[归个] | bool]) -> Callable[[ast.AST], TypeIs[归个] | bool]:
+	def isAnyOf[归个: ast.AST](*predicate: Callable[[ast.AST], TypeIs[归个] | bool]) -> Callable[[ast.AST], TypeIs[归个] | bool]:
+		# DOCUMENT
 		def workhorse(node: ast.AST) -> TypeIs[归个] | bool:
 			return any(antecedent(node) for antecedent in predicate)
 		return workhorse
@@ -357,8 +359,6 @@ class IfThis:  # ruff: ignore[too-many-public-methods]
 			return Be.Name.idIs(IfThis.isIdentifier(identifier))(node)
 		return workhorse
 
-# TODO I wanted `Be.Call.funcIs(IfThis.isNestedNameIdentifier('TypeVar'))` to match typing_extensions.TypeVar(), typing.TypeVar(), or TypeVar().
-# Is that a good idea?
 	@staticmethod
 	def isNestedNameIdentifier(identifier: str) -> Callable[[ast.AST], TypeIs[ast.Attribute | ast.Starred | ast.Subscript]]:
 		"""Return a predicate matching an `ast.Name`, `ast.Attribute`, `ast.Subscript`, or `ast.Starred` node with a specific identifier.
@@ -489,7 +489,6 @@ class IfThis:  # ruff: ignore[too-many-public-methods]
 			return all(not (descendant is not node and predicate(descendant)) for descendant in ast.walk(node))
 		return workhorse
 
-# TODO Py3.14 has a new feature for comparing two nodes. Investigate.
 	@staticmethod
 	def unparseIs(astAST: ast.AST) -> Callable[[ast.AST], bool]:
 		"""Return a predicate that matches a node if its unparsed code matches the unparsed code of a given AST node.
@@ -509,4 +508,10 @@ class IfThis:  # ruff: ignore[too-many-public-methods]
 		"""
 		def workhorse(node: ast.AST) -> bool:
 			return ast.unparse(node) == ast.unparse(astAST)
+		return workhorse
+
+	@staticmethod
+	def astIs[木: ast.AST](astAST: 木) -> Callable[[ast.AST], TypeIs[木]]:
+		def workhorse(node: ast.AST) -> TypeIs[木]:
+			return ast.compare(node, astAST)
 		return workhorse

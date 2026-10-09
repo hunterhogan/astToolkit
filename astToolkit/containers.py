@@ -33,7 +33,7 @@ allowing transformation logic to focus on semantic changes rather than syntactic
 """
 from __future__ import annotations
 
-from astToolkit import extractFunctionDef, identifierDotAttribute, Make
+from astToolkit import Be, DOT, extractFunctionDef, identifierDotAttribute, IfThis, Make, NodeChanger
 from astToolkit.changeDef import (
 	makeDictionaryAsyncFunctionDef as makeDictionaryAsyncFunctionDef, makeDictionaryClassDef as makeDictionaryClassDef,
 	makeDictionaryFunctionDef as makeDictionaryFunctionDef, makeDictionaryMosDef as makeDictionaryMosDef)
@@ -55,6 +55,9 @@ if TYPE_CHECKING:
 	from pathlib import Path, PurePath
 	from typing import Any
 	import io
+
+# fix: addAst() discards asname when processing ordinary ast.Import statements.
+# fix: removeImportFromModule() does not remove entries from _listImport.
 
 class LedgerOfImports:
 	"""
@@ -131,7 +134,7 @@ class LedgerOfImports:
 				for alias in astImport____.names:
 					self._listImport.append(alias.name)
 			case ast.ImportFrom():
-				# TODO fix the mess created by `None` means '.'. I need a `str_nameDOTname` to replace '.',
+				# TODO fix the mess created by `None` means '.'. I need a `identifierDotAttribute` to replace '.',
 				# of course this involves the same package/module context problem as above.
 				if astImport____.module is None:
 					astImport____.module = '.'
@@ -140,7 +143,7 @@ class LedgerOfImports:
 				for alias in astImport____.names:
 					self._dictionaryImportFrom[astImport____.module].append((alias.name, alias.asname))
 			case _:
-				message = f"I received {type(astImport____) = }, but I can only accept {ast.Import} and {ast.ImportFrom}."
+				message = f"I received {type(astImport____) = }, but I can only parse {ast.Import} and {ast.ImportFrom}."
 				raise ValueError(message)
 		if type_ignores:
 			self.type_ignores.extend(type_ignores)
@@ -325,7 +328,7 @@ class LedgerOfImports:
 		if type_ignores:
 			self.type_ignores.extend(type_ignores)
 
-@dataclasses.dataclass
+@dataclasses.dataclass(slots=True)
 class IngredientsFunction:
 	"""
 	Package a function definition with its import dependencies for code generation.
@@ -364,7 +367,7 @@ class IngredientsFunction:
 		"""
 		removeUnusedParameters(self.astFunctionDef)
 
-@dataclasses.dataclass
+@dataclasses.dataclass(slots=True)
 class IngredientsModule:
 	"""Build complete Python modules programmatically from organized components.
 
@@ -401,7 +404,7 @@ class IngredientsModule:
 	"""
 
 	ingredientsFunction: dataclasses.InitVar[Sequence[IngredientsFunction] | IngredientsFunction | None] = None
-	"""# NOTE
+	"""
 	- Bare statements in `prologue` and `epilogue` are not 'protected' by `if __name__ == '__main__':` so they will be executed merely by loading the module.
 	- The dataclass has methods for modifying `prologue`, `epilogue`, and `launcher`.
 	- However, `prologue`, `epilogue`, and `launcher` are `ast.Module` (as opposed to `list[ast.stmt]`), so that you may use tools such as `ast.walk` and `ast.NodeVisitor` on the fields.

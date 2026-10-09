@@ -1,3 +1,5 @@
+# ruff: file-ignore[docstring-missing-yields]
+# ruff: file-ignore[unnecessary-lambda]
 """SSOT for all tests."""
 from __future__ import annotations
 
@@ -125,8 +127,7 @@ def generateBeAttributeMethodTestData() -> Iterator[tuple[str, str, str, Any, An
 		Expected result of the attribute check
 	"""
 # Format: (class, method, attribute, node_value, check_value, expected)
-# NOTE: For AST objects in positive tests, we use the same object instance (not separate Make calls)
-# to ensure proper object identity comparison. For negative tests, we use different objects.
+# NOTE: This system does not conform to instructions.
 	listTestCases: list[tuple[str, str, str, Any, Any, bool]] = []
 
 	# alias tests
@@ -410,7 +411,7 @@ def generateGrabIndexTestCases() -> Iterator[tuple[str, Callable[[], list[ast.AS
 
 	listTestCases: list[tuple[str, Callable[[], list[ast.AST]], int, Callable[[ast.AST], ast.AST | list[ast.AST] | None], list[str]]] = [
 		# descriptionTest, factoryListOriginal, indexTarget, actionTransform, listExpectedIdentifiers
-		("modify_element", lambda: [Make.Name("North"), Make.Name("South"), Make.Name("East")], 1, lambda node: Make.Name(node.id.upper()), ["North", "SOUTH", "East"]),  # pyright: ignore[reportAttributeAccessIssue]
+		("modify_element", lambda: [Make.Name("North"), Make.Name("South"), Make.Name("East")], 1, lambda node: Make.Name(node.id.upper()), ["North", "SOUTH", "East"]),  # pyright: ignore[reportAttributeAccessIssue,reportUnknownMemberType,reportUnknownArgumentType]  # ty: ignore[unresolved-attribute]
 		("delete_element", lambda: [Make.Name("alpha"), Make.Name("beta"), Make.Name("gamma")], 1, lambda node: None, ["alpha", "gamma"]),
 		("expand_element", lambda: [Make.Name("prime2"), Make.Name("prime3"), Make.Name("prime5")], 1, lambda node: [Make.Name("expanded7"), Make.Name("expanded11")], ["prime2", "expanded7", "expanded11", "prime5"]),
 	]

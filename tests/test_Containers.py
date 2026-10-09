@@ -3,10 +3,16 @@ from __future__ import annotations
 
 from astToolkit import Make
 from astToolkit.containers import astModuleToIngredientsFunction, IngredientsFunction, IngredientsModule, LedgerOfImports
+from operator import attrgetter
 from pathlib import Path
+from runpy import run_path
+from typing import TYPE_CHECKING
 import ast
 import pytest
 import tempfile
+
+if TYPE_CHECKING:
+	from collections.abc import Sequence
 
 @pytest.mark.parametrize("startWithSelector", ['none', 'basicImports', 'torchRelativeImports', 'doubleRelativeImport'])
 def testInitializationOfSomething(startWithSelector: str, astModuleTorchRelativeImports: ast.Module, astModuleDoubleRelativeImport: ast.Module, listExpectedRelativeImportModules: list[str]) -> None:
@@ -375,6 +381,9 @@ def testInitializationWithDefaults(initializationParameter: None, expectedCountF
 	assert isinstance(ingredientsModule.epilogue, ast.Module)
 	assert isinstance(ingredientsModule.launcher, ast.Module)
 	assert len(ingredientsModule.listIngredientsFunctions) == expectedCountFunctions
+	assert ingredientsModule.body == []
+	ingredientsModule.appendLauncher()
+	assert ingredientsModule.body == []
 
 @pytest.mark.parametrize("nameFunctionTest,expectedCountFunctions,expectedNameFunction", [
 	("functionEta", 1, "functionEta"),
@@ -478,6 +487,44 @@ def testAppendLauncherAddsStatements(nameFunctionToCall: str) -> None:
 			break
 	assert predicateFoundOurStatement
 
+@pytest.mark.parametrize('astModule,statement,type_ignores,expected', [
+	(None, None, None, ('', ())),
+	(None, [], [Make.TypeIgnore(13, '[assignment]')], ('', ('[assignment]',))),
+	(Make.Module([Make.Expr(Make.Constant(233))], [Make.TypeIgnore(5, '[arg-type]')]), None,
+		[Make.TypeIgnore(13, '[assignment]')], ('\n    233', ('[arg-type]', '[assignment]'))),
+	(None, Make.Expr(Make.Constant(377)), None, ('\n    377', ())),
+	(None, (Make.Expr(Make.Constant(233)), Make.Expr(Make.Constant(377))), None, ('\n    233\n    377', ())),
+	(None, Make.If(Make.Compare(Make.Name('__name__'), [Make.Eq()], [Make.Constant('__main__')]),
+		[Make.Expr(Make.Constant(233))], [Make.Expr(Make.Constant(987))]), None, ('\n    233', ())),
+	(Make.Module([
+		Make.Expr(Make.Constant(233)),
+		Make.If(Make.Compare(Make.Name('__name__'), [Make.Eq()], [Make.Constant('__main__')]), [Make.Expr(Make.Constant(377))]),
+		Make.Expr(Make.Constant(610)),
+	]), [
+		Make.If(Make.Compare(Make.Name('__name__'), [Make.Eq()], [Make.Constant('__main__')]), [Make.Expr(Make.Constant(987))]),
+		Make.Expr(Make.Constant(1597)),
+	], None, ('\n    233\n    377\n    610\n    987\n    1597', ())),
+	(None, Make.If(Make.Constant(True), [
+		Make.If(Make.Compare(Make.Name('__name__'), [Make.Eq()], [Make.Constant('__main__')]), [Make.Expr(Make.Constant(233))]),
+	]), None, ("\n    if True:\n        if __name__ == '__main__':\n            233", ())),
+	(None, Make.If(Make.Compare(Make.Name('__name__'), [Make.NotEq()], [Make.Constant('__main__')]),
+		[Make.Expr(Make.Constant(233))]), None, ("\n    if __name__ != '__main__':\n        233", ())),
+])
+def test_appendLauncher(astModule: ast.Module | None, statement: Sequence[ast.stmt] | ast.stmt | None,
+		type_ignores: list[ast.TypeIgnore] | None, expected: tuple[str, tuple[str, ...]]) -> None:
+	ingredientsModule = IngredientsModule()
+	ingredientsModule.appendLauncher(statement=Make.Assign([Make.Name('launcherExecuted', context=Make.Store())], Make.Constant(89)))
+	ingredientsModule.appendLauncher(astModule, statement, type_ignores)
+
+	assert ast.unparse(Make.Module(ingredientsModule.body)) == "if __name__ == '__main__':\n    launcherExecuted = 89" + expected[0]
+	assert tuple(map(attrgetter('tag'), ingredientsModule.launcher.type_ignores)) == expected[1]
+
+	with tempfile.TemporaryDirectory() as pathTemporary:
+		pathFilename = Path(pathTemporary) / 'moduleGenerated.py'
+		ingredientsModule.write_astModule(pathFilename)
+		assert 'launcherExecuted' not in run_path(str(pathFilename), run_name='moduleGenerated')
+		assert run_path(str(pathFilename), run_name='__main__')['launcherExecuted'] == 89
+
 @pytest.mark.parametrize("nameFunctionTest,expectedCountFunctions", [
 	("functionTau", 1),
 	("functionUpsilon", 1),
@@ -570,22 +617,13 @@ def testBodyPropertyAssemblesComponentsInCorrectOrder(identifierModule: str, nam
 
 	listBodyStatements = ingredientsModule.body
 
-	# Find indices of our specific statements
-	indexPrologue = -1
-	indexFunction = -1
-	indexEpilogue = -1
-	indexLauncher = -1
-
-	for indexStatement, statement in enumerate(listBodyStatements):
-		if isinstance(statement, ast.Assign) and isinstance(statement.targets[0], ast.Name) and statement.targets[0].id == namePrologueVariable:
-			indexPrologue = indexStatement
-		elif isinstance(statement, ast.FunctionDef) and statement.name == nameFunction:
-			indexFunction = indexStatement
-		elif isinstance(statement, ast.Expr) and isinstance(statement.value, ast.Call) and isinstance(statement.value.func, ast.Name):
-			if statement.value.func.id == nameFunctionEpilogue:
-				indexEpilogue = indexStatement
-			elif statement.value.func.id == nameFunctionLauncher:
-				indexLauncher = indexStatement
+	indexPrologue = listBodyStatements.index(statementPrologueUnique)
+	indexFunction = listBodyStatements.index(astFunctionDefTest)
+	indexEpilogue = listBodyStatements.index(statementEpilogueUnique)
+	indexLauncher = len(listBodyStatements) - 1
+	ast_stmtLauncher: ast.stmt = listBodyStatements[indexLauncher]
+	assert isinstance(ast_stmtLauncher, ast.If)
+	assert ast_stmtLauncher.body == [statementLauncherUnique]
 
 # Verify correct ordering: prologue < function < epilogue < launcher
 	assert indexPrologue < indexFunction, "Prologue should come before function"
