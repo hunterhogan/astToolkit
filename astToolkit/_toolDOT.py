@@ -10,18 +10,18 @@ from astToolkit.theTypes import (
 	hasDOTname, hasDOTname_Name, hasDOTname_str, hasDOTname_strOrNone, hasDOTnames, hasDOTnames_list_alias, hasDOTnames_list_str, hasDOTop,
 	hasDOTop_boolop, hasDOTop_operator, hasDOTop_unaryop, hasDOToperand, hasDOTops, hasDOToptional_vars, hasDOTorelse, hasDOTorelse_expr,
 	hasDOTorelse_list_stmt, hasDOTpattern, hasDOTpattern_pattern, hasDOTpattern_patternOrNone, hasDOTpatterns, hasDOTposonlyargs, hasDOTrest,
-	hasDOTreturns, hasDOTreturns_expr, hasDOTreturns_exprOrNone, hasDOTright, hasDOTsimple, hasDOTslice, hasDOTstep, hasDOTsubject, hasDOTtag,
-	hasDOTtarget, hasDOTtarget_expr, hasDOTtarget_Name, hasDOTtarget_NameOrAttributeOrSubscript, hasDOTtargets, hasDOTtest, hasDOTtype,
-	hasDOTtype_comment, hasDOTtype_ignores, hasDOTtype_params, hasDOTupper, hasDOTvalue, hasDOTvalue_boolOrNone, hasDOTvalue_ConstantValueType,
-	hasDOTvalue_expr, hasDOTvalue_exprOrNone, hasDOTvalues, hasDOTvararg)
+	hasDOTreturns, hasDOTreturns_expr, hasDOTreturns_exprOrNone, hasDOTright, hasDOTsimple, hasDOTslice, hasDOTstep, hasDOTstr, hasDOTsubject,
+	hasDOTtag, hasDOTtarget, hasDOTtarget_expr, hasDOTtarget_Name, hasDOTtarget_NameOrAttributeOrSubscript, hasDOTtargets, hasDOTtest,
+	hasDOTtype, hasDOTtype_comment, hasDOTtype_ignores, hasDOTtype_params, hasDOTupper, hasDOTvalue, hasDOTvalue_boolOrNone,
+	hasDOTvalue_ConstantValueType, hasDOTvalue_expr, hasDOTvalue_exprOrNone, hasDOTvalues, hasDOTvararg)
 from collections.abc import Sequence
 from typing import overload
 import ast
 import builtins
 import sys
 
-if sys.version_info >= (3, 14):
-    from astToolkit.theTypes import hasDOTstr
+if sys.version_info >= (3, 15):
+    from astToolkit.theTypes import hasDOTis_lazy
 
 class DOT:
     """Access attributes and sub-nodes of AST elements via consistent accessor methods.
@@ -203,6 +203,11 @@ class DOT:
     @staticmethod
     def is_async(node: hasDOTis_async) -> int:
         return node.is_async
+    if sys.version_info >= (3, 15):
+
+        @staticmethod
+        def is_lazy(node: hasDOTis_lazy) -> bool | None:
+            return node.is_lazy
 
     @staticmethod
     def items(node: hasDOTitems) -> list[ast.withitem]:
@@ -415,11 +420,10 @@ class DOT:
     @staticmethod
     def step(node: hasDOTstep) -> ast.expr | None:
         return node.step
-    if sys.version_info >= (3, 14):
 
-        @staticmethod
-        def str(node: hasDOTstr) -> builtins.str:
-            return node.str
+    @staticmethod
+    def str(node: hasDOTstr) -> builtins.str:
+        return node.str
 
     @staticmethod
     def subject(node: hasDOTsubject) -> ast.expr:

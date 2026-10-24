@@ -1196,6 +1196,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Import]:
                 return isinstance(node, ast.Import) and attributeCondition(node.names)
             return workhorse
+        if sys.version_info >= (3, 15):
+
+            @staticmethod
+            def is_lazyIs(attributeCondition: Callable[[Any], bool]) -> Callable[[ast.AST], TypeIs[ast.Import]]:
+
+                def workhorse(node: ast.AST) -> TypeIs[ast.Import]:
+                    return isinstance(node, ast.Import) and attributeCondition(node.is_lazy)
+                return workhorse
     Import = _Import()
     '`Be.Import` matches `class` `ast.Import`.\n\n        This `class` is associated with Python keywords `import`.\n        It is a subclass of `ast.stmt`.\n        '
 
@@ -1224,6 +1232,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.ImportFrom]:
                 return isinstance(node, ast.ImportFrom) and attributeCondition(node.level)
             return workhorse
+        if sys.version_info >= (3, 15):
+
+            @staticmethod
+            def is_lazyIs(attributeCondition: Callable[[Any], bool]) -> Callable[[ast.AST], TypeIs[ast.ImportFrom]]:
+
+                def workhorse(node: ast.AST) -> TypeIs[ast.ImportFrom]:
+                    return isinstance(node, ast.ImportFrom) and attributeCondition(node.is_lazy)
+                return workhorse
     ImportFrom = _ImportFrom()
     '`Be.ImportFrom` matches `class` `ast.ImportFrom`.\n\n        This `class` is associated with Python keywords `import`.\n        It is a subclass of `ast.stmt`.\n        '
 
@@ -1249,42 +1265,41 @@ class Be:
             return workhorse
     Interactive = _Interactive()
     '`Be.Interactive`, Interactive mode, matches `class` `ast.Interactive`.\n\n        It is a subclass of `ast.mod`.\n        '
-    if sys.version_info >= (3, 14):
 
-        class _Interpolation:
+    class _Interpolation:
 
-            def __call__(self, node: ast.AST) -> TypeIs[ast.Interpolation]:
-                return isinstance(node, ast.Interpolation)
+        def __call__(self, node: ast.AST) -> TypeIs[ast.Interpolation]:
+            return isinstance(node, ast.Interpolation)
 
-            @staticmethod
-            def valueIs(attributeCondition: Callable[[Any], bool]) -> Callable[[ast.AST], TypeIs[ast.Interpolation]]:
+        @staticmethod
+        def valueIs(attributeCondition: Callable[[Any], bool]) -> Callable[[ast.AST], TypeIs[ast.Interpolation]]:
 
-                def workhorse(node: ast.AST) -> TypeIs[ast.Interpolation]:
-                    return isinstance(node, ast.Interpolation) and attributeCondition(node.value)
-                return workhorse
+            def workhorse(node: ast.AST) -> TypeIs[ast.Interpolation]:
+                return isinstance(node, ast.Interpolation) and attributeCondition(node.value)
+            return workhorse
 
-            @staticmethod
-            def strIs(attributeCondition: Callable[[Any], bool]) -> Callable[[ast.AST], TypeIs[ast.Interpolation]]:
+        @staticmethod
+        def strIs(attributeCondition: Callable[[Any], bool]) -> Callable[[ast.AST], TypeIs[ast.Interpolation]]:
 
-                def workhorse(node: ast.AST) -> TypeIs[ast.Interpolation]:
-                    return isinstance(node, ast.Interpolation) and attributeCondition(node.str)
-                return workhorse
+            def workhorse(node: ast.AST) -> TypeIs[ast.Interpolation]:
+                return isinstance(node, ast.Interpolation) and attributeCondition(node.str)
+            return workhorse
 
-            @staticmethod
-            def conversionIs(attributeCondition: Callable[[Any], bool]) -> Callable[[ast.AST], TypeIs[ast.Interpolation]]:
+        @staticmethod
+        def conversionIs(attributeCondition: Callable[[Any], bool]) -> Callable[[ast.AST], TypeIs[ast.Interpolation]]:
 
-                def workhorse(node: ast.AST) -> TypeIs[ast.Interpolation]:
-                    return isinstance(node, ast.Interpolation) and attributeCondition(node.conversion)
-                return workhorse
+            def workhorse(node: ast.AST) -> TypeIs[ast.Interpolation]:
+                return isinstance(node, ast.Interpolation) and attributeCondition(node.conversion)
+            return workhorse
 
-            @staticmethod
-            def format_specIs(attributeCondition: Callable[[Any], bool]) -> Callable[[ast.AST], TypeIs[ast.Interpolation]]:
+        @staticmethod
+        def format_specIs(attributeCondition: Callable[[Any], bool]) -> Callable[[ast.AST], TypeIs[ast.Interpolation]]:
 
-                def workhorse(node: ast.AST) -> TypeIs[ast.Interpolation]:
-                    return isinstance(node, ast.Interpolation) and attributeCondition(node.format_spec)
-                return workhorse
-        Interpolation = _Interpolation()
-        '`Be.Interpolation` matches `class` `ast.Interpolation`.\n\n        It is a subclass of `ast.expr`.\n        '
+            def workhorse(node: ast.AST) -> TypeIs[ast.Interpolation]:
+                return isinstance(node, ast.Interpolation) and attributeCondition(node.format_spec)
+            return workhorse
+    Interpolation = _Interpolation()
+    '`Be.Interpolation` matches `class` `ast.Interpolation`.\n\n        It is a subclass of `ast.expr`.\n        '
 
     @staticmethod
     def Invert(node: ast.AST) -> TypeIs[ast.Invert]:
@@ -2031,21 +2046,20 @@ class Be:
             return workhorse
     Subscript = _Subscript()
     "`Be.Subscript` matches `class` `ast.Subscript`.\n\n        This `class` is associated with Python delimiters '[]'.\n        It is a subclass of `ast.expr`.\n        "
-    if sys.version_info >= (3, 14):
 
-        class _TemplateStr:
+    class _TemplateStr:
 
-            def __call__(self, node: ast.AST) -> TypeIs[ast.TemplateStr]:
-                return isinstance(node, ast.TemplateStr)
+        def __call__(self, node: ast.AST) -> TypeIs[ast.TemplateStr]:
+            return isinstance(node, ast.TemplateStr)
 
-            @staticmethod
-            def valuesIs(attributeCondition: Callable[[Any], bool]) -> Callable[[ast.AST], TypeIs[ast.TemplateStr]]:
+        @staticmethod
+        def valuesIs(attributeCondition: Callable[[Any], bool]) -> Callable[[ast.AST], TypeIs[ast.TemplateStr]]:
 
-                def workhorse(node: ast.AST) -> TypeIs[ast.TemplateStr]:
-                    return isinstance(node, ast.TemplateStr) and attributeCondition(node.values)
-                return workhorse
-        TemplateStr = _TemplateStr()
-        '`Be.TemplateStr` matches `class` `ast.TemplateStr`.\n\n        It is a subclass of `ast.expr`.\n        '
+            def workhorse(node: ast.AST) -> TypeIs[ast.TemplateStr]:
+                return isinstance(node, ast.TemplateStr) and attributeCondition(node.values)
+            return workhorse
+    TemplateStr = _TemplateStr()
+    '`Be.TemplateStr` matches `class` `ast.TemplateStr`.\n\n        It is a subclass of `ast.expr`.\n        '
 
     class _Try:
 

@@ -8,7 +8,7 @@ import ast
 import builtins
 import sys
 
-class Make:
+class Make:  # ruff: ignore[too-many-public-methods]
     """Create a `class` `ast.AST` `object` or an `ast.AST` subclass `object`.
 
     I describe `keywordArguments` of `Make` methods here.
@@ -1757,10 +1757,11 @@ class Make:
         ```
         """
         return ast.IfExp(test=test, body=body, orelse=orElse, **keywordArguments)
+    if sys.version_info >= (3, 15):
 
-    @staticmethod
-    def Import(dotModule: identifierDotAttribute, asName: str | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Import:
-        """Make an `ast.Import` `object` representing a single `import` statement.
+        @staticmethod
+        def Import(dotModule: identifierDotAttribute, asName: str | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Import:
+            """Make an `ast.Import` `object` representing a single `import` statement.
 
         (AI generated docstring.)
 
@@ -1802,34 +1803,110 @@ class Make:
         Make.Import(dotModule = 'scipy.signal.windows', asName = 'SciPy')
         ```
         """
-        return ast.Import(names=[Make.alias(dotModule, asName)], **keywordArguments)
+            return ast.Import(names=[Make.alias(dotModule, asName)], **keywordArguments)
+    else:
 
-    @staticmethod
-    def ImportFrom(dotModule: str | None, list_alias: list[ast.alias], level: int=0, **keywordArguments: Unpack[ast_attributes]) -> ast.ImportFrom:
-        """Make a from-import statement AST `object` for selective module imports.
+        @staticmethod
+        def Import(dotModule: identifierDotAttribute, asName: str | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Import:
+            """Make an `ast.Import` `object` representing a single `import` statement.
 
         (AI generated docstring.)
 
-        The `ast.ImportFrom` `object` represents `from ... import` statements that selectively import specific names
-        from modules. It supports relative imports and multiple import aliases.
+        The `ast.Import` `object` represents one `import` statement with zero or more module names separated by commas.
+        Each module name is an `ast.alias` `object`. The series of module names is stored in `ast.Import.names` as a
+        `list` of `ast.alias`.      Nevertheless, with `Make.Import`, you must create exactly one `ast.alias` `object`
+        to be placed in `ast.Import.names`.
 
         Parameters
         ----------
-        module :
-            The source module name using dot notation, or None for relative imports that rely solely on the level
-            parameter.
-        names :
-            List of alias objects specifying which names to import and their optional aliases.
-        level :
-            (relative import level) Import level controlling relative vs absolute imports. Zero indicates absolute
-            import, positive values indicate relative import depth.
+        dotModule :
+            (package.Module notation) The name of the module to import: the name may be in dot notation, also called
+            attribute access; the name may be an absolute or relative import. This parameter corresponds with
+            `ast.alias.name` in `ast.Import.names[0]`; or, written as one dot-notation statement, it corresponds with
+            `ast.Import.names[0].name`.
+        asName :
+            (as Name) The identifier of the module in the local scope: `asName` must be a valid identifier, so it cannot
+            be in dot notation. This parameter corresponds with `ast.alias.asname` in `ast.Import.names[0]`; or, written
+            as one dot-notation statement, it corresponds with `ast.Import.names[0].asname`.
 
         Returns
         -------
-        fromImportStatement : ast.ImportFrom
-            AST `object` representing a selective module import statement.
+        importStatement :
+            An `ast.Import` `object` with one `ast.alias` `object` representing a single `import` statement with a
+            single module name.
+
+        Examples
+        --------
+        ```python
+        # To represent: `import os`
+        Make.Import(dotModule = 'os')
+
+        # To represent: `import re as regex`
+        Make.Import(dotModule = 're', asName = 'regex')
+
+        # To represent: `import collections.abc`
+        Make.Import(dotModule = 'collections.abc')
+        # To represent: `import scipy.signal.windows as SciPy`
+        Make.Import(dotModule = 'scipy.signal.windows', asName = 'SciPy')
+        ```
         """
-        return ast.ImportFrom(module=dotModule, names=list_alias, level=level, **keywordArguments)
+            return ast.Import(names=[Make.alias(dotModule, asName)], **keywordArguments)
+    if sys.version_info >= (3, 15):
+
+        @staticmethod
+        def ImportFrom(dotModule: str | None, list_alias: list[ast.alias], level: int=0, is_lazy: bool | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.ImportFrom:
+            """Make a from-import statement AST `object` for selective module imports.
+
+            (AI generated docstring.)
+
+            The `ast.ImportFrom` `object` represents `from ... import` statements that selectively import specific names
+            from modules. It supports relative imports and multiple import aliases.
+
+            Parameters
+            ----------
+            module :
+                The source module name using dot notation, or None for relative imports that rely solely on the level
+                parameter.
+            names :
+                List of alias objects specifying which names to import and their optional aliases.
+            level :
+                (relative import level) Import level controlling relative vs absolute imports. Zero indicates absolute
+                import, positive values indicate relative import depth.
+
+            Returns
+            -------
+            fromImportStatement : ast.ImportFrom
+                AST `object` representing a selective module import statement.
+            """
+            return ast.ImportFrom(module=dotModule, names=list_alias, level=level, is_lazy=is_lazy, **keywordArguments)
+    else:
+
+        @staticmethod
+        def ImportFrom(dotModule: str | None, list_alias: list[ast.alias], level: int=0, **keywordArguments: Unpack[ast_attributes]) -> ast.ImportFrom:
+            """Make a from-import statement AST `object` for selective module imports.
+
+            (AI generated docstring.)
+
+            The `ast.ImportFrom` `object` represents `from ... import` statements that selectively import specific names
+            from modules. It supports relative imports and multiple import aliases.
+
+            Parameters
+            ----------
+            module :
+                The source module name using dot notation, or None for relative imports that rely solely on the level
+                parameter.
+            names :
+                List of alias objects specifying which names to import and their optional aliases.
+            level :
+                (relative import level) Import level controlling relative vs absolute imports. Zero indicates absolute
+                import, positive values indicate relative import depth.
+
+            Returns
+            -------
+            fromImportStatement : ast.ImportFrom
+                AST `object` representing a selective module import statement.
+            """
+            return ast.ImportFrom(module=dotModule, names=list_alias, level=level, **keywordArguments)
 
     @staticmethod
     def In() -> ast.In:
@@ -1868,34 +1945,33 @@ class Make:
             The constructed interactive module node
         """
         return ast.Interactive(body=list(body))
-    if sys.version_info >= (3, 14):
 
-        @staticmethod
-        def Interpolation(value: ast.expr, string: builtins.str, conversion: int, format_spec: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Interpolation:
-            """Make an interpolation AST `object` for template strings.
+    @staticmethod
+    def Interpolation(value: ast.expr, string: builtins.str, conversion: int, format_spec: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Interpolation:
+        """Make an interpolation AST `object` for template strings.
 
-            (AI generated docstring.)
+        (AI generated docstring.)
 
-            The `ast.Interpolation` `object` represents a single interpolation within a template string. It captures the
-            expression being interpolated, along with any conversion flags and format specifiers.
+        The `ast.Interpolation` `object` represents a single interpolation within a template string. It captures the
+        expression being interpolated, along with any conversion flags and format specifiers.
 
-            Parameters
-            ----------
-            value : ast.expr
-                The expression to be evaluated and interpolated.
-            string : builtins.str
-                The original string representation of the interpolation. https://github.com/python/cpython/issues/143661
-            conversion : int
-                The conversion flag (e.g., -1 for none, 115 for 's', 114 for 'r', 97 for 'a').
-            format_spec : ast.expr | None = None
-                Optional format specifier expression.
+        Parameters
+        ----------
+        value : ast.expr
+            The expression to be evaluated and interpolated.
+        string : builtins.str
+            The original string representation of the interpolation. https://github.com/python/cpython/issues/143661
+        conversion : int
+            The conversion flag (e.g., -1 for none, 115 for 's', 114 for 'r', 97 for 'a').
+        format_spec : ast.expr | None = None
+            Optional format specifier expression.
 
-            Returns
-            -------
-            nodeInterpolation : ast.Interpolation
-                AST `object` representing an interpolation component of a template string.
-            """
-            return ast.Interpolation(value=value, str=string, conversion=conversion, format_spec=format_spec, **keywordArguments)
+        Returns
+        -------
+        nodeInterpolation : ast.Interpolation
+            AST `object` representing an interpolation component of a template string.
+        """
+        return ast.Interpolation(value=value, str=string, conversion=conversion, format_spec=format_spec, **keywordArguments)
 
     @staticmethod
     def Invert() -> ast.Invert:
@@ -3212,28 +3288,27 @@ class Make:
             AST `object` representing a subscription operation with brackets.
         """
         return ast.Subscript(value=value, slice=slice, ctx=context or ast.Load(), **keywordArguments)
-    if sys.version_info >= (3, 14):
 
-        @staticmethod
-        def TemplateStr(values: Sequence[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.TemplateStr:
-            """Make a template string AST `object`.
+    @staticmethod
+    def TemplateStr(values: Sequence[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.TemplateStr:
+        """Make a template string AST `object`.
 
-            (AI generated docstring.)
+        (AI generated docstring.)
 
-            The `ast.TemplateStr` `object` represents a template string. It consists of a sequence of components which can
-            be constant strings or interpolations.
+        The `ast.TemplateStr` `object` represents a template string. It consists of a sequence of components which can
+        be constant strings or interpolations.
 
-            Parameters
-            ----------
-            values : Sequence[ast.expr]
-                A sequence of nodes (typically `ast.Constant` or `ast.Interpolation`) forming the template string.
+        Parameters
+        ----------
+        values : Sequence[ast.expr]
+            A sequence of nodes (typically `ast.Constant` or `ast.Interpolation`) forming the template string.
 
-            Returns
-            -------
-            templateString : ast.TemplateStr
-                AST `object` representing a template string.
-            """
-            return ast.TemplateStr(values=list(values), **keywordArguments)
+        Returns
+        -------
+        templateString : ast.TemplateStr
+            AST `object` representing a template string.
+        """
+        return ast.TemplateStr(values=list(values), **keywordArguments)
 
     @staticmethod
     def Try(body: Sequence[ast.stmt], handlers: list[ast.ExceptHandler], orElse: Sequence[ast.stmt] | None=None, finalbody: Sequence[ast.stmt] | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Try:

@@ -65,8 +65,6 @@ Transform multiplication to addition:
 # isort: split
 from __future__ import annotations
 
-import sys
-
 # isort: split
 from astToolkit.theTypes import (
 	ast_attributes as ast_attributes, ast_attributes_int as ast_attributes_int, ast_attributes_type_comment as ast_attributes_type_comment,
@@ -95,8 +93,8 @@ from astToolkit.theTypes import (
 	hasDOTpattern_pattern as hasDOTpattern_pattern, hasDOTpattern_patternOrNone as hasDOTpattern_patternOrNone,
 	hasDOTpatterns as hasDOTpatterns, hasDOTposonlyargs as hasDOTposonlyargs, hasDOTrest as hasDOTrest, hasDOTreturns as hasDOTreturns,
 	hasDOTreturns_expr as hasDOTreturns_expr, hasDOTreturns_exprOrNone as hasDOTreturns_exprOrNone, hasDOTright as hasDOTright,
-	hasDOTsimple as hasDOTsimple, hasDOTslice as hasDOTslice, hasDOTstep as hasDOTstep, hasDOTsubject as hasDOTsubject, hasDOTtag as hasDOTtag,
-	hasDOTtarget as hasDOTtarget, hasDOTtarget_expr as hasDOTtarget_expr, hasDOTtarget_Name as hasDOTtarget_Name,
+	hasDOTsimple as hasDOTsimple, hasDOTslice as hasDOTslice, hasDOTstep as hasDOTstep, hasDOTstr as hasDOTstr, hasDOTsubject as hasDOTsubject,
+	hasDOTtag as hasDOTtag, hasDOTtarget as hasDOTtarget, hasDOTtarget_expr as hasDOTtarget_expr, hasDOTtarget_Name as hasDOTtarget_Name,
 	hasDOTtarget_NameOrAttributeOrSubscript as hasDOTtarget_NameOrAttributeOrSubscript, hasDOTtargets as hasDOTtargets,
 	hasDOTtest as hasDOTtest, hasDOTtype as hasDOTtype, hasDOTtype_comment as hasDOTtype_comment, hasDOTtype_ignores as hasDOTtype_ignores,
 	hasDOTtype_params as hasDOTtype_params, hasDOTupper as hasDOTupper, hasDOTvalue as hasDOTvalue,
@@ -104,10 +102,6 @@ from astToolkit.theTypes import (
 	hasDOTvalue_expr as hasDOTvalue_expr, hasDOTvalue_exprOrNone as hasDOTvalue_exprOrNone, hasDOTvalues as hasDOTvalues,
 	hasDOTvararg as hasDOTvararg, identifierDotAttribute as identifierDotAttribute, 一符 as 一符, 个 as 个, 二符 as 二符, 俪 as 俪, 口 as 口, 工 as 工,
 	工位 as 工位, 布尔符 as 布尔符, 常 as 常, 归个 as 归个, 形 as 形, 忽 as 忽, 拦 as 拦, 文义 as 文义, 文件 as 文件, 木 as 木, 本 as 本, 比符 as 比符)
-
-# isort: split
-if (3, 14) <= sys.version_info:  # ruff: ignore[non-empty-init-module]
-	from astToolkit.theTypes import hasDOTstr as hasDOTstr
 
 # isort: split
 from astToolkit._theSSOT import packageSettings  # pyright: ignore[reportUnusedImport]

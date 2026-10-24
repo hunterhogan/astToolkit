@@ -7,7 +7,7 @@ from astToolkit.theTypes import (
 	hasDOTguard, hasDOThandlers, hasDOTid, hasDOTifs, hasDOTis_async, hasDOTitems, hasDOTiter, hasDOTkey, hasDOTkeys, hasDOTkeywords,
 	hasDOTkind, hasDOTkw_defaults, hasDOTkwarg, hasDOTkwd_attrs, hasDOTkwd_patterns, hasDOTkwonlyargs, hasDOTleft, hasDOTlevel, hasDOTlineno,
 	hasDOTlower, hasDOTmodule, hasDOTmsg, hasDOTname, hasDOTnames, hasDOTop, hasDOToperand, hasDOTops, hasDOToptional_vars, hasDOTorelse,
-	hasDOTpattern, hasDOTpatterns, hasDOTposonlyargs, hasDOTrest, hasDOTreturns, hasDOTright, hasDOTsimple, hasDOTslice, hasDOTstep,
+	hasDOTpattern, hasDOTpatterns, hasDOTposonlyargs, hasDOTrest, hasDOTreturns, hasDOTright, hasDOTsimple, hasDOTslice, hasDOTstep, hasDOTstr,
 	hasDOTsubject, hasDOTtag, hasDOTtarget, hasDOTtargets, hasDOTtest, hasDOTtype, hasDOTtype_comment, hasDOTtype_ignores, hasDOTtype_params,
 	hasDOTupper, hasDOTvalue, hasDOTvalues, hasDOTvararg, 一符, 个, 二符, 俪, 口, 工, 工位, 布尔符, 形, 比符)
 from collections.abc import Callable, Sequence
@@ -15,8 +15,8 @@ from typing import Any
 import ast
 import sys
 
-if sys.version_info >= (3, 14):
-    from astToolkit.theTypes import hasDOTstr
+if sys.version_info >= (3, 15):
+    from astToolkit.theTypes import hasDOTis_lazy
 
 class Grab:
     """Modify specific attributes of AST nodes while preserving the node structure.
@@ -954,6 +954,36 @@ class Grab:
             setattr(node, 'is_async', action(getattr(node, 'is_async')))
             return node
         return workhorse
+    if sys.version_info >= (3, 15):
+
+        @staticmethod
+        def is_lazyAttribute(action: Callable[[bool | None], bool | None]) -> Callable[[hasDOTis_lazy], hasDOTis_lazy]:
+            """Apply a function to the `is_lazy` attribute of a 'node' of `type` `hasDOTis_lazy`.
+
+            The `type` of the `is_lazy` attribute is `something` for [any of] `class` `ast.IDK`.  If `type` were represented
+            by a `TypeVar`, I would tell you what the ideogram is.  If `is_lazy` could be a second type, I would tell you it
+            is `type` `somethingElse` for [any of] `class` `ast.FML`.
+
+            Parameters
+            ----------
+            action : Callable[[bool | None], bool | None]
+                A function with one parameter and a `return` of the same `type`.
+
+            Returns
+            -------
+            workhorse : Callable[[hasDOTis_lazy], hasDOTis_lazy]
+                A function with one parameter for a 'node' of `type` `hasDOTis_lazy` and a `return` of the same `type`.
+
+            Type Checker Error?
+            -------------------
+            If you use `Grab` with one level of complexity, your type checker will give you accurate guidance. With two levels of complexity, such as nesting `Grab`
+            in another `Grab`, your type checker will be angry. I recommend `typing.cast()`. The fault is mine: the 'type safety' of `Grab` is inherently limited.
+            """
+
+            def workhorse(node: hasDOTis_lazy) -> hasDOTis_lazy:
+                setattr(node, 'is_lazy', action(getattr(node, 'is_lazy')))
+                return node
+            return workhorse
 
     @staticmethod
     def itemsAttribute(action: Callable[[list[ast.withitem]], list[ast.withitem]]) -> Callable[[hasDOTitems], hasDOTitems]:
@@ -1912,36 +1942,35 @@ class Grab:
             setattr(node, 'step', action(getattr(node, 'step')))
             return node
         return workhorse
-    if sys.version_info >= (3, 14):
 
-        @staticmethod
-        def strAttribute(action: Callable[[str], str]) -> Callable[[hasDOTstr], hasDOTstr]:
-            """Apply a function to the `str` attribute of a 'node' of `type` `hasDOTstr`.
+    @staticmethod
+    def strAttribute(action: Callable[[str], str]) -> Callable[[hasDOTstr], hasDOTstr]:
+        """Apply a function to the `str` attribute of a 'node' of `type` `hasDOTstr`.
 
-            The `type` of the `str` attribute is `something` for [any of] `class` `ast.IDK`.  If `type` were represented by
-            a `TypeVar`, I would tell you what the ideogram is.  If `str` could be a second type, I would tell you it is
-            `type` `somethingElse` for [any of] `class` `ast.FML`.
+        The `type` of the `str` attribute is `something` for [any of] `class` `ast.IDK`.  If `type` were represented by
+        a `TypeVar`, I would tell you what the ideogram is.  If `str` could be a second type, I would tell you it is
+        `type` `somethingElse` for [any of] `class` `ast.FML`.
 
-            Parameters
-            ----------
-            action : Callable[[str], str]
-                A function with one parameter and a `return` of the same `type`.
+        Parameters
+        ----------
+        action : Callable[[str], str]
+            A function with one parameter and a `return` of the same `type`.
 
-            Returns
-            -------
-            workhorse : Callable[[hasDOTstr], hasDOTstr]
-                A function with one parameter for a 'node' of `type` `hasDOTstr` and a `return` of the same `type`.
+        Returns
+        -------
+        workhorse : Callable[[hasDOTstr], hasDOTstr]
+            A function with one parameter for a 'node' of `type` `hasDOTstr` and a `return` of the same `type`.
 
-            Type Checker Error?
-            -------------------
-            If you use `Grab` with one level of complexity, your type checker will give you accurate guidance. With two levels of complexity, such as nesting `Grab`
-            in another `Grab`, your type checker will be angry. I recommend `typing.cast()`. The fault is mine: the 'type safety' of `Grab` is inherently limited.
-            """
+        Type Checker Error?
+        -------------------
+        If you use `Grab` with one level of complexity, your type checker will give you accurate guidance. With two levels of complexity, such as nesting `Grab`
+        in another `Grab`, your type checker will be angry. I recommend `typing.cast()`. The fault is mine: the 'type safety' of `Grab` is inherently limited.
+        """
 
-            def workhorse(node: hasDOTstr) -> hasDOTstr:
-                setattr(node, 'str', action(getattr(node, 'str')))
-                return node
-            return workhorse
+        def workhorse(node: hasDOTstr) -> hasDOTstr:
+            setattr(node, 'str', action(getattr(node, 'str')))
+            return node
+        return workhorse
 
     @staticmethod
     def subjectAttribute(action: Callable[[工], 工]) -> Callable[[hasDOTsubject], hasDOTsubject]:
