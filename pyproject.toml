@@ -45,7 +45,7 @@ classifiers = [
   "Typing :: Typed",
 ]
 urls = { Donate = "https://www.patreon.com/integrated", Homepage = "https://github.com/hunterhogan/astToolkit", Issues = "https://github.com/hunterhogan/astToolkit/issues", Repository = "https://github.com/hunterhogan/astToolkit.git" }
-dependencies = ["hunterMakesPy>=0.4.3"]
+dependencies = ["hunterMakesPy>=0.8.1"]
 optional-dependencies = { testing = ["pytest-cov", "pytest-xdist", "pytest"] }
 
 [build-system]
