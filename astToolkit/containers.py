@@ -123,11 +123,6 @@ class LedgerOfImports:
 			from parsed Python code.
 		type_ignores : list[ast.TypeIgnore] | None
 			Additional type ignore directives associated with this import.
-
-		Raises
-		------
-		ValueError
-			If the AST node is not an import statement type.
 		"""
 		match astImport____:
 			case ast.Import():
@@ -143,8 +138,7 @@ class LedgerOfImports:
 				for alias in astImport____.names:
 					self._dictionaryImportFrom[astImport____.module].append((alias.name, alias.asname))
 			case _:
-				message = f"I received {type(astImport____) = }, but I can only parse {ast.Import} and {ast.ImportFrom}."
-				raise ValueError(message)
+				pass
 		if type_ignores:
 			self.type_ignores.extend(type_ignores)
 
@@ -655,8 +649,11 @@ class IngredientsModule:
 		list_stmt.extend(self.prologue.body)
 		list_stmt.extend(ingredientsFunction.astFunctionDef for ingredientsFunction in self.listIngredientsFunctions)
 		list_stmt.extend(self.epilogue.body)
-		list_stmt.extend(self.launcher.body)
-		# TODO `launcher`, if it exists, must start with `if __name__ == '__main__':` and be indented
+		if self.launcher.body:
+			astCompare: ast.Compare = Make.Compare(Make.Name('__name__'), [Make.Eq()], [Make.Constant('__main__')])
+			astModule: ast.Module = Make.Module(self.launcher.body)
+			NodeChanger(IfThis.isAllOf(Be.If.testIs(IfThis.astIs(astCompare)), self.launcher.body.__contains__), DOT.body).visit(astModule)
+			list_stmt.append(Make.If(astCompare, astModule.body))
 		return list_stmt
 
 	@property

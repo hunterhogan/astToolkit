@@ -15,7 +15,7 @@ import ast
 
 if TYPE_CHECKING:
 	from collections.abc import Callable
-	from typing import Any, TypeIs
+	from typing import Any, TypeGuard, TypeIs
 
 class IfThis:  # ruff: ignore[too-many-public-methods]
 	"""Composable predicate generators for AST node identification in antecedent-action workflows.
@@ -31,14 +31,14 @@ class IfThis:  # ruff: ignore[too-many-public-methods]
 
 	@overload
 	@staticmethod
-	def isAllOf[归木: ast.AST](*predicate: Callable[[ast.AST], TypeIs[归木]]) -> Callable[[ast.AST], TypeIs[归木]]: ...
+	def isAllOf[归木: ast.AST](antecedent: Callable[[ast.AST], TypeIs[归木]], /, *predicate: Callable[[ast.AST], bool]) -> Callable[[ast.AST], TypeGuard[归木]]: ...
 	@overload
 	@staticmethod
 	def isAllOf(*predicate: Callable[[ast.AST], bool]) -> Callable[[ast.AST], bool]: ...
 	@staticmethod
-	def isAllOf[归木: ast.AST](*predicate: Callable[[ast.AST], TypeIs[归木]] | Callable[[ast.AST], bool]) -> Callable[[ast.AST], TypeIs[归木]] | Callable[[ast.AST], bool]:
+	def isAllOf(*predicate: Callable[[ast.AST], bool]) -> Callable[[ast.AST], bool]:
 		# DOCUMENT Try nesting instead of this.
-		def workhorse(node: ast.AST) -> TypeIs[归木] | bool:
+		def workhorse(node: ast.AST) -> bool:
 			return all(antecedent(node) for antecedent in predicate)
 		return workhorse
 
