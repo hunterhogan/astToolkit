@@ -1,3 +1,4 @@
+# pyright: reportUnusedImport=false
 """
 AST Transformation Tools for Code Optimization and Generation.
 
@@ -26,9 +27,8 @@ code transformations while maintaining semantic integrity and performance charac
 """
 from __future__ import annotations
 
-from astToolkit._namespaceUncertainty import (
-	pythonCode2ast_expr as pythonCode2ast_expr, unjoinBinOP as unjoinBinOP, unparseFindReplace as unparseFindReplace)
-from astToolkit.changeDef import removeUnusedParameters  # pyright: ignore[reportUnusedImport]
-from astToolkit.changeDef import (  # pyright: ignore[reportUnusedImport]
-	inlineFunctionDef, makeDictionaryAsyncFunctionDef, makeDictionaryClassDef, makeDictionaryFunctionDef, makeDictionaryMosDef)
-from astToolkit.filesystem import write_astModule  # pyright: ignore[reportUnusedImport]
+from astToolkit.changeDef import (
+	inlineFunctionDef, makeDictionaryAsyncFunctionDef, makeDictionaryClassDef, makeDictionaryFunctionDef, makeDictionaryMosDef,
+	removeUnusedParameters)
+from astToolkit.filesystem import write_astModule
+from astToolkit.ohWow import pythonCode2ast_expr, unjoinBinOP, unparseFindReplace

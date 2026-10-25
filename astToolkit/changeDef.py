@@ -6,6 +6,180 @@ from astToolkit import Be, DOT, Grab, IfThis, Make, NodeChanger, NodeTourist, Th
 from copy import deepcopy
 import ast
 
+def extractClassDef(astAST: ast.AST, identifier: str) -> ast.ClassDef | None:
+	"""Extract an `ast.ClassDef` (***Class*** ***Def***inition) from an `ast.AST` (Abstract Syntax Tree) `object` by name.
+
+	(AI generated docstring)
+
+	You can use `extractClassDef` to retrieve the first `ast.ClassDef` whose `ast.ClassDef.name`
+	equals `identifier` from within `astAST`. `extractClassDef` returns `None` when no matching
+	`ast.ClassDef` is found.
+
+	Parameters
+	----------
+	astAST : ast.AST
+		(Abstract Syntax Tree) The `ast.AST` `object` to search for `ast.ClassDef` nodes.
+	identifier : str
+		The name to match against `ast.ClassDef.name`.
+
+	Returns
+	-------
+	astClassDef : ast.ClassDef | None
+		The first `ast.ClassDef` (***Class*** ***Def***inition) `object` whose
+		`ast.ClassDef.name == identifier`, or `None` if `extractClassDef` does not find a matching
+		`ast.ClassDef`.
+
+	References
+	----------
+	[1] ast.ClassDef - Python documentation
+		https://docs.python.org/3/library/ast.html#ast.ClassDef
+	[2] astToolkit - Context7
+		https://context7.com/hunterhogan/asttoolkit
+	"""
+	return NodeTourist(IfThis.isClassDefIdentifier(identifier), Then.extractIt).captureLastMatch(astAST)
+
+def extractFunctionDef(astAST: ast.AST, identifier: str) -> ast.FunctionDef | None:
+	"""Extract an `ast.FunctionDef` (Function ***Def***inition) from an `ast.AST` (abstract syntax tree) `object` by name.
+
+	(AI generated docstring)
+
+	You can use `extractFunctionDef` to retrieve the first `ast.FunctionDef` whose
+	`ast.FunctionDef.name` equals `identifier` from within `astAST`. `extractFunctionDef` returns
+	`None` when no matching `ast.FunctionDef` is found.
+
+	Parameters
+	----------
+	astAST : ast.AST
+		(abstract syntax tree) The `ast.AST` `object` to search for `ast.FunctionDef` nodes.
+	identifier : str
+		The name to match against `ast.FunctionDef.name` (***id***entifier of the function).
+
+	Returns
+	-------
+	astFunctionDef : ast.FunctionDef | None
+		The first `ast.FunctionDef` (Function ***Def***inition) `object` whose
+		`ast.FunctionDef.name == identifier`, or `None` if `extractFunctionDef` does not find a
+		matching `ast.FunctionDef`.
+
+	References
+	----------
+	[1] ast.FunctionDef - Python documentation
+		https://docs.python.org/3/library/ast.html#ast.FunctionDef
+	[2] astToolkit - Context7
+		https://context7.com/hunterhogan/asttoolkit
+	"""
+	return NodeTourist(IfThis.isFunctionDefIdentifier(identifier), Then.extractIt).captureLastMatch(astAST)
+
+def inlineFunctionDef(identifierToInline: str, astModule: ast.Module) -> ast.FunctionDef:
+	"""Synthesize an `ast.FunctionDef` (Function ***Def***inition) with each called function's `body` substituted inline.
+
+	(AI generated docstring)
+
+	You can use `inlineFunctionDef` to transform the `ast.FunctionDef` (Function ***Def***inition)
+	named `identifierToInline` in `astModule` (abstract syntax tree Module) by replacing calls to
+	other functions defined in the same `astModule` with each matched function's `body`.
+
+	`inlineFunctionDef` searches `identifierToInline` for `ast.Call` (Call) nodes that target an
+	`ast.Name` (***id***entifier), for example `Path`, but not an `ast.Attribute` (***attr***ibute)
+	such as `pathlib.Path`. The `ast.Name.id` (***id***entifier) must match an `ast.FunctionDef.name`
+	in `astModule`. When a match is found, `inlineFunctionDef` replaces the `ast.Call` with the
+	body of the matched `ast.FunctionDef`.
+
+	`inlineFunctionDef` repeats the inlining process until no more locally defined functions remain
+	to be inlined. Functions not called directly by `identifierToInline` in the original `astModule`
+	may therefore be inlined if they are called by an already-inlined function.
+
+	Parameters
+	----------
+	identifierToInline : str
+		The name of the target `ast.FunctionDef` (Function ***Def***inition); `identifierToInline`
+		must match an `ast.FunctionDef.name` in `astModule`.
+	astModule : ast.Module
+		(abstract syntax tree Module) An `ast.Module` containing the `ast.FunctionDef` named
+		`identifierToInline` and zero or more additional `ast.FunctionDef` `object` to inline.
+
+	Returns
+	-------
+	FunctionDefToInline : ast.FunctionDef
+		The synthesized `ast.FunctionDef` (Function ***Def***inition) with inlined logic from
+		other functions defined in `astModule`.
+
+	Recursive Functions
+	-------------------
+	Direct recursion
+		If an `ast.FunctionDef` calls itself, it is not inlined.
+
+	Mutual recursion
+		If any function transitively reachable from `identifierToInline` calls back to
+		`identifierToInline`, it is not inlined.
+
+	Raises
+	------
+	ValueError
+		If `identifierToInline` does not match any `ast.FunctionDef.name` in `astModule`.
+
+	References
+	----------
+	[1] ast.FunctionDef - Python documentation
+		https://docs.python.org/3/library/ast.html#ast.FunctionDef
+	[2] ast.Call - Python documentation
+		https://docs.python.org/3/library/ast.html#ast.Call
+	[3] Inline expansion - Wikipedia
+		https://en.wikipedia.org/wiki/Inline_expansion
+	[4] astToolkit - Context7
+		https://context7.com/hunterhogan/asttoolkit
+	"""
+	dictionaryFunctionDef: dict[str, ast.FunctionDef] = makeDictionaryFunctionDef(astModule)
+	try:
+		FunctionDefToInline = dictionaryFunctionDef[identifierToInline]
+	except KeyError as 拦message:
+		message: str = f"I was unable to find an `ast.FunctionDef` with name {identifierToInline = } in {astModule = }."
+		raise ValueError(message) from 拦message
+
+	listIdentifiersCalledFunctions: list[str] = []
+	findIdentifiersToInline = NodeTourist[ast.Call, ast.Call](IfThis.isCallToName
+		, Grab.funcAttribute(Grab.idAttribute(Then.appendTo(listIdentifiersCalledFunctions))))
+	findIdentifiersToInline.visit(FunctionDefToInline)
+
+	dictionary4Inlining: dict[str, ast.FunctionDef] = {}
+	for identifier in sorted(set(listIdentifiersCalledFunctions).intersection(dictionaryFunctionDef.keys())):
+		if NodeTourist(IfThis.matchesMeButNotAnyDescendant(IfThis.isCallIdentifier(identifier)), Then.extractIt).captureLastMatch(astModule) is not None:
+			dictionary4Inlining[identifier] = dictionaryFunctionDef[identifier]
+
+	keepGoing = True
+	while keepGoing:
+		keepGoing = False
+		listIdentifiersCalledFunctions.clear()
+		findIdentifiersToInline.visit(Make.Module(list(dictionary4Inlining.values())))
+
+		listIdentifiersCalledFunctions = sorted((set(listIdentifiersCalledFunctions).difference(dictionary4Inlining.keys())).intersection(dictionaryFunctionDef.keys()))
+		if len(listIdentifiersCalledFunctions) > 0:
+			keepGoing = True
+			for identifier in listIdentifiersCalledFunctions:
+				if NodeTourist(IfThis.matchesMeButNotAnyDescendant(IfThis.isCallIdentifier(identifier)), Then.extractIt).captureLastMatch(astModule) is not None:
+					FunctionDefTarget = dictionaryFunctionDef[identifier]
+					if len(FunctionDefTarget.body) == 1:
+						replacement = NodeTourist[ast.AST, ast.expr](Be.Return, Then.extractIt(DOT.value)).captureLastMatch(FunctionDefTarget)
+						inliner = NodeChanger(
+							findThis=IfThis.isCallIdentifier(identifier), doThat=Then.replaceWith(replacement))
+						for astFunctionDef in dictionary4Inlining.values():
+							inliner.visit(astFunctionDef)
+					else:
+						inliner = NodeChanger(Be.Assign.valueIs(IfThis.isCallIdentifier(identifier)), Then.replaceWith(FunctionDefTarget.body[0:-1]))
+						for astFunctionDef in dictionary4Inlining.values():
+							inliner.visit(astFunctionDef)
+
+	for identifier, FunctionDefTarget in dictionary4Inlining.items():
+		if len(FunctionDefTarget.body) == 1:
+			replacement = NodeTourist[ast.AST, ast.expr](Be.Return, Then.extractIt(DOT.value)).captureLastMatch(FunctionDefTarget)
+			inliner = NodeChanger(IfThis.isCallIdentifier(identifier), Then.replaceWith(replacement))
+			inliner.visit(FunctionDefToInline)
+		else:
+			inliner = NodeChanger(Be.Assign.valueIs(IfThis.isCallIdentifier(identifier)), Then.replaceWith(FunctionDefTarget.body[0:-1]))
+			inliner.visit(FunctionDefToInline)
+	ast.fix_missing_locations(FunctionDefToInline)
+	return FunctionDefToInline
+
 def makeDictionaryAsyncFunctionDef(astAST: ast.AST) -> dict[str, ast.AsyncFunctionDef]:
 	"""Make a `dict` (***dict***ionary) mapping each `async def` (***async***hronous ***def***inition) function name to its `ast.AsyncFunctionDef` (***Async***hronous Function ***Def***inition) `object`.
 
@@ -136,116 +310,6 @@ def makeDictionaryMosDef(astAST: ast.AST) -> dict[str, ast.AsyncFunctionDef | as
 	dictionaryIdentifier2MosDef.update(makeDictionaryFunctionDef(astAST))
 	return dictionaryIdentifier2MosDef
 
-def inlineFunctionDef(identifierToInline: str, astModule: ast.Module) -> ast.FunctionDef:
-	"""Synthesize an `ast.FunctionDef` (Function ***Def***inition) with each called function's `body` substituted inline.
-
-	(AI generated docstring)
-
-	You can use `inlineFunctionDef` to transform the `ast.FunctionDef` (Function ***Def***inition)
-	named `identifierToInline` in `astModule` (abstract syntax tree Module) by replacing calls to
-	other functions defined in the same `astModule` with each matched function's `body`.
-
-	`inlineFunctionDef` searches `identifierToInline` for `ast.Call` (Call) nodes that target an
-	`ast.Name` (***id***entifier), for example `Path`, but not an `ast.Attribute` (***attr***ibute)
-	such as `pathlib.Path`. The `ast.Name.id` (***id***entifier) must match an `ast.FunctionDef.name`
-	in `astModule`. When a match is found, `inlineFunctionDef` replaces the `ast.Call` with the
-	body of the matched `ast.FunctionDef`.
-
-	`inlineFunctionDef` repeats the inlining process until no more locally defined functions remain
-	to be inlined. Functions not called directly by `identifierToInline` in the original `astModule`
-	may therefore be inlined if they are called by an already-inlined function.
-
-	Parameters
-	----------
-	identifierToInline : str
-		The name of the target `ast.FunctionDef` (Function ***Def***inition); `identifierToInline`
-		must match an `ast.FunctionDef.name` in `astModule`.
-	astModule : ast.Module
-		(abstract syntax tree Module) An `ast.Module` containing the `ast.FunctionDef` named
-		`identifierToInline` and zero or more additional `ast.FunctionDef` `object` to inline.
-
-	Returns
-	-------
-	FunctionDefToInline : ast.FunctionDef
-		The synthesized `ast.FunctionDef` (Function ***Def***inition) with inlined logic from
-		other functions defined in `astModule`.
-
-	Recursive Functions
-	-------------------
-	Direct recursion
-		If an `ast.FunctionDef` calls itself, it is not inlined.
-
-	Mutual recursion
-		If any function transitively reachable from `identifierToInline` calls back to
-		`identifierToInline`, it is not inlined.
-
-	Raises
-	------
-	ValueError
-		If `identifierToInline` does not match any `ast.FunctionDef.name` in `astModule`.
-
-	References
-	----------
-	[1] ast.FunctionDef - Python documentation
-		https://docs.python.org/3/library/ast.html#ast.FunctionDef
-	[2] ast.Call - Python documentation
-		https://docs.python.org/3/library/ast.html#ast.Call
-	[3] Inline expansion - Wikipedia
-		https://en.wikipedia.org/wiki/Inline_expansion
-	[4] astToolkit - Context7
-		https://context7.com/hunterhogan/asttoolkit
-	"""
-	dictionaryFunctionDef: dict[str, ast.FunctionDef] = makeDictionaryFunctionDef(astModule)
-	try:
-		FunctionDefToInline = dictionaryFunctionDef[identifierToInline]
-	except KeyError as 拦message:
-		message: str = f"I was unable to find an `ast.FunctionDef` with name {identifierToInline = } in {astModule = }."
-		raise ValueError(message) from 拦message
-
-	listIdentifiersCalledFunctions: list[str] = []
-	findIdentifiersToInline = NodeTourist[ast.Call, ast.Call](IfThis.isCallToName
-		, Grab.funcAttribute(Grab.idAttribute(Then.appendTo(listIdentifiersCalledFunctions))))
-	findIdentifiersToInline.visit(FunctionDefToInline)
-
-	dictionary4Inlining: dict[str, ast.FunctionDef] = {}
-	for identifier in sorted(set(listIdentifiersCalledFunctions).intersection(dictionaryFunctionDef.keys())):
-		if NodeTourist(IfThis.matchesMeButNotAnyDescendant(IfThis.isCallIdentifier(identifier)), Then.extractIt).captureLastMatch(astModule) is not None:
-			dictionary4Inlining[identifier] = dictionaryFunctionDef[identifier]
-
-	keepGoing = True
-	while keepGoing:
-		keepGoing = False
-		listIdentifiersCalledFunctions.clear()
-		findIdentifiersToInline.visit(Make.Module(list(dictionary4Inlining.values())))
-
-		listIdentifiersCalledFunctions = sorted((set(listIdentifiersCalledFunctions).difference(dictionary4Inlining.keys())).intersection(dictionaryFunctionDef.keys()))
-		if len(listIdentifiersCalledFunctions) > 0:
-			keepGoing = True
-			for identifier in listIdentifiersCalledFunctions:
-				if NodeTourist(IfThis.matchesMeButNotAnyDescendant(IfThis.isCallIdentifier(identifier)), Then.extractIt).captureLastMatch(astModule) is not None:
-					FunctionDefTarget = dictionaryFunctionDef[identifier]
-					if len(FunctionDefTarget.body) == 1:
-						replacement = NodeTourist[ast.AST, ast.expr](Be.Return, Then.extractIt(DOT.value)).captureLastMatch(FunctionDefTarget)
-						inliner = NodeChanger(
-							findThis=IfThis.isCallIdentifier(identifier), doThat=Then.replaceWith(replacement))
-						for astFunctionDef in dictionary4Inlining.values():
-							inliner.visit(astFunctionDef)
-					else:
-						inliner = NodeChanger(Be.Assign.valueIs(IfThis.isCallIdentifier(identifier)), Then.replaceWith(FunctionDefTarget.body[0:-1]))
-						for astFunctionDef in dictionary4Inlining.values():
-							inliner.visit(astFunctionDef)
-
-	for identifier, FunctionDefTarget in dictionary4Inlining.items():
-		if len(FunctionDefTarget.body) == 1:
-			replacement = NodeTourist[ast.AST, ast.expr](Be.Return, Then.extractIt(DOT.value)).captureLastMatch(FunctionDefTarget)
-			inliner = NodeChanger(IfThis.isCallIdentifier(identifier), Then.replaceWith(replacement))
-			inliner.visit(FunctionDefToInline)
-		else:
-			inliner = NodeChanger(Be.Assign.valueIs(IfThis.isCallIdentifier(identifier)), Then.replaceWith(FunctionDefTarget.body[0:-1]))
-			inliner.visit(FunctionDefToInline)
-	ast.fix_missing_locations(FunctionDefToInline)
-	return FunctionDefToInline
-
 def removeUnusedParameters(FunctionDef: ast.FunctionDef) -> ast.FunctionDef:
 	"""Remove unused `ast.arg` (***arg***ument) parameters from an `ast.FunctionDef` (Function ***Def***inition).
 
@@ -307,67 +371,3 @@ def removeUnusedParameters(FunctionDef: ast.FunctionDef) -> ast.FunctionDef:
 	ast.fix_missing_locations(FunctionDef)
 
 	return FunctionDef
-
-def extractClassDef(astAST: ast.AST, identifier: str) -> ast.ClassDef | None:
-	"""Extract an `ast.ClassDef` (***Class*** ***Def***inition) from an `ast.AST` (Abstract Syntax Tree) `object` by name.
-
-	(AI generated docstring)
-
-	You can use `extractClassDef` to retrieve the first `ast.ClassDef` whose `ast.ClassDef.name`
-	equals `identifier` from within `astAST`. `extractClassDef` returns `None` when no matching
-	`ast.ClassDef` is found.
-
-	Parameters
-	----------
-	astAST : ast.AST
-		(Abstract Syntax Tree) The `ast.AST` `object` to search for `ast.ClassDef` nodes.
-	identifier : str
-		The name to match against `ast.ClassDef.name`.
-
-	Returns
-	-------
-	astClassDef : ast.ClassDef | None
-		The first `ast.ClassDef` (***Class*** ***Def***inition) `object` whose
-		`ast.ClassDef.name == identifier`, or `None` if `extractClassDef` does not find a matching
-		`ast.ClassDef`.
-
-	References
-	----------
-	[1] ast.ClassDef - Python documentation
-		https://docs.python.org/3/library/ast.html#ast.ClassDef
-	[2] astToolkit - Context7
-		https://context7.com/hunterhogan/asttoolkit
-	"""
-	return NodeTourist(IfThis.isClassDefIdentifier(identifier), Then.extractIt).captureLastMatch(astAST)
-
-def extractFunctionDef(astAST: ast.AST, identifier: str) -> ast.FunctionDef | None:
-	"""Extract an `ast.FunctionDef` (Function ***Def***inition) from an `ast.AST` (abstract syntax tree) `object` by name.
-
-	(AI generated docstring)
-
-	You can use `extractFunctionDef` to retrieve the first `ast.FunctionDef` whose
-	`ast.FunctionDef.name` equals `identifier` from within `astAST`. `extractFunctionDef` returns
-	`None` when no matching `ast.FunctionDef` is found.
-
-	Parameters
-	----------
-	astAST : ast.AST
-		(abstract syntax tree) The `ast.AST` `object` to search for `ast.FunctionDef` nodes.
-	identifier : str
-		The name to match against `ast.FunctionDef.name` (***id***entifier of the function).
-
-	Returns
-	-------
-	astFunctionDef : ast.FunctionDef | None
-		The first `ast.FunctionDef` (Function ***Def***inition) `object` whose
-		`ast.FunctionDef.name == identifier`, or `None` if `extractFunctionDef` does not find a
-		matching `ast.FunctionDef`.
-
-	References
-	----------
-	[1] ast.FunctionDef - Python documentation
-		https://docs.python.org/3/library/ast.html#ast.FunctionDef
-	[2] astToolkit - Context7
-		https://context7.com/hunterhogan/asttoolkit
-	"""
-	return NodeTourist(IfThis.isFunctionDefIdentifier(identifier), Then.extractIt).captureLastMatch(astAST)

@@ -7,6 +7,7 @@ from astToolkit.changeDef import (
 	removeUnusedParameters)
 from astToolkit.filesystem import write_astModule
 from astToolkit.transformationTools import pythonCode2ast_expr, unjoinBinOP, unparseFindReplace
+from copy import deepcopy
 from io import StringIO
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -146,23 +147,122 @@ def testRemoveUnusedParametersAllUsed(functionDefAllParametersUsed: ast.Function
 	countParametersResult = len(resultFunctionDef.args.args)
 	assert countParametersResult == countParametersOriginal, 'removeUnusedParameters: should preserve all used parameters'
 
-@pytest.mark.parametrize('operatorType,countExpected', [(ast.Add, 3)])
+@pytest.mark.parametrize('operatorType,countExpected', [(ast.Add, 3), (ast.operator, 3), (ast.Mult, 0)])
 def testUnjoinBinOPBasicOperation(operatorType: type[ast.operator], countExpected: int, binOpChained: ast.BinOp) -> None:
 	"""Test unjoinBinOP extracts expressions from binary operations."""
-	listExpressions = unjoinBinOP(binOpChained, operatorType)
+	listExpressions = unjoinBinOP(binOpChained) if operatorType is ast.operator else unjoinBinOP(binOpChained, operatorType)
 
 	assert isinstance(listExpressions, list), f'unjoinBinOP: should return list for {operatorType.__name__}'
-	assert len(listExpressions) >= countExpected, (
-		f'unjoinBinOP: should extract at least {countExpected} expressions for {operatorType.__name__}'
+	assert len(listExpressions) == countExpected, (
+		f'unjoinBinOP: should extract exactly {countExpected} expressions for {operatorType.__name__}'
 	)
+	expected: list[ast.expr] = [Make.Constant(233), Make.Constant(89), Make.Constant(144)] if countExpected else []
+	assert all(map(ast.compare, listExpressions, expected, strict=True))
 
-def testUnjoinBinOPSingleExpression() -> None:
-	"""Test unjoinBinOP with single expression."""
-	exprSingle = Make.Constant(89)  # Fibonacci number
-	listExpressions = unjoinBinOP(exprSingle)
+@pytest.mark.parametrize('astAST,operator,expected', [
+	pytest.param(Make.Constant(89), ast.operator, [], id='constant'),
+	pytest.param(Make.Name('north'), ast.Add, [], id='name'),
+	pytest.param(Make.Module([]), ast.Add, [], id='empty-module'),
+	pytest.param(Make.Add(), ast.Add, [], id='operator-node'),
+	pytest.param(Make.Add.join([Make.Name('north'), Make.Name('east')]), ast.Add,
+		[Make.Name('north'), Make.Name('east')], id='two-operands'),
+	pytest.param(Make.Add.join([Make.Name('north'), Make.Name('east'), Make.Name('south')]), ast.Add,
+		[Make.Name('north'), Make.Name('east'), Make.Name('south')], id='left-nested'),
+	pytest.param(Make.Add.join([Make.Name('north'), Make.Add.join([Make.Name('east'), Make.Name('south')])]), ast.Add,
+		[Make.Name('north'), Make.Name('east'), Make.Name('south')], id='right-nested'),
+	pytest.param(Make.Add.join([
+		Make.Add.join([Make.Name('north'), Make.Name('east')]),
+		Make.Add.join([Make.Name('south'), Make.Name('west')])]), ast.Add,
+		[Make.Name('north'), Make.Name('east'), Make.Name('south'), Make.Name('west')], id='both-branches'),
+	pytest.param(Make.Add.join([Make.Name('north'), Make.Name('north'), Make.Name('east')]), ast.Add,
+		[Make.Name('north'), Make.Name('north'), Make.Name('east')], id='repeated-operands'),
+	pytest.param(Make.Add.join([
+		Make.Mult.join([Make.Name('north'), Make.Add.join([Make.Name('east'), Make.Name('south')])]),
+		Make.Name('west')]), ast.Add,
+		[Make.Mult.join([Make.Name('north'), Make.Add.join([Make.Name('east'), Make.Name('south')])]),
+			Make.Name('west')], id='different-left-operator'),
+	pytest.param(Make.Add.join([
+		Make.Name('north'),
+		Make.Mult.join([Make.Add.join([Make.Name('east'), Make.Name('south')]), Make.Name('west')])]), ast.Add,
+		[Make.Name('north'),
+			Make.Mult.join([Make.Add.join([Make.Name('east'), Make.Name('south')]), Make.Name('west')])], id='different-right-operator'),
+	pytest.param(Make.Add.join([
+		Make.Mult.join([Make.Name('north'), Make.Name('east')]), Make.Name('south')]), ast.operator,
+		[Make.Name('north'), Make.Name('east'), Make.Name('south')], id='all-operators'),
+	pytest.param(Make.Sub.join([Make.Name('north'), Make.Sub.join([Make.Name('east'), Make.Name('south')])]), ast.Sub,
+		[Make.Name('north'), Make.Name('east'), Make.Name('south')], id='noncommutative-order'),
+	pytest.param(Make.Mult.join([Make.Name('north'), Make.Name('east')]), ast.Add,
+		[], id='no-matching-operator'),
+	pytest.param(Make.Mult.join([
+		Make.Add.join([Make.Name('north'), Make.Name('east')]), Make.Name('south')]), ast.Add,
+		[Make.Name('north'), Make.Name('east')], id='search-inside-unmatched-root'),
+	pytest.param(Make.Add.join([
+		Make.Call(Make.Name('combine'), [Make.Add.join([Make.Name('north'), Make.Name('east')])]),
+		Make.Name('south')]), ast.Add,
+		[Make.Call(Make.Name('combine'), [Make.Add.join([Make.Name('north'), Make.Name('east')])]),
+			Make.Name('south')], id='complete-call-operand'),
+	pytest.param(Make.BitOr.join([
+		Make.Subscript(Make.Name('list'), Make.BitOr.join([Make.Name('int'), Make.Name('str')])),
+		Make.Constant(None)]), ast.BitOr,
+		[Make.Subscript(Make.Name('list'), Make.BitOr.join([Make.Name('int'), Make.Name('str')])),
+			Make.Constant(None)], id='nested-type-union'),
+	pytest.param(Make.BitOr.join([
+		Make.Attribute(Make.Name('ast'), 'expr'),
+		Make.Subscript(Make.Name('list'), Make.Attribute(Make.Name('ast'), 'expr')),
+		Make.Constant(None)]), ast.BitOr,
+		[Make.Attribute(Make.Name('ast'), 'expr'), Make.Subscript(Make.Name('list'), Make.Attribute(Make.Name('ast'), 'expr')),
+			Make.Constant(None)], id='factory-type-union'),
+	pytest.param(Make.Module([
+		Make.Expr(Make.Add.join([Make.Name('north'), Make.Name('east')])),
+		Make.Expr(Make.Constant(89)),
+		Make.Expr(Make.Add.join([Make.Name('south'), Make.Name('west')]))]), ast.Add,
+		[Make.Name('north'), Make.Name('east'), Make.Name('south'), Make.Name('west')], id='separate-operations'),
+	pytest.param(Make.Add.join([Make.Name('north')] * 3), ast.Add,
+		[Make.Name('north'), Make.Name('north'), Make.Name('north')], id='shared-operand'),
+	pytest.param(Make.Add.join([Make.Add.join([Make.Name('north'), Make.Name('east')])] * 2), ast.Add,
+		[Make.Name('north'), Make.Name('east'), Make.Name('north'), Make.Name('east')], id='shared-subtree'),
+	pytest.param(Make.Add.join([
+		Make.UnaryOp(Make.USub(), Make.Add.join([Make.Name('north'), Make.Name('east')])),
+		Make.Name('south')]), ast.Add,
+		[Make.UnaryOp(Make.USub(), Make.Add.join([Make.Name('north'), Make.Name('east')])),
+			Make.Name('south')], id='complete-unary-operand'),
+	pytest.param(Make.Add.join([
+		Make.IfExp(Make.Name('ready'), Make.Add.join([Make.Name('north'), Make.Name('east')]), Make.Name('south')),
+		Make.Name('west')]), ast.Add,
+		[Make.IfExp(Make.Name('ready'), Make.Add.join([Make.Name('north'), Make.Name('east')]), Make.Name('south')),
+			Make.Name('west')], id='complete-conditional-operand'),
+	pytest.param(Make.Expression(Make.Add.join([Make.Name('north'), Make.Name('east')])), ast.Add,
+		[Make.Name('north'), Make.Name('east')], id='expression-root'),
+	pytest.param(Make.Call(Make.Name('combine'), [
+		Make.Add.join([Make.Name('north'), Make.Name('east')]),
+		Make.Add.join([Make.Name('south'), Make.Name('west')])]), ast.Add,
+		[Make.Name('north'), Make.Name('east'), Make.Name('south'), Make.Name('west')], id='separate-call-arguments'),
+	pytest.param(Make.Mult.join([
+		Make.Add.join([Make.Name('north'), Make.Name('east')]),
+		Make.Add.join([Make.Name('south'), Make.Name('west')])]), ast.Add,
+		[Make.Name('north'), Make.Name('east'), Make.Name('south'), Make.Name('west')], id='search-both-unmatched-branches'),
+	pytest.param(Make.Pow.join([Make.Name('north'), Make.Pow.join([Make.Name('east'), Make.Name('south')])]), ast.Pow,
+		[Make.Name('north'), Make.Name('east'), Make.Name('south')], id='nested-power'),
+	pytest.param(Make.FloorDiv.join([Make.Name('north'), Make.Name('east'), Make.Name('south')]), ast.FloorDiv,
+		[Make.Name('north'), Make.Name('east'), Make.Name('south')], id='floor-division'),
+	pytest.param(Make.BitXor.join([Make.Name('north'), Make.Name('east'), Make.Name('south')]), ast.BitXor,
+		[Make.Name('north'), Make.Name('east'), Make.Name('south')], id='bitwise-xor'),
+])
+def testUnjoinBinOPSingleExpression(astAST: ast.AST, operator: type[ast.operator], expected: list[ast.expr]) -> None:
+	"""Check operand structure, order, identity, and preservation of the input AST.
+
+	(AI generated docstring)
+	"""
+	structure: ast.AST = deepcopy(astAST)
+	identities: set[int] = set(map(id, ast.walk(astAST)))
+	listExpressions = unjoinBinOP(astAST, operator)
 
 	assert isinstance(listExpressions, list), 'unjoinBinOP: should return list for single expression'
-	assert len(listExpressions) == 0, 'unjoinBinOP: should return empty list for non-BinOp'
+	assert len(listExpressions) == len(expected)
+	assert all(map(ast.compare, listExpressions, expected, strict=True))
+	assert set(map(id, listExpressions)) <= identities
+	assert set(map(id, ast.walk(astAST))) == identities
+	assert ast.compare(astAST, structure, compare_attributes=True)
 
 def testUnparseFindReplaceBasicReplacement() -> None:
 	"""Test unparseFindReplace performs basic node replacement."""

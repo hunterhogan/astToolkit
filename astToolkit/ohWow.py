@@ -1,8 +1,10 @@
-"""IDK how I want to organize the namespace."""
+# ruff: ignore[undocumented-public-module]
+# DOCUMENT
 from __future__ import annotations
 
-from astToolkit import Be, DOT, Grab, IfThis, NodeChanger, NodeTourist, Then
+from astToolkit import Be, DOT, IfThis, NodeChanger, NodeTourist, Then
 from copy import deepcopy
+from humpy_cytoolz.functoolz import complement
 from hunterMakesPy import raiseIfNone
 from typing import TYPE_CHECKING
 import ast
@@ -105,14 +107,18 @@ def unparseFindReplace[木: ast.AST, 文件: ast.AST, 文义: ast.AST](astTree: 
 	return newTree
 
 def unjoinBinOP(astAST: ast.AST, operator: type[ast.operator] = ast.operator) -> list[ast.expr]:
-	"""Decompose a nested `ast.BinOp` (***Bin***ary ***Op***eration) tree into a flat `list` of `ast.expr` (***expr***ession) nodes.
+	"""Extract the operands of matching binary operations in traversal order.
 
 	(AI generated docstring)
 
-	You can use `unjoinBinOP` to flatten a binary operation tree rooted at `astAST` (abstract syntax
-	tree) into a `list` of `ast.expr` leaf nodes. `unjoinBinOP` traverses the tree collecting the
-	right-hand operands of every matching `ast.BinOp` and accumulating all non-`ast.BinOp` nodes
-	into the result.
+	You can use `unjoinBinOP` to collect the operands of `ast.BinOp` nodes whose `op` matches
+	`operator`. Each matching chain is flattened in left-to-right order, preserving repeated
+	operands. The search can find separate matching operations anywhere in `astAST`.
+
+	Within a matching operation, only operands that are themselves matching `ast.BinOp` nodes
+	are split further. Other operands remain complete expressions, including calls, subscripts,
+	and binary operations with a different operator. Matching operations inside those complete
+	operands are not collected separately. The input tree is unchanged.
 
 	Parameters
 	----------
@@ -120,46 +126,22 @@ def unjoinBinOP(astAST: ast.AST, operator: type[ast.operator] = ast.operator) ->
 		(abstract syntax tree) The root `ast.AST` `object` to decompose. `astAST` is typically an
 		`ast.BinOp` node, but `unjoinBinOP` accepts any `ast.AST` `object`.
 	operator : type[ast.operator] = ast.operator
-		(***op***erator) The `ast.operator` subclass to match when deciding whether to descend into
-		an `ast.BinOp.op` (***op***erator). Defaults to `ast.operator`, which matches all binary
-		operators.
+		(***op***erator) The class matched against each `ast.BinOp.op` (***op***erator) instance.
+		Defaults to `ast.operator`, which matches all binary operators.
 
 	Returns
 	-------
 	list_ast_expr : list[ast.expr]
-		A flat `list` of `ast.expr` (***expr***ession) nodes that were the operands of the matched
-		`ast.BinOp` nodes.
-
-	Algorithm Details
-	-----------------
-	`unjoinBinOP` uses a `workbench` to hold `ast.BinOp` nodes encountered as left-hand operands
-	of outer `ast.BinOp` nodes. The traversal continues until `workbench` is empty, at which point
-	all nested `ast.BinOp` nodes have been decomposed and their non-`ast.BinOp` operands have been
-	collected into the result `list`.
-
-	References
-	----------
-	[1] ast.BinOp - Python documentation
-		https://docs.python.org/3/library/ast.html#ast.BinOp
-	[2] ast.operator - Python documentation
-		https://docs.python.org/3/library/ast.html#ast.operator
-	[3] astToolkit - Context7
-		https://context7.com/hunterhogan/asttoolkit
+		The original `ast.expr` (***expr***ession) operand nodes in traversal order. Returns an
+		empty `list` when no binary operation matches.
 	"""
 	list_ast_expr: list[ast.expr] = []
-	workbench: list[ast.expr] = []
 
-	findThis = Be.BinOp.opIs(lambda this_op: isinstance(this_op, operator))
-	doThat = Grab.andDoAllOf([Grab.leftAttribute(Then.appendTo(workbench)), Grab.rightAttribute(Then.appendTo(list_ast_expr))])
-	breakingBinOp = NodeTourist(findThis, doThat)
+	findThis = Be.BinOp.opIs(operator.__instancecheck__)
+	doThat = NodeChanger[ast.expr, ast.expr](
+		IfThis.isAllOf(Be.expr, complement(findThis)), Then.appendTo(list_ast_expr)).visit
+	breakingBinOp = NodeChanger(findThis, doThat)
 
 	breakingBinOp.visit(astAST)
-
-	while workbench:
-		ast_expr = workbench.pop()
-		if isinstance(ast_expr, ast.BinOp):
-			breakingBinOp.visit(ast_expr)
-		else:
-			list_ast_expr.append(ast_expr)
 
 	return list_ast_expr
