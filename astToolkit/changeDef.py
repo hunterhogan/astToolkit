@@ -1,3 +1,5 @@
+# ruff: ignore[undocumented-public-module]
+# DOCUMENT
 from __future__ import annotations
 
 from astToolkit import Be, DOT, Grab, IfThis, Make, NodeChanger, NodeTourist, Then

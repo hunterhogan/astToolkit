@@ -1,3 +1,5 @@
+# ruff: ignore[undocumented-public-module]
+# DOCUMENT
 from __future__ import annotations
 
 from hunterMakesPy.filesystemToolkit import settings_autoflakeDEFAULT, writePython

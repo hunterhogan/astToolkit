@@ -103,18 +103,19 @@ def testAddImportFromAsStrWithAlias(identifierModule: str, nameIdentifier: str, 
 					predicateFoundAlias = True
 	assert predicateFoundAlias is expectedPredicateFound
 
-@pytest.mark.parametrize("identifierModule,expectedPredicateInList", [
-	("pathlib", True),
-	("ast", True),
-	("sys", True),
+@pytest.mark.parametrize("astImport____,expected", [
+	(Make.Import('pathlib'), ['import pathlib']),
+	(Make.Import('ast'), ['import ast']),
+	(Make.Import('sys'), ['import sys']),
+	(Make.Import('ast', 'syntax'), ['import ast as syntax']),
+	(Make.Import('collections.abc', 'interfaces'), ['import collections.abc as interfaces']),
 ])
-def testAddAstWithImportNode(identifierModule: str, expectedPredicateInList: bool) -> None:
+def testAddAstWithImportNode(astImport____: ast.Import, expected: list[str]) -> None:
 	"""Test addAst with Import AST node."""
 	ledgerImports = LedgerOfImports()
-	astImportNode = Make.Import(identifierModule)
-	ledgerImports.addAst(astImportNode)
-	listModuleIdentifiers = ledgerImports.exportListModuleIdentifiers()
-	assert (identifierModule in listModuleIdentifiers) is expectedPredicateInList
+	ledgerImports.addAst(astImport____)
+	assert list(map(ast.unparse, ledgerImports.makeList_ast())) == expected
+	assert ledgerImports.exportListModuleIdentifiers() == [astImport____.names[0].name]
 
 @pytest.mark.parametrize("moduleInNode,nameAlias,levelRelative,moduleExpectedInLedger,expectedPredicateInList", [
 	('os', 'path', 0, 'os', True),
@@ -156,6 +157,7 @@ def testExportListModuleIdentifiersReturnsUniqueValues(listOperations: list[tupl
 	([("addImport_asStr", "ast"), ("addImportFrom_asStr", "typing", "Any")], 1, 1),
 	([("addImport_asStr", "ast"), ("addImport_asStr", "sys")], 2, 0),
 	([("addImportFrom_asStr", "typing", "Any"), ("addImportFrom_asStr", "collections", "defaultdict")], 0, 2),
+	([("addAst", "ast", "syntax"), ("addImport_asStr", "ast"), ("addAst", "ast", "syntaxTree")], 3, 0),
 ])
 def testMakeListAstGeneratesImportStatements(listOperations: list[tuple[str, ...]], expectedCountImportStatements: int, expectedCountImportFromStatements: int) -> None:
 	"""Test makeList_ast generates correct import statement nodes."""
@@ -167,6 +169,8 @@ def testMakeListAstGeneratesImportStatements(listOperations: list[tuple[str, ...
 			ledgerImports.addImport_asStr(operation[1])
 		elif methodName == "addImportFrom_asStr":
 			ledgerImports.addImportFrom_asStr(operation[1], operation[2])
+		elif methodName == "addAst":
+			ledgerImports.addAst(Make.Import(operation[1], operation[2]))
 
 	listAstImports = ledgerImports.makeList_ast()
 	countImport = sum(1 for astImport in listAstImports if isinstance(astImport, ast.Import))
@@ -201,11 +205,16 @@ def testMakeListAstDeduplicatesImports(listOperations: list[tuple[str, ...]], ex
 def testRemoveImportFromModule(identifierModule: str, listNamesToAdd: list[str], expectedPredicateModuleNotInList: bool) -> None:
 	"""Test removeImportFromModule removes all imports from a module."""
 	ledgerImports = LedgerOfImports()
+	ledgerImports.addImport_asStr(identifierModule)
+	ledgerImports.addAst(Make.Import(identifierModule, 'moduleAlias'))
+	ledgerImports.addImport_asStr(identifierModule)
+	ledgerImports.addImport_asStr('fractions')
 	for nameToAdd in listNamesToAdd:
 		ledgerImports.addImportFrom_asStr(identifierModule, nameToAdd)
 	ledgerImports.removeImportFromModule(identifierModule)
 	listModuleIdentifiers = ledgerImports.exportListModuleIdentifiers()
 	assert (identifierModule not in listModuleIdentifiers) is expectedPredicateModuleNotInList
+	assert list(map(ast.unparse, ledgerImports.makeList_ast())) == ['import fractions']
 
 @pytest.mark.parametrize("identifierModule,listNamesToAdd,nameToRemove,asNameToRemove,listNamesExpectedRemaining", [
 	("typing", ["Any", "Dict"], "Any", None, ["Dict"]),
@@ -234,8 +243,10 @@ def testRemoveImportFromWithSpecificItem(identifierModule: str, listNamesToAdd: 
 @pytest.mark.parametrize("identifierModule,listNamesToAdd,nameToRemove,asNameToRemove,listNamesExpectedRemaining", [
 	("collections", [("defaultdict", "dd"), ("Counter", None)], "defaultdict", "dd", ["Counter"]),
 	("typing", [("Any", "TypeAny"), ("Dict", None)], "Any", "TypeAny", ["Dict"]),
+	("collections", [("defaultdict", "dd"), ("Counter", None)], None, "dd", ["Counter"]),
+	("collections", [("defaultdict", "dd"), ("Counter", None)], None, "Counter", ["defaultdict"]),
 ])
-def testRemoveImportFromWithAlias(identifierModule: str, listNamesToAdd: list[tuple[str, str | None]], nameToRemove: str, asNameToRemove: str, listNamesExpectedRemaining: list[str]) -> None:
+def testRemoveImportFromWithAlias(identifierModule: str, listNamesToAdd: list[tuple[str, str | None]], nameToRemove: str | None, asNameToRemove: str, listNamesExpectedRemaining: list[str]) -> None:
 	"""Test removeImportFrom removes item with alias."""
 	ledgerImports = LedgerOfImports()
 	for nameToAdd, asNameToAdd in listNamesToAdd:
@@ -253,6 +264,7 @@ def testRemoveImportFromWithAlias(identifierModule: str, listNamesToAdd: list[tu
 	for nameExpected in listNamesExpectedRemaining:
 		assert nameExpected in listNamesFound
 	assert nameToRemove not in listNamesFound
+	assert listNamesFound == listNamesExpectedRemaining
 
 @pytest.mark.parametrize("listLedgerOperations,expectedListModules,includeTorchRelativeFixture", [
 	([([("addImport_asStr", "ast")], [("addImport_asStr", "collections")])], ["ast", "collections"], False),
@@ -531,6 +543,8 @@ def testRemoveImportFromModuleAcrossAllFunctions(identifierModule: str, listName
 	ingredientsModule.appendIngredientsFunction(ingredientsFunctionTest)
 
 	# Remove from everywhere
+	ingredientsModule.imports.addAst(Make.Import(identifierModule, 'moduleAlias'))
+	ingredientsFunctionTest.imports.addAst(Make.Import(identifierModule, 'functionAlias'))
 	ingredientsModule.removeImportFromModule(identifierModule)
 
 	# Verify removal

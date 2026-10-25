@@ -6,6 +6,7 @@ import ast
 if TYPE_CHECKING:
 	from astToolkit import astASTattributes
 
+# TODO re-sync with Python's dump function.
 def dump(node: ast.AST, *, annotate_fields: bool = True, include_attributes: bool = False, indent: int | str | None = None, show_empty: bool = False) -> str:
 	"""Return a formatted string representation of an `ast.AST` node.
 

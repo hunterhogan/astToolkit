@@ -8,7 +8,7 @@ import ast
 import builtins
 import sys
 
-class Make:  # ruff: ignore[too-many-public-methods]
+class Make:
     """Create a `class` `ast.AST` `object` or an `ast.AST` subclass `object`.
 
     I describe `keywordArguments` of `Make` methods here.
@@ -830,7 +830,7 @@ class Make:  # ruff: ignore[too-many-public-methods]
         return ast.boolop()
 
     @staticmethod
-    def Break(**keywordArguments: Unpack[ast_attributes]) -> ast.Break:
+    def Break() -> ast.Break:
         """Make an `ast.Break` object for a `break` statement.
 
         (AI generated docstring.)
@@ -848,7 +848,7 @@ class Make:  # ruff: ignore[too-many-public-methods]
         `ast.Break` suppresses the `orelse` body of the enclosing `ast.For`, `ast.AsyncFor`, or `ast.While` node. A `break` placed outside any loop body raises
         `SyntaxError` at compile time.
         """
-        return ast.Break(**keywordArguments)
+        return ast.Break()
 
     @staticmethod
     def Call(callee: ast.expr, listParameters: Sequence[ast.expr] | None=None, list_keyword: list[ast.keyword] | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Call:
@@ -1092,7 +1092,7 @@ class Make:  # ruff: ignore[too-many-public-methods]
         return ast.Constant(value=value, kind=kind, **keywordArguments)
 
     @staticmethod
-    def Continue(**keywordArguments: Unpack[ast_attributes]) -> ast.Continue:
+    def Continue() -> ast.Continue:
         """Make an `ast.Continue` object for a `continue` statement.
 
         (AI generated docstring.)
@@ -1111,7 +1111,7 @@ class Make:  # ruff: ignore[too-many-public-methods]
         `ast.Continue` does not suppress the `orelse` body of the enclosing loop—only `ast.Break` suppresses it. A `continue` placed outside any loop body
         raises `SyntaxError` at compile time.
         """
-        return ast.Continue(**keywordArguments)
+        return ast.Continue()
 
     @staticmethod
     def Del() -> ast.Del:
@@ -2914,7 +2914,7 @@ class Make:  # ruff: ignore[too-many-public-methods]
         return ast.ParamSpec(name=name, default_value=default_value, **keywordArguments)
 
     @staticmethod
-    def Pass(**keywordArguments: Unpack[ast_attributes]) -> ast.Pass:
+    def Pass() -> ast.Pass:
         """Create an `ast.Pass` node for pass statements.
 
         (AI generated docstring.)
@@ -2927,7 +2927,7 @@ class Make:  # ruff: ignore[too-many-public-methods]
         nodePass : ast.Pass
             The constructed pass statement node.
         """
-        return ast.Pass(**keywordArguments)
+        return ast.Pass()
 
     @staticmethod
     def pattern(**keywordArguments: Unpack[ast_attributes_int]) -> ast.pattern:

@@ -37,14 +37,96 @@ class IfThis:  # ruff: ignore[too-many-public-methods]
 	def isAllOf(*predicate: Callable[[ast.AST], bool]) -> Callable[[ast.AST], bool]: ...
 	@staticmethod
 	def isAllOf(*predicate: Callable[[ast.AST], bool]) -> Callable[[ast.AST], bool]:
-		# DOCUMENT Try nesting instead of this.
+		"""Combine predicates that must all match the same AST node.
+
+		(AI generated docstring)
+
+		You can use the combined predicate as `findThis` in `NodeTourist` or `NodeChanger`.
+		Each predicate receives the same node, in the supplied order. Evaluation stops at the
+		first false result. An empty combination returns `True` for every node.
+
+		Parameters
+		----------
+		*predicate : Callable[[ast.AST], bool]
+			Conditions that must all hold. Put a node-type condition before any condition that
+			requires attributes of that type.
+
+		Returns
+		-------
+		findThis : Callable[[ast.AST], bool]
+			Predicate returning `True` when every supplied condition holds. A leading `TypeIs`
+			predicate preserves the matched node type for visitor actions through `TypeGuard`.
+
+		See Also
+		--------
+		`isAnyOf`
+			Match a node when at least one condition holds.
+		`astToolkit.NodeTourist`
+			Read matching nodes, including through nested visitors.
+		`astToolkit.NodeChanger`
+			Transform matching nodes, including through nested visitors.
+
+		Nested Visitors
+		---------------
+		As an alternative, give an outer visitor an inner visitor's bound `visit` method as
+		`doThat`. The outer predicate selects a node, and the inner visitor applies the next
+		condition within that subtree. The inner visitor can also match descendants, so this
+		technique differs from testing every condition on the same node. The visitor class
+		docstrings explain traversal and result capture in more detail.
+
+		Examples
+		--------
+		Select assignments of literal values to names, as used in scalar-variable preparation.
+
+			```python
+			from astToolkit import Be, IfThis
+
+			findThis = IfThis.isAllOf(
+				IfThis.isAssignAndTargets0Is(Be.Name)
+				, Be.Assign.valueIs(Be.Constant))
+			```
+		"""
 		def workhorse(node: ast.AST) -> bool:
 			return all(antecedent(node) for antecedent in predicate)
 		return workhorse
 
 	@staticmethod
 	def isAnyOf[归个: ast.AST](*predicate: Callable[[ast.AST], TypeIs[归个] | bool]) -> Callable[[ast.AST], TypeIs[归个] | bool]:
-		# DOCUMENT
+		"""Combine predicates that allow any one match on an AST node.
+
+		(AI generated docstring)
+
+		You can use the combined predicate as `findThis` in `NodeTourist` or `NodeChanger`.
+		Each predicate receives the same node, in the supplied order. Evaluation stops at the
+		first true result. An empty combination returns `False` for every node.
+
+		Parameters
+		----------
+		*predicate : Callable[[ast.AST], bool]
+			Alternative conditions. Each condition must accept any AST node because a false
+			result from an earlier condition does not establish the node's type.
+
+		Returns
+		-------
+		findThis : Callable[[ast.AST], bool]
+			Predicate returning `True` when at least one supplied condition holds.
+
+		See Also
+		--------
+		`isAllOf`
+			Match a node only when every condition holds.
+
+		Examples
+		--------
+		Select both forms of import statement when rebuilding a module's import ledger.
+
+			```python
+			from astToolkit import Be, IfThis, NodeChanger, Then
+
+			removeImports = NodeChanger(
+				IfThis.isAnyOf(Be.ImportFrom, Be.Import), Then.removeIt)
+			```
+		"""
 		def workhorse(node: ast.AST) -> TypeIs[归个] | bool:
 			return any(antecedent(node) for antecedent in predicate)
 		return workhorse

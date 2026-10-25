@@ -34,17 +34,17 @@ allowing transformation logic to focus on semantic changes rather than syntactic
 from __future__ import annotations
 
 from astToolkit import Be, DOT, extractFunctionDef, identifierDotAttribute, IfThis, Make, NodeChanger
-from astToolkit.changeDef import (
-	makeDictionaryAsyncFunctionDef as makeDictionaryAsyncFunctionDef, makeDictionaryClassDef as makeDictionaryClassDef,
-	makeDictionaryFunctionDef as makeDictionaryFunctionDef, makeDictionaryMosDef as makeDictionaryMosDef)
+from astToolkit.changeDef import makeDictionaryAsyncFunctionDef, makeDictionaryClassDef, makeDictionaryFunctionDef, makeDictionaryMosDef
 from astToolkit.filesystem import write_astModule
 from astToolkit.transformationTools import removeUnusedParameters
 from collections import defaultdict
 from collections.abc import Iterable
+from humpy_cytoolz.functoolz import compose, curry
 from hunterMakesPy import raiseIfNone
 from hunterMakesPy.dataStructures import updateExtendPolishDictionaryLists
 from hunterMakesPy.filesystemToolkit import settings_autoflakeDEFAULT, settings_isortDEFAULT
-from operator import attrgetter
+from itertools import starmap
+from operator import attrgetter, itemgetter, ne
 from typing import overload, TYPE_CHECKING
 import ast
 import dataclasses
@@ -56,8 +56,7 @@ if TYPE_CHECKING:
 	from typing import Any
 	import io
 
-# fix: addAst() discards asname when processing ordinary ast.Import statements.
-# fix: removeImportFromModule() does not remove entries from _listImport.
+# TODO Python 3.15 is_lazy. fml.
 
 class LedgerOfImports:
 	"""
@@ -103,7 +102,7 @@ class LedgerOfImports:
 			Additional type ignore directives to include in the generated module.
 		"""
 		self._dictionaryImportFrom: dict[identifierDotAttribute, list[tuple[str, str | None]]] = defaultdict(list)
-		self._listImport: list[identifierDotAttribute] = []
+		self._listImport: list[tuple[identifierDotAttribute, str | None]] = []
 		self.type_ignores: list[ast.TypeIgnore] = [] if type_ignores is None else list(type_ignores)
 		if startWith:
 			self.walkThis(startWith)
@@ -127,7 +126,7 @@ class LedgerOfImports:
 		match astImport____:
 			case ast.Import():
 				for alias in astImport____.names:
-					self._listImport.append(alias.name)
+					self._listImport.append((alias.name, alias.asname))
 			case ast.ImportFrom():
 				# TODO fix the mess created by `None` means '.'. I need a `identifierDotAttribute` to replace '.',
 				# of course this involves the same package/module context problem as above.
@@ -142,7 +141,7 @@ class LedgerOfImports:
 		if type_ignores:
 			self.type_ignores.extend(type_ignores)
 
-	def addImport_asStr(self, dotModule: identifierDotAttribute, type_ignores: list[ast.TypeIgnore] | None = None) -> None:
+	def addImport_asStr(self, dotModule: identifierDotAttribute, asName: str | None = None, type_ignores: list[ast.TypeIgnore] | None = None) -> None:
 		"""
 		Record a dependency on a module that should be imported directly.
 
@@ -156,7 +155,7 @@ class LedgerOfImports:
 		type_ignores : list[ast.TypeIgnore] | None
 			Additional type ignore directives associated with this import.
 		"""
-		self._listImport.append(dotModule)
+		self._listImport.append((dotModule, asName))
 		if type_ignores:
 			self.type_ignores.extend(type_ignores)
 
@@ -193,7 +192,7 @@ class LedgerOfImports:
 			Sorted list of module names that have import dependencies recorded.
 		"""
 		listModuleIdentifiers: list[identifierDotAttribute] = list(self._dictionaryImportFrom.keys())
-		listModuleIdentifiers.extend(self._listImport)
+		listModuleIdentifiers.extend(map(itemgetter(0), self._listImport))
 		return sorted(set(listModuleIdentifiers))
 
 	def makeList_ast(self) -> list[ast.ImportFrom | ast.Import]:
@@ -220,7 +219,7 @@ class LedgerOfImports:
 				list_alias.append(Make.alias(name, asName))
 			if list_alias:
 				listImportFrom.append(Make.ImportFrom(dotModule, list_alias))
-		list_astImport: list[ast.Import] = [Make.Import(dotModule) for dotModule in sorted(set(self._listImport))]
+		list_astImport: list[ast.Import] = list(starmap(Make.Import, self._listImport))
 		return listImportFrom + list_astImport
 
 	def removeImportFromModule(self, dotModule: identifierDotAttribute) -> None:
@@ -236,7 +235,8 @@ class LedgerOfImports:
 		dotModule : identifierDotAttribute
 			The module name to remove all dependencies for (e.g., "ast", "collections.abc").
 		"""
-		self.removeImportFrom(dotModule, None, None)
+		self._dictionaryImportFrom.pop(dotModule, None)
+		self._listImport = list(filter(compose(dotModule.__ne__, itemgetter(0)), self._listImport))
 
 	def removeImportFrom(self, dotModule: identifierDotAttribute | None, name: str | None, asName: str | None = None) -> None:
 		"""
@@ -261,24 +261,19 @@ class LedgerOfImports:
 		- name="xy", asName="alias": Remove records for importing "xy as alias".
 		- name=None, asName="alias": Remove any record that uses "alias" as the imported name.
 		"""
-		if dotModule in self._dictionaryImportFrom:
-			次name: int = 0
-			次asName: int = 1
-			if name is None and asName is None:
-				self._dictionaryImportFrom.pop(dotModule)
+		if name is None and asName is None:
+			if dotModule is not None:
+				self.removeImportFromModule(dotModule)
+		elif dotModule in self._dictionaryImportFrom:
+			if name is None:
+				self._dictionaryImportFrom[dotModule] = list(filter(
+					compose(curry(ne, asName), itemgetter(1)),
+					filter((asName, None).__ne__, self._dictionaryImportFrom[dotModule])))
 			else:
-				if name is None:
-					def conditionalFilter(entry: tuple[str, str | None]) -> bool:
-						return (entry[次asName] != asName) and not (entry[次asName] is None and entry[次name] == asName)
-				else:
-					def conditionalFilter(entry: tuple[str, str | None]) -> bool:
-						return not (entry[次name] == name and entry[次asName] == asName)
-
-				self._dictionaryImportFrom[dotModule] = list(filter(conditionalFilter, self._dictionaryImportFrom[dotModule]))
-
-				if not self._dictionaryImportFrom[dotModule]:
-					self._dictionaryImportFrom.pop(dotModule)
-		elif (dotModule is None) and (name is not None or asName is not None):
+				self._dictionaryImportFrom[dotModule] = list(filter((name, asName).__ne__, self._dictionaryImportFrom[dotModule]))
+			if not self._dictionaryImportFrom[dotModule]:
+				self._dictionaryImportFrom.pop(dotModule)
+		elif dotModule is None:
 			for module in list(self._dictionaryImportFrom):
 				self.removeImportFrom(module, name, asName)
 

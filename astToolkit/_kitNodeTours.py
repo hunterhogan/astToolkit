@@ -41,7 +41,7 @@ if TYPE_CHECKING:
 	from typing import Final, TypeGuard, TypeIs
 
 class NodeTourist[木: ast.AST, 归个](ast.NodeVisitor):
-	"""Read-only AST visitor that extracts information from nodes matching predicate conditions.
+	"""Read and collect information from AST nodes that match a predicate.
 
 	(AI generated docstring)
 
@@ -54,31 +54,63 @@ class NodeTourist[木: ast.AST, 归个](ast.NodeVisitor):
 	about specific node types or patterns without modifying the source code structure. The generic
 	type parameters ensure type safety when working with specific AST node types and return values.
 
-	Parameters
+	Attributes
 	----------
-	findThis : Callable[[ast.AST], TypeIs[木] | bool]
-		Predicate function that tests AST nodes. Can return either a `TypeIs` for type narrowing or a
-		simple boolean. When using `TypeIs`, the type checker can safely narrow the node type for the
-		action function.
+	findThis : Callable[[ast.AST], bool]
+		Predicate supplied at construction. A `TypeIs` or `TypeGuard` predicate identifies the
+		matched node type for the action.
 	doThat : Callable[[木], 归个]
-		Action function that operates on nodes matching the predicate. Receives the matched node with
-		properly narrowed typing and returns the extracted information.
+		Action supplied at construction. The action receives the matched node and returns the
+		information to capture. Use `DOT` getters to read attributes without changing the AST.
+	nodeCaptured : 归个 | None = None
+		Result from the most recent matching node. `captureLastMatch` resets this value before
+		each search; `visit` leaves the previous value intact when no node matches.
+
+	See Also
+	--------
+	`NodeChanger`
+		Replace or remove nodes, or transform their attributes.
+	`astToolkit.IfThis.isAllOf`
+		Require several conditions on the same node.
+
+	Nested Visitors
+	---------------
+	You can use an inner visitor's bound method as the outer visitor's `doThat`. The outer
+	`findThis` selects a node, and the inner visitor searches that node and its descendants.
+	Both predicates can match the starting node, but the inner predicate can also match nodes
+	deeper in the selected subtree. This differs from `IfThis.isAllOf`, which gives every
+	predicate the same node. Attribute predicates such as
+	`Be.Assign.valueIs(IfThis.isCallIdentifier(identifier))` select an assignment by its value;
+	the selected node is still the assignment.
+
+	Use the inner `captureLastMatch` method when the outer visitor should capture a result from
+	each selected subtree. The inner search resets its capture for each subtree. The outer
+	`captureLastMatch` then returns the inner result for the last outer match, which can be
+	`None` even when an earlier subtree contained a match. The inner `visit` method returns
+	`None`; use that method when the inner action collects results in a supplied container.
+
+	The outer visitor still searches descendants after its action finishes. If two outer matches
+	contain the same descendant, the inner visitor searches that descendant more than once.
+	Collection actions can therefore record duplicates. Choose the outer predicate according to
+	the intended search scope; nesting does not restrict a search to direct children.
 
 	Examples
 	--------
-	Extract all bicycle component names from a module:
-	```python
-		bicycleComponentCollector = NodeTourist(Be.FunctionDef, lambda wheelFunction: DOT.name(wheelFunction))
-		componentNames = []
-		bicycleComponentCollector.doThat = Then.appendTo(componentNames)
-		bicycleComponentCollector.visit(bicycleModule)
-	```
+	Combine the argument and annotation searches used to find a state dataclass identifier.
+	The result is `'StateMapFolding'` for this annotated argument.
 
-	Find specific kitchen recipe definition:
-	```python
-		specificRecipe = NodeTourist(IfThis.isFunctionDefIdentifier("bakeBread"), Then.extractIt)
-		foundRecipe = specificRecipe.captureLastMatch(kitchenModule)
-	```
+		```python
+		from astToolkit import Be, DOT, Make, NodeTourist
+		from typing import TYPE_CHECKING
+
+		if TYPE_CHECKING:
+			import ast
+
+		ast_arg: ast.arg = Make.arg('state', Make.Name('StateMapFolding'))
+		readIdentifier = NodeTourist(Be.Name, DOT.id)
+		identifierDataclass: str | None = NodeTourist(
+			Be.arg, readIdentifier.captureLastMatch).captureLastMatch(ast_arg)
+		```
 	"""
 
 	@overload
@@ -150,7 +182,7 @@ class NodeTourist[木: ast.AST, 归个](ast.NodeVisitor):
 		return self.nodeCaptured
 
 class NodeChanger[木: ast.AST, 归木: ast.AST | Iterable[ast.AST] | None](ast.NodeTransformer):
-	"""Destructive AST transformer that selectively modifies nodes matching predicate conditions.
+	"""Transform AST nodes that match a predicate.
 
 	(AI generated docstring)
 
@@ -161,40 +193,76 @@ class NodeChanger[木: ast.AST, 归木: ast.AST | Iterable[ast.AST] | None](ast.
 
 	This class forms the foundation for code optimization, refactoring, and generation workflows.
 	Unlike `NodeTourist`, `NodeChanger` modifies the AST structure and returns a transformed tree. The
-	transformation is applied recursively, ensuring that nested structures are properly processed.
+	visitor searches recursively until a node matches, then delegates that subtree to its action.
 
 	The class is designed for scenarios where you need to make surgical changes to specific parts of
 	an AST while preserving the overall structure and semantics of the code. Common use cases include
 	function inlining, variable renaming, dead code elimination, and pattern-based code
 	transformations.
 
-	Parameters
+	Attributes
 	----------
-	findThis : Callable[[ast.AST], TypeIs[木] | bool]
-		Predicate function that identifies nodes to transform. Should return `True` for nodes that
-		require modification and `False` for nodes that should remain unchanged. The function receives
-		an `ast.AST` node and determines whether transformation is needed.
-	doThat : Callable[[木], 归个]
-		Action function that performs the actual transformation. Receives nodes that matched the
-		predicate and returns the replacement node, modified node, or `None` for deletion. The return
-		value becomes the new node in the transformed tree.
+	findThis : Callable[[ast.AST], bool]
+		Predicate supplied at construction. A `TypeIs` or `TypeGuard` predicate identifies the
+		matched node type for the action.
+	doThat : Callable[[木], 归木]
+		Action supplied at construction. Return the modified node, a replacement node, or `None`
+		for removal. Statement-list positions also accept an iterable of replacement statements.
+
+	See Also
+	--------
+	`NodeTourist`
+		Read or collect nodes without replacing them.
+	`astToolkit.IfThis.isAllOf`
+		Require several conditions on the same node.
+
+	Nested Visitors
+	---------------
+	You can use an inner `NodeChanger` object's bound `visit` method as the outer visitor's
+	`doThat`. The outer predicate selects a node, and the inner visitor starts its search at
+	that node. The inner visitor's return value becomes the outer action's result, so a
+	replacement or removal propagates to the containing tree.
+
+	A match ends the outer visitor's search within that subtree. The outer visitor does not
+	automatically visit the matched node's children or the action's returned replacement.
+	The inner visitor controls further traversal. If its starting node matches, the inner
+	action runs without visiting children. Otherwise, the inner visitor searches descendants,
+	even when its predicate rejects the starting node. Nesting therefore differs from
+	`IfThis.isAllOf`, whose conditions must hold on the same node.
+
+	Use nested visitors when a selected subtree needs a separate transformation. Searches inside
+	a selected function also reach decorators, annotations, and nested definitions unless the
+	inner visitor's predicates or actions limit that scope. Use attribute predicates to select a
+	parent by an attribute, such as `Be.Assign.valueIs(IfThis.isCallIdentifier(identifier))`.
+	The action still receives the assignment. To transform only that assignment's value, use
+	`Grab.valueAttribute(innerVisitor.visit)` as the outer action. `Grab` retains the assignment
+	and assigns the inner result to its `value` attribute.
 
 	Examples
 	--------
-	Replace all bicycle wheel references with tire references:
-	```python
-		wheelReplacer = NodeChanger(
-				IfThis.isCallIdentifier("checkWheel"),
-				Then.replaceWith(Make.Call(Make.Name("checkTire"), [], []))
-		)
-		transformedBicycle = wheelReplacer.visit(bicycleAST)
-	```
+	Insert a state update after `tuple()` expressions in a selected counting function, following
+	the module-generation transformation used for pruning. The outer visitor selects `count`;
+	the inner visitor inserts `astAssign_shortcut` after the expression in that function.
 
-	Remove all kitchen cleanup statements:
-	```python
-		cleanupRemover = NodeChanger(Be.Pass, Then.removeIt)
-		streamlinedKitchen = cleanupRemover.visit(kitchenAST)
-	```
+		```python
+		from astToolkit import Be, IfThis, Make, NodeChanger, Then
+		from typing import TYPE_CHECKING
+
+		if TYPE_CHECKING:
+			import ast
+
+		astAssign_shortcut: ast.Assign = Make.Assign(
+			[Make.Name('state', Make.Store())]
+			, Make.Call(Make.Name('prune'), [Make.Name('state')]))
+		astModule: ast.Module = Make.Module([
+			Make.FunctionDef('count', body=[Make.Expr(Make.Call(Make.Name('tuple'), []))])])
+		insertShortcut = NodeChanger(
+			Be.Expr.valueIs(IfThis.isCallIdentifier('tuple'))
+			, Then.insertThisBelow([astAssign_shortcut]))
+		NodeChanger(
+			Be.FunctionDef.nameIs(IfThis.isIdentifier('count'))
+			, insertShortcut.visit).visit(astModule)
+		```
 	"""
 
 	@overload
@@ -221,7 +289,8 @@ class NodeChanger[木: ast.AST, 归木: ast.AST | Iterable[ast.AST] | None](ast.
 
 		If the predicate returns `True`, the action function (`doThat`) is applied to the node to
 		perform the transformation. The action function may return a replacement node, a modified
-		version of the original node, or `None` to delete the node from the tree.
+		version of the original node, or `None` to delete the node from the tree. The matched node's
+		children and the returned replacement are visited only if the action arranges that traversal.
 
 		If the predicate returns `False`, the method delegates to the parent `visit` method to
 		continue standard transformation traversal, ensuring all child nodes are processed
@@ -234,7 +303,7 @@ class NodeChanger[木: ast.AST, 归木: ast.AST | Iterable[ast.AST] | None](ast.
 
 		Returns
 		-------
-		transformedNode : 归个 | ast.AST
+		transformedNode : 归木 | ast.AST
 			The result of applying the action function if the predicate matches, otherwise the result
 			of standard transformation traversal. Returns `None` if the node should be deleted.
 		"""
