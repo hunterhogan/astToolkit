@@ -6,6 +6,7 @@ line-length = 140
 preview = true
 allowed-confusables = [
   "–",
+  "’",
   "′",
   "×",
   "−",
@@ -28,54 +29,62 @@ allowed-confusables = [
 ]
 ignore = [
   "any-type",
-  "complex-structure",
-  "missing-trailing-comma",
-  "incorrect-blank-line-after-class",
-  "docstring-tab-indentation",
-  "missing-trailing-period",
-  "non-imperative-mood",
-  "line-too-long",
-  "unused-import",
-  "FIX",
-  "static-join-to-f-string",
-  "I",
-  "N",
-  "blanket-noqa",
-  "type-name-incorrect-variance",
-  "dict-index-missing-items",
-  "useless-import-alias",
-  "non-ascii-name",
-  "non-ascii-import-name",
-  "too-many-branches",
-  "too-many-arguments",
-  "too-many-statements",
-  "too-many-nested-blocks",
-  "magic-value-comparison",
-  "useless-else-on-loop",
-  "redefined-loop-name",
-  "typed-argument-default-in-stub",
-  "docstring-in-stub",
-  "redundant-numeric-union",
-  "snake-case-type-alias",
   "bad-quotes-inline-string",
-  "superfluous-else-return",
-  "superfluous-else-continue",
-  "explicit-f-string-type-conversion",
-  "subprocess-without-shell-equals-true",
-  "if-else-block-instead-of-if-exp",
-  "yoda-conditions",
-  "TD",
-  "tab-indentation",
-  "missing-newline-at-end-of-file",
-  "missing-copyright-notice",
-  "incorrect-section-order",
-  "no-space-after-block-comment",
-  "blank-lines-top-level",
-  "too-many-blank-lines",
   "blank-lines-after-function-or-class",
-  "too-many-locals",
-  "too-many-positional-arguments",
+  "blank-lines-top-level",
+  "blanket-noqa",
+  "complex-structure",
+  "dict-index-missing-items",
+  "docstring-in-stub",
+  "docstring-missing-exception",
+  "docstring-missing-returns",
+  "docstring-missing-yields",
+  "docstring-tab-indentation",
+  "explicit-f-string-type-conversion",
+  "FIX",
+  "I",
+  "if-else-block-instead-of-if-exp",
+  "incorrect-blank-line-after-class",
+  "incorrect-section-order",
+  "line-too-long",
+  "magic-value-comparison",
+  "missing-copyright-notice",
+  "missing-newline-at-end-of-file",
+  "missing-trailing-comma",
+  "missing-trailing-period",
+  "N",
+  "no-space-after-block-comment",
+  "non-ascii-import-name",
+  "non-ascii-name",
+  "non-imperative-mood",
+  "non-pep695-type-alias",
+  "redefined-loop-name",
+  "redundant-numeric-union",
+  "self-or-cls-assignment",
+  "snake-case-type-alias",
+  "static-join-to-f-string",
+  "subclass-builtin",
+  "subprocess-without-shell-equals-true",
+  "superfluous-else-continue",
+  "superfluous-else-return",
   "suspicious-pickle-import",
+  "tab-indentation",
+  "TD",
+  "too-many-arguments",
+  "too-many-blank-lines",
+  "too-many-branches",
+  "too-many-locals",
+  "too-many-nested-blocks",
+  "too-many-positional-arguments",
+  "too-many-statements",
+  "type-name-incorrect-variance",
+  "typed-argument-default-in-stub",
+  "unnecessary-literal-dict",
+  "unused-import",
+  "unused-variable",
+  "useless-else-on-loop",
+  "useless-import-alias",
+  "yoda-conditions",
 ]
 select = ["ALL"]
 task-tags = ["DEVELOPMENT", "FailEarly", "NOTE", "SEMIOTICS", "TODO"]
@@ -84,17 +93,33 @@ task-tags = ["DEVELOPMENT", "FailEarly", "NOTE", "SEMIOTICS", "TODO"]
 allow-dict-calls-with-keyword-arguments = true
 
 [lint.flake8-import-conventions]
-banned-aliases = { numpy = ["np"], optype = ["op"], pandas = ["pd"], regex = ["re"] }
+banned-aliases = { numpy = ["np"], optype = ["op"], pandas = ["pd"], polars = ["pl"], regex = ["re"] }
 
 [lint.flake8-import-conventions.aliases]
 "accelerate.utils.dataclasses" = "accelerate_dataclasses"
 "fs.path" = "fs_path"
+"gmpy2.bit_test" = "isBit1吗"
+"gmpy2.is_even" = "isEven吗"
+"gmpy2.is_odd" = "isOdd吗"
+"humpy_cytoolz.assoc" = "associateKeyValue"
+"humpy_cytoolz.curry" = "syntacticCurry"
+"humpy_cytoolz.groupby" = "toolz_groupby"
 "itertools.product" = "CartesianProduct"
+"math.comb" = "nCr"
+"more_itertools.all_unique" = "allUnique吗"
+"regex" = "regex"
+"scipy" = "scipy"
+"sympy.binomial" = "sympy_binomial"
+"sympy.catalan" = "sympy_catalan"
+"sympy.functions.combinatorial.factorials.binomial" = "sympy_binomial"
+"sympy.functions.combinatorial.numbers.catalan" = "sympy_catalan"
+"sympy" = "sympy"
 "torch.autograd.grad" = "torch_grad"
 "torch.nn.functional" = "F"
 "torch.nn.parallel.DistributedDataParallel" = "DDP"
 numpy = "numpy"
 pandas = "pandas"
+polars = "polars"
 re = "regex"
 
 [lint.flake8-quotes]
@@ -104,15 +129,15 @@ inline-quotes = "single"
 "__init__.py" = ["useless-import-alias"]
 "*test*.py" = [
   "ARG",
+  "assert",
   "BLE",
   "D",
+  "docstring-missing-returns",
   "DTZ",
   "FBT",
   "PT",
-  "assert",
   "suspicious-non-cryptographic-random-usage",
   "TRY",
-  "docstring-missing-returns",
 ]
 
 [lint.pydocstyle]
