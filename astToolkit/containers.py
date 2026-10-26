@@ -1,7 +1,9 @@
 """
-Container classes for programmatic Python module assembly and code generation.
+Most of this package is good and has the potential for excellence, but NOT this module.
 
-(AI generated docstring)
+(AI generated docstring follows)
+
+Container classes for programmatic Python module assembly and code generation.
 
 This module provides the foundational container classes for building Python modules programmatically
 through an assembly line approach. The containers track import dependencies, organize code components,
@@ -56,7 +58,7 @@ if TYPE_CHECKING:
 	from typing import Any
 	import io
 
-# TODO Python 3.15 is_lazy. fml.
+# TODO Python 3.15 `is_lazy`. fml.
 
 class LedgerOfImports:
 	"""

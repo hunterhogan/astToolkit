@@ -110,7 +110,7 @@ from astToolkit._theSSOT import packageSettings  # pyright: ignore[reportUnusedI
 from astToolkit._kitNodeTours import NodeChanger as NodeChanger, NodeTourist as NodeTourist
 
 # isort: split
-from astToolkit._dumpHandmade import dump as dump
+from astToolkit._tool_dump import dump as dump
 from astToolkit._toolBe import Be as Be
 from astToolkit._toolDOT import DOT as DOT
 from astToolkit._toolGrab import Grab as Grab
