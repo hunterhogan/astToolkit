@@ -1,11 +1,12 @@
 """Automatically generated file, so changes may be overwritten."""
 from astToolkit.theTypes import 木
 from collections.abc import Callable, Sequence
+from operator import call
 from typing import Any, TypeIs
 import ast
 import sys
 
-class Be:
+class Be:  # ruff: ignore[too-many-public-methods]
     """A comprehensive suite of functions for AST class identification and type narrowing.
 
     `class` `Be` has a method for each `ast.AST` subclass, also called "node type", to perform type
@@ -78,7 +79,13 @@ class Be:
         """
         return isinstance(node, ast.Add)
 
-    class _alias:
+    @call
+    class alias:
+        """`Be.alias` matches `class` `ast.alias`.
+
+        This `class` is associated with Python keywords `as`.
+        It is a subclass of `ast.AST`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.alias]:
             return isinstance(node, ast.alias)
@@ -96,8 +103,6 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.alias]:
                 return isinstance(node, ast.alias) and attributeCondition(node.asname)
             return workhorse
-    alias = _alias()
-    '`Be.alias` matches `class` `ast.alias`.\n\n        This `class` is associated with Python keywords `as`.\n        It is a subclass of `ast.AST`.\n        '
 
     @staticmethod
     def And(node: ast.AST) -> TypeIs[ast.And]:
@@ -108,7 +113,13 @@ class Be:
         """
         return isinstance(node, ast.And)
 
-    class _AnnAssign:
+    @call
+    class AnnAssign:
+        """`Be.AnnAssign`, ***Ann***otated ***Assign***ment, matches `class` `ast.AnnAssign`.
+
+        This `class` is associated with Python delimiters ':, ='.
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.AnnAssign]:
             return isinstance(node, ast.AnnAssign)
@@ -140,10 +151,13 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.AnnAssign]:
                 return isinstance(node, ast.AnnAssign) and attributeCondition(node.simple)
             return workhorse
-    AnnAssign = _AnnAssign()
-    "`Be.AnnAssign`, ***Ann***otated ***Assign***ment, matches `class` `ast.AnnAssign`.\n\n        This `class` is associated with Python delimiters ':, ='.\n        It is a subclass of `ast.stmt`.\n        "
 
-    class _arg:
+    @call
+    class arg:
+        """`Be.arg`, ***arg***ument, matches `class` `ast.arg`.
+
+        It is a subclass of `ast.AST`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.arg]:
             return isinstance(node, ast.arg)
@@ -168,10 +182,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.arg]:
                 return isinstance(node, ast.arg) and attributeCondition(node.type_comment)
             return workhorse
-    arg = _arg()
-    '`Be.arg`, ***arg***ument, matches `class` `ast.arg`.\n\n        It is a subclass of `ast.AST`.\n        '
 
-    class _arguments:
+    @call
+    class arguments:
+        """`Be.arguments` matches `class` `ast.arguments`.
+
+        This `class` is associated with Python delimiters ','.
+        It is a subclass of `ast.AST`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.arguments]:
             return isinstance(node, ast.arguments)
@@ -224,10 +242,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.arguments]:
                 return isinstance(node, ast.arguments) and attributeCondition(node.defaults)
             return workhorse
-    arguments = _arguments()
-    "`Be.arguments` matches `class` `ast.arguments`.\n\n        This `class` is associated with Python delimiters ','.\n        It is a subclass of `ast.AST`.\n        "
 
-    class _Assert:
+    @call
+    class Assert:
+        """`Be.Assert` matches `class` `ast.Assert`.
+
+        This `class` is associated with Python keywords `assert`.
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Assert]:
             return isinstance(node, ast.Assert)
@@ -245,10 +267,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Assert]:
                 return isinstance(node, ast.Assert) and attributeCondition(node.msg)
             return workhorse
-    Assert = _Assert()
-    '`Be.Assert` matches `class` `ast.Assert`.\n\n        This `class` is associated with Python keywords `assert`.\n        It is a subclass of `ast.stmt`.\n        '
 
-    class _Assign:
+    @call
+    class Assign:
+        """`Be.Assign` matches `class` `ast.Assign`.
+
+        This `class` is associated with Python delimiters '='.
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Assign]:
             return isinstance(node, ast.Assign)
@@ -273,8 +299,6 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Assign]:
                 return isinstance(node, ast.Assign) and attributeCondition(node.type_comment)
             return workhorse
-    Assign = _Assign()
-    "`Be.Assign` matches `class` `ast.Assign`.\n\n        This `class` is associated with Python delimiters '='.\n        It is a subclass of `ast.stmt`.\n        "
 
     @staticmethod
     def AST(node: ast.AST) -> TypeIs[ast.AST]:
@@ -284,7 +308,13 @@ class Be:
         """
         return isinstance(node, ast.AST)
 
-    class _AsyncFor:
+    @call
+    class AsyncFor:
+        """`Be.AsyncFor`, ***Async***hronous For loop, matches `class` `ast.AsyncFor`.
+
+        This `class` is associated with Python keywords `async for` and Python delimiters ':'.
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.AsyncFor]:
             return isinstance(node, ast.AsyncFor)
@@ -323,10 +353,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.AsyncFor]:
                 return isinstance(node, ast.AsyncFor) and attributeCondition(node.type_comment)
             return workhorse
-    AsyncFor = _AsyncFor()
-    "`Be.AsyncFor`, ***Async***hronous For loop, matches `class` `ast.AsyncFor`.\n\n        This `class` is associated with Python keywords `async for` and Python delimiters ':'.\n        It is a subclass of `ast.stmt`.\n        "
 
-    class _AsyncFunctionDef:
+    @call
+    class AsyncFunctionDef:
+        """`Be.AsyncFunctionDef`, ***Async***hronous Function ***Def***inition, matches `class` `ast.AsyncFunctionDef`.
+
+        This `class` is associated with Python keywords `async def` and Python delimiters ':'.
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.AsyncFunctionDef]:
             return isinstance(node, ast.AsyncFunctionDef)
@@ -379,10 +413,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.AsyncFunctionDef]:
                 return isinstance(node, ast.AsyncFunctionDef) and attributeCondition(node.type_params)
             return workhorse
-    AsyncFunctionDef = _AsyncFunctionDef()
-    "`Be.AsyncFunctionDef`, ***Async***hronous Function ***Def***inition, matches `class` `ast.AsyncFunctionDef`.\n\n        This `class` is associated with Python keywords `async def` and Python delimiters ':'.\n        It is a subclass of `ast.stmt`.\n        "
 
-    class _AsyncWith:
+    @call
+    class AsyncWith:
+        """`Be.AsyncWith`, ***Async***hronous With statement, matches `class` `ast.AsyncWith`.
+
+        This `class` is associated with Python keywords `async with` and Python delimiters ':'.
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.AsyncWith]:
             return isinstance(node, ast.AsyncWith)
@@ -407,10 +445,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.AsyncWith]:
                 return isinstance(node, ast.AsyncWith) and attributeCondition(node.type_comment)
             return workhorse
-    AsyncWith = _AsyncWith()
-    "`Be.AsyncWith`, ***Async***hronous With statement, matches `class` `ast.AsyncWith`.\n\n        This `class` is associated with Python keywords `async with` and Python delimiters ':'.\n        It is a subclass of `ast.stmt`.\n        "
 
-    class _Attribute:
+    @call
+    class Attribute:
+        """`Be.Attribute` matches `class` `ast.Attribute`.
+
+        This `class` is associated with Python delimiters '.'.
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Attribute]:
             return isinstance(node, ast.Attribute)
@@ -435,10 +477,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Attribute]:
                 return isinstance(node, ast.Attribute) and attributeCondition(node.ctx)
             return workhorse
-    Attribute = _Attribute()
-    "`Be.Attribute` matches `class` `ast.Attribute`.\n\n        This `class` is associated with Python delimiters '.'.\n        It is a subclass of `ast.expr`.\n        "
 
-    class _AugAssign:
+    @call
+    class AugAssign:
+        """`Be.AugAssign`, ***Aug***mented ***Assign***ment, matches `class` `ast.AugAssign`.
+
+        This `class` is associated with Python delimiters '+=, -=, *=, /=, //=, %=, **=, |=, &=, ^=, <<=, >>='.
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.AugAssign]:
             return isinstance(node, ast.AugAssign)
@@ -463,10 +509,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.AugAssign]:
                 return isinstance(node, ast.AugAssign) and attributeCondition(node.value)
             return workhorse
-    AugAssign = _AugAssign()
-    "`Be.AugAssign`, ***Aug***mented ***Assign***ment, matches `class` `ast.AugAssign`.\n\n        This `class` is associated with Python delimiters '+=, -=, *=, /=, //=, %=, **=, |=, &=, ^=, <<=, >>='.\n        It is a subclass of `ast.stmt`.\n        "
 
-    class _Await:
+    @call
+    class Await:
+        """`Be.Await`, ***Await*** the asynchronous operation, matches `class` `ast.Await`.
+
+        This `class` is associated with Python keywords `await`.
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Await]:
             return isinstance(node, ast.Await)
@@ -477,10 +527,13 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Await]:
                 return isinstance(node, ast.Await) and attributeCondition(node.value)
             return workhorse
-    Await = _Await()
-    '`Be.Await`, ***Await*** the asynchronous operation, matches `class` `ast.Await`.\n\n        This `class` is associated with Python keywords `await`.\n        It is a subclass of `ast.expr`.\n        '
 
-    class _BinOp:
+    @call
+    class BinOp:
+        """`Be.BinOp`, ***Bin***ary ***Op***eration, matches `class` `ast.BinOp`.
+
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.BinOp]:
             return isinstance(node, ast.BinOp)
@@ -505,8 +558,6 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.BinOp]:
                 return isinstance(node, ast.BinOp) and attributeCondition(node.right)
             return workhorse
-    BinOp = _BinOp()
-    '`Be.BinOp`, ***Bin***ary ***Op***eration, matches `class` `ast.BinOp`.\n\n        It is a subclass of `ast.expr`.\n        '
 
     @staticmethod
     def BitAnd(node: ast.AST) -> TypeIs[ast.BitAnd]:
@@ -535,7 +586,12 @@ class Be:
         """
         return isinstance(node, ast.BitXor)
 
-    class _BoolOp:
+    @call
+    class BoolOp:
+        """`Be.BoolOp`, ***Bool***ean ***Op***eration, matches `class` `ast.BoolOp`.
+
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.BoolOp]:
             return isinstance(node, ast.BoolOp)
@@ -553,8 +609,6 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.BoolOp]:
                 return isinstance(node, ast.BoolOp) and attributeCondition(node.values)
             return workhorse
-    BoolOp = _BoolOp()
-    '`Be.BoolOp`, ***Bool***ean ***Op***eration, matches `class` `ast.BoolOp`.\n\n        It is a subclass of `ast.expr`.\n        '
 
     @staticmethod
     def boolop(node: ast.AST) -> TypeIs[ast.boolop]:
@@ -573,7 +627,13 @@ class Be:
         """
         return isinstance(node, ast.Break)
 
-    class _Call:
+    @call
+    class Call:
+        """`Be.Call` matches `class` `ast.Call`.
+
+        This `class` is associated with Python delimiters '()'.
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Call]:
             return isinstance(node, ast.Call)
@@ -598,10 +658,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Call]:
                 return isinstance(node, ast.Call) and attributeCondition(node.keywords)
             return workhorse
-    Call = _Call()
-    "`Be.Call` matches `class` `ast.Call`.\n\n        This `class` is associated with Python delimiters '()'.\n        It is a subclass of `ast.expr`.\n        "
 
-    class _ClassDef:
+    @call
+    class ClassDef:
+        """`Be.ClassDef`, ***Class*** ***Def***inition, matches `class` `ast.ClassDef`.
+
+        This `class` is associated with Python keywords `class` and Python delimiters ':'.
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.ClassDef]:
             return isinstance(node, ast.ClassDef)
@@ -647,8 +711,6 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.ClassDef]:
                 return isinstance(node, ast.ClassDef) and attributeCondition(node.type_params)
             return workhorse
-    ClassDef = _ClassDef()
-    "`Be.ClassDef`, ***Class*** ***Def***inition, matches `class` `ast.ClassDef`.\n\n        This `class` is associated with Python keywords `class` and Python delimiters ':'.\n        It is a subclass of `ast.stmt`.\n        "
 
     @staticmethod
     def cmpop(node: ast.AST) -> TypeIs[ast.cmpop]:
@@ -658,7 +720,12 @@ class Be:
         """
         return isinstance(node, ast.cmpop)
 
-    class _Compare:
+    @call
+    class Compare:
+        """`Be.Compare` matches `class` `ast.Compare`.
+
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Compare]:
             return isinstance(node, ast.Compare)
@@ -683,10 +750,13 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Compare]:
                 return isinstance(node, ast.Compare) and attributeCondition(node.comparators)
             return workhorse
-    Compare = _Compare()
-    '`Be.Compare` matches `class` `ast.Compare`.\n\n        It is a subclass of `ast.expr`.\n        '
 
-    class _comprehension:
+    @call
+    class comprehension:
+        """`Be.comprehension` matches `class` `ast.comprehension`.
+
+        It is a subclass of `ast.AST`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.comprehension]:
             return isinstance(node, ast.comprehension)
@@ -718,10 +788,13 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.comprehension]:
                 return isinstance(node, ast.comprehension) and attributeCondition(node.is_async)
             return workhorse
-    comprehension = _comprehension()
-    '`Be.comprehension` matches `class` `ast.comprehension`.\n\n        It is a subclass of `ast.AST`.\n        '
 
-    class _Constant:
+    @call
+    class Constant:
+        """`Be.Constant` matches `class` `ast.Constant`.
+
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Constant]:
             return isinstance(node, ast.Constant)
@@ -739,8 +812,6 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Constant]:
                 return isinstance(node, ast.Constant) and attributeCondition(node.kind)
             return workhorse
-    Constant = _Constant()
-    '`Be.Constant` matches `class` `ast.Constant`.\n\n        It is a subclass of `ast.expr`.\n        '
 
     @staticmethod
     def Continue(node: ast.AST) -> TypeIs[ast.Continue]:
@@ -759,7 +830,13 @@ class Be:
         """
         return isinstance(node, ast.Del)
 
-    class _Delete:
+    @call
+    class Delete:
+        """`Be.Delete` matches `class` `ast.Delete`.
+
+        This `class` is associated with Python keywords `del`.
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Delete]:
             return isinstance(node, ast.Delete)
@@ -770,10 +847,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Delete]:
                 return isinstance(node, ast.Delete) and attributeCondition(node.targets)
             return workhorse
-    Delete = _Delete()
-    '`Be.Delete` matches `class` `ast.Delete`.\n\n        This `class` is associated with Python keywords `del`.\n        It is a subclass of `ast.stmt`.\n        '
 
-    class _Dict:
+    @call
+    class Dict:
+        """`Be.Dict`, ***Dict***ionary, matches `class` `ast.Dict`.
+
+        This `class` is associated with Python delimiters '{}'.
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Dict]:
             return isinstance(node, ast.Dict)
@@ -791,10 +872,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Dict]:
                 return isinstance(node, ast.Dict) and attributeCondition(node.values)
             return workhorse
-    Dict = _Dict()
-    "`Be.Dict`, ***Dict***ionary, matches `class` `ast.Dict`.\n\n        This `class` is associated with Python delimiters '{}'.\n        It is a subclass of `ast.expr`.\n        "
 
-    class _DictComp:
+    @call
+    class DictComp:
+        """`Be.DictComp`, ***Dict***ionary ***c***o***mp***rehension, matches `class` `ast.DictComp`.
+
+        This `class` is associated with Python delimiters '{}'.
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.DictComp]:
             return isinstance(node, ast.DictComp)
@@ -819,8 +904,6 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.DictComp]:
                 return isinstance(node, ast.DictComp) and attributeCondition(node.generators)
             return workhorse
-    DictComp = _DictComp()
-    "`Be.DictComp`, ***Dict***ionary ***c***o***mp***rehension, matches `class` `ast.DictComp`.\n\n        This `class` is associated with Python delimiters '{}'.\n        It is a subclass of `ast.expr`.\n        "
 
     @staticmethod
     def Div(node: ast.AST) -> TypeIs[ast.Div]:
@@ -840,7 +923,13 @@ class Be:
         """
         return isinstance(node, ast.Eq)
 
-    class _ExceptHandler:
+    @call
+    class ExceptHandler:
+        """`Be.ExceptHandler`, ***Except***ion ***Handler***, matches `class` `ast.ExceptHandler`.
+
+        This `class` is associated with Python keywords `except`.
+        It is a subclass of `ast.excepthandler`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.ExceptHandler]:
             return isinstance(node, ast.ExceptHandler)
@@ -865,8 +954,6 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.ExceptHandler]:
                 return isinstance(node, ast.ExceptHandler) and attributeCondition(node.body)
             return workhorse
-    ExceptHandler = _ExceptHandler()
-    '`Be.ExceptHandler`, ***Except***ion ***Handler***, matches `class` `ast.ExceptHandler`.\n\n        This `class` is associated with Python keywords `except`.\n        It is a subclass of `ast.excepthandler`.\n        '
 
     @staticmethod
     def excepthandler(node: ast.AST) -> TypeIs[ast.excepthandler]:
@@ -876,7 +963,12 @@ class Be:
         """
         return isinstance(node, ast.excepthandler)
 
-    class _Expr:
+    @call
+    class Expr:
+        """`Be.Expr`, ***Expr***ession, matches `class` `ast.Expr`.
+
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Expr]:
             return isinstance(node, ast.Expr)
@@ -887,8 +979,6 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Expr]:
                 return isinstance(node, ast.Expr) and attributeCondition(node.value)
             return workhorse
-    Expr = _Expr()
-    '`Be.Expr`, ***Expr***ession, matches `class` `ast.Expr`.\n\n        It is a subclass of `ast.stmt`.\n        '
 
     @staticmethod
     def expr(node: ast.AST) -> TypeIs[ast.expr]:
@@ -906,7 +996,12 @@ class Be:
         """
         return isinstance(node, ast.expr_context)
 
-    class _Expression:
+    @call
+    class Expression:
+        """`Be.Expression` matches `class` `ast.Expression`.
+
+        It is a subclass of `ast.mod`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Expression]:
             return isinstance(node, ast.Expression)
@@ -917,8 +1012,6 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Expression]:
                 return isinstance(node, ast.Expression) and attributeCondition(node.body)
             return workhorse
-    Expression = _Expression()
-    '`Be.Expression` matches `class` `ast.Expression`.\n\n        It is a subclass of `ast.mod`.\n        '
 
     @staticmethod
     def FloorDiv(node: ast.AST) -> TypeIs[ast.FloorDiv]:
@@ -929,7 +1022,13 @@ class Be:
         """
         return isinstance(node, ast.FloorDiv)
 
-    class _For:
+    @call
+    class For:
+        """`Be.For` matches `class` `ast.For`.
+
+        This `class` is associated with Python keywords `for` and Python delimiters ':'.
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.For]:
             return isinstance(node, ast.For)
@@ -968,10 +1067,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.For]:
                 return isinstance(node, ast.For) and attributeCondition(node.type_comment)
             return workhorse
-    For = _For()
-    "`Be.For` matches `class` `ast.For`.\n\n        This `class` is associated with Python keywords `for` and Python delimiters ':'.\n        It is a subclass of `ast.stmt`.\n        "
 
-    class _FormattedValue:
+    @call
+    class FormattedValue:
+        """`Be.FormattedValue` matches `class` `ast.FormattedValue`.
+
+        This `class` is associated with Python delimiters '{}'.
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.FormattedValue]:
             return isinstance(node, ast.FormattedValue)
@@ -996,10 +1099,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.FormattedValue]:
                 return isinstance(node, ast.FormattedValue) and attributeCondition(node.format_spec)
             return workhorse
-    FormattedValue = _FormattedValue()
-    "`Be.FormattedValue` matches `class` `ast.FormattedValue`.\n\n        This `class` is associated with Python delimiters '{}'.\n        It is a subclass of `ast.expr`.\n        "
 
-    class _FunctionDef:
+    @call
+    class FunctionDef:
+        """`Be.FunctionDef`, Function ***Def***inition, matches `class` `ast.FunctionDef`.
+
+        This `class` is associated with Python keywords `def` and Python delimiters '()'.
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.FunctionDef]:
             return isinstance(node, ast.FunctionDef)
@@ -1052,10 +1159,13 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.FunctionDef]:
                 return isinstance(node, ast.FunctionDef) and attributeCondition(node.type_params)
             return workhorse
-    FunctionDef = _FunctionDef()
-    "`Be.FunctionDef`, Function ***Def***inition, matches `class` `ast.FunctionDef`.\n\n        This `class` is associated with Python keywords `def` and Python delimiters '()'.\n        It is a subclass of `ast.stmt`.\n        "
 
-    class _FunctionType:
+    @call
+    class FunctionType:
+        """`Be.FunctionType`, Function Type, matches `class` `ast.FunctionType`.
+
+        It is a subclass of `ast.mod`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.FunctionType]:
             return isinstance(node, ast.FunctionType)
@@ -1073,10 +1183,13 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.FunctionType]:
                 return isinstance(node, ast.FunctionType) and attributeCondition(node.returns)
             return workhorse
-    FunctionType = _FunctionType()
-    '`Be.FunctionType`, Function Type, matches `class` `ast.FunctionType`.\n\n        It is a subclass of `ast.mod`.\n        '
 
-    class _GeneratorExp:
+    @call
+    class GeneratorExp:
+        """`Be.GeneratorExp`, Generator ***Exp***ression, matches `class` `ast.GeneratorExp`.
+
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.GeneratorExp]:
             return isinstance(node, ast.GeneratorExp)
@@ -1094,10 +1207,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.GeneratorExp]:
                 return isinstance(node, ast.GeneratorExp) and attributeCondition(node.generators)
             return workhorse
-    GeneratorExp = _GeneratorExp()
-    '`Be.GeneratorExp`, Generator ***Exp***ression, matches `class` `ast.GeneratorExp`.\n\n        It is a subclass of `ast.expr`.\n        '
 
-    class _Global:
+    @call
+    class Global:
+        """`Be.Global` matches `class` `ast.Global`.
+
+        This `class` is associated with Python keywords `global`.
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Global]:
             return isinstance(node, ast.Global)
@@ -1108,8 +1225,6 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Global]:
                 return isinstance(node, ast.Global) and attributeCondition(node.names)
             return workhorse
-    Global = _Global()
-    '`Be.Global` matches `class` `ast.Global`.\n\n        This `class` is associated with Python keywords `global`.\n        It is a subclass of `ast.stmt`.\n        '
 
     @staticmethod
     def Gt(node: ast.AST) -> TypeIs[ast.Gt]:
@@ -1129,7 +1244,13 @@ class Be:
         """
         return isinstance(node, ast.GtE)
 
-    class _If:
+    @call
+    class If:
+        """`Be.If` matches `class` `ast.If`.
+
+        This `class` is associated with Python keywords `if` and Python delimiters ':'.
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.If]:
             return isinstance(node, ast.If)
@@ -1154,10 +1275,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.If]:
                 return isinstance(node, ast.If) and attributeCondition(node.orelse)
             return workhorse
-    If = _If()
-    "`Be.If` matches `class` `ast.If`.\n\n        This `class` is associated with Python keywords `if` and Python delimiters ':'.\n        It is a subclass of `ast.stmt`.\n        "
 
-    class _IfExp:
+    @call
+    class IfExp:
+        """`Be.IfExp`, If ***Exp***ression, matches `class` `ast.IfExp`.
+
+        This `class` is associated with Python keywords `if`.
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.IfExp]:
             return isinstance(node, ast.IfExp)
@@ -1182,10 +1307,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.IfExp]:
                 return isinstance(node, ast.IfExp) and attributeCondition(node.orelse)
             return workhorse
-    IfExp = _IfExp()
-    '`Be.IfExp`, If ***Exp***ression, matches `class` `ast.IfExp`.\n\n        This `class` is associated with Python keywords `if`.\n        It is a subclass of `ast.expr`.\n        '
 
-    class _Import:
+    @call
+    class Import:
+        """`Be.Import` matches `class` `ast.Import`.
+
+        This `class` is associated with Python keywords `import`.
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Import]:
             return isinstance(node, ast.Import)
@@ -1204,10 +1333,14 @@ class Be:
                 def workhorse(node: ast.AST) -> TypeIs[ast.Import]:
                     return isinstance(node, ast.Import) and attributeCondition(node.is_lazy)
                 return workhorse
-    Import = _Import()
-    '`Be.Import` matches `class` `ast.Import`.\n\n        This `class` is associated with Python keywords `import`.\n        It is a subclass of `ast.stmt`.\n        '
 
-    class _ImportFrom:
+    @call
+    class ImportFrom:
+        """`Be.ImportFrom` matches `class` `ast.ImportFrom`.
+
+        This `class` is associated with Python keywords `import`.
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.ImportFrom]:
             return isinstance(node, ast.ImportFrom)
@@ -1240,8 +1373,6 @@ class Be:
                 def workhorse(node: ast.AST) -> TypeIs[ast.ImportFrom]:
                     return isinstance(node, ast.ImportFrom) and attributeCondition(node.is_lazy)
                 return workhorse
-    ImportFrom = _ImportFrom()
-    '`Be.ImportFrom` matches `class` `ast.ImportFrom`.\n\n        This `class` is associated with Python keywords `import`.\n        It is a subclass of `ast.stmt`.\n        '
 
     @staticmethod
     def In(node: ast.AST) -> TypeIs[ast.In]:
@@ -1252,7 +1383,12 @@ class Be:
         """
         return isinstance(node, ast.In)
 
-    class _Interactive:
+    @call
+    class Interactive:
+        """`Be.Interactive`, Interactive mode, matches `class` `ast.Interactive`.
+
+        It is a subclass of `ast.mod`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Interactive]:
             return isinstance(node, ast.Interactive)
@@ -1263,10 +1399,13 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Interactive]:
                 return isinstance(node, ast.Interactive) and attributeCondition(node.body)
             return workhorse
-    Interactive = _Interactive()
-    '`Be.Interactive`, Interactive mode, matches `class` `ast.Interactive`.\n\n        It is a subclass of `ast.mod`.\n        '
 
-    class _Interpolation:
+    @call
+    class Interpolation:
+        """`Be.Interpolation` matches `class` `ast.Interpolation`.
+
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Interpolation]:
             return isinstance(node, ast.Interpolation)
@@ -1298,8 +1437,6 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Interpolation]:
                 return isinstance(node, ast.Interpolation) and attributeCondition(node.format_spec)
             return workhorse
-    Interpolation = _Interpolation()
-    '`Be.Interpolation` matches `class` `ast.Interpolation`.\n\n        It is a subclass of `ast.expr`.\n        '
 
     @staticmethod
     def Invert(node: ast.AST) -> TypeIs[ast.Invert]:
@@ -1328,7 +1465,12 @@ class Be:
         """
         return isinstance(node, ast.IsNot)
 
-    class _JoinedStr:
+    @call
+    class JoinedStr:
+        """`Be.JoinedStr`, Joined ***Str***ing, matches `class` `ast.JoinedStr`.
+
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.JoinedStr]:
             return isinstance(node, ast.JoinedStr)
@@ -1339,10 +1481,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.JoinedStr]:
                 return isinstance(node, ast.JoinedStr) and attributeCondition(node.values)
             return workhorse
-    JoinedStr = _JoinedStr()
-    '`Be.JoinedStr`, Joined ***Str***ing, matches `class` `ast.JoinedStr`.\n\n        It is a subclass of `ast.expr`.\n        '
 
-    class _keyword:
+    @call
+    class keyword:
+        """`Be.keyword` matches `class` `ast.keyword`.
+
+        This `class` is associated with Python delimiters '='.
+        It is a subclass of `ast.AST`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.keyword]:
             return isinstance(node, ast.keyword)
@@ -1360,10 +1506,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.keyword]:
                 return isinstance(node, ast.keyword) and attributeCondition(node.value)
             return workhorse
-    keyword = _keyword()
-    "`Be.keyword` matches `class` `ast.keyword`.\n\n        This `class` is associated with Python delimiters '='.\n        It is a subclass of `ast.AST`.\n        "
 
-    class _Lambda:
+    @call
+    class Lambda:
+        """`Be.Lambda`, Lambda function, matches `class` `ast.Lambda`.
+
+        This `class` is associated with Python keywords `lambda` and Python delimiters ':'.
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Lambda]:
             return isinstance(node, ast.Lambda)
@@ -1381,10 +1531,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Lambda]:
                 return isinstance(node, ast.Lambda) and attributeCondition(node.body)
             return workhorse
-    Lambda = _Lambda()
-    "`Be.Lambda`, Lambda function, matches `class` `ast.Lambda`.\n\n        This `class` is associated with Python keywords `lambda` and Python delimiters ':'.\n        It is a subclass of `ast.expr`.\n        "
 
-    class _List:
+    @call
+    class List:
+        """`Be.List` matches `class` `ast.List`.
+
+        This `class` is associated with Python delimiters '[]'.
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.List]:
             return isinstance(node, ast.List)
@@ -1402,10 +1556,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.List]:
                 return isinstance(node, ast.List) and attributeCondition(node.ctx)
             return workhorse
-    List = _List()
-    "`Be.List` matches `class` `ast.List`.\n\n        This `class` is associated with Python delimiters '[]'.\n        It is a subclass of `ast.expr`.\n        "
 
-    class _ListComp:
+    @call
+    class ListComp:
+        """`Be.ListComp`, List ***c***o***mp***rehension, matches `class` `ast.ListComp`.
+
+        This `class` is associated with Python delimiters '[]'.
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.ListComp]:
             return isinstance(node, ast.ListComp)
@@ -1423,8 +1581,6 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.ListComp]:
                 return isinstance(node, ast.ListComp) and attributeCondition(node.generators)
             return workhorse
-    ListComp = _ListComp()
-    "`Be.ListComp`, List ***c***o***mp***rehension, matches `class` `ast.ListComp`.\n\n        This `class` is associated with Python delimiters '[]'.\n        It is a subclass of `ast.expr`.\n        "
 
     @staticmethod
     def Load(node: ast.AST) -> TypeIs[ast.Load]:
@@ -1461,7 +1617,13 @@ class Be:
         """
         return isinstance(node, ast.LtE)
 
-    class _Match:
+    @call
+    class Match:
+        """`Be.Match`, Match this, matches `class` `ast.Match`.
+
+        This `class` is associated with Python delimiters ':'.
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Match]:
             return isinstance(node, ast.Match)
@@ -1479,10 +1641,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Match]:
                 return isinstance(node, ast.Match) and attributeCondition(node.cases)
             return workhorse
-    Match = _Match()
-    "`Be.Match`, Match this, matches `class` `ast.Match`.\n\n        This `class` is associated with Python delimiters ':'.\n        It is a subclass of `ast.stmt`.\n        "
 
-    class _match_case:
+    @call
+    class match_case:
+        """`Be.match_case`, match case, matches `class` `ast.match_case`.
+
+        This `class` is associated with Python delimiters ':'.
+        It is a subclass of `ast.AST`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.match_case]:
             return isinstance(node, ast.match_case)
@@ -1507,10 +1673,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.match_case]:
                 return isinstance(node, ast.match_case) and attributeCondition(node.body)
             return workhorse
-    match_case = _match_case()
-    "`Be.match_case`, match case, matches `class` `ast.match_case`.\n\n        This `class` is associated with Python delimiters ':'.\n        It is a subclass of `ast.AST`.\n        "
 
-    class _MatchAs:
+    @call
+    class MatchAs:
+        """`Be.MatchAs`, Match As, matches `class` `ast.MatchAs`.
+
+        This `class` is associated with Python delimiters ':'.
+        It is a subclass of `ast.pattern`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.MatchAs]:
             return isinstance(node, ast.MatchAs)
@@ -1528,10 +1698,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.MatchAs]:
                 return isinstance(node, ast.MatchAs) and attributeCondition(node.name)
             return workhorse
-    MatchAs = _MatchAs()
-    "`Be.MatchAs`, Match As, matches `class` `ast.MatchAs`.\n\n        This `class` is associated with Python delimiters ':'.\n        It is a subclass of `ast.pattern`.\n        "
 
-    class _MatchClass:
+    @call
+    class MatchClass:
+        """`Be.MatchClass`, Match Class, matches `class` `ast.MatchClass`.
+
+        This `class` is associated with Python delimiters ':'.
+        It is a subclass of `ast.pattern`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.MatchClass]:
             return isinstance(node, ast.MatchClass)
@@ -1563,10 +1737,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.MatchClass]:
                 return isinstance(node, ast.MatchClass) and attributeCondition(node.kwd_patterns)
             return workhorse
-    MatchClass = _MatchClass()
-    "`Be.MatchClass`, Match Class, matches `class` `ast.MatchClass`.\n\n        This `class` is associated with Python delimiters ':'.\n        It is a subclass of `ast.pattern`.\n        "
 
-    class _MatchMapping:
+    @call
+    class MatchMapping:
+        """`Be.MatchMapping`, Match Mapping, matches `class` `ast.MatchMapping`.
+
+        This `class` is associated with Python delimiters ':'.
+        It is a subclass of `ast.pattern`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.MatchMapping]:
             return isinstance(node, ast.MatchMapping)
@@ -1591,10 +1769,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.MatchMapping]:
                 return isinstance(node, ast.MatchMapping) and attributeCondition(node.rest)
             return workhorse
-    MatchMapping = _MatchMapping()
-    "`Be.MatchMapping`, Match Mapping, matches `class` `ast.MatchMapping`.\n\n        This `class` is associated with Python delimiters ':'.\n        It is a subclass of `ast.pattern`.\n        "
 
-    class _MatchOr:
+    @call
+    class MatchOr:
+        """`Be.MatchOr`, Match this Or that, matches `class` `ast.MatchOr`.
+
+        This `class` is associated with Python delimiters ':' and Python operators '|'.
+        It is a subclass of `ast.pattern`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.MatchOr]:
             return isinstance(node, ast.MatchOr)
@@ -1605,10 +1787,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.MatchOr]:
                 return isinstance(node, ast.MatchOr) and attributeCondition(node.patterns)
             return workhorse
-    MatchOr = _MatchOr()
-    "`Be.MatchOr`, Match this Or that, matches `class` `ast.MatchOr`.\n\n        This `class` is associated with Python delimiters ':' and Python operators '|'.\n        It is a subclass of `ast.pattern`.\n        "
 
-    class _MatchSequence:
+    @call
+    class MatchSequence:
+        """`Be.MatchSequence`, Match this Sequence, matches `class` `ast.MatchSequence`.
+
+        This `class` is associated with Python delimiters ':'.
+        It is a subclass of `ast.pattern`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.MatchSequence]:
             return isinstance(node, ast.MatchSequence)
@@ -1619,10 +1805,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.MatchSequence]:
                 return isinstance(node, ast.MatchSequence) and attributeCondition(node.patterns)
             return workhorse
-    MatchSequence = _MatchSequence()
-    "`Be.MatchSequence`, Match this Sequence, matches `class` `ast.MatchSequence`.\n\n        This `class` is associated with Python delimiters ':'.\n        It is a subclass of `ast.pattern`.\n        "
 
-    class _MatchSingleton:
+    @call
+    class MatchSingleton:
+        """`Be.MatchSingleton`, Match Singleton, matches `class` `ast.MatchSingleton`.
+
+        This `class` is associated with Python delimiters ':'.
+        It is a subclass of `ast.pattern`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.MatchSingleton]:
             return isinstance(node, ast.MatchSingleton)
@@ -1633,10 +1823,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.MatchSingleton]:
                 return isinstance(node, ast.MatchSingleton) and attributeCondition(node.value)
             return workhorse
-    MatchSingleton = _MatchSingleton()
-    "`Be.MatchSingleton`, Match Singleton, matches `class` `ast.MatchSingleton`.\n\n        This `class` is associated with Python delimiters ':'.\n        It is a subclass of `ast.pattern`.\n        "
 
-    class _MatchStar:
+    @call
+    class MatchStar:
+        """`Be.MatchStar`, Match Star, matches `class` `ast.MatchStar`.
+
+        This `class` is associated with Python delimiters ':' and Python operators '*'.
+        It is a subclass of `ast.pattern`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.MatchStar]:
             return isinstance(node, ast.MatchStar)
@@ -1647,10 +1841,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.MatchStar]:
                 return isinstance(node, ast.MatchStar) and attributeCondition(node.name)
             return workhorse
-    MatchStar = _MatchStar()
-    "`Be.MatchStar`, Match Star, matches `class` `ast.MatchStar`.\n\n        This `class` is associated with Python delimiters ':' and Python operators '*'.\n        It is a subclass of `ast.pattern`.\n        "
 
-    class _MatchValue:
+    @call
+    class MatchValue:
+        """`Be.MatchValue`, Match Value, matches `class` `ast.MatchValue`.
+
+        This `class` is associated with Python delimiters ':'.
+        It is a subclass of `ast.pattern`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.MatchValue]:
             return isinstance(node, ast.MatchValue)
@@ -1661,8 +1859,6 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.MatchValue]:
                 return isinstance(node, ast.MatchValue) and attributeCondition(node.value)
             return workhorse
-    MatchValue = _MatchValue()
-    "`Be.MatchValue`, Match Value, matches `class` `ast.MatchValue`.\n\n        This `class` is associated with Python delimiters ':'.\n        It is a subclass of `ast.pattern`.\n        "
 
     @staticmethod
     def MatMult(node: ast.AST) -> TypeIs[ast.MatMult]:
@@ -1689,7 +1885,12 @@ class Be:
         """
         return isinstance(node, ast.mod)
 
-    class _Module:
+    @call
+    class Module:
+        """`Be.Module` matches `class` `ast.Module`.
+
+        It is a subclass of `ast.mod`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Module]:
             return isinstance(node, ast.Module)
@@ -1707,8 +1908,6 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Module]:
                 return isinstance(node, ast.Module) and attributeCondition(node.type_ignores)
             return workhorse
-    Module = _Module()
-    '`Be.Module` matches `class` `ast.Module`.\n\n        It is a subclass of `ast.mod`.\n        '
 
     @staticmethod
     def Mult(node: ast.AST) -> TypeIs[ast.Mult]:
@@ -1719,7 +1918,12 @@ class Be:
         """
         return isinstance(node, ast.Mult)
 
-    class _Name:
+    @call
+    class Name:
+        """`Be.Name` matches `class` `ast.Name`.
+
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Name]:
             return isinstance(node, ast.Name)
@@ -1737,10 +1941,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Name]:
                 return isinstance(node, ast.Name) and attributeCondition(node.ctx)
             return workhorse
-    Name = _Name()
-    '`Be.Name` matches `class` `ast.Name`.\n\n        It is a subclass of `ast.expr`.\n        '
 
-    class _NamedExpr:
+    @call
+    class NamedExpr:
+        """`Be.NamedExpr`, Named ***Expr***ession, matches `class` `ast.NamedExpr`.
+
+        This `class` is associated with Python operators ':='.
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.NamedExpr]:
             return isinstance(node, ast.NamedExpr)
@@ -1758,10 +1966,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.NamedExpr]:
                 return isinstance(node, ast.NamedExpr) and attributeCondition(node.value)
             return workhorse
-    NamedExpr = _NamedExpr()
-    "`Be.NamedExpr`, Named ***Expr***ession, matches `class` `ast.NamedExpr`.\n\n        This `class` is associated with Python operators ':='.\n        It is a subclass of `ast.expr`.\n        "
 
-    class _Nonlocal:
+    @call
+    class Nonlocal:
+        """`Be.Nonlocal` matches `class` `ast.Nonlocal`.
+
+        This `class` is associated with Python keywords `nonlocal`.
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Nonlocal]:
             return isinstance(node, ast.Nonlocal)
@@ -1772,8 +1984,6 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Nonlocal]:
                 return isinstance(node, ast.Nonlocal) and attributeCondition(node.names)
             return workhorse
-    Nonlocal = _Nonlocal()
-    '`Be.Nonlocal` matches `class` `ast.Nonlocal`.\n\n        This `class` is associated with Python keywords `nonlocal`.\n        It is a subclass of `ast.stmt`.\n        '
 
     @staticmethod
     def Not(node: ast.AST) -> TypeIs[ast.Not]:
@@ -1819,7 +2029,13 @@ class Be:
         """
         return isinstance(node, ast.Or)
 
-    class _ParamSpec:
+    @call
+    class ParamSpec:
+        """`Be.ParamSpec`, ***Param***eter ***Spec***ification, matches `class` `ast.ParamSpec`.
+
+        This `class` is associated with Python delimiters '[]'.
+        It is a subclass of `ast.type_param`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.ParamSpec]:
             return isinstance(node, ast.ParamSpec)
@@ -1837,8 +2053,6 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.ParamSpec]:
                 return isinstance(node, ast.ParamSpec) and attributeCondition(node.default_value)
             return workhorse
-    ParamSpec = _ParamSpec()
-    "`Be.ParamSpec`, ***Param***eter ***Spec***ification, matches `class` `ast.ParamSpec`.\n\n        This `class` is associated with Python delimiters '[]'.\n        It is a subclass of `ast.type_param`.\n        "
 
     @staticmethod
     def Pass(node: ast.AST) -> TypeIs[ast.Pass]:
@@ -1866,7 +2080,13 @@ class Be:
         """
         return isinstance(node, ast.Pow)
 
-    class _Raise:
+    @call
+    class Raise:
+        """`Be.Raise` matches `class` `ast.Raise`.
+
+        This `class` is associated with Python keywords `raise`.
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Raise]:
             return isinstance(node, ast.Raise)
@@ -1884,10 +2104,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Raise]:
                 return isinstance(node, ast.Raise) and attributeCondition(node.cause)
             return workhorse
-    Raise = _Raise()
-    '`Be.Raise` matches `class` `ast.Raise`.\n\n        This `class` is associated with Python keywords `raise`.\n        It is a subclass of `ast.stmt`.\n        '
 
-    class _Return:
+    @call
+    class Return:
+        """`Be.Return` matches `class` `ast.Return`.
+
+        This `class` is associated with Python keywords `return`.
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Return]:
             return isinstance(node, ast.Return)
@@ -1898,8 +2122,6 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Return]:
                 return isinstance(node, ast.Return) and attributeCondition(node.value)
             return workhorse
-    Return = _Return()
-    '`Be.Return` matches `class` `ast.Return`.\n\n        This `class` is associated with Python keywords `return`.\n        It is a subclass of `ast.stmt`.\n        '
 
     @staticmethod
     def RShift(node: ast.AST) -> TypeIs[ast.RShift]:
@@ -1910,7 +2132,13 @@ class Be:
         """
         return isinstance(node, ast.RShift)
 
-    class _Set:
+    @call
+    class Set:
+        """`Be.Set` matches `class` `ast.Set`.
+
+        This `class` is associated with Python delimiters '{}'.
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Set]:
             return isinstance(node, ast.Set)
@@ -1921,10 +2149,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Set]:
                 return isinstance(node, ast.Set) and attributeCondition(node.elts)
             return workhorse
-    Set = _Set()
-    "`Be.Set` matches `class` `ast.Set`.\n\n        This `class` is associated with Python delimiters '{}'.\n        It is a subclass of `ast.expr`.\n        "
 
-    class _SetComp:
+    @call
+    class SetComp:
+        """`Be.SetComp`, Set ***c***o***mp***rehension, matches `class` `ast.SetComp`.
+
+        This `class` is associated with Python delimiters '{}'.
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.SetComp]:
             return isinstance(node, ast.SetComp)
@@ -1942,10 +2174,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.SetComp]:
                 return isinstance(node, ast.SetComp) and attributeCondition(node.generators)
             return workhorse
-    SetComp = _SetComp()
-    "`Be.SetComp`, Set ***c***o***mp***rehension, matches `class` `ast.SetComp`.\n\n        This `class` is associated with Python delimiters '{}'.\n        It is a subclass of `ast.expr`.\n        "
 
-    class _Slice:
+    @call
+    class Slice:
+        """`Be.Slice` matches `class` `ast.Slice`.
+
+        This `class` is associated with Python delimiters '[], :'.
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Slice]:
             return isinstance(node, ast.Slice)
@@ -1970,10 +2206,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Slice]:
                 return isinstance(node, ast.Slice) and attributeCondition(node.step)
             return workhorse
-    Slice = _Slice()
-    "`Be.Slice` matches `class` `ast.Slice`.\n\n        This `class` is associated with Python delimiters '[], :'.\n        It is a subclass of `ast.expr`.\n        "
 
-    class _Starred:
+    @call
+    class Starred:
+        """`Be.Starred` matches `class` `ast.Starred`.
+
+        This `class` is associated with Python operators '*'.
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Starred]:
             return isinstance(node, ast.Starred)
@@ -1991,8 +2231,6 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Starred]:
                 return isinstance(node, ast.Starred) and attributeCondition(node.ctx)
             return workhorse
-    Starred = _Starred()
-    "`Be.Starred` matches `class` `ast.Starred`.\n\n        This `class` is associated with Python operators '*'.\n        It is a subclass of `ast.expr`.\n        "
 
     @staticmethod
     def stmt(node: ast.AST) -> TypeIs[ast.stmt]:
@@ -2019,7 +2257,13 @@ class Be:
         """
         return isinstance(node, ast.Sub)
 
-    class _Subscript:
+    @call
+    class Subscript:
+        """`Be.Subscript` matches `class` `ast.Subscript`.
+
+        This `class` is associated with Python delimiters '[]'.
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Subscript]:
             return isinstance(node, ast.Subscript)
@@ -2044,10 +2288,13 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Subscript]:
                 return isinstance(node, ast.Subscript) and attributeCondition(node.ctx)
             return workhorse
-    Subscript = _Subscript()
-    "`Be.Subscript` matches `class` `ast.Subscript`.\n\n        This `class` is associated with Python delimiters '[]'.\n        It is a subclass of `ast.expr`.\n        "
 
-    class _TemplateStr:
+    @call
+    class TemplateStr:
+        """`Be.TemplateStr` matches `class` `ast.TemplateStr`.
+
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.TemplateStr]:
             return isinstance(node, ast.TemplateStr)
@@ -2058,10 +2305,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.TemplateStr]:
                 return isinstance(node, ast.TemplateStr) and attributeCondition(node.values)
             return workhorse
-    TemplateStr = _TemplateStr()
-    '`Be.TemplateStr` matches `class` `ast.TemplateStr`.\n\n        It is a subclass of `ast.expr`.\n        '
 
-    class _Try:
+    @call
+    class Try:
+        """`Be.Try` matches `class` `ast.Try`.
+
+        This `class` is associated with Python keywords `try`, `except` and Python delimiters ':'.
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Try]:
             return isinstance(node, ast.Try)
@@ -2093,10 +2344,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Try]:
                 return isinstance(node, ast.Try) and attributeCondition(node.finalbody)
             return workhorse
-    Try = _Try()
-    "`Be.Try` matches `class` `ast.Try`.\n\n        This `class` is associated with Python keywords `try`, `except` and Python delimiters ':'.\n        It is a subclass of `ast.stmt`.\n        "
 
-    class _TryStar:
+    @call
+    class TryStar:
+        """`Be.TryStar`, Try executing this, protected by `except*` ("except star"), matches `class` `ast.TryStar`.
+
+        This `class` is associated with Python keywords `try`, `except*` and Python delimiters ':'.
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.TryStar]:
             return isinstance(node, ast.TryStar)
@@ -2128,10 +2383,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.TryStar]:
                 return isinstance(node, ast.TryStar) and attributeCondition(node.finalbody)
             return workhorse
-    TryStar = _TryStar()
-    '`Be.TryStar`, Try executing this, protected by `except*` ("except star"), matches `class` `ast.TryStar`.\n\n        This `class` is associated with Python keywords `try`, `except*` and Python delimiters \':\'.\n        It is a subclass of `ast.stmt`.\n        '
 
-    class _Tuple:
+    @call
+    class Tuple:
+        """`Be.Tuple` matches `class` `ast.Tuple`.
+
+        This `class` is associated with Python delimiters '()'.
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Tuple]:
             return isinstance(node, ast.Tuple)
@@ -2149,8 +2408,6 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Tuple]:
                 return isinstance(node, ast.Tuple) and attributeCondition(node.ctx)
             return workhorse
-    Tuple = _Tuple()
-    "`Be.Tuple` matches `class` `ast.Tuple`.\n\n        This `class` is associated with Python delimiters '()'.\n        It is a subclass of `ast.expr`.\n        "
 
     @staticmethod
     def type_ignore(node: ast.AST) -> TypeIs[ast.type_ignore]:
@@ -2168,7 +2425,12 @@ class Be:
         """
         return isinstance(node, ast.type_param)
 
-    class _TypeAlias:
+    @call
+    class TypeAlias:
+        """`Be.TypeAlias`, Type Alias, matches `class` `ast.TypeAlias`.
+
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.TypeAlias]:
             return isinstance(node, ast.TypeAlias)
@@ -2193,10 +2455,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.TypeAlias]:
                 return isinstance(node, ast.TypeAlias) and attributeCondition(node.value)
             return workhorse
-    TypeAlias = _TypeAlias()
-    '`Be.TypeAlias`, Type Alias, matches `class` `ast.TypeAlias`.\n\n        It is a subclass of `ast.stmt`.\n        '
 
-    class _TypeIgnore:
+    @call
+    class TypeIgnore:
+        """`Be.TypeIgnore`, this Type (`type`) error, Ignore it, matches `class` `ast.TypeIgnore`.
+
+        This `class` is associated with Python delimiters ':'.
+        It is a subclass of `ast.type_ignore`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.TypeIgnore]:
             return isinstance(node, ast.TypeIgnore)
@@ -2214,10 +2480,13 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.TypeIgnore]:
                 return isinstance(node, ast.TypeIgnore) and attributeCondition(node.tag)
             return workhorse
-    TypeIgnore = _TypeIgnore()
-    "`Be.TypeIgnore`, this Type (`type`) error, Ignore it, matches `class` `ast.TypeIgnore`.\n\n        This `class` is associated with Python delimiters ':'.\n        It is a subclass of `ast.type_ignore`.\n        "
 
-    class _TypeVar:
+    @call
+    class TypeVar:
+        """`Be.TypeVar`, Type ***Var***iable, matches `class` `ast.TypeVar`.
+
+        It is a subclass of `ast.type_param`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.TypeVar]:
             return isinstance(node, ast.TypeVar)
@@ -2242,10 +2511,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.TypeVar]:
                 return isinstance(node, ast.TypeVar) and attributeCondition(node.default_value)
             return workhorse
-    TypeVar = _TypeVar()
-    '`Be.TypeVar`, Type ***Var***iable, matches `class` `ast.TypeVar`.\n\n        It is a subclass of `ast.type_param`.\n        '
 
-    class _TypeVarTuple:
+    @call
+    class TypeVarTuple:
+        """`Be.TypeVarTuple`, Type ***Var***iable ***Tuple***, matches `class` `ast.TypeVarTuple`.
+
+        This `class` is associated with Python operators '*'.
+        It is a subclass of `ast.type_param`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.TypeVarTuple]:
             return isinstance(node, ast.TypeVarTuple)
@@ -2263,8 +2536,6 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.TypeVarTuple]:
                 return isinstance(node, ast.TypeVarTuple) and attributeCondition(node.default_value)
             return workhorse
-    TypeVarTuple = _TypeVarTuple()
-    "`Be.TypeVarTuple`, Type ***Var***iable ***Tuple***, matches `class` `ast.TypeVarTuple`.\n\n        This `class` is associated with Python operators '*'.\n        It is a subclass of `ast.type_param`.\n        "
 
     @staticmethod
     def UAdd(node: ast.AST) -> TypeIs[ast.UAdd]:
@@ -2275,7 +2546,12 @@ class Be:
         """
         return isinstance(node, ast.UAdd)
 
-    class _UnaryOp:
+    @call
+    class UnaryOp:
+        """`Be.UnaryOp`, ***Un***ary ***Op***eration, matches `class` `ast.UnaryOp`.
+
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.UnaryOp]:
             return isinstance(node, ast.UnaryOp)
@@ -2293,8 +2569,6 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.UnaryOp]:
                 return isinstance(node, ast.UnaryOp) and attributeCondition(node.operand)
             return workhorse
-    UnaryOp = _UnaryOp()
-    '`Be.UnaryOp`, ***Un***ary ***Op***eration, matches `class` `ast.UnaryOp`.\n\n        It is a subclass of `ast.expr`.\n        '
 
     @staticmethod
     def unaryop(node: ast.AST) -> TypeIs[ast.unaryop]:
@@ -2313,7 +2587,13 @@ class Be:
         """
         return isinstance(node, ast.USub)
 
-    class _While:
+    @call
+    class While:
+        """`Be.While` matches `class` `ast.While`.
+
+        This `class` is associated with Python keywords `while`.
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.While]:
             return isinstance(node, ast.While)
@@ -2338,10 +2618,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.While]:
                 return isinstance(node, ast.While) and attributeCondition(node.orelse)
             return workhorse
-    While = _While()
-    '`Be.While` matches `class` `ast.While`.\n\n        This `class` is associated with Python keywords `while`.\n        It is a subclass of `ast.stmt`.\n        '
 
-    class _With:
+    @call
+    class With:
+        """`Be.With` matches `class` `ast.With`.
+
+        This `class` is associated with Python keywords `with` and Python delimiters ':'.
+        It is a subclass of `ast.stmt`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.With]:
             return isinstance(node, ast.With)
@@ -2366,10 +2650,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.With]:
                 return isinstance(node, ast.With) and attributeCondition(node.type_comment)
             return workhorse
-    With = _With()
-    "`Be.With` matches `class` `ast.With`.\n\n        This `class` is associated with Python keywords `with` and Python delimiters ':'.\n        It is a subclass of `ast.stmt`.\n        "
 
-    class _withitem:
+    @call
+    class withitem:
+        """`Be.withitem`, with item, matches `class` `ast.withitem`.
+
+        This `class` is associated with Python keywords `as`.
+        It is a subclass of `ast.AST`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.withitem]:
             return isinstance(node, ast.withitem)
@@ -2387,10 +2675,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.withitem]:
                 return isinstance(node, ast.withitem) and attributeCondition(node.optional_vars)
             return workhorse
-    withitem = _withitem()
-    '`Be.withitem`, with item, matches `class` `ast.withitem`.\n\n        This `class` is associated with Python keywords `as`.\n        It is a subclass of `ast.AST`.\n        '
 
-    class _Yield:
+    @call
+    class Yield:
+        """`Be.Yield`, Yield an element, matches `class` `ast.Yield`.
+
+        This `class` is associated with Python keywords `yield`.
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Yield]:
             return isinstance(node, ast.Yield)
@@ -2401,10 +2693,14 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.Yield]:
                 return isinstance(node, ast.Yield) and attributeCondition(node.value)
             return workhorse
-    Yield = _Yield()
-    '`Be.Yield`, Yield an element, matches `class` `ast.Yield`.\n\n        This `class` is associated with Python keywords `yield`.\n        It is a subclass of `ast.expr`.\n        '
 
-    class _YieldFrom:
+    @call
+    class YieldFrom:
+        """`Be.YieldFrom`, Yield an element From, matches `class` `ast.YieldFrom`.
+
+        This `class` is associated with Python keywords `yield from`.
+        It is a subclass of `ast.expr`.
+        """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.YieldFrom]:
             return isinstance(node, ast.YieldFrom)
@@ -2415,5 +2711,3 @@ class Be:
             def workhorse(node: ast.AST) -> TypeIs[ast.YieldFrom]:
                 return isinstance(node, ast.YieldFrom) and attributeCondition(node.value)
             return workhorse
-    YieldFrom = _YieldFrom()
-    '`Be.YieldFrom`, Yield an element From, matches `class` `ast.YieldFrom`.\n\n        This `class` is associated with Python keywords `yield from`.\n        It is a subclass of `ast.expr`.\n        '
