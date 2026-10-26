@@ -1,4 +1,6 @@
 
+from __future__ import annotations
+
 from astToolkit import dump, Make
 from collections.abc import Callable
 from itertools import chain
@@ -258,7 +260,7 @@ listMakeMinimal = [
 	"Make.YieldFrom(value=Make.Name(id='Make_YieldFrom_value'))",
 ]
 
-nodeConstructors_astMaximallyEmpty =	[
+nodeConstructors_astMaximallyEmpty = [
 	"ast.Add()",
 	"ast.alias(name='name', asname=None)",
 	"ast.And()",
@@ -518,13 +520,13 @@ for MakeMaximallyEmpty, MakeMinimal, astMinimal in zip(listMakeMinimal, listMake
 
 	identifier = MakeMaximallyEmpty.split('(')[0][len('Make.'):None]
 	listDictionaryAsStr: list[str] = []
-	listDictionaryAsStr.append(f'"metadata": {{"classObject": ast.{identifier}, "identifiersSubclasses": [subclass.__name__ for subclass in ast.{identifier}.__subclasses__()]}}')  # noqa: E501, T201
+	listDictionaryAsStr.append(f'"metadata": {{"classObject": ast.{identifier}, "identifiersSubclasses": [subclass.__name__ for subclass in ast.{identifier}.__subclasses__()]}}')
 	if MakeMaximallyEmpty != MakeMinimal:
-		listDictionaryAsStr.append(f'"class Make, minimal parameters": {{"expression": {MakeMinimal}, "astToolkit.dump": "{dump(eval(MakeMinimal), show_empty=True)}", "ast.dump": "{ast.dump(eval(MakeMinimal), show_empty=True)}"}}')  # noqa: E501, S307
-	print(f'"{identifier}": {{')  # noqa: T201
+		listDictionaryAsStr.append(f'"class Make, minimal parameters": {{"expression": {MakeMinimal}, "astToolkit.dump": "{dump(eval(MakeMinimal), show_empty=True)}", "ast.dump": "{ast.dump(eval(MakeMinimal), show_empty=True)}"}}')  # ruff: ignore[suspicious-eval-usage]
+	print(f'"{identifier}": {{')  # ruff: ignore[print]
 	print(*listDictionaryAsStr
-		, f'"class Make, maximally empty parameters": {{"expression": {MakeMaximallyEmpty}, "astToolkit.dump": "{dump(eval(MakeMaximallyEmpty), show_empty=True)}", "ast.dump": "{ast.dump(eval(MakeMaximallyEmpty), show_empty=True)}"}}'  # noqa: E501, S307
-		, f'"ast module, minimal parameters": {{"expression": {astMinimal}, "astToolkit.dump": "{dump(eval(astMinimal), show_empty=True)}", "ast.dump": "{ast.dump(eval(astMinimal), show_empty=True)}"}}'  # noqa: E501, S307
+		, f'"class Make, maximally empty parameters": {{"expression": {MakeMaximallyEmpty}, "astToolkit.dump": "{dump(eval(MakeMaximallyEmpty), show_empty=True)}", "ast.dump": "{ast.dump(eval(MakeMaximallyEmpty), show_empty=True)}"}}'  # ruff: ignore[suspicious-eval-usage]
+		, f'"ast module, minimal parameters": {{"expression": {astMinimal}, "astToolkit.dump": "{dump(eval(astMinimal), show_empty=True)}", "ast.dump": "{ast.dump(eval(astMinimal), show_empty=True)}"}}'  # ruff: ignore[suspicious-eval-usage]
 		, sep=',\n')
 	print('},')
 print('}')
@@ -542,6 +544,3 @@ print('}')
 # dict[str, dict[str, Callable]]
 
 # identifierClass
-
-
-
