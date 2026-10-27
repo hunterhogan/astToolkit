@@ -6,7 +6,7 @@ from typing import Any, TypeIs
 import ast
 import sys
 
-class Be:  # ruff: ignore[too-many-public-methods]
+class Be:
     """A comprehensive suite of functions for AST class identification and type narrowing.
 
     `class` `Be` has a method for each `ast.AST` subclass, also called "node type", to perform type

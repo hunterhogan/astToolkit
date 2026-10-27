@@ -514,45 +514,31 @@ class Make:
         return ast.AsyncWith(items=items, body=list(body), **keywordArguments)
 
     @staticmethod
-    def Attribute(value: ast.expr, *attribute: str, context: ast.expr_context | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Attribute:
+    def Attribute(value: ast.expr, attribute: str, context: ast.expr_context | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Attribute:
         """Make an `ast.Attribute` object for dot notation attribute access.
 
         (AI generated docstring.)
 
         The `ast.Attribute` object represents attribute access using dot notation such as `object.method` or
-        `module.Class`. The `*attribute` variadic parameter accepts multiple names to chain attribute accesses,
-        producing `value.first.second.third` from a single `Make.Attribute` call.
+        `module.Class`.
 
         Parameters
         ----------
         value : ast.expr
             Base expression providing the object on which attribute access begins.
         attribute : str
-            One or more attribute name strings to access in sequence. Multiple names generate a chain of nested
-            `ast.Attribute` objects.
+            Attribute name string to access.
         context : ast.expr_context | None = None
-            (***c***on***t***e***x***t) Expression context for the final attribute in the chain. Use `ast.Load()` to
-            read, `ast.Store()` to assign, or `ast.Del()` (***Del***ete) to delete. Defaults to `ast.Load()`. This
-            parameter corresponds to `ast.Attribute.ctx`.
+            (***c***on***t***e***x***t) Expression context for the attribute access. Use `ast.Load()` to read,
+            `ast.Store()` to assign, or `ast.Del()` (***Del***ete) to delete. Defaults to `ast.Load()`. This parameter
+            corresponds to `ast.Attribute.ctx`.
 
         Returns
         -------
         attributeAccess : ast.Attribute
-            An `ast.Attribute` object representing the final attribute in the chain.
-
-        Chained Attribute Access
-        ------------------------
-        `Make.Attribute(value, 'first', 'second', context=ctx)` produces `ast.Attribute(ast.Attribute(value, 'first', ctx=ast.Load()), 'second', ctx=ctx)`. Only
-        the final `ast.Attribute` node in the chain uses the supplied `context`; all intermediate nodes use `ast.Load()`.
+            An `ast.Attribute` object representing the attribute access.
         """
-        ctx = context or ast.Load()
-
-        def addDOTattribute(chain: ast.expr, identifier: str, ctx: ast.expr_context, **keywordArguments: Unpack[ast_attributes]) -> ast.Attribute:
-            return ast.Attribute(value=chain, attr=identifier, ctx=ctx, **keywordArguments)
-        buffaloBuffalo = addDOTattribute(value, attribute[0], ctx, **keywordArguments)
-        for identifier in attribute[1:None]:
-            buffaloBuffalo = addDOTattribute(buffaloBuffalo, identifier, ctx, **keywordArguments)
-        return buffaloBuffalo
+        return ast.Attribute(value=value, attr=attribute, ctx=context or ast.Load(), **keywordArguments)
 
     @staticmethod
     def AugAssign(target: ast.Name | ast.Attribute | ast.Subscript, op: ast.operator, value: ast.expr, **keywordArguments: Unpack[ast_attributes]) -> ast.AugAssign:

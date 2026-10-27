@@ -44,9 +44,14 @@ classifiers = [
   "Topic :: Software Development :: Libraries :: Python Modules",
   "Typing :: Typed",
 ]
-urls = { Donate = "https://www.patreon.com/integrated", Homepage = "https://github.com/hunterhogan/astToolkit", Issues = "https://github.com/hunterhogan/astToolkit/issues", Repository = "https://github.com/hunterhogan/astToolkit.git" }
 dependencies = ["hunterMakesPy>=0.8.1"]
-optional-dependencies = { testing = ["pytest-cov", "pytest-xdist", "pytest"] }
+optional-dependencies = { testing = ["pytest-cov", "pytest-parametrize>=1.6", "pytest"] }
+
+[project.urls]
+Donate = "https://www.patreon.com/integrated"
+Homepage = "https://github.com/hunterhogan/astToolkit"
+Issues = "https://github.com/hunterhogan/astToolkit/issues"
+Repository = "https://github.com/hunterhogan/astToolkit.git"
 
 [build-system]
 requires = ["setuptools"]
@@ -54,9 +59,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.coverage]
 report = { exclude_lines = ["if TYPE_CHECKING:", "if __name__ == \"__main__\":"], ignore_errors = false }
-run = { branch = true, concurrency = ["multiprocessing"], data_file = "tests/coverage/.coverage", omit = [
-  "tests/*"
-], parallel = true, source = ["."] }
+run = { branch = true, data_file = "tests/coverage/.coverage", omit = ["tests/*"], source = ["."] }
 
 [tool.pytest]
 addopts = ["--color=yes"]
@@ -72,3 +75,6 @@ filenameCitationDOTcff = "CITATION.cff"
 pathFilenameCitationSSOT = "citations/CITATION.cff"
 
 # TODO create agent skill
+
+# TODO can I use my join idea without subclassing class Add(ast.Add): because subclassing means
+# ast.compare is always false
