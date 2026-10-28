@@ -1,5 +1,26 @@
-# ruff: ignore[undocumented-public-module]
-# DOCUMENT
+"""Read Python source into AST modules and write AST modules as formatted Python.
+
+(AI generated docstring)
+
+You can obtain an `ast.Module` (abstract syntax tree Module) from a UTF-8 source file or
+an importable module, then write generated or transformed source to a file or text stream.
+Parser options control grammar selection, type comments, and AST optimization.
+
+Contents
+--------
+Functions
+	parseLogicalPath2astModule
+		Import a module and parse its available Python source.
+	parsePathFilename2astModule
+		Parse a UTF-8 Python source file without importing it.
+	write_astModule
+		Format Python source from an AST module and write it to a file or text stream.
+
+Classes
+	Parameters_astParse
+		Describe optional parser settings for the source-reading functions.
+"""
+
 from __future__ import annotations
 
 from hunterMakesPy.filesystemToolkit import settings_autoflakeDEFAULT, writePython
@@ -18,42 +39,40 @@ if TYPE_CHECKING:
 	import io
 
 class Parameters_astParse(TypedDict, total=False):
-	"""Specify keyword arguments for `ast.parse` [1] when calling parse functions in this module.
+	"""Specify parser options for producing an `ast.Module` (Module).
 
 	(AI generated docstring)
 
-	You can use `astParseParameters` as a `TypedDict` [2] to annotate keyword arguments forwarded
-	to `ast.parse` [1] by `parseLogicalPath2astModule` and `parsePathFilename2astModule`. All fields
-	are optional (`total=False`).
+	You can use `Parameters_astParse` to annotate keyword arguments for
+	`parseLogicalPath2astModule` and `parsePathFilename2astModule`. Every key is optional.
+	The attribute defaults below apply when a key is omitted.
 
 	Attributes
 	----------
-	mode : Literal['exec']
-		Specifies the kind of code to parse. Only `'exec'` is accepted; only `'exec'` produces an
-		`ast.Module` (Module).
-	type_comments : bool
-		When `True`, `ast.parse` [1] preserves `# type:` and `# type: ignore` (type ***ignore***)
-		comments as specified by PEP 484 [3] and PEP 526 [4].
-	feature_version : int | tuple[int, int] | None
-		A mini-version controlling which Python grammar `ast.parse` [1] uses. For example, `(3, 9)`
-		applies Python 3.9 grammar rules. When `None`, `ast.parse` [1] uses the current interpreter
-		grammar.
-	optimize : Literal[-1, 0, 1, 2]
-		Controls AST optimization level (Python 3.13+ [5] only). `0` and `-1` apply no
-		optimization; `1` applies basic optimizations; `2` applies aggressive optimizations.
+	mode : {'exec'} = 'exec'
+		The parsing mode that produces an `ast.Module` (Module).
+	type_comments : bool = False
+		Whether to preserve `# type:` comments and collect `# type: ignore` (type ***ignore***)
+		comments in `ast.Module.type_ignores`.
+	feature_version : int | tuple[int, int] | None = None
+		The Python grammar version to request. An integer selects a Python 3 minor version;
+		a tuple specifies `(3, minor)`. `None` uses the running interpreter's grammar.
+		The requested grammar is an approximation, not an exact older interpreter [1].
+	optimize : {-1, 0, 1, 2} = -1
+		The AST optimization level. `-1` and `0` produce an unoptimized tree; positive levels
+		request an optimized tree [1], which can change or remove source constructs.
+
+	See Also
+	--------
+	`parseLogicalPath2astModule`
+		Parse an imported module with these options.
+	`parsePathFilename2astModule`
+		Parse a UTF-8 source file with these options.
 
 	References
 	----------
-	[1] ast.parse - Python documentation
+	[1] Python documentation, `ast.parse`.
 		https://docs.python.org/3/library/ast.html#ast.parse
-	[2] TypedDict - Python documentation
-		https://docs.python.org/3/library/typing.html#typing.TypedDict
-	[3] PEP 484 - Type Hints
-		https://peps.python.org/pep-0484/
-	[4] PEP 526 - Syntax for Variable Annotations
-		https://peps.python.org/pep-0526/
-	[5] What's New In Python 3.13 - ast module changes
-		https://docs.python.org/3/whatsnew/3.13.html
 	"""
 	mode: Literal['exec']
 	type_comments: bool
@@ -61,131 +80,68 @@ class Parameters_astParse(TypedDict, total=False):
 	optimize: Literal[-1, 0, 1, 2]
 
 def parsePathFilename2astModule(pathFilename: PathLike[Any] | PurePath, **keywordArguments: Unpack[Parameters_astParse]) -> ast.Module:
-	"""Parse a Python source file at `pathFilename` into an `ast.Module` (Module).
+	"""Parse a UTF-8 Python source file into an `ast.Module` (Module).
 
 	(AI generated docstring)
-
-	You can use `parsePathFilename2astModule` to read the content of a Python source file from
-	`pathFilename` and parse it into an `ast.Module` (abstract syntax tree Module) using
-	`ast.parse` [1]. `parsePathFilename2astModule` reads the file using UTF-8 encoding.
-	`keywordArguments` accepts any subset of the keyword arguments defined in `astParseParameters`,
-	forwarded directly to `ast.parse` [1].
 
 	Parameters
 	----------
 	pathFilename : PathLike[Any] | PurePath
 		The filesystem path of the Python source file to parse.
+	keywordArguments : Unpack[Parameters_astParse]
+		Optional parser settings. Omitted settings use the defaults documented in
+		`Parameters_astParse`.
 
 	Returns
 	-------
 	astModule : ast.Module
-		The `ast.Module` (abstract syntax tree Module) representing the parsed source code of the
-		file at `pathFilename`.
+		The `ast.Module` (abstract syntax tree Module) representing the file's source code.
 
-	ast.parse Parameters
-	--------------------
-	`keywordArguments` accepts any subset of the following `astParseParameters` [2] keyword
-	arguments, which are forwarded directly to `ast.parse` [1].
-
-	mode : Literal['exec'] = 'exec'
-		Specifies the kind of code to parse. Only `'exec'` is accepted; only `'exec'` produces an
-		`ast.Module` (Module).
-	type_comments : bool = False
-		When `True`, `ast.parse` [1] preserves `# type:` and `# type: ignore` (type ***ignore***)
-		comments as specified by PEP 484 [3] and PEP 526 [4]. Type comments are attached to AST
-		nodes in the `type_comment` (a `type` annotation in a comment) field and collected in
-		`ast.Module.type_ignores` (type ***ignore*** comments).
-	feature_version : int | tuple[int, int] | None = None
-		A mini-version for parsing: when set to a tuple such as `(3, 9)`, `ast.parse` [1] attempts
-		to parse using Python 3.9 grammar. The lowest supported version is `(3, 7)` as of 2025 July.
-		When `None`, `ast.parse` [1] uses the current interpreter grammar.
-	optimize : Literal[-1, 0, 1, 2] = -1
-		Controls AST optimization level (Python 3.13+ [5] only).
-		- `-1`: No optimization (default).
-		- `0`: No optimization (same as `-1`).
-		- `1`: Basic optimizations, for example constant folding and dead-code removal.
-		- `2`: Aggressive optimizations; may remove docstrings.
-		When `optimize > 0`, some AST nodes may be omitted or changed.
-
-	References
-	----------
-	[1] ast.parse - Python documentation
-		https://docs.python.org/3/library/ast.html#ast.parse
-	[2] astParseParameters - Internal package reference
-	[3] PEP 484 - Type Hints
-		https://peps.python.org/pep-0484/
-	[4] PEP 526 - Syntax for Variable Annotations
-		https://peps.python.org/pep-0526/
-	[5] What's New In Python 3.13 - ast module changes
-		https://docs.python.org/3/whatsnew/3.13.html
+	See Also
+	--------
+	`Parameters_astParse`
+		Inspect the accepted parser settings and their defaults.
+	`parseLogicalPath2astModule`
+		Parse a module identified by its import path.
+	`write_astModule`
+		Write an AST module as formatted Python source.
 	"""
 	return ast.parse(Path(pathFilename).read_text(encoding="utf-8"), **keywordArguments)
 
 def parseLogicalPath2astModule(logicalPath: identifierDotAttribute, package: str | None = None, **keywordArguments: Unpack[Parameters_astParse]) -> ast.Module:
-	"""Parse the source code of a Python module at a logical import path into an `ast.Module` (Module).
+	"""Parse a module at a logical import path into an `ast.Module` (Module).
 
 	(AI generated docstring)
 
-	You can use `parseLogicalPath2astModule` to import a module by its logical path (for example,
-	`'scipy.signal.windows'`) using `importlib.import_module` [1], retrieve its source code with
-	`inspect.getsource` [2], and then parse that source code into an `ast.Module` (abstract syntax
-	tree Module) using `ast.parse` [3]. `keywordArguments` accepts any subset of the keyword
-	arguments defined in `astParseParameters`, forwarded directly to `ast.parse` [3].
+	You can obtain the source tree of an importable Python module without locating its source
+	file yourself. The module must have source code available to `inspect.getsource`.
 
 	Parameters
 	----------
 	logicalPath : identifierDotAttribute
-		The logical import path to the module using dot notation (for example, `'numpy.typing'`).
+		The module's logical import path in dot notation.
 	package : str | None = None
-		The anchor package for a relative `logicalPath`, passed directly to
-		`importlib.import_module` [1]. Provide `package` when `logicalPath` starts with a dot.
+		The anchor package for a relative `logicalPath`. Supply `package` when
+		`logicalPath` starts with a dot.
+	keywordArguments : Unpack[Parameters_astParse]
+		Optional parser settings. Omitted settings use the defaults documented in
+		`Parameters_astParse`.
 
 	Returns
 	-------
 	astModule : ast.Module
-		The `ast.Module` (abstract syntax tree Module) representing the parsed source code of the
-		imported module.
+		The `ast.Module` (abstract syntax tree Module) representing the imported module's source.
 
-	ast.parse Parameters
-	--------------------
-	`keywordArguments` accepts any subset of the following `astParseParameters` [4] keyword
-	arguments, which are forwarded directly to `ast.parse` [3].
+	See Also
+	--------
+	`Parameters_astParse`
+		Inspect the accepted parser settings and their defaults.
+	`parsePathFilename2astModule`
+		Read source directly from a file without importing the module.
 
-	mode : Literal['exec'] = 'exec'
-		Specifies the kind of code to parse. Only `'exec'` is accepted; only `'exec'` produces an
-		`ast.Module` (Module).
-	type_comments : bool = False
-		When `True`, `ast.parse` [3] preserves `# type:` and `# type: ignore` (type ***ignore***)
-		comments as specified by PEP 484 [5] and PEP 526 [6]. Type comments are attached to AST
-		nodes in the `type_comment` (a `type` annotation in a comment) field and collected in
-		`ast.Module.type_ignores` (type ***ignore*** comments).
-	feature_version : int | tuple[int, int] | None = None
-		A mini-version for parsing: when set to a tuple such as `(3, 9)`, `ast.parse` [3] attempts
-		to parse using Python 3.9 grammar. The lowest supported version is `(3, 7)` as of 2025 July.
-		When `None`, `ast.parse` [3] uses the current interpreter grammar.
-	optimize : Literal[-1, 0, 1, 2] = -1
-		Controls AST optimization level (Python 3.13+ [7] only).
-		- `-1`: No optimization (default).
-		- `0`: No optimization (same as `-1`).
-		- `1`: Basic optimizations, for example constant folding and dead-code removal.
-		- `2`: Aggressive optimizations; may remove docstrings.
-		When `optimize > 0`, some AST nodes may be omitted or changed.
-
-	References
-	----------
-	[1] importlib.import_module - Python documentation
-		https://docs.python.org/3/library/importlib.html#importlib.import_module
-	[2] inspect.getsource - Python documentation
-		https://docs.python.org/3/library/inspect.html#inspect.getsource
-	[3] ast.parse - Python documentation
-		https://docs.python.org/3/library/ast.html#ast.parse
-	[4] astParseParameters - Internal package reference
-	[5] PEP 484 - Type Hints
-		https://peps.python.org/pep-0484/
-	[6] PEP 526 - Syntax for Variable Annotations
-		https://peps.python.org/pep-0526/
-	[7] What's New In Python 3.13 - ast module changes
-		https://docs.python.org/3/whatsnew/3.13.html
+	Module Import
+	-------------
+	Importing `logicalPath` can execute module-level code before the source is parsed.
 	"""
 	moduleImported: ModuleType = importlib.import_module(logicalPath, package)
 	sourcePython: str = inspect_getsource(moduleImported)
@@ -196,52 +152,47 @@ def write_astModule(astModule: ast.Module, pathFilename: PathLike[Any] | PurePat
 @overload
 def write_astModule(astModule: ast.Module, pathFilename: io.TextIOBase, settings: dict[str, dict[str, Any]] | None = None, identifierPackage: str = '') ->  io.TextIOBase: ...
 def write_astModule(astModule: ast.Module, pathFilename: PathLike[Any] | PurePath | io.TextIOBase, settings: dict[str, dict[str, Any]] | None = None, identifierPackage: str = '') -> Path | io.TextIOBase:
-	"""Convert an `ast.Module` (Module) to Python source code and write it to a file or stream.
+	"""Write an `ast.Module` (Module) as formatted Python source to a file or text stream.
 
 	(AI generated docstring)
 
-	You can use `write_astModule` to serialize an `ast.Module` `object` to formatted Python source
-	code and write the result to a filesystem path or an open text stream. `write_astModule` calls
-	`ast.fix_missing_locations` [1] on `astModule` before unparsing, then delegates formatting and
-	output to `writePython` from `hunterMakesPy` [2].
-
-	By default, `write_astModule` uses `autoflake` [3] to remove unused imports and `isort` [4] to
-	organize import statements. You can override this behavior by providing `settings`.
+	You can write generated or transformed source with unused imports removed by `autoflake`
+	and import statements organized by `isort`. The `settings` entries configure these tools.
 
 	Parameters
 	----------
 	astModule : ast.Module
-		(Module) The `ast.Module` `object` to convert and write.
+		(Module) The source tree to convert and write.
 	pathFilename : PathLike[Any] | PurePath | io.TextIOBase
-		The destination for the generated Python source code. `pathFilename` may be a filesystem
-		path or an open `io.TextIOBase` [5] text stream.
+		The destination file path or open text stream.
 	settings : dict[str, dict[str, Any]] | None = None
-		Configuration for code-formatting tools. When `settings` is `None` and `identifierPackage`
-		is non-empty, `write_astModule` uses `settings_autoflakeDEFAULT` from `hunterMakesPy` [2].
-		Provide nested `dict` entries keyed by tool name (for example, `'autoflake'` or `'isort'`)
-		to override the defaults.
+		Formatter settings keyed by tool name. The `'autoflake'` and `'isort'` entries each
+		replace that tool's defaults. Missing entries use the defaults from `hunterMakesPy`.
+		`None` and an empty `dict` use defaults, with the package adjustment described below.
 	identifierPackage : str = ''
-		An optional package name to preserve in the `autoflake` [3] additional-imports list when
-		`settings` is `None`. `identifierPackage` has no effect when `settings` is provided.
+		A package name to add to the `autoflake` additional-imports list when `settings` is
+		`None` or empty. A nonempty `settings` mapping disables this adjustment.
 
 	Returns
 	-------
 	outputDestination : Path | io.TextIOBase
-		The written `pathlib.Path` `object` when `pathFilename` is a filesystem path, or the
-		original `io.TextIOBase` [5] stream after writing when `pathFilename` is a stream.
+		The written `pathlib.Path` for a filesystem destination, or the supplied text stream.
 
-	References
-	----------
-	[1] ast.fix_missing_locations - Python documentation
-		https://docs.python.org/3/library/ast.html#ast.fix_missing_locations
-	[2] hunterMakesPy - Context7
-		https://context7.com/hunterhogan/huntermakespy
-	[3] autoflake - PyPI
-		https://pypi.org/project/autoflake/
-	[4] isort - documentation
-		https://pycqa.github.io/isort/
-	[5] io.TextIOBase - Python documentation
-		https://docs.python.org/3/library/io.html#io.TextIOBase
+	See Also
+	--------
+	`parsePathFilename2astModule`
+		Read a Python source file into an AST module.
+	`astToolkit.containers.IngredientsModule`
+		Assemble module sections and imports before writing source.
+
+	Source and Destination Changes
+	------------------------------
+	Missing source locations are filled in on `astModule` in place. An existing destination
+	file is overwritten; text streams receive text at their current position.
+
+	When `identifierPackage` applies, the package name is appended to the shared
+	`settings_autoflakeDEFAULT['additional_imports']` list from `hunterMakesPy`. The name
+	therefore remains in that default list for later writes in the same process.
 	"""
 	ast.fix_missing_locations(astModule)
 	pythonSource: str = ast.unparse(astModule)
