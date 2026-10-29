@@ -1,12 +1,15 @@
 # ruff: noqa: A002
 """Automatically generated file, so changes may be overwritten."""
-from astToolkit.theTypes import ast_attributes, ast_attributes_int, ast_attributes_type_comment, ConstantValueType
+from astToolkit.theTypes import ast_attributes, ast_attributes_int, ast_attributes_type_comment, ast_ConstantValue
 from collections.abc import Iterable, Sequence
 from hunterMakesPy import identifierDotAttribute
 from typing import overload, Unpack
 import ast
 import builtins
 import sys
+import warnings
+
+warnings.filterwarnings('ignore', category=DeprecationWarning, message='Instantiating abstract AST node class*')
 
 class Make:
     """Create a `class` `ast.AST` `object` or an `ast.AST` subclass `object`.
@@ -1046,7 +1049,7 @@ class Make:
         return ast.comprehension(target=target, iter=iter, ifs=list(ifs), is_async=is_async)
 
     @staticmethod
-    def Constant(value: ConstantValueType, kind: str | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Constant:
+    def Constant(value: ast_ConstantValue, kind: str | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Constant:
         """Make an `ast.Constant` object for a literal value in Python source.
 
         (AI generated docstring.)
@@ -1057,7 +1060,7 @@ class Make:
 
         Parameters
         ----------
-        value : ConstantValueType
+        value : ast_ConstantValue
             The literal constant value. May be any type accepted by `ast.Constant.value`: `int`, `float`, `complex`,
             `str`, `bytes`, `bool`, `None`, or `...` (Ellipsis).
         kind : str | None = None

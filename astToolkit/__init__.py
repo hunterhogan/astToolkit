@@ -68,7 +68,7 @@ from __future__ import annotations
 # isort: split
 from astToolkit.theTypes import (
 	ast_attributes as ast_attributes, ast_attributes_int as ast_attributes_int, ast_attributes_type_comment as ast_attributes_type_comment,
-	astASTattributes as astASTattributes, ConstantValueType as ConstantValueType, hasDOTannotation as hasDOTannotation,
+	astASTattributes as astASTattributes, ast_ConstantValue as ast_ConstantValue, hasDOTannotation as hasDOTannotation,
 	hasDOTannotation_expr as hasDOTannotation_expr, hasDOTannotation_exprOrNone as hasDOTannotation_exprOrNone, hasDOTarg as hasDOTarg,
 	hasDOTarg_str as hasDOTarg_str, hasDOTarg_strOrNone as hasDOTarg_strOrNone, hasDOTargs as hasDOTargs,
 	hasDOTargs_arguments as hasDOTargs_arguments, hasDOTargs_list_arg as hasDOTargs_list_arg, hasDOTargs_list_expr as hasDOTargs_list_expr,
@@ -98,9 +98,9 @@ from astToolkit.theTypes import (
 	hasDOTtarget_NameOrAttributeOrSubscript as hasDOTtarget_NameOrAttributeOrSubscript, hasDOTtargets as hasDOTtargets,
 	hasDOTtest as hasDOTtest, hasDOTtype as hasDOTtype, hasDOTtype_comment as hasDOTtype_comment, hasDOTtype_ignores as hasDOTtype_ignores,
 	hasDOTtype_params as hasDOTtype_params, hasDOTupper as hasDOTupper, hasDOTvalue as hasDOTvalue,
-	hasDOTvalue_boolOrNone as hasDOTvalue_boolOrNone, hasDOTvalue_ConstantValueType as hasDOTvalue_ConstantValueType,
+	hasDOTvalue_boolOrNone as hasDOTvalue_boolOrNone, hasDOTvalue_ast_ConstantValue as hasDOTvalue_ast_ConstantValue,
 	hasDOTvalue_expr as hasDOTvalue_expr, hasDOTvalue_exprOrNone as hasDOTvalue_exprOrNone, hasDOTvalues as hasDOTvalues,
-	hasDOTvararg as hasDOTvararg, identifierDotAttribute as identifierDotAttribute, 一符 as 一符, 个 as 个, 二符 as 二符, 俪 as 俪, 口 as 口, 工 as 工,
+	hasDOTvararg as hasDOTvararg, 一符 as 一符, 个 as 个, 二符 as 二符, 俪 as 俪, 口 as 口, 工 as 工,
 	工位 as 工位, 布尔符 as 布尔符, 常 as 常, 归个 as 归个, 形 as 形, 忽 as 忽, 拦 as 拦, 文义 as 文义, 文件 as 文件, 木 as 木, 本 as 本, 比符 as 比符)
 
 # isort: split

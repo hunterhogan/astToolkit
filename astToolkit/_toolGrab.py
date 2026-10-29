@@ -1,7 +1,7 @@
 # ruff: noqa: B009, B010
 """Automatically generated file, so changes may be overwritten."""
 from astToolkit.theTypes import (
-	ConstantValueType, hasDOTannotation, hasDOTarg, hasDOTargs, hasDOTargtypes, hasDOTasname, hasDOTattr, hasDOTbases, hasDOTbody, hasDOTbound,
+	ast_ConstantValue, hasDOTannotation, hasDOTarg, hasDOTargs, hasDOTargtypes, hasDOTasname, hasDOTattr, hasDOTbases, hasDOTbody, hasDOTbound,
 	hasDOTcases, hasDOTcause, hasDOTcls, hasDOTcomparators, hasDOTcontext_expr, hasDOTconversion, hasDOTctx, hasDOTdecorator_list,
 	hasDOTdefault_value, hasDOTdefaults, hasDOTelt, hasDOTelts, hasDOTexc, hasDOTfinalbody, hasDOTformat_spec, hasDOTfunc, hasDOTgenerators,
 	hasDOTguard, hasDOThandlers, hasDOTid, hasDOTifs, hasDOTis_async, hasDOTitems, hasDOTiter, hasDOTkey, hasDOTkeys, hasDOTkeywords,
@@ -2264,7 +2264,7 @@ class Grab:
         return workhorse
 
     @staticmethod
-    def valueAttribute(action: Callable[[bool | None], bool | None] | Callable[[ConstantValueType], ConstantValueType] | Callable[[工], 工] | Callable[[工 | None], 工 | None]) -> Callable[[hasDOTvalue], hasDOTvalue]:
+    def valueAttribute(action: Callable[[ast_ConstantValue], ast_ConstantValue] | Callable[[bool | None], bool | None] | Callable[[工], 工] | Callable[[工 | None], 工 | None]) -> Callable[[hasDOTvalue], hasDOTvalue]:
         """Apply a function to the `value` attribute of a 'node' of `type` `hasDOTvalue`.
 
         The `type` of the `value` attribute is `something` for [any of] `class` `ast.IDK`.  If `type` were represented
@@ -2273,7 +2273,7 @@ class Grab:
 
         Parameters
         ----------
-        action : Callable[[bool | None], bool | None] | Callable[[ConstantValueType], ConstantValueType] | Callable[[工],
+        action : Callable[[ast_ConstantValue], ast_ConstantValue] | Callable[[bool | None], bool | None] | Callable[[工],
         工] | Callable[[工 | None], 工 | None]
             A function with one parameter and a `return` of the same `type`.
 

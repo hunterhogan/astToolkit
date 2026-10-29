@@ -1,6 +1,6 @@
 """Automatically generated file, so changes may be overwritten."""
 from astToolkit.theTypes import (
-	ConstantValueType, hasDOTannotation, hasDOTannotation_expr, hasDOTannotation_exprOrNone, hasDOTarg, hasDOTarg_str, hasDOTarg_strOrNone,
+	ast_ConstantValue, hasDOTannotation, hasDOTannotation_expr, hasDOTannotation_exprOrNone, hasDOTarg, hasDOTarg_str, hasDOTarg_strOrNone,
 	hasDOTargs, hasDOTargs_arguments, hasDOTargs_list_arg, hasDOTargs_list_expr, hasDOTargtypes, hasDOTasname, hasDOTattr, hasDOTbases,
 	hasDOTbody, hasDOTbody_expr, hasDOTbody_list_stmt, hasDOTbound, hasDOTcases, hasDOTcause, hasDOTcls, hasDOTcomparators, hasDOTcontext_expr,
 	hasDOTconversion, hasDOTctx, hasDOTdecorator_list, hasDOTdefault_value, hasDOTdefaults, hasDOTelt, hasDOTelts, hasDOTexc, hasDOTfinalbody,
@@ -12,8 +12,8 @@ from astToolkit.theTypes import (
 	hasDOTorelse_list_stmt, hasDOTpattern, hasDOTpattern_pattern, hasDOTpattern_patternOrNone, hasDOTpatterns, hasDOTposonlyargs, hasDOTrest,
 	hasDOTreturns, hasDOTreturns_expr, hasDOTreturns_exprOrNone, hasDOTright, hasDOTsimple, hasDOTslice, hasDOTstep, hasDOTstr, hasDOTsubject,
 	hasDOTtag, hasDOTtarget, hasDOTtarget_expr, hasDOTtarget_Name, hasDOTtarget_NameOrAttributeOrSubscript, hasDOTtargets, hasDOTtest,
-	hasDOTtype, hasDOTtype_comment, hasDOTtype_ignores, hasDOTtype_params, hasDOTupper, hasDOTvalue, hasDOTvalue_boolOrNone,
-	hasDOTvalue_ConstantValueType, hasDOTvalue_expr, hasDOTvalue_exprOrNone, hasDOTvalues, hasDOTvararg)
+	hasDOTtype, hasDOTtype_comment, hasDOTtype_ignores, hasDOTtype_params, hasDOTupper, hasDOTvalue, hasDOTvalue_ast_ConstantValue,
+	hasDOTvalue_boolOrNone, hasDOTvalue_expr, hasDOTvalue_exprOrNone, hasDOTvalues, hasDOTvararg)
 from collections.abc import Sequence
 from typing import overload
 import ast
@@ -482,12 +482,12 @@ class DOT:
 
     @staticmethod
     @overload
-    def value(node: hasDOTvalue_boolOrNone) -> bool | None:
+    def value(node: hasDOTvalue_ast_ConstantValue) -> ast_ConstantValue:
         ...
 
     @staticmethod
     @overload
-    def value(node: hasDOTvalue_ConstantValueType) -> ConstantValueType:
+    def value(node: hasDOTvalue_boolOrNone) -> bool | None:
         ...
 
     @staticmethod
@@ -501,7 +501,7 @@ class DOT:
         ...
 
     @staticmethod
-    def value(node: hasDOTvalue) -> ast.expr | bool | ConstantValueType | None:
+    def value(node: hasDOTvalue) -> ast.expr | ast_ConstantValue | bool | None:
         return node.value
 
     @staticmethod

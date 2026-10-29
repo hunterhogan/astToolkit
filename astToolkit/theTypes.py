@@ -4,9 +4,8 @@ from typing import TypedDict, TypeVar as typing_TypeVar
 import ast
 import sys
 
-type ConstantValueType = bool | bytes | complex | EllipsisType | float | int | None | range | str
-type astASTattributes = ast.AST | ConstantValueType | list[ast.AST] | list[ast.AST | None] | list[str]
-type identifierDotAttribute = str
+type ast_ConstantValue = str | bytes | bool | int | float | complex | EllipsisType | None
+type astASTattributes = ast.AST | ast_ConstantValue | list[ast.AST] | list[ast.AST | None] | list[str]
 个 = typing_TypeVar('个', covariant=True)
 "Generic `TypeVar` (Type ***Var***iable).\n\n(AI generated docstring.)\n\nThe ideograph '个' (gè) is a generic measure word. Its decimal unicode is 20010.\n"
 归个 = typing_TypeVar('归个', covariant=True)
@@ -163,8 +162,8 @@ type hasDOTtype_comment = ast.arg | ast.Assign | ast.AsyncFor | ast.AsyncFunctio
 type hasDOTtype_ignores = ast.Module
 type hasDOTtype_params = ast.AsyncFunctionDef | ast.ClassDef | ast.FunctionDef | ast.TypeAlias
 type hasDOTupper = ast.Slice
-type hasDOTvalue = hasDOTvalue_boolOrNone | hasDOTvalue_ConstantValueType | hasDOTvalue_expr | hasDOTvalue_exprOrNone
-type hasDOTvalue_ConstantValueType = ast.Constant
+type hasDOTvalue = hasDOTvalue_ast_ConstantValue | hasDOTvalue_boolOrNone | hasDOTvalue_expr | hasDOTvalue_exprOrNone
+type hasDOTvalue_ast_ConstantValue = ast.Constant
 type hasDOTvalue_boolOrNone = ast.MatchSingleton
 type hasDOTvalue_expr = ast.Assign | ast.Attribute | ast.AugAssign | ast.Await | ast.DictComp | ast.Expr | ast.FormattedValue | ast.Interpolation | ast.keyword | ast.MatchValue | ast.NamedExpr | ast.Starred | ast.Subscript | ast.TypeAlias | ast.YieldFrom
 type hasDOTvalue_exprOrNone = ast.AnnAssign | ast.Return | ast.Yield

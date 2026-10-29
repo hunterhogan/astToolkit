@@ -31,7 +31,7 @@ import ast
 import importlib
 
 if TYPE_CHECKING:
-	from astToolkit import identifierDotAttribute
+	from hunterMakesPy import identifierDotAttribute
 	from os import PathLike
 	from pathlib import PurePath
 	from types import ModuleType
