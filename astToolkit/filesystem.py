@@ -23,7 +23,7 @@ Classes
 
 from __future__ import annotations
 
-from hunterMakesPy.filesystemToolkit import settings_autoflakeDEFAULT, writePython
+from hunterMakesPy.kitFilesystem import settings_autoflakeDEFAULT, writePython
 from inspect import getsource as inspect_getsource
 from pathlib import Path
 from typing import overload, TYPE_CHECKING, TypedDict, Unpack
