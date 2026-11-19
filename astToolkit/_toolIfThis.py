@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 	from collections.abc import Callable
 	from typing import Any, TypeGuard, TypeIs
 
-class IfThis:  # ruff: ignore[too-many-public-methods]
+class IfThis:
 	"""Composable predicate generators for AST node identification in antecedent-action workflows.
 
 	(AI generated docstring)

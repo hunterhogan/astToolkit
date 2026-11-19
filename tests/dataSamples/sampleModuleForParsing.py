@@ -1,4 +1,6 @@
 """Sample Python module."""
+# pyright: reportTypeCommentUsage=false
+# ruff: file-ignore[legacy-type-comment]
 
 from __future__ import annotations
 
@@ -21,3 +23,4 @@ class ClassEpsilon:
 	"""Another sample class."""
 
 	attributeZeta: str = "valueTest"
+listCities = ["Tokyo", "Lagos"]  # type: list[str]

@@ -521,13 +521,13 @@ for MakeMaximallyEmpty, MakeMinimal, astMinimal in zip(listMakeMinimal, listMake
 	)
 	if MakeMaximallyEmpty != MakeMinimal:
 		listDictionaryAsStr.append(
-			f'"class Make, minimal parameters": {{"expression": {MakeMinimal}, "astToolkit.dump": "{dump(eval(MakeMinimal), show_empty=True)}", "ast.dump": "{ast.dump(eval(MakeMinimal), show_empty=True)}"}}'
+			f'"MakeMinimal": {{"expression": {MakeMinimal}, "astToolkit.dump": "{dump(eval(MakeMinimal), show_empty=True)}", "ast.dump": "{ast.dump(eval(MakeMinimal), show_empty=True)}"}}'
 		)
 	print(f'"{identifier}": {{')
 	print(
 		*listDictionaryAsStr,
-		f'"class Make, maximally empty parameters": {{"expression": {MakeMaximallyEmpty}, "astToolkit.dump": "{dump(eval(MakeMaximallyEmpty), show_empty=True)}", "ast.dump": "{ast.dump(eval(MakeMaximallyEmpty), show_empty=True)}"}}',
-		f'"ast module, minimal parameters": {{"expression": {astMinimal}, "astToolkit.dump": "{dump(eval(astMinimal), show_empty=True)}", "ast.dump": "{ast.dump(eval(astMinimal), show_empty=True)}"}}',
+		f'"MakeMaximallyEmpty": {{"expression": {MakeMaximallyEmpty}, "astToolkit.dump": "{dump(eval(MakeMaximallyEmpty), show_empty=True)}", "ast.dump": "{ast.dump(eval(MakeMaximallyEmpty), show_empty=True)}"}}',
+		f'"astMinimal": {{"expression": {astMinimal}, "astToolkit.dump": "{dump(eval(astMinimal), show_empty=True)}", "ast.dump": "{ast.dump(eval(astMinimal), show_empty=True)}"}}',
 		sep=',\n',
 	)
 	print('},')

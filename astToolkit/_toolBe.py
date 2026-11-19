@@ -1,10 +1,14 @@
 """Automatically generated file, so changes may be overwritten."""
-from astToolkit.theTypes import 木
-from collections.abc import Callable, Sequence
+from __future__ import annotations
+
 from operator import call
-from typing import Any, TypeIs
+from typing import TYPE_CHECKING
 import ast
 import sys
+
+if TYPE_CHECKING:
+    from collections.abc import Callable, Sequence
+    from typing import Any, TypeIs
 
 class Be:
     """A comprehensive suite of functions for AST class identification and type narrowing.
@@ -60,13 +64,12 @@ class Be:
         if Be.Call(node) and Be.Name(node.func):
             callableName = node.func.id  # Type-safe access to function name
     ```
-
     """
 
     @staticmethod
-    def at(index: int, predicate: Callable[[Any], TypeIs[木]]) -> Callable[[Sequence[ast.AST]], TypeIs[木]]:
+    def at(index: int, predicate: Callable[[ast.AST], bool]) -> Callable[[Sequence[ast.AST]], bool]:
 
-        def workhorse(node: Sequence[ast.AST]) -> TypeIs[木]:
+        def workhorse(node: Sequence[ast.AST]) -> bool:
             return predicate(node[index])
         return workhorse
 
@@ -76,6 +79,8 @@ class Be:
 
         This `class` is associated with Python delimiters '+=' and Python operators '+'.
         It is a subclass of `ast.operator`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.Add)
 
@@ -85,6 +90,8 @@ class Be:
 
         This `class` is associated with Python keywords `as`.
         It is a subclass of `ast.AST`.
+
+        Its AST fields are `name`, `asname`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.alias]:
@@ -110,6 +117,8 @@ class Be:
 
         This `class` is associated with Python keywords `and`.
         It is a subclass of `ast.boolop`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.And)
 
@@ -119,6 +128,8 @@ class Be:
 
         This `class` is associated with Python delimiters ':, ='.
         It is a subclass of `ast.stmt`.
+
+        Its AST fields are `target`, `annotation`, `value`, `simple`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.AnnAssign]:
@@ -157,6 +168,8 @@ class Be:
         """`Be.arg`, ***arg***ument, matches `class` `ast.arg`.
 
         It is a subclass of `ast.AST`.
+
+        Its AST fields are `arg`, `annotation`, `type_comment`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.arg]:
@@ -189,6 +202,9 @@ class Be:
 
         This `class` is associated with Python delimiters ','.
         It is a subclass of `ast.AST`.
+
+        Its AST fields are `posonlyargs`, `args`, `vararg`, `kwonlyargs`, `kw_defaults`, `kwarg`,
+        `defaults`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.arguments]:
@@ -249,6 +265,8 @@ class Be:
 
         This `class` is associated with Python keywords `assert`.
         It is a subclass of `ast.stmt`.
+
+        Its AST fields are `test`, `msg`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Assert]:
@@ -274,6 +292,8 @@ class Be:
 
         This `class` is associated with Python delimiters '='.
         It is a subclass of `ast.stmt`.
+
+        Its AST fields are `targets`, `value`, `type_comment`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Assign]:
@@ -305,6 +325,8 @@ class Be:
         """`Be.AST`, Abstract Syntax Tree, matches any of `class` `ast.AST` | `ast.alias` | `ast.arg` | `ast.arguments` | `ast.boolop` | `ast.cmpop` | `ast.comprehension` | `ast.excepthandler` | `ast.expr` | `ast.expr_context` | `ast.keyword` | `ast.match_case` | `ast.mod` | `ast.operator` | `ast.pattern` | `ast.slice` | `ast.stmt` | `ast.type_ignore` | `ast.type_param` | `ast.unaryop` | `ast.withitem`.
 
         It is a subclass of `ast.object`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.AST)
 
@@ -314,6 +336,8 @@ class Be:
 
         This `class` is associated with Python keywords `async for` and Python delimiters ':'.
         It is a subclass of `ast.stmt`.
+
+        Its AST fields are `target`, `iter`, `body`, `orelse`, `type_comment`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.AsyncFor]:
@@ -360,6 +384,9 @@ class Be:
 
         This `class` is associated with Python keywords `async def` and Python delimiters ':'.
         It is a subclass of `ast.stmt`.
+
+        Its AST fields are `name`, `args`, `body`, `decorator_list`, `returns`, `type_comment`,
+        `type_params`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.AsyncFunctionDef]:
@@ -420,6 +447,8 @@ class Be:
 
         This `class` is associated with Python keywords `async with` and Python delimiters ':'.
         It is a subclass of `ast.stmt`.
+
+        Its AST fields are `items`, `body`, `type_comment`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.AsyncWith]:
@@ -452,6 +481,8 @@ class Be:
 
         This `class` is associated with Python delimiters '.'.
         It is a subclass of `ast.expr`.
+
+        Its AST fields are `value`, `attr`, `ctx`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Attribute]:
@@ -482,8 +513,10 @@ class Be:
     class AugAssign:
         """`Be.AugAssign`, ***Aug***mented ***Assign***ment, matches `class` `ast.AugAssign`.
 
-        This `class` is associated with Python delimiters '+=, -=, *=, /=, //=, %=, **=, |=, &=, ^=, <<=, >>='.
+        This `class` is associated with Python delimiters '+=, -=, *=, @=, /=, //=, %=, **=, |=, &=, ^=, <<=, >>='.
         It is a subclass of `ast.stmt`.
+
+        Its AST fields are `target`, `op`, `value`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.AugAssign]:
@@ -516,6 +549,8 @@ class Be:
 
         This `class` is associated with Python keywords `await`.
         It is a subclass of `ast.expr`.
+
+        Its AST field is `value`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Await]:
@@ -533,6 +568,8 @@ class Be:
         """`Be.BinOp`, ***Bin***ary ***Op***eration, matches `class` `ast.BinOp`.
 
         It is a subclass of `ast.expr`.
+
+        Its AST fields are `left`, `op`, `right`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.BinOp]:
@@ -565,6 +602,8 @@ class Be:
 
         This `class` is associated with Python operators '&'.
         It is a subclass of `ast.operator`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.BitAnd)
 
@@ -574,6 +613,8 @@ class Be:
 
         This `class` is associated with Python operators '|'.
         It is a subclass of `ast.operator`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.BitOr)
 
@@ -583,6 +624,8 @@ class Be:
 
         This `class` is associated with Python operators '^'.
         It is a subclass of `ast.operator`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.BitXor)
 
@@ -591,6 +634,8 @@ class Be:
         """`Be.BoolOp`, ***Bool***ean ***Op***eration, matches `class` `ast.BoolOp`.
 
         It is a subclass of `ast.expr`.
+
+        Its AST fields are `op`, `values`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.BoolOp]:
@@ -615,6 +660,8 @@ class Be:
         """`Be.boolop`, ***bool***ean ***op***erator, matches any of `class` `ast.boolop` | `ast.And` | `ast.Or`.
 
         It is a subclass of `ast.AST`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.boolop)
 
@@ -624,6 +671,8 @@ class Be:
 
         This `class` is associated with Python keywords `break`.
         It is a subclass of `ast.stmt`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.Break)
 
@@ -633,6 +682,8 @@ class Be:
 
         This `class` is associated with Python delimiters '()'.
         It is a subclass of `ast.expr`.
+
+        Its AST fields are `func`, `args`, `keywords`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Call]:
@@ -665,6 +716,8 @@ class Be:
 
         This `class` is associated with Python keywords `class` and Python delimiters ':'.
         It is a subclass of `ast.stmt`.
+
+        Its AST fields are `name`, `bases`, `keywords`, `body`, `decorator_list`, `type_params`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.ClassDef]:
@@ -717,6 +770,8 @@ class Be:
         """`Be.cmpop`, ***c***o***mp***arison ***op***erator, matches any of `class` `ast.cmpop` | `ast.Eq` | `ast.Gt` | `ast.GtE` | `ast.In` | `ast.Is` | `ast.IsNot` | `ast.Lt` | `ast.LtE` | `ast.NotEq` | `ast.NotIn`.
 
         It is a subclass of `ast.AST`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.cmpop)
 
@@ -725,6 +780,8 @@ class Be:
         """`Be.Compare` matches `class` `ast.Compare`.
 
         It is a subclass of `ast.expr`.
+
+        Its AST fields are `left`, `ops`, `comparators`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Compare]:
@@ -756,6 +813,8 @@ class Be:
         """`Be.comprehension` matches `class` `ast.comprehension`.
 
         It is a subclass of `ast.AST`.
+
+        Its AST fields are `target`, `iter`, `ifs`, `is_async`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.comprehension]:
@@ -794,6 +853,8 @@ class Be:
         """`Be.Constant` matches `class` `ast.Constant`.
 
         It is a subclass of `ast.expr`.
+
+        Its AST fields are `value`, `kind`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Constant]:
@@ -819,6 +880,8 @@ class Be:
 
         This `class` is associated with Python keywords `continue`.
         It is a subclass of `ast.stmt`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.Continue)
 
@@ -827,6 +890,8 @@ class Be:
         """`Be.Del`, ***Del***ete, matches `class` `ast.Del`.
 
         It is a subclass of `ast.expr_context`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.Del)
 
@@ -836,6 +901,8 @@ class Be:
 
         This `class` is associated with Python keywords `del`.
         It is a subclass of `ast.stmt`.
+
+        Its AST field is `targets`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Delete]:
@@ -854,6 +921,8 @@ class Be:
 
         This `class` is associated with Python delimiters '{}'.
         It is a subclass of `ast.expr`.
+
+        Its AST fields are `keys`, `values`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Dict]:
@@ -879,6 +948,8 @@ class Be:
 
         This `class` is associated with Python delimiters '{}'.
         It is a subclass of `ast.expr`.
+
+        Its AST fields are `key`, `value`, `generators`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.DictComp]:
@@ -911,6 +982,8 @@ class Be:
 
         This `class` is associated with Python delimiters '/=' and Python operators '/'.
         It is a subclass of `ast.operator`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.Div)
 
@@ -920,6 +993,8 @@ class Be:
 
         This `class` is associated with Python operators '=='.
         It is a subclass of `ast.cmpop`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.Eq)
 
@@ -929,6 +1004,8 @@ class Be:
 
         This `class` is associated with Python keywords `except`.
         It is a subclass of `ast.excepthandler`.
+
+        Its AST fields are `type`, `name`, `body`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.ExceptHandler]:
@@ -960,6 +1037,8 @@ class Be:
         """`Be.excepthandler`, ***except***ion ***handler***, matches any of `class` `ast.excepthandler` | `ast.ExceptHandler`.
 
         It is a subclass of `ast.AST`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.excepthandler)
 
@@ -968,6 +1047,8 @@ class Be:
         """`Be.Expr`, ***Expr***ession, matches `class` `ast.Expr`.
 
         It is a subclass of `ast.stmt`.
+
+        Its AST field is `value`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Expr]:
@@ -985,6 +1066,8 @@ class Be:
         """`Be.expr`, ***expr***ession, matches any of `class` `ast.expr` | `ast.Attribute` | `ast.Await` | `ast.BinOp` | `ast.BoolOp` | `ast.Call` | `ast.Compare` | `ast.Constant` | `ast.Dict` | `ast.DictComp` | `ast.FormattedValue` | `ast.GeneratorExp` | `ast.IfExp` | `ast.Interpolation` | `ast.JoinedStr` | `ast.Lambda` | `ast.List` | `ast.ListComp` | `ast.Name` | `ast.NamedExpr` | `ast.Set` | `ast.SetComp` | `ast.Slice` | `ast.Starred` | `ast.Subscript` | `ast.TemplateStr` | `ast.Tuple` | `ast.UnaryOp` | `ast.Yield` | `ast.YieldFrom`.
 
         It is a subclass of `ast.AST`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.expr)
 
@@ -993,6 +1076,8 @@ class Be:
         """`Be.expr_context`, ***expr***ession ***context***, matches any of `class` `ast.expr_context` | `ast.AugLoad` | `ast.AugStore` | `ast.Del` | `ast.Load` | `ast.Param` | `ast.Store`.
 
         It is a subclass of `ast.AST`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.expr_context)
 
@@ -1001,6 +1086,8 @@ class Be:
         """`Be.Expression` matches `class` `ast.Expression`.
 
         It is a subclass of `ast.mod`.
+
+        Its AST field is `body`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Expression]:
@@ -1019,6 +1106,8 @@ class Be:
 
         This `class` is associated with Python delimiters '//=' and Python operators '//'.
         It is a subclass of `ast.operator`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.FloorDiv)
 
@@ -1028,6 +1117,8 @@ class Be:
 
         This `class` is associated with Python keywords `for` and Python delimiters ':'.
         It is a subclass of `ast.stmt`.
+
+        Its AST fields are `target`, `iter`, `body`, `orelse`, `type_comment`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.For]:
@@ -1074,6 +1165,8 @@ class Be:
 
         This `class` is associated with Python delimiters '{}'.
         It is a subclass of `ast.expr`.
+
+        Its AST fields are `value`, `conversion`, `format_spec`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.FormattedValue]:
@@ -1106,6 +1199,9 @@ class Be:
 
         This `class` is associated with Python keywords `def` and Python delimiters '()'.
         It is a subclass of `ast.stmt`.
+
+        Its AST fields are `name`, `args`, `body`, `decorator_list`, `returns`, `type_comment`,
+        `type_params`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.FunctionDef]:
@@ -1165,6 +1261,8 @@ class Be:
         """`Be.FunctionType`, Function Type, matches `class` `ast.FunctionType`.
 
         It is a subclass of `ast.mod`.
+
+        Its AST fields are `argtypes`, `returns`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.FunctionType]:
@@ -1189,6 +1287,8 @@ class Be:
         """`Be.GeneratorExp`, Generator ***Exp***ression, matches `class` `ast.GeneratorExp`.
 
         It is a subclass of `ast.expr`.
+
+        Its AST fields are `elt`, `generators`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.GeneratorExp]:
@@ -1214,6 +1314,8 @@ class Be:
 
         This `class` is associated with Python keywords `global`.
         It is a subclass of `ast.stmt`.
+
+        Its AST field is `names`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Global]:
@@ -1228,19 +1330,23 @@ class Be:
 
     @staticmethod
     def Gt(node: ast.AST) -> TypeIs[ast.Gt]:
-        """`Be.Gt`, is Greater than, matches `class` `ast.Gt`.
+        """`Be.Gt`, is ***G***reater ***t***han, matches `class` `ast.Gt`.
 
         This `class` is associated with Python operators '>'.
         It is a subclass of `ast.cmpop`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.Gt)
 
     @staticmethod
     def GtE(node: ast.AST) -> TypeIs[ast.GtE]:
-        """`Be.GtE`, is Greater than or Equal to, matches `class` `ast.GtE`.
+        """`Be.GtE`, is ***G***reater ***t***han or ***E***qual to, matches `class` `ast.GtE`.
 
         This `class` is associated with Python operators '>='.
         It is a subclass of `ast.cmpop`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.GtE)
 
@@ -1250,6 +1356,8 @@ class Be:
 
         This `class` is associated with Python keywords `if` and Python delimiters ':'.
         It is a subclass of `ast.stmt`.
+
+        Its AST fields are `test`, `body`, `orelse`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.If]:
@@ -1282,6 +1390,8 @@ class Be:
 
         This `class` is associated with Python keywords `if`.
         It is a subclass of `ast.expr`.
+
+        Its AST fields are `test`, `body`, `orelse`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.IfExp]:
@@ -1314,6 +1424,8 @@ class Be:
 
         This `class` is associated with Python keywords `import`.
         It is a subclass of `ast.stmt`.
+
+        Its AST fields are `names`, `is_lazy`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Import]:
@@ -1340,6 +1452,8 @@ class Be:
 
         This `class` is associated with Python keywords `import`.
         It is a subclass of `ast.stmt`.
+
+        Its AST fields are `module`, `names`, `level`, `is_lazy`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.ImportFrom]:
@@ -1380,6 +1494,8 @@ class Be:
 
         This `class` is associated with Python keywords `in`.
         It is a subclass of `ast.cmpop`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.In)
 
@@ -1388,6 +1504,8 @@ class Be:
         """`Be.Interactive`, Interactive mode, matches `class` `ast.Interactive`.
 
         It is a subclass of `ast.mod`.
+
+        Its AST field is `body`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Interactive]:
@@ -1405,6 +1523,8 @@ class Be:
         """`Be.Interpolation` matches `class` `ast.Interpolation`.
 
         It is a subclass of `ast.expr`.
+
+        Its AST fields are `value`, `str`, `conversion`, `format_spec`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Interpolation]:
@@ -1444,6 +1564,8 @@ class Be:
 
         This `class` is associated with Python operators '~'.
         It is a subclass of `ast.unaryop`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.Invert)
 
@@ -1453,6 +1575,8 @@ class Be:
 
         This `class` is associated with Python keywords `is`.
         It is a subclass of `ast.cmpop`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.Is)
 
@@ -1462,6 +1586,8 @@ class Be:
 
         This `class` is associated with Python keywords `is not`.
         It is a subclass of `ast.cmpop`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.IsNot)
 
@@ -1470,6 +1596,8 @@ class Be:
         """`Be.JoinedStr`, Joined ***Str***ing, matches `class` `ast.JoinedStr`.
 
         It is a subclass of `ast.expr`.
+
+        Its AST field is `values`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.JoinedStr]:
@@ -1488,6 +1616,8 @@ class Be:
 
         This `class` is associated with Python delimiters '='.
         It is a subclass of `ast.AST`.
+
+        Its AST fields are `arg`, `value`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.keyword]:
@@ -1513,6 +1643,8 @@ class Be:
 
         This `class` is associated with Python keywords `lambda` and Python delimiters ':'.
         It is a subclass of `ast.expr`.
+
+        Its AST fields are `args`, `body`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Lambda]:
@@ -1538,6 +1670,8 @@ class Be:
 
         This `class` is associated with Python delimiters '[]'.
         It is a subclass of `ast.expr`.
+
+        Its AST fields are `elts`, `ctx`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.List]:
@@ -1563,6 +1697,8 @@ class Be:
 
         This `class` is associated with Python delimiters '[]'.
         It is a subclass of `ast.expr`.
+
+        Its AST fields are `elt`, `generators`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.ListComp]:
@@ -1587,33 +1723,41 @@ class Be:
         """`Be.Load` matches `class` `ast.Load`.
 
         It is a subclass of `ast.expr_context`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.Load)
 
     @staticmethod
     def LShift(node: ast.AST) -> TypeIs[ast.LShift]:
-        """`Be.LShift`, Left Shift, matches `class` `ast.LShift`.
+        """`Be.LShift`, ***L***eft Shift, matches `class` `ast.LShift`.
 
         This `class` is associated with Python delimiters '<<=' and Python operators '<<'.
         It is a subclass of `ast.operator`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.LShift)
 
     @staticmethod
     def Lt(node: ast.AST) -> TypeIs[ast.Lt]:
-        """`Be.Lt`, is Less than, matches `class` `ast.Lt`.
+        """`Be.Lt`, is ***L***ess ***t***han, matches `class` `ast.Lt`.
 
         This `class` is associated with Python operators '<'.
         It is a subclass of `ast.cmpop`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.Lt)
 
     @staticmethod
     def LtE(node: ast.AST) -> TypeIs[ast.LtE]:
-        """`Be.LtE`, is Less than or Equal to, matches `class` `ast.LtE`.
+        """`Be.LtE`, is ***L***ess ***t***han or ***E***qual to, matches `class` `ast.LtE`.
 
         This `class` is associated with Python operators '<='.
         It is a subclass of `ast.cmpop`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.LtE)
 
@@ -1623,6 +1767,8 @@ class Be:
 
         This `class` is associated with Python delimiters ':'.
         It is a subclass of `ast.stmt`.
+
+        Its AST fields are `subject`, `cases`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Match]:
@@ -1648,6 +1794,8 @@ class Be:
 
         This `class` is associated with Python delimiters ':'.
         It is a subclass of `ast.AST`.
+
+        Its AST fields are `pattern`, `guard`, `body`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.match_case]:
@@ -1680,6 +1828,8 @@ class Be:
 
         This `class` is associated with Python delimiters ':'.
         It is a subclass of `ast.pattern`.
+
+        Its AST fields are `pattern`, `name`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.MatchAs]:
@@ -1705,6 +1855,8 @@ class Be:
 
         This `class` is associated with Python delimiters ':'.
         It is a subclass of `ast.pattern`.
+
+        Its AST fields are `cls`, `patterns`, `kwd_attrs`, `kwd_patterns`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.MatchClass]:
@@ -1744,6 +1896,8 @@ class Be:
 
         This `class` is associated with Python delimiters ':'.
         It is a subclass of `ast.pattern`.
+
+        Its AST fields are `keys`, `patterns`, `rest`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.MatchMapping]:
@@ -1776,6 +1930,8 @@ class Be:
 
         This `class` is associated with Python delimiters ':' and Python operators '|'.
         It is a subclass of `ast.pattern`.
+
+        Its AST field is `patterns`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.MatchOr]:
@@ -1794,6 +1950,8 @@ class Be:
 
         This `class` is associated with Python delimiters ':'.
         It is a subclass of `ast.pattern`.
+
+        Its AST field is `patterns`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.MatchSequence]:
@@ -1812,6 +1970,8 @@ class Be:
 
         This `class` is associated with Python delimiters ':'.
         It is a subclass of `ast.pattern`.
+
+        Its AST field is `value`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.MatchSingleton]:
@@ -1830,6 +1990,8 @@ class Be:
 
         This `class` is associated with Python delimiters ':' and Python operators '*'.
         It is a subclass of `ast.pattern`.
+
+        Its AST field is `name`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.MatchStar]:
@@ -1848,6 +2010,8 @@ class Be:
 
         This `class` is associated with Python delimiters ':'.
         It is a subclass of `ast.pattern`.
+
+        Its AST field is `value`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.MatchValue]:
@@ -1864,7 +2028,10 @@ class Be:
     def MatMult(node: ast.AST) -> TypeIs[ast.MatMult]:
         """`Be.MatMult`, ***Mat***rix ***Mult***iplication, matches `class` `ast.MatMult`.
 
+        This `class` is associated with Python delimiters '@=' and Python operators '@'.
         It is a subclass of `ast.operator`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.MatMult)
 
@@ -1874,6 +2041,8 @@ class Be:
 
         This `class` is associated with Python delimiters '%=' and Python operators '%'.
         It is a subclass of `ast.operator`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.Mod)
 
@@ -1882,6 +2051,8 @@ class Be:
         """`Be.mod`, ***mod***ule, matches any of `class` `ast.mod` | `ast.Expression` | `ast.FunctionType` | `ast.Interactive` | `ast.Module` | `ast.Suite`.
 
         It is a subclass of `ast.AST`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.mod)
 
@@ -1890,6 +2061,8 @@ class Be:
         """`Be.Module` matches `class` `ast.Module`.
 
         It is a subclass of `ast.mod`.
+
+        Its AST fields are `body`, `type_ignores`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Module]:
@@ -1915,6 +2088,8 @@ class Be:
 
         This `class` is associated with Python delimiters '*=' and Python operators '*'.
         It is a subclass of `ast.operator`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.Mult)
 
@@ -1923,6 +2098,8 @@ class Be:
         """`Be.Name` matches `class` `ast.Name`.
 
         It is a subclass of `ast.expr`.
+
+        Its AST fields are `id`, `ctx`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Name]:
@@ -1948,6 +2125,8 @@ class Be:
 
         This `class` is associated with Python operators ':='.
         It is a subclass of `ast.expr`.
+
+        Its AST fields are `target`, `value`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.NamedExpr]:
@@ -1973,6 +2152,8 @@ class Be:
 
         This `class` is associated with Python keywords `nonlocal`.
         It is a subclass of `ast.stmt`.
+
+        Its AST field is `names`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Nonlocal]:
@@ -1991,6 +2172,8 @@ class Be:
 
         This `class` is associated with Python keywords `not`.
         It is a subclass of `ast.unaryop`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.Not)
 
@@ -2000,6 +2183,8 @@ class Be:
 
         This `class` is associated with Python operators '!='.
         It is a subclass of `ast.cmpop`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.NotEq)
 
@@ -2009,6 +2194,8 @@ class Be:
 
         This `class` is associated with Python keywords `not in`.
         It is a subclass of `ast.cmpop`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.NotIn)
 
@@ -2017,6 +2204,8 @@ class Be:
         """`Be.operator` matches any of `class` `ast.operator` | `ast.Add` | `ast.BitAnd` | `ast.BitOr` | `ast.BitXor` | `ast.Div` | `ast.FloorDiv` | `ast.LShift` | `ast.MatMult` | `ast.Mod` | `ast.Mult` | `ast.Pow` | `ast.RShift` | `ast.Sub`.
 
         It is a subclass of `ast.AST`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.operator)
 
@@ -2026,6 +2215,8 @@ class Be:
 
         This `class` is associated with Python keywords `or`.
         It is a subclass of `ast.boolop`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.Or)
 
@@ -2035,6 +2226,8 @@ class Be:
 
         This `class` is associated with Python delimiters '[]'.
         It is a subclass of `ast.type_param`.
+
+        Its AST fields are `name`, `default_value`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.ParamSpec]:
@@ -2060,6 +2253,8 @@ class Be:
 
         This `class` is associated with Python keywords `pass`.
         It is a subclass of `ast.stmt`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.Pass)
 
@@ -2068,6 +2263,8 @@ class Be:
         """`Be.pattern` matches any of `class` `ast.pattern` | `ast.MatchAs` | `ast.MatchClass` | `ast.MatchMapping` | `ast.MatchOr` | `ast.MatchSequence` | `ast.MatchSingleton` | `ast.MatchStar` | `ast.MatchValue`.
 
         It is a subclass of `ast.AST`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.pattern)
 
@@ -2077,6 +2274,8 @@ class Be:
 
         This `class` is associated with Python delimiters '**=' and Python operators '**'.
         It is a subclass of `ast.operator`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.Pow)
 
@@ -2086,6 +2285,8 @@ class Be:
 
         This `class` is associated with Python keywords `raise`.
         It is a subclass of `ast.stmt`.
+
+        Its AST fields are `exc`, `cause`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Raise]:
@@ -2111,6 +2312,8 @@ class Be:
 
         This `class` is associated with Python keywords `return`.
         It is a subclass of `ast.stmt`.
+
+        Its AST field is `value`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Return]:
@@ -2125,10 +2328,12 @@ class Be:
 
     @staticmethod
     def RShift(node: ast.AST) -> TypeIs[ast.RShift]:
-        """`Be.RShift`, Right Shift, matches `class` `ast.RShift`.
+        """`Be.RShift`, ***R***ight Shift, matches `class` `ast.RShift`.
 
         This `class` is associated with Python delimiters '>>=' and Python operators '>>'.
         It is a subclass of `ast.operator`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.RShift)
 
@@ -2138,6 +2343,8 @@ class Be:
 
         This `class` is associated with Python delimiters '{}'.
         It is a subclass of `ast.expr`.
+
+        Its AST field is `elts`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Set]:
@@ -2156,6 +2363,8 @@ class Be:
 
         This `class` is associated with Python delimiters '{}'.
         It is a subclass of `ast.expr`.
+
+        Its AST fields are `elt`, `generators`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.SetComp]:
@@ -2181,6 +2390,8 @@ class Be:
 
         This `class` is associated with Python delimiters '[], :'.
         It is a subclass of `ast.expr`.
+
+        Its AST fields are `lower`, `upper`, `step`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Slice]:
@@ -2213,6 +2424,8 @@ class Be:
 
         This `class` is associated with Python operators '*'.
         It is a subclass of `ast.expr`.
+
+        Its AST fields are `value`, `ctx`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Starred]:
@@ -2237,6 +2450,8 @@ class Be:
         """`Be.stmt`, ***st***ate***m***en***t***, matches any of `class` `ast.stmt` | `ast.AnnAssign` | `ast.Assert` | `ast.Assign` | `ast.AsyncFor` | `ast.AsyncFunctionDef` | `ast.AsyncWith` | `ast.AugAssign` | `ast.Break` | `ast.ClassDef` | `ast.Continue` | `ast.Delete` | `ast.Expr` | `ast.For` | `ast.FunctionDef` | `ast.Global` | `ast.If` | `ast.Import` | `ast.ImportFrom` | `ast.Match` | `ast.Nonlocal` | `ast.Pass` | `ast.Raise` | `ast.Return` | `ast.Try` | `ast.TryStar` | `ast.TypeAlias` | `ast.While` | `ast.With`.
 
         It is a subclass of `ast.AST`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.stmt)
 
@@ -2245,6 +2460,8 @@ class Be:
         """`Be.Store` matches `class` `ast.Store`.
 
         It is a subclass of `ast.expr_context`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.Store)
 
@@ -2254,6 +2471,8 @@ class Be:
 
         This `class` is associated with Python delimiters '-=' and Python operators '-'.
         It is a subclass of `ast.operator`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.Sub)
 
@@ -2263,6 +2482,8 @@ class Be:
 
         This `class` is associated with Python delimiters '[]'.
         It is a subclass of `ast.expr`.
+
+        Its AST fields are `value`, `slice`, `ctx`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Subscript]:
@@ -2291,9 +2512,11 @@ class Be:
 
     @call
     class TemplateStr:
-        """`Be.TemplateStr` matches `class` `ast.TemplateStr`.
+        """`Be.TemplateStr`, Template ***Str***ing, matches `class` `ast.TemplateStr`.
 
         It is a subclass of `ast.expr`.
+
+        Its AST field is `values`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.TemplateStr]:
@@ -2312,6 +2535,8 @@ class Be:
 
         This `class` is associated with Python keywords `try`, `except` and Python delimiters ':'.
         It is a subclass of `ast.stmt`.
+
+        Its AST fields are `body`, `handlers`, `orelse`, `finalbody`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Try]:
@@ -2351,6 +2576,8 @@ class Be:
 
         This `class` is associated with Python keywords `try`, `except*` and Python delimiters ':'.
         It is a subclass of `ast.stmt`.
+
+        Its AST fields are `body`, `handlers`, `orelse`, `finalbody`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.TryStar]:
@@ -2390,6 +2617,8 @@ class Be:
 
         This `class` is associated with Python delimiters '()'.
         It is a subclass of `ast.expr`.
+
+        Its AST fields are `elts`, `ctx`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Tuple]:
@@ -2414,6 +2643,8 @@ class Be:
         """`Be.type_ignore`, this `type` error, you ignore it, matches any of `class` `ast.type_ignore` | `ast.TypeIgnore`.
 
         It is a subclass of `ast.AST`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.type_ignore)
 
@@ -2422,6 +2653,8 @@ class Be:
         """`Be.type_param`, type ***param***eter, matches any of `class` `ast.type_param` | `ast.ParamSpec` | `ast.TypeVar` | `ast.TypeVarTuple`.
 
         It is a subclass of `ast.AST`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.type_param)
 
@@ -2430,6 +2663,8 @@ class Be:
         """`Be.TypeAlias`, Type Alias, matches `class` `ast.TypeAlias`.
 
         It is a subclass of `ast.stmt`.
+
+        Its AST fields are `name`, `type_params`, `value`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.TypeAlias]:
@@ -2462,6 +2697,8 @@ class Be:
 
         This `class` is associated with Python delimiters ':'.
         It is a subclass of `ast.type_ignore`.
+
+        Its AST fields are `lineno`, `tag`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.TypeIgnore]:
@@ -2486,6 +2723,8 @@ class Be:
         """`Be.TypeVar`, Type ***Var***iable, matches `class` `ast.TypeVar`.
 
         It is a subclass of `ast.type_param`.
+
+        Its AST fields are `name`, `bound`, `default_value`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.TypeVar]:
@@ -2518,6 +2757,8 @@ class Be:
 
         This `class` is associated with Python operators '*'.
         It is a subclass of `ast.type_param`.
+
+        Its AST fields are `name`, `default_value`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.TypeVarTuple]:
@@ -2543,6 +2784,8 @@ class Be:
 
         This `class` is associated with Python operators '+'.
         It is a subclass of `ast.unaryop`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.UAdd)
 
@@ -2551,6 +2794,8 @@ class Be:
         """`Be.UnaryOp`, ***Un***ary ***Op***eration, matches `class` `ast.UnaryOp`.
 
         It is a subclass of `ast.expr`.
+
+        Its AST fields are `op`, `operand`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.UnaryOp]:
@@ -2575,6 +2820,8 @@ class Be:
         """`Be.unaryop`, ***un***ary ***op***erator, matches any of `class` `ast.unaryop` | `ast.Invert` | `ast.Not` | `ast.UAdd` | `ast.USub`.
 
         It is a subclass of `ast.AST`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.unaryop)
 
@@ -2584,6 +2831,8 @@ class Be:
 
         This `class` is associated with Python operators '-'.
         It is a subclass of `ast.unaryop`.
+
+        It has no AST fields.
         """
         return isinstance(node, ast.USub)
 
@@ -2593,6 +2842,8 @@ class Be:
 
         This `class` is associated with Python keywords `while`.
         It is a subclass of `ast.stmt`.
+
+        Its AST fields are `test`, `body`, `orelse`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.While]:
@@ -2625,6 +2876,8 @@ class Be:
 
         This `class` is associated with Python keywords `with` and Python delimiters ':'.
         It is a subclass of `ast.stmt`.
+
+        Its AST fields are `items`, `body`, `type_comment`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.With]:
@@ -2657,6 +2910,8 @@ class Be:
 
         This `class` is associated with Python keywords `as`.
         It is a subclass of `ast.AST`.
+
+        Its AST fields are `context_expr`, `optional_vars`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.withitem]:
@@ -2682,6 +2937,8 @@ class Be:
 
         This `class` is associated with Python keywords `yield`.
         It is a subclass of `ast.expr`.
+
+        Its AST field is `value`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.Yield]:
@@ -2700,6 +2957,8 @@ class Be:
 
         This `class` is associated with Python keywords `yield from`.
         It is a subclass of `ast.expr`.
+
+        Its AST field is `value`.
         """
 
         def __call__(self, node: ast.AST) -> TypeIs[ast.YieldFrom]:

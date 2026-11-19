@@ -6,6 +6,7 @@ on:
   workflow_run:
     workflows: ["Python Tests"]
     types: [completed]
+    branches: [main]
   workflow_dispatch:
   release:
     types: [published, released]

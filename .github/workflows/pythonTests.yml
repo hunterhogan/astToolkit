@@ -46,6 +46,7 @@ jobs:
     needs: get-project-info
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         tests-python-versions: ${{ fromJson(needs.get-project-info.outputs.tests-python-versions) }}
     steps:

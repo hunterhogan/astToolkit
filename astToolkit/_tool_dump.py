@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import ast
 
 def dump(node: ast.AST, annotate_fields: bool=True, include_attributes: bool=False, *, color: bool=False, indent: int | str | None=None, show_empty: bool=False) -> str:

@@ -1,27 +1,31 @@
 """Automatically generated file, so changes may be overwritten."""
-from astToolkit.theTypes import (
-	ast_ConstantValue, hasDOTannotation, hasDOTannotation_expr, hasDOTannotation_exprOrNone, hasDOTarg, hasDOTarg_str, hasDOTarg_strOrNone,
-	hasDOTargs, hasDOTargs_arguments, hasDOTargs_list_arg, hasDOTargs_list_expr, hasDOTargtypes, hasDOTasname, hasDOTattr, hasDOTbases,
-	hasDOTbody, hasDOTbody_expr, hasDOTbody_list_stmt, hasDOTbound, hasDOTcases, hasDOTcause, hasDOTcls, hasDOTcomparators, hasDOTcontext_expr,
-	hasDOTconversion, hasDOTctx, hasDOTdecorator_list, hasDOTdefault_value, hasDOTdefaults, hasDOTelt, hasDOTelts, hasDOTexc, hasDOTfinalbody,
-	hasDOTformat_spec, hasDOTfunc, hasDOTgenerators, hasDOTguard, hasDOThandlers, hasDOTid, hasDOTifs, hasDOTis_async, hasDOTitems, hasDOTiter,
-	hasDOTkey, hasDOTkeys, hasDOTkeys_list_expr, hasDOTkeys_list_exprOrNone, hasDOTkeywords, hasDOTkind, hasDOTkw_defaults, hasDOTkwarg,
-	hasDOTkwd_attrs, hasDOTkwd_patterns, hasDOTkwonlyargs, hasDOTleft, hasDOTlevel, hasDOTlineno, hasDOTlower, hasDOTmodule, hasDOTmsg,
-	hasDOTname, hasDOTname_Name, hasDOTname_str, hasDOTname_strOrNone, hasDOTnames, hasDOTnames_list_alias, hasDOTnames_list_str, hasDOTop,
-	hasDOTop_boolop, hasDOTop_operator, hasDOTop_unaryop, hasDOToperand, hasDOTops, hasDOToptional_vars, hasDOTorelse, hasDOTorelse_expr,
-	hasDOTorelse_list_stmt, hasDOTpattern, hasDOTpattern_pattern, hasDOTpattern_patternOrNone, hasDOTpatterns, hasDOTposonlyargs, hasDOTrest,
-	hasDOTreturns, hasDOTreturns_expr, hasDOTreturns_exprOrNone, hasDOTright, hasDOTsimple, hasDOTslice, hasDOTstep, hasDOTstr, hasDOTsubject,
-	hasDOTtag, hasDOTtarget, hasDOTtarget_expr, hasDOTtarget_Name, hasDOTtarget_NameOrAttributeOrSubscript, hasDOTtargets, hasDOTtest,
-	hasDOTtype, hasDOTtype_comment, hasDOTtype_ignores, hasDOTtype_params, hasDOTupper, hasDOTvalue, hasDOTvalue_ast_ConstantValue,
-	hasDOTvalue_boolOrNone, hasDOTvalue_expr, hasDOTvalue_exprOrNone, hasDOTvalues, hasDOTvararg)
-from collections.abc import Sequence
-from typing import overload
-import ast
-import builtins
+from __future__ import annotations
+
+from typing import overload, TYPE_CHECKING
 import sys
 
-if sys.version_info >= (3, 15):
-    from astToolkit.theTypes import hasDOTis_lazy
+if TYPE_CHECKING:
+    from astToolkit.theTypes import (
+        ast_ConstantValue, hasDOTannotation, hasDOTannotation_expr, hasDOTannotation_exprOrNone, hasDOTarg, hasDOTarg_str,
+        hasDOTarg_strOrNone, hasDOTargs, hasDOTargs_arguments, hasDOTargs_list_arg, hasDOTargs_list_expr, hasDOTargtypes, hasDOTasname,
+        hasDOTattr, hasDOTbases, hasDOTbody, hasDOTbody_expr, hasDOTbody_list_stmt, hasDOTbound, hasDOTcases, hasDOTcause, hasDOTcls,
+        hasDOTcomparators, hasDOTcontext_expr, hasDOTconversion, hasDOTctx, hasDOTdecorator_list, hasDOTdefault_value, hasDOTdefaults,
+        hasDOTelt, hasDOTelts, hasDOTexc, hasDOTfinalbody, hasDOTformat_spec, hasDOTfunc, hasDOTgenerators, hasDOTguard, hasDOThandlers,
+        hasDOTid, hasDOTifs, hasDOTis_async, hasDOTitems, hasDOTiter, hasDOTkey, hasDOTkeys, hasDOTkeys_list_expr,
+        hasDOTkeys_list_exprOrNone, hasDOTkeywords, hasDOTkind, hasDOTkw_defaults, hasDOTkwarg, hasDOTkwd_attrs, hasDOTkwd_patterns,
+        hasDOTkwonlyargs, hasDOTleft, hasDOTlevel, hasDOTlineno, hasDOTlower, hasDOTmodule, hasDOTmsg, hasDOTname, hasDOTname_Name,
+        hasDOTname_str, hasDOTname_strOrNone, hasDOTnames, hasDOTnames_list_alias, hasDOTnames_list_str, hasDOTop, hasDOTop_boolop,
+        hasDOTop_operator, hasDOTop_unaryop, hasDOToperand, hasDOTops, hasDOToptional_vars, hasDOTorelse, hasDOTorelse_expr,
+        hasDOTorelse_list_stmt, hasDOTpattern, hasDOTpattern_pattern, hasDOTpattern_patternOrNone, hasDOTpatterns, hasDOTposonlyargs,
+        hasDOTrest, hasDOTreturns, hasDOTreturns_expr, hasDOTreturns_exprOrNone, hasDOTright, hasDOTsimple, hasDOTslice, hasDOTstep,
+        hasDOTstr, hasDOTsubject, hasDOTtag, hasDOTtarget, hasDOTtarget_expr, hasDOTtarget_Name, hasDOTtarget_NameOrAttributeOrSubscript,
+        hasDOTtargets, hasDOTtest, hasDOTtype, hasDOTtype_comment, hasDOTtype_ignores, hasDOTtype_params, hasDOTupper, hasDOTvalue,
+        hasDOTvalue_ast_ConstantValue, hasDOTvalue_boolOrNone, hasDOTvalue_expr, hasDOTvalue_exprOrNone, hasDOTvalues, hasDOTvararg)
+    from collections.abc import Sequence
+    import ast
+    import builtins
+    if sys.version_info >= (3, 15):
+        from astToolkit.theTypes import hasDOTis_lazy
 
 class DOT:
     """Access attributes and sub-nodes of AST elements via consistent accessor methods.
@@ -32,7 +36,6 @@ class DOT:
 
     DOT is designed for safe, read-only access to node properties, unlike the grab class which is designed for modifying
     node attributes.
-
     """
 
     @staticmethod

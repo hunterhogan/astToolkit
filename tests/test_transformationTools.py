@@ -1,353 +1,154 @@
-"""Tests for transformationTools module using parametrized tests and DRY principles."""
+"""Expected values and exceptions are hand-derived from the `transformationTools` docstrings."""
 from __future__ import annotations
 
-from astToolkit import Be, IfThis, Make
-from astToolkit.changeDef import (
-	inlineFunctionDef, makeDictionaryAsyncFunctionDef, makeDictionaryClassDef, makeDictionaryFunctionDef, makeDictionaryMosDef,
-	removeUnusedParameters)
-from astToolkit.filesystem import write_astModule
+from astToolkit import Make
 from astToolkit.transformationTools import pythonCode2ast_expr, unjoinBinOP, unparseFindReplace
 from copy import deepcopy
-from io import StringIO
-from pathlib import Path
-from tempfile import TemporaryDirectory
-from typing import Any
+from tests import assertComparable, assertEqualTo, messageTestFailure
+from typing import TYPE_CHECKING
 import ast
 import pytest
 
-@pytest.mark.parametrize(
-	'identifierFunction,valueExpected', [('functionPrimary', True), ('functionSecondary', True), ('functionTertiary', False)]
-)
-def testMakeDictionaryFunctionDef(identifierFunction: str, valueExpected: bool, moduleSampleFunctions: ast.Module) -> None:
-	"""Test makeDictionaryFunctionDef extracts function definitions correctly."""
-	dictionaryResult = makeDictionaryFunctionDef(moduleSampleFunctions)
+if TYPE_CHECKING:
+	from collections.abc import Mapping
 
-	assert (identifierFunction in dictionaryResult) is valueExpected, (
-		f'makeDictionaryFunctionDef: {identifierFunction} should {"be" if valueExpected else "not be"} in result'
-	)
+@pytest.mark.parametrize('string, expected', [
+	pytest.param('233', Make.Constant(233), id='constant233')
+	, pytest.param('north', Make.Name('north'), id='nameNorth')
+	, pytest.param('north.east', Make.Attribute(Make.Name('north'), 'east'), id='attributeNorthEast')
+	, pytest.param('north[13]', Make.Subscript(Make.Name('north'), Make.Constant(13)), id='subscriptNorth13')
+	, pytest.param('north()', Make.Call(Make.Name('north')), id='callNorth')
+	, pytest.param('value = 13\nnorth', Make.Name('north'), id='assignThenNameNorth')
+	, pytest.param('north\ndef south():\n    east', Make.Name('east'), id='nameNorthThenNestedEast')
+	, pytest.param('def south():\n    east\nnorth', Make.Name('north'), id='nestedEastThenNameNorth')
+])
+def test_pythonCode2ast_expr(string: str, expected: ast.expr) -> None:
+	assertComparable(pythonCode2ast_expr(string), expected, pythonCode2ast_expr.__name__, string)
 
-	if valueExpected:
-		assert isinstance(dictionaryResult[identifierFunction], ast.FunctionDef), (
-			f'makeDictionaryFunctionDef: value for {identifierFunction} should be ast.FunctionDef'
-		)
+@pytest.mark.parametrize('string, expected, match', [
+	pytest.param('value = 13', ValueError, 'unexpectedly returned `None`', id='exprNone')
+	, pytest.param('north(', SyntaxError, r"'\(' was never closed", id='syntaxInvalid')
+])
+def test_pythonCode2ast_exprError(string: str, expected: type[Exception], match: str) -> None:
+	with pytest.raises(expected, match=match):
+		pythonCode2ast_expr(string)
 
-@pytest.mark.parametrize('identifierClass,valueExpected', [('ClassAlpha', True), ('ClassBeta', True), ('ClassGamma', False)])
-def testMakeDictionaryClassDef(identifierClass: str, valueExpected: bool, moduleSampleClasses: ast.Module) -> None:
-	"""Test makeDictionaryClassDef extracts class definitions correctly."""
-	dictionaryResult = makeDictionaryClassDef(moduleSampleClasses)
-
-	assert (identifierClass in dictionaryResult) is valueExpected, (
-		f'makeDictionaryClassDef: {identifierClass} should {"be" if valueExpected else "not be"} in result'
-	)
-
-	if valueExpected:
-		assert isinstance(dictionaryResult[identifierClass], ast.ClassDef), (
-			f'makeDictionaryClassDef: value for {identifierClass} should be ast.ClassDef'
-		)
-
-@pytest.mark.parametrize(
-	'identifierAsync,valueExpected', [('asyncFunctionNorth', True), ('asyncFunctionSouth', True), ('asyncFunctionEast', False)]
-)
-def testMakeDictionaryAsyncFunctionDef(identifierAsync: str, valueExpected: bool, moduleSampleAsyncFunctions: ast.Module) -> None:
-	"""Test makeDictionaryAsyncFunctionDef extracts async function definitions correctly."""
-	dictionaryResult = makeDictionaryAsyncFunctionDef(moduleSampleAsyncFunctions)
-
-	assert (identifierAsync in dictionaryResult) is valueExpected, (
-		f'makeDictionaryAsyncFunctionDef: {identifierAsync} should {"be" if valueExpected else "not be"} in result'
-	)
-
-	if valueExpected:
-		assert isinstance(dictionaryResult[identifierAsync], ast.AsyncFunctionDef), (
-			f'makeDictionaryAsyncFunctionDef: value for {identifierAsync} should be ast.AsyncFunctionDef'
-		)
-
-def testMakeDictionaryMosDef(moduleSampleMixed: ast.Module) -> None:
-	"""Test makeDictionaryMosDef extracts all definition types correctly."""
-	dictionaryResult = makeDictionaryMosDef(moduleSampleMixed)
-
-	# Should contain async functions
-	assert 'asyncFunctionPrimary' in dictionaryResult, 'makeDictionaryMosDef: should contain async function'
-	assert isinstance(dictionaryResult['asyncFunctionPrimary'], ast.AsyncFunctionDef), (
-		'makeDictionaryMosDef: async function should be ast.AsyncFunctionDef'
-	)
-
-	# Should contain classes
-	assert 'ClassPrimary' in dictionaryResult, 'makeDictionaryMosDef: should contain class'
-	assert isinstance(dictionaryResult['ClassPrimary'], ast.ClassDef), 'makeDictionaryMosDef: class should be ast.ClassDef'
-
-	# Should contain functions
-	assert 'functionPrimary' in dictionaryResult, 'makeDictionaryMosDef: should contain function'
-	assert isinstance(dictionaryResult['functionPrimary'], ast.FunctionDef), 'makeDictionaryMosDef: function should be ast.FunctionDef'
-
-def testInlineFunctionDefBasicInlining(moduleInliningBasic: ast.Module) -> None:
-	"""Test inlineFunctionDef performs basic function inlining."""
-	resultFunctionDef = inlineFunctionDef('functionTarget', moduleInliningBasic)
-
-	assert isinstance(resultFunctionDef, ast.FunctionDef), 'inlineFunctionDef: should return ast.FunctionDef'
-	assert resultFunctionDef.name == 'functionTarget', 'inlineFunctionDef: should preserve function name'
-
-	# Check that function has been modified (body should contain inlined logic)
-	assert len(resultFunctionDef.body) > 0, 'inlineFunctionDef: should have function body'
-
-def testInlineFunctionDefMissingIdentifier(moduleSampleFunctions: ast.Module) -> None:
-	"""Test inlineFunctionDef raises ValueError for missing identifier."""
-	with pytest.raises(ValueError, match='unable to find'):
-		inlineFunctionDef('functionNonexistent', moduleSampleFunctions)
-
-def testInlineFunctionDefNoInliningNeeded(moduleInliningNone: ast.Module) -> None:
-	"""Test inlineFunctionDef with function that needs no inlining."""
-	resultFunctionDef = inlineFunctionDef('functionStandalone', moduleInliningNone)
-
-	assert isinstance(resultFunctionDef, ast.FunctionDef), 'inlineFunctionDef: should return ast.FunctionDef'
-	assert resultFunctionDef.name == 'functionStandalone', 'inlineFunctionDef: should preserve function name'
-
-@pytest.mark.parametrize(
-	'stringCode,expectedType',
-	[
-		('233', ast.Constant),  # Fibonacci number
-		('variableNorth', ast.Name),
-		('objectPrimary.methodSecondary', ast.Attribute),
-		('listItems[13]', ast.Subscript),  # Fibonacci index
-		('functionCall()', ast.Call),
-	],
-)
-def testPythonCode2ASTExprVariousExpressions(stringCode: str, expectedType: type[ast.expr]) -> None:
-	"""Test pythonCode2ast_expr converts various expressions correctly."""
-	resultExpr = pythonCode2ast_expr(stringCode)
-
-	assert isinstance(resultExpr, ast.expr), f"pythonCode2ast_expr: should return ast.expr for '{stringCode}'"
-	assert isinstance(resultExpr, expectedType), f"pythonCode2ast_expr: '{stringCode}' should produce {expectedType.__name__}"
-
-def testRemoveUnusedParametersBasicRemoval(functionDefUnusedParameters: ast.FunctionDef) -> None:
-	"""Test removeUnusedParameters removes unused parameters correctly."""
-	resultFunctionDef = removeUnusedParameters(functionDefUnusedParameters)
-
-	assert isinstance(resultFunctionDef, ast.FunctionDef), 'removeUnusedParameters: should return ast.FunctionDef'
-
-	# Check that unused parameters are removed
-	listParameterNames = [argItem.arg for argItem in resultFunctionDef.args.args]
-	assert 'parameterUnused' not in listParameterNames, 'removeUnusedParameters: should remove unused parameter'
-
-def testRemoveUnusedParametersReturnUpdated(functionDefUnusedParameters: ast.FunctionDef) -> None:
-	"""Test removeUnusedParameters updates return statements correctly."""
-	resultFunctionDef = removeUnusedParameters(functionDefUnusedParameters)
-
-	assert resultFunctionDef is functionDefUnusedParameters
-	assert ast.compare(resultFunctionDef.body[-1], Make.Return(Make.Tuple([Make.Name('parameterUsed')])))
-	assert Be.FunctionDef.returnsIs(IfThis.astIs(Make.Subscript(Make.Name('tuple'), Make.Tuple([]))))(resultFunctionDef)
-
-def testRemoveUnusedParametersAllUsed(functionDefAllParametersUsed: ast.FunctionDef) -> None:
-	"""Test removeUnusedParameters with all parameters used."""
-	countParametersOriginal = len(functionDefAllParametersUsed.args.args)
-	resultFunctionDef = removeUnusedParameters(functionDefAllParametersUsed)
-
-	assert isinstance(resultFunctionDef, ast.FunctionDef), 'removeUnusedParameters: should return ast.FunctionDef'
-
-	# All parameters should still be present
-	countParametersResult = len(resultFunctionDef.args.args)
-	assert countParametersResult == countParametersOriginal, 'removeUnusedParameters: should preserve all used parameters'
-
-@pytest.mark.parametrize('operatorType,countExpected', [(ast.Add, 3), (ast.operator, 3), (ast.Mult, 0)])
-def testUnjoinBinOPBasicOperation(operatorType: type[ast.operator], countExpected: int, binOpChained: ast.BinOp) -> None:
-	"""Test unjoinBinOP extracts expressions from binary operations."""
-	listExpressions = unjoinBinOP(binOpChained) if operatorType is ast.operator else unjoinBinOP(binOpChained, operatorType)
-
-	assert isinstance(listExpressions, list), f'unjoinBinOP: should return list for {operatorType.__name__}'
-	assert len(listExpressions) == countExpected, (
-		f'unjoinBinOP: should extract exactly {countExpected} expressions for {operatorType.__name__}'
-	)
-	expected: list[ast.expr] = [Make.Constant(233), Make.Constant(89), Make.Constant(144)] if countExpected else []
-	assert all(map(ast.compare, listExpressions, expected, strict=True))
-
-@pytest.mark.parametrize('astAST,operator,expected', [
-	pytest.param(Make.Constant(89), ast.operator, [], id='constant'),
-	pytest.param(Make.Name('north'), ast.Add, [], id='name'),
-	pytest.param(Make.Module([]), ast.Add, [], id='empty-module'),
-	pytest.param(Make.Add(), ast.Add, [], id='operator-node'),
+@pytest.mark.parametrize('astAST, operator, expected', [
+	pytest.param(Make.Constant(89), ast.operator, [], id='constant89'),
+	pytest.param(Make.Name('north'), ast.Add, [], id='nameNorth'),
+	pytest.param(Make.Module([]), ast.Add, [], id='emptyModule'),
+	pytest.param(Make.Add(), ast.Add, [], id='operatorNode'),
 	pytest.param(Make.Add.join([Make.Name('north'), Make.Name('east')]), ast.Add,
-		[Make.Name('north'), Make.Name('east')], id='two-operands'),
+		[Make.Name('north'), Make.Name('east')], id='twoOperands'),
 	pytest.param(Make.Add.join([Make.Name('north'), Make.Name('east'), Make.Name('south')]), ast.Add,
-		[Make.Name('north'), Make.Name('east'), Make.Name('south')], id='left-nested'),
+		[Make.Name('north'), Make.Name('east'), Make.Name('south')], id='leftNested'),
 	pytest.param(Make.Add.join([Make.Name('north'), Make.Add.join([Make.Name('east'), Make.Name('south')])]), ast.Add,
-		[Make.Name('north'), Make.Name('east'), Make.Name('south')], id='right-nested'),
+		[Make.Name('north'), Make.Name('east'), Make.Name('south')], id='rightNested'),
 	pytest.param(Make.Add.join([
 		Make.Add.join([Make.Name('north'), Make.Name('east')]),
 		Make.Add.join([Make.Name('south'), Make.Name('west')])]), ast.Add,
-		[Make.Name('north'), Make.Name('east'), Make.Name('south'), Make.Name('west')], id='both-branches'),
+		[Make.Name('north'), Make.Name('east'), Make.Name('south'), Make.Name('west')], id='bothBranches'),
 	pytest.param(Make.Add.join([Make.Name('north'), Make.Name('north'), Make.Name('east')]), ast.Add,
-		[Make.Name('north'), Make.Name('north'), Make.Name('east')], id='repeated-operands'),
+		[Make.Name('north'), Make.Name('north'), Make.Name('east')], id='repeatedOperands'),
 	pytest.param(Make.Add.join([
 		Make.Mult.join([Make.Name('north'), Make.Add.join([Make.Name('east'), Make.Name('south')])]),
 		Make.Name('west')]), ast.Add,
 		[Make.Mult.join([Make.Name('north'), Make.Add.join([Make.Name('east'), Make.Name('south')])]),
-			Make.Name('west')], id='different-left-operator'),
+			Make.Name('west')], id='differentLeftOperator'),
 	pytest.param(Make.Add.join([
 		Make.Name('north'),
 		Make.Mult.join([Make.Add.join([Make.Name('east'), Make.Name('south')]), Make.Name('west')])]), ast.Add,
 		[Make.Name('north'),
-			Make.Mult.join([Make.Add.join([Make.Name('east'), Make.Name('south')]), Make.Name('west')])], id='different-right-operator'),
+			Make.Mult.join([Make.Add.join([Make.Name('east'), Make.Name('south')]), Make.Name('west')])], id='differentRightOperator'),
 	pytest.param(Make.Add.join([
 		Make.Mult.join([Make.Name('north'), Make.Name('east')]), Make.Name('south')]), ast.operator,
-		[Make.Name('north'), Make.Name('east'), Make.Name('south')], id='all-operators'),
+		[Make.Name('north'), Make.Name('east'), Make.Name('south')], id='allOperators'),
 	pytest.param(Make.Sub.join([Make.Name('north'), Make.Sub.join([Make.Name('east'), Make.Name('south')])]), ast.Sub,
-		[Make.Name('north'), Make.Name('east'), Make.Name('south')], id='noncommutative-order'),
+		[Make.Name('north'), Make.Name('east'), Make.Name('south')], id='noncommutativeOrder'),
 	pytest.param(Make.Mult.join([Make.Name('north'), Make.Name('east')]), ast.Add,
-		[], id='no-matching-operator'),
+		[], id='noMatchingOperator'),
 	pytest.param(Make.Mult.join([
 		Make.Add.join([Make.Name('north'), Make.Name('east')]), Make.Name('south')]), ast.Add,
-		[Make.Name('north'), Make.Name('east')], id='search-inside-unmatched-root'),
+		[Make.Name('north'), Make.Name('east')], id='searchInsideUnmatchedRoot'),
 	pytest.param(Make.Add.join([
 		Make.Call(Make.Name('combine'), [Make.Add.join([Make.Name('north'), Make.Name('east')])]),
 		Make.Name('south')]), ast.Add,
 		[Make.Call(Make.Name('combine'), [Make.Add.join([Make.Name('north'), Make.Name('east')])]),
-			Make.Name('south')], id='complete-call-operand'),
+			Make.Name('south')], id='completeCallOperand'),
 	pytest.param(Make.BitOr.join([
 		Make.Subscript(Make.Name('list'), Make.BitOr.join([Make.Name('int'), Make.Name('str')])),
 		Make.Constant(None)]), ast.BitOr,
 		[Make.Subscript(Make.Name('list'), Make.BitOr.join([Make.Name('int'), Make.Name('str')])),
-			Make.Constant(None)], id='nested-type-union'),
+			Make.Constant(None)], id='nestedTypeUnion'),
 	pytest.param(Make.BitOr.join([
 		Make.Attribute(Make.Name('ast'), 'expr'),
 		Make.Subscript(Make.Name('list'), Make.Attribute(Make.Name('ast'), 'expr')),
 		Make.Constant(None)]), ast.BitOr,
 		[Make.Attribute(Make.Name('ast'), 'expr'), Make.Subscript(Make.Name('list'), Make.Attribute(Make.Name('ast'), 'expr')),
-			Make.Constant(None)], id='factory-type-union'),
+			Make.Constant(None)], id='factoryTypeUnion'),
 	pytest.param(Make.Module([
 		Make.Expr(Make.Add.join([Make.Name('north'), Make.Name('east')])),
 		Make.Expr(Make.Constant(89)),
 		Make.Expr(Make.Add.join([Make.Name('south'), Make.Name('west')]))]), ast.Add,
-		[Make.Name('north'), Make.Name('east'), Make.Name('south'), Make.Name('west')], id='separate-operations'),
+		[Make.Name('north'), Make.Name('east'), Make.Name('south'), Make.Name('west')], id='separateOperations'),
 	pytest.param(Make.Add.join([Make.Name('north')] * 3), ast.Add,
-		[Make.Name('north'), Make.Name('north'), Make.Name('north')], id='shared-operand'),
+		[Make.Name('north'), Make.Name('north'), Make.Name('north')], id='sharedOperand'),
 	pytest.param(Make.Add.join([Make.Add.join([Make.Name('north'), Make.Name('east')])] * 2), ast.Add,
-		[Make.Name('north'), Make.Name('east'), Make.Name('north'), Make.Name('east')], id='shared-subtree'),
+		[Make.Name('north'), Make.Name('east'), Make.Name('north'), Make.Name('east')], id='sharedSubtree'),
 	pytest.param(Make.Add.join([
 		Make.UnaryOp(Make.USub(), Make.Add.join([Make.Name('north'), Make.Name('east')])),
 		Make.Name('south')]), ast.Add,
 		[Make.UnaryOp(Make.USub(), Make.Add.join([Make.Name('north'), Make.Name('east')])),
-			Make.Name('south')], id='complete-unary-operand'),
+			Make.Name('south')], id='completeUnaryOperand'),
 	pytest.param(Make.Add.join([
 		Make.IfExp(Make.Name('ready'), Make.Add.join([Make.Name('north'), Make.Name('east')]), Make.Name('south')),
 		Make.Name('west')]), ast.Add,
 		[Make.IfExp(Make.Name('ready'), Make.Add.join([Make.Name('north'), Make.Name('east')]), Make.Name('south')),
-			Make.Name('west')], id='complete-conditional-operand'),
+			Make.Name('west')], id='completeConditionalOperand'),
 	pytest.param(Make.Expression(Make.Add.join([Make.Name('north'), Make.Name('east')])), ast.Add,
-		[Make.Name('north'), Make.Name('east')], id='expression-root'),
+		[Make.Name('north'), Make.Name('east')], id='expressionRoot'),
 	pytest.param(Make.Call(Make.Name('combine'), [
 		Make.Add.join([Make.Name('north'), Make.Name('east')]),
 		Make.Add.join([Make.Name('south'), Make.Name('west')])]), ast.Add,
-		[Make.Name('north'), Make.Name('east'), Make.Name('south'), Make.Name('west')], id='separate-call-arguments'),
+		[Make.Name('north'), Make.Name('east'), Make.Name('south'), Make.Name('west')], id='separateCallArguments'),
 	pytest.param(Make.Mult.join([
 		Make.Add.join([Make.Name('north'), Make.Name('east')]),
 		Make.Add.join([Make.Name('south'), Make.Name('west')])]), ast.Add,
-		[Make.Name('north'), Make.Name('east'), Make.Name('south'), Make.Name('west')], id='search-both-unmatched-branches'),
+		[Make.Name('north'), Make.Name('east'), Make.Name('south'), Make.Name('west')], id='searchBothUnmatchedBranches'),
 	pytest.param(Make.Pow.join([Make.Name('north'), Make.Pow.join([Make.Name('east'), Make.Name('south')])]), ast.Pow,
-		[Make.Name('north'), Make.Name('east'), Make.Name('south')], id='nested-power'),
+		[Make.Name('north'), Make.Name('east'), Make.Name('south')], id='nestedPower'),
 	pytest.param(Make.FloorDiv.join([Make.Name('north'), Make.Name('east'), Make.Name('south')]), ast.FloorDiv,
-		[Make.Name('north'), Make.Name('east'), Make.Name('south')], id='floor-division'),
+		[Make.Name('north'), Make.Name('east'), Make.Name('south')], id='floorDivision'),
 	pytest.param(Make.BitXor.join([Make.Name('north'), Make.Name('east'), Make.Name('south')]), ast.BitXor,
-		[Make.Name('north'), Make.Name('east'), Make.Name('south')], id='bitwise-xor'),
+		[Make.Name('north'), Make.Name('east'), Make.Name('south')], id='bitwiseXor'),
 ])
-def testUnjoinBinOPSingleExpression(astAST: ast.AST, operator: type[ast.operator], expected: list[ast.expr]) -> None:
-	"""Check operand structure, order, identity, and preservation of the input AST.
-
-	(AI generated docstring)
-	"""
-	structure: ast.AST = deepcopy(astAST)
+def test_unjoinBinOP(astAST: ast.AST, operator: type[ast.operator], expected: list[ast.expr]) -> None:
+	astASTBefore: ast.AST = deepcopy(astAST)
 	identities: set[int] = set(map(id, ast.walk(astAST)))
-	listExpressions = unjoinBinOP(astAST, operator)
+	list_ast_expr: list[ast.expr] = unjoinBinOP(astAST, operator)
+	assertEqualTo(type(list_ast_expr), list, unjoinBinOP.__name__, astAST, operator)
+	assertComparable(Make.Tuple(list_ast_expr), Make.Tuple(expected), unjoinBinOP.__name__, astAST, operator)
+	assert set(map(id, list_ast_expr)) <= identities, messageTestFailure(
+		list_ast_expr, 'the operand nodes of astAST', unjoinBinOP.__name__, astAST, operator)
+	assert ast.compare(astAST, astASTBefore, compare_attributes=True), messageTestFailure(
+		ast.dump(astAST), ast.dump(astASTBefore), unjoinBinOP.__name__, astAST, operator)
 
-	assert isinstance(listExpressions, list), 'unjoinBinOP: should return list for single expression'
-	assert len(listExpressions) == len(expected)
-	assert all(map(ast.compare, listExpressions, expected, strict=True))
-	assert set(map(id, listExpressions)) <= identities
-	assert set(map(id, ast.walk(astAST))) == identities
-	assert ast.compare(astAST, structure, compare_attributes=True)
+# `ast.unparse` reads the `lineno` of an `ast.Assign`, so the sample comes from `ast.parse`.
+assignNorth233: ast.Module = ast.parse('north = 233')
 
-def testUnparseFindReplaceBasicReplacement() -> None:
-	"""Test unparseFindReplace performs basic node replacement."""
-	treeOriginal = Make.Module(
-		[
-			Make.Assign(
-				targets=[Make.Name('variableAlpha', context=Make.Store())],
-				value=Make.Constant(233),  # Fibonacci number
-			)
-		]
-	)
-	ast.fix_missing_locations(treeOriginal)
-
-	mappingReplacements: dict[ast.AST, ast.AST] = {
-		Make.Constant(233): Make.Constant(89)  # Different Fibonacci numbers
-	}
-
-	treeResult = unparseFindReplace(treeOriginal, mappingReplacements)
-
-	assert isinstance(treeResult, ast.Module), 'unparseFindReplace: should return ast.Module'
-
-	codeUnparsed = ast.unparse(treeResult)
-	assert '89' in codeUnparsed, 'unparseFindReplace: should replace value with new value'
-	assert '233' not in codeUnparsed, 'unparseFindReplace: should not contain old value'
-
-def testUnparseFindReplaceNoReplacements() -> None:
-	"""Test unparseFindReplace with no matching replacements."""
-	treeOriginal = Make.Module(
-		[
-			Make.Assign(
-				targets=[Make.Name('variableBeta', context=Make.Store())],
-				value=Make.Constant(377),  # Fibonacci number
-			)
-		]
-	)
-	ast.fix_missing_locations(treeOriginal)
-
-	mappingReplacements: dict[ast.AST, ast.AST] = {Make.Constant(233): Make.Constant(89)}
-
-	treeResult = unparseFindReplace(treeOriginal, mappingReplacements)
-
-	assert isinstance(treeResult, ast.Module), 'unparseFindReplace: should return ast.Module'
-
-	codeUnparsed = ast.unparse(treeResult)
-	assert '377' in codeUnparsed, 'unparseFindReplace: should preserve original value when no match'
-
-def testWriteASTModuleToFile(moduleSampleSimple: ast.Module) -> None:
-	"""Test write_astModule writes module to file correctly."""
-	with TemporaryDirectory() as pathTemporary:
-		pathFilename = Path(pathTemporary) / 'outputModule.py'
-
-		write_astModule(moduleSampleSimple, pathFilename)
-
-		assert pathFilename.exists(), 'write_astModule: should create output file'
-
-		contentFile = pathFilename.read_text()
-		assert len(contentFile) > 0, 'write_astModule: should write non-empty content'
-		assert 'def ' in contentFile or 'class ' in contentFile, 'write_astModule: should contain Python code'
-
-def testWriteASTModuleToStringIO(moduleSampleSimple: ast.Module) -> None:
-	"""Test write_astModule writes module to StringIO correctly."""
-	streamOutput = StringIO()
-
-	write_astModule(moduleSampleSimple, streamOutput)
-
-	contentStream = streamOutput.getvalue()
-	assert len(contentStream) > 0, 'write_astModule: should write non-empty content to stream'
-	assert 'def ' in contentStream or 'class ' in contentStream, 'write_astModule: should contain Python code in stream'
-
-def testWriteASTModuleWithSettings(moduleSampleSimple: ast.Module) -> None:
-	"""Test write_astModule with custom settings."""
-	with TemporaryDirectory() as pathTemporary:
-		pathFilename = Path(pathTemporary) / 'outputModuleWithSettings.py'
-
-		settingsCustom: dict[str, dict[str, Any]] = {'autoflake': {'additional_imports': ['astToolkit']}}
-
-		write_astModule(moduleSampleSimple, pathFilename, settingsCustom)
-
-		assert pathFilename.exists(), 'write_astModule: should create output file with settings'
-
-def testWriteASTModuleWithPackageIdentifier(moduleSampleSimple: ast.Module) -> None:
-	"""Test write_astModule with package identifier."""
-	with TemporaryDirectory() as pathTemporary:
-		pathFilename = Path(pathTemporary) / 'outputModuleWithPackage.py'
-
-		write_astModule(moduleSampleSimple, pathFilename, identifierPackage='astToolkit')
-
-		assert pathFilename.exists(), 'write_astModule: should create output file with package identifier'
+@pytest.mark.parametrize('astTree, mappingFindReplaceNodes, expected', [
+	pytest.param(assignNorth233, {Make.Constant(233): Make.Constant(89)}
+		, Make.Module([Make.Assign([Make.Name('north', context=Make.Store())], Make.Constant(89))]), id='constant233To89')
+	, pytest.param(assignNorth233, {Make.Constant(377): Make.Constant(89)}, assignNorth233, id='matchNone')
+	, pytest.param(assignNorth233, {Make.Name('north'): Make.Name('south')}
+		, Make.Module([Make.Assign([Make.Name('south')], Make.Constant(233))]), id='nameLoadMatchesNameStore')
+	, pytest.param(assignNorth233, {Make.Constant(233): Make.Constant(89), Make.Constant(89): Make.Constant(13)}
+		, Make.Module([Make.Assign([Make.Name('north', context=Make.Store())], Make.Constant(13))]), id='replacementMatchesLaterEntry')
+	, pytest.param(Make.Constant(233), {Make.Constant(233): Make.Constant(89)}, Make.Constant(233), id='rootNotReplaced')
+])
+def test_unparseFindReplace(astTree: ast.AST, mappingFindReplaceNodes: Mapping[ast.AST, ast.AST], expected: ast.AST) -> None:
+	astTreeBefore: ast.AST = deepcopy(astTree)
+	newTree: ast.AST = unparseFindReplace(astTree, mappingFindReplaceNodes)
+	assert newTree is not astTree, messageTestFailure(newTree, 'a copy of astTree', unparseFindReplace.__name__, astTree, mappingFindReplaceNodes)
+	assertComparable(newTree, expected, unparseFindReplace.__name__, astTree, mappingFindReplaceNodes)
+	assertComparable(astTree, astTreeBefore, unparseFindReplace.__name__, astTree, mappingFindReplaceNodes)

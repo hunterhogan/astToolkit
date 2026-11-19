@@ -1,6 +1,6 @@
 [project]
 name = "astToolkit"
-version = "0.14.0"
+version = "0.14.1"
 description = "A powerfully composable, type-safe toolkit for Python abstract syntax tree (AST) manipulation, analysis, transformation, and code generation with a layered architecture designed for building sophisticated code processing assembly-lines."
 readme = "README.md"
 requires-python = ">=3.14"
@@ -45,7 +45,7 @@ classifiers = [
   "Typing :: Typed",
 ]
 dependencies = ["hunterMakesPy>=0.10.0"]
-optional-dependencies = { testing = ["pytest-cov", "pytest-parametrize>=1.6", "pytest"] }
+optional-dependencies = { testing = ["hypothesis", "pytest-cov", "pytest-xdist", "pytest>=9.0"] }
 
 [project.urls]
 Donate = "https://www.patreon.com/integrated"
@@ -58,12 +58,25 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [tool.coverage]
-report = { exclude_lines = ["if TYPE_CHECKING:", "if __name__ == \"__main__\":"], ignore_errors = false }
+report = { exclude_also = [
+  "@overload",
+  "^\\s*\\.\\.\\.$",
+  "if __name__ == \"__main__\":",
+  "if TYPE_CHECKING:",
+], ignore_errors = false }
 run = { branch = true, data_file = "tests/coverage/.coverage", omit = ["tests/*"], source = ["."] }
 
 [tool.pytest]
 addopts = ["--color=yes"]
+empty_parameter_set_mark = "fail_at_collect"
+filterwarnings = [
+  "error",
+  # The samples of abstract classes, such as `Make.expr()`, instantiate abstract `ast` classes on purpose.
+  "ignore:Instantiating abstract AST node class:DeprecationWarning",
+]
 log_auto_indent = "On"
+minversion = "9.0"
+strict = true
 testpaths = ["tests"]
 
 [tool.setuptools]
@@ -78,5 +91,3 @@ pathFilenameCitationSSOT = "citations/CITATION.cff"
 
 # TODO can I use my join idea without subclassing class Add(ast.Add): because subclassing means
 # ast.compare is always false
-
-# TODO in `Make`, suppress DeprecationWarning: Instantiating abstract AST node class

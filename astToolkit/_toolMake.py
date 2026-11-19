@@ -1,85 +1,79 @@
 # ruff: noqa: A002
 """Automatically generated file, so changes may be overwritten."""
-from astToolkit.theTypes import ast_attributes, ast_attributes_int, ast_attributes_type_comment, ast_ConstantValue
-from collections.abc import Iterable, Sequence
-from hunterMakesPy import identifierDotAttribute
-from typing import overload, Unpack
+from __future__ import annotations
+
+from typing import overload, TYPE_CHECKING
 import ast
-import builtins
 import sys
 import warnings
 
+if TYPE_CHECKING:
+    from astToolkit.theTypes import ast_attributes, ast_attributes_int, ast_attributes_type_comment, ast_ConstantValue
+    from collections.abc import Iterable, Sequence
+    from hunterMakesPy import identifierDotAttribute
+    from typing import Unpack
+    import builtins
 warnings.filterwarnings('ignore', category=DeprecationWarning, message='Instantiating abstract AST node class*')
 
 class Make:
-    """Create a `class` `ast.AST` `object` or an `ast.AST` subclass `object`.
+    """Create an `ast.AST` (Abstract Syntax Tree) object or an instance of a subclass.
 
     I describe `keywordArguments` of `Make` methods here.
 
     Parameters
     ----------
     col_offset : int
-        (***col***umn offset) Position information specifying the column where an AST object begins.
-    end_col_offset : (int | None) | int
-        (end ***col***umn offset) Position information specifying the column where an AST object ends.
-    end_lineno : (int | None) | int
-        (end line _**n**umer**o**_ (_Latin_ "number")) Position information specifying the line number where an AST
-        object ends.
-    level : int = 0
-        (relative import level) An absolute import is 'level' 0. A relative import is `level` deep.
+        (***col***umn offset) Zero-based UTF-8 byte offset where the source begins.
+    end_col_offset : int | None
+        (end ***col***umn offset) Zero-based UTF-8 byte offset just after the end of the source on
+        `end_lineno`.
+    end_lineno : int | None
+        (end line _**n**umer**o**_ (_Latin_ "number")) One-based line number where the source ends.
     lineno : int
-        (line _**n**umer**o**_ (_Latin_ "number")) Position information manually specifying the line number where an AST
-        object begins.
-    type_comment : str
-        (a `type` annotation in a comment) Optional string with the type annotation as a comment or `# noqa: `.
+        (line _**n**umer**o**_ (_Latin_ "number")) One-based line number where the source begins.
 
-    Notes
-    -----
-    Every non-deprecated subclass of `ast.AST` (Abstract Syntax Tree), has a corresponding method in `Make`, and for each `class`, you can set the value of each
-    attribute. But, what is an "attribute"? In the `ast` universe, one word may have many different meanings, and if you want to avoid confusion, you should pay
-    close attention to capitalization, leading underscores, and context. In Python, an "attribute" is a property of an `object`. In `class` `Make`, when you
-    create an `ast.AST` subclass `object`, you can set the value of any attribute of that `object`. The `ast` universe divides attributes into two categories,
-    `_attributes` and `_fields` (or `_field*`).
+    Source Positions and Syntax Fields
+    ----------------------------------
+    What is an attribute? In Python, an attribute is a named         property of an object. In the
+    `ast` (abstract syntax tree) universe, one word may have many different         meanings. Pay
+    close attention to capitalization, leading underscores, and context.
 
-    The attributes in category `_attributes` are `lineno` (line _**n**umer**o**_ (_Latin_ "number")),
-    `col_offset` (***col***umn offset), `end_lineno` (end line _**n**umer**o**_ (_Latin_ "number")), and `end_col_offset` (end ***col***umn offset). These
-    attributes of an `ast` `object` represent the physical location of the text when rendered as Python code. With abstract syntax trees, as opposed to concrete
-    syntax trees for example, you rarely need to work directly with physical locations, therefore `_attributes` are almost always relegated to
-    `**keywordArguments` in `Make` methods. For a counter example, see `Make.TypeIgnore` (this Type (`type`) error, Ignore it), for which `lineno` is a named
-    parameter.
+            The syntax fields appear in `_fields`, and their types appear in `_field_types`. For
+    example, the `attr`         (***attr***ibute) field of `ast.Attribute` holds the name after the
+    dot. Other uses of the word         attribute include `getattr`, `setattr`, and
+    `ast.MatchClass.kwd_attrs` (***k***ey***w***or***d*** ***attr***ibute***s***).
 
-    In an attempt to distinguish the attributes of `ast.AST` subclasses that are not in the category `_attributes` from the four attributes in
-    the category `_attributes`, all other attributes of `ast.AST` subclasses are in category `_fields` (or sometimes, category `_field*`, such as
-    `_field_types`).
-
-    You probably want to try to avoid confusing these concepts and categories with similarly named things, including `ast.Attribute`,
-    `ast.Attribute.attr` (***attr***ibute), `getattr`, `setattr`, `ast.MatchClass.kwd_attrs` (***k***ey***w***or***d*** ***attr***ibute***s***), and
-    `_Attributes` (no, really, it's a thing).
+            The source positions, when available, appear in `_attributes`. They refer to the original
+    source, including         when the text contains characters that use multiple UTF-8 bytes. For an
+    exception to the usual placement of         source positions in `**keywordArguments`, see
+    `Make.TypeIgnore` (this Type (`type`) error, Ignore it), which has         a named `lineno` (line
+    _**n**umer**o**_ (_Latin_ "number")) field.
     """
 
     @staticmethod
     def _boolopJoinMethod(ast_operator: type[ast.boolop], expressions: Sequence[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr | ast.BoolOp:
-        """'Join' expressions with a boolean operator.
+        """I use this method to join expressions with a Boolean operator.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        This private method provides the core logic for boolean operator joining used by `And.join()` and `Or.join()`
-        methods. It handles edge cases like empty sequences and single expressions while creating properly nested
-        `ast.BoolOp` structures for multiple expressions. If you are looking for public join functionality, use the
-        specific boolean operator classes (`Make.And.join()`, `Make.Or.join()`) instead of this internal method.
+        `Make.And.join()` and `Make.Or.join()` use one `ast.BoolOp` (***Bool***ean ***Op***eration)
+        for two or more expressions.
 
         Parameters
         ----------
         ast_operator : type[ast.boolop]
-            The boolean operator type (`ast.And` or `ast.Or`) to use for joining.
+            Boolean operator class, `ast.And` or `ast.Or` (`ast.boolop`, ***bool***ean
+            ***op***erator).
         expressions : Sequence[ast.expr]
-            Sequence of expressions to join with the boolean operator.
+            Operands in evaluation order (`ast.expr`, ***expr***ession).
+        **keywordArguments : ast_attributes
+            Source positions for the constructed expression.
 
         Returns
         -------
         joinedExpression : ast.expr
-            Single expression representing the joined boolean operation, or the original expression if only one
-            provided.
+            One `ast.BoolOp` (***Bool***ean ***Op***eration) for two or more operands, the original
+            operand for a single input, or an empty string literal for an empty input.
         """
         listExpressions: list[ast.expr] = list(expressions)
         match len(listExpressions):
@@ -93,27 +87,27 @@ class Make:
 
     @staticmethod
     def _operatorJoinMethod(ast_operator: type[ast.operator], expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
-        """'Join' expressions with a binary operator.
+        """I use this method to join expressions with a binary operator.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        This private method provides the core logic for binary operator joining used by operator classes like
-        `Add.join()`, `BitOr.join()`, etc. It creates left-associative nested `ast.BinOp` structures by chaining
-        expressions from left to right. If you are looking for public join functionality, use the specific operator
-        classes (`Make.Add.join()`, `Make.BitOr.join()`, etc.) instead of this internal method.
+        Operator classes such as `Make.Add` use this method to join expressions into left-associated
+        `ast.BinOp` (***Bin***ary ***Op***eration) operations.
 
         Parameters
         ----------
         ast_operator : type[ast.operator]
-            The binary operator type (like `ast.Add`, `ast.BitOr`) to use for joining.
+            Binary operator class such as `ast.Add` or `ast.BitOr`.
         expressions : Iterable[ast.expr]
-            Collection of expressions to join with the binary operator.
+            Operands in evaluation order (`ast.expr`, ***expr***ession).
+        **keywordArguments : ast_attributes
+            Source positions for every constructed expression.
 
         Returns
         -------
         joinedExpression : ast.expr
-            Single expression representing the left-associative chained binary operations, or empty string constant if
-            no expressions provided.
+            Nested `ast.BinOp` (***Bin***ary ***Op***eration) operations for two or more operands, the
+            original operand for a single input, or an empty string literal for an empty input.
         """
         listExpressions: list[ast.expr] = list(expressions)
         if not listExpressions:
@@ -124,45 +118,48 @@ class Make:
         return expressionsJoined
 
     class Add(ast.Add):
-        """Identical to the `ast` (abstract syntax tree) class but with a method, `join()`, that 'joins' expressions using the `ast.BinOp` (***Bin***ary ***Op***eration) class."""
+        """Make an `ast.Add` operator for `+`.
+
+        This subclass of `ast.Add` adds `join()`, which combines expressions into nested `ast.BinOp`
+        (***Bin***ary ***Op***eration) operations.
+        """
 
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
-            """Make a single `ast.expr` (***expr***ession) from a `Sequence` of `ast.expr` by creating nested `ast.BinOp` (***Bin***ary ***Op***eration) `object` that are logically 'joined' by the `ast.operator` subclass.
+            """Join expressions in left-associated `ast.BinOp` (***Bin***ary ***Op***eration) operations.
 
-            Like str.join() (***str***ing) but for AST (Abstract Syntax Tree) expressions.
+            Like `str.join()` (***str***ing) but for `AST` (Abstract Syntax Tree) expressions. Joining
+            `a`, `b`, and `c` with `Make.Sub.join()` represents `(a - b) - c`.
 
             Parameters
             ----------
             expressions : Iterable[ast.expr]
-                Collection of expressions to join.
+                Operands in evaluation order (`ast.expr`, ***expr***ession).
             **keywordArguments : ast_attributes
-
+                Source positions for every constructed expression. A single input keeps its existing
+                positions.
 
             Returns
             -------
             joinedExpression : ast.expr
-                Single expression representing the joined expressions.
+                Nested `ast.BinOp` (***Bin***ary ***Op***eration) operations for two or more operands,
+                the original operand for a single input, or an empty string literal for an empty
+                input.
 
             Examples
             --------
-            ```python
-            # Instead of manually constructing nested ast.BinOp structures:
-            ast.BinOp(
-                left=ast.BinOp(
-            left=ast.Name('Crosby')
-                    , op=ast.BitOr()
-                    , right=ast.Name('Stills'))
-                , op=ast.BitOr()
-            , right=ast.Name('Nash')
-            )
+                ```python
+                import ast
+                from astToolkit import Make
 
-            # Simply use:
-            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'),
-            ast.Name('Nash')])
-
-            # Both produce the same AST structure but the join() method eliminates the manual nesting.
-            ```
+                # Both expressions represent (Crosby | Stills) | Nash.
+                ast.BinOp(
+                    left=ast.BinOp(left=Make.Name('Crosby'), op=ast.BitOr(), right=Make.Name('Stills')),
+                    op=ast.BitOr(),
+                    right=Make.Name('Nash'),
+                )
+                Make.BitOr.join([Make.Name('Crosby'), Make.Name('Stills'), Make.Name('Nash')])
+                ```
             """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
@@ -170,20 +167,21 @@ class Make:
     def alias(dotModule: str, asName: str | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.alias:
         """Make an `ast.alias` object for a single name mapping in an import statement.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.alias` object represents one name mapping in an `import` or `from ... import` statement. `dotModule`
-        accepts the name being imported; the optional `asName` (as Name) provides an alternative local identifier for
-        the imported name.
+        An `ast.alias` represents one imported name, with an optional `as` binding.
 
         Parameters
         ----------
         dotModule : str
-            The module, submodule, class, or function name to import. Dot notation is permitted for submodule paths.
-            This parameter corresponds to `ast.alias.name`.
+            (package.Module notation) Name to import. Use a dotted module path in `import` or a member
+            name in `from ... import`. Use `'*'` for a wildcard in a `from ... import` statement. This
+            is `ast.alias.name`.
         asName : str | None = None
-            (as Name) Optional alternative identifier for the imported name in local scope. This parameter corresponds
-            to `ast.alias.asname`.
+            (as Name) Local identifier supplied by `as`. Omit it to use the binding implied by the
+            import. This is `ast.alias.asname` (as name).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
@@ -193,195 +191,203 @@ class Make:
         return ast.alias(name=dotModule, asname=asName, **keywordArguments)
 
     class And(ast.And):
-        """Identical to the `ast` (abstract syntax tree) class but with a method, `join()`, that 'joins' expressions using the `ast.BoolOp` (***Bool***ean ***Op***eration) class."""
+        """Make an `ast.And` operator for `and`.
+
+        This subclass of `ast.And` adds `join()`, which combines expressions into one `ast.BoolOp`
+        (***Bool***ean ***Op***eration).
+        """
 
         @classmethod
         def join(cls, expressions: Sequence[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
-            """Make a single `ast.expr` (***expr***ession) from a `Sequence` of `ast.expr` by creating an `ast.BoolOp` (***Bool***ean ***Op***eration) `object` that logically 'joins' the `Sequence`.
+            """Join expressions in one `ast.BoolOp` (***Bool***ean ***Op***eration).
 
-            Like str.join() (***str***ing) but for AST (Abstract Syntax Tree) expressions.
+            Like `str.join()` (***str***ing) but for `AST` (Abstract Syntax Tree) expressions.
 
             Parameters
             ----------
             expressions : Sequence[ast.expr]
-                Collection of expressions to join.
+                Operands in evaluation order (`ast.expr`, ***expr***ession).
             **keywordArguments : ast_attributes
-
+                Source positions for the constructed expression. A single input keeps its existing
+                positions.
 
             Returns
             -------
             joinedExpression : ast.expr
-                Single expression representing the joined expressions.
+                One `ast.BoolOp` (***Bool***ean ***Op***eration) for two or more operands, the
+                original operand for a single input, or an empty string literal for an empty input.
 
             Examples
             --------
-            ```python
-            # Instead of manually constructing ast.BoolOp structures:
-            ast.BoolOp(
-                op=ast.And(),
-            values=[ast.Name('Lions'), ast.Name('tigers'), ast.Name('bears')]
-            )
+                ```python
+                import ast
+                from astToolkit import Make
 
-            # Simply use:
-            astToolkit.And.join([ast.Name('Lions'), ast.Name('tigers'), ast.Name('bears')])
-
-            # Both produce the same AST structure but the join()
-            method eliminates the manual construction.
-            ```
+                # Both expressions represent Lions and tigers and bears.
+                ast.BoolOp(
+                    op=ast.And(),
+                    values=[Make.Name('Lions'), Make.Name('tigers'), Make.Name('bears')],
+                )
+                Make.And.join([Make.Name('Lions'), Make.Name('tigers'), Make.Name('bears')])
+                ```
             """
             return Make._boolopJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
     def AnnAssign(target: ast.Name | ast.Attribute | ast.Subscript, annotation: ast.expr, value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.AnnAssign:
-        """Make an `ast.AnnAssign` (***Ann***otated ***Assign***ment) object for a type-annotated variable assignment.
+        """Make an `ast.AnnAssign` (***Ann***otated ***Assign***ment) for an annotated assignment.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.AnnAssign` object represents an annotated variable assignment such as `name: int = 42` or `config:
-        dict[str, Any]`. The `annotation` provides the type expression; the optional `value` provides an initial value.
+        An `ast.AnnAssign` (***Ann***otated ***Assign***ment) represents `name: int = 42` or an
+        annotation without an assignment, such as `name: int`. For a name target, `Make.AnnAssign`
+        sets `simple=1`, the form used for an unparenthesized name. Attribute and subscription targets
+        use `simple=0`.
 
         Parameters
         ----------
         target : ast.Name | ast.Attribute | ast.Subscript
-            Assignment target. May be an `ast.Name`, `ast.Attribute`, or `ast.Subscript`.
+            Assignment target in `Make.Store()` context. Use an `ast.Name`, `ast.Attribute`, or
+            `ast.Subscript`.
         annotation : ast.expr
-            Type annotation expression specifying the variable type.
+            Annotation expression following `:` (`ast.expr`, ***expr***ession).
         value : ast.expr | None = None
-            Optional initial value expression for the annotated variable.
+            Value expression following `=`. Omit it for an annotation without an assignment.
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         annotatedAssignment : ast.AnnAssign
-            An `ast.AnnAssign` (***Ann***otated ***Assign***ment) object representing a type-annotated variable
-            assignment.
-
-        Implementation Details
-        ----------------------
-        `Make.AnnAssign` automatically computes `ast.AnnAssign.simple` as `int(isinstance(target, ast.Name))`. This field is not exposed as a parameter. The
-        Python grammar requires `simple` to be 1 when the target is a bare `ast.Name` and 0 for `ast.Attribute` or `ast.Subscript` targets.
+            The statement for the supplied annotation and optional value.
         """
         return ast.AnnAssign(target=target, annotation=annotation, value=value, simple=int(isinstance(target, ast.Name)), **keywordArguments)
 
     @staticmethod
     def arg(Buffalo_buffalo_Buffalo_buffalo_buffalo_buffalo_Buffalo_buffalo: str, annotation: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_type_comment]) -> ast.arg:
-        """Make an `ast.arg` (***arg***ument) object for a single parameter in a function signature.
+        """Make an `ast.arg` (***arg***ument) for one parameter in a function definition.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.arg` object represents one parameter in a function definition, including positional, keyword-only,
-        `*args`, and `**kwargs` parameters. The parameter name is provided as
-        `Buffalo_buffalo_Buffalo_buffalo_buffalo_buffalo_Buffalo_buffalo`, which corresponds to `ast.arg.arg`.
+        An `ast.arg` (***arg***ument) represents a single parameter, including a positional-only,
+        keyword-only, `*args`, or `**kwargs` parameter. Supply defaults separately in
+        `Make.arguments`.
 
         Parameters
         ----------
         Buffalo_buffalo_Buffalo_buffalo_buffalo_buffalo_Buffalo_buffalo : str
-            Parameter name as a string. This parameter corresponds to `ast.arg.arg`.
+            Name of the parameter, stored in `ast.arg.arg` (***arg***ument).
         annotation : ast.expr | None = None
-            Optional type annotation expression for the parameter.
+            Annotation expression following `:` (`ast.expr`, ***expr***ession).
+        type_comment : str | None = None
+            (a `type` annotation in a comment) Type annotation text from a `# type: ...` comment on
+            this parameter.
+        **keywordArguments : ast_attributes_type_comment
+            Optional source positions and `type_comment`. See `Make` for source positions.
 
         Returns
         -------
         argumentDefinition : ast.arg
-            An `ast.arg` (***arg***ument) object representing one function parameter with an optional type annotation.
+            An `ast.arg` (***arg***ument) object representing one function parameter with an optional
+            type annotation.
 
         Parameter Naming
         ----------------
-        `ast.arg` uses `ast.arg.arg` (a string field) to hold the parameter name. In `Make`, this field is named
-        `Buffalo_buffalo_Buffalo_buffalo_buffalo_buffalo_Buffalo_buffalo` to avoid collision with the `ast.arg` class itself. In an `ast.FunctionDef` (Function
-        ***Def***inition), the dereference chain is `ast.FunctionDef.args.args[n].arg.arg`—four identifiers that resolve to: the `ast.arguments` object, the
-        list of positional parameters, one `ast.arg` object, and the parameter name string.
+        For the first positional-or-keyword parameter of `functionDefinition`,
+        `functionDefinition.args.args[0].arg` gives the parameter name. The first `args`
+        (***arg***ument***s***) holds the `ast.arguments` specification, and the second holds the list
+        of `ast.arg` (***arg***ument) objects.
         """
         return ast.arg(arg=Buffalo_buffalo_Buffalo_buffalo_buffalo_buffalo_Buffalo_buffalo, annotation=annotation, **keywordArguments)
 
     @staticmethod
     def arguments(posonlyargs: list[ast.arg] | None=None, list_arg: list[ast.arg] | None=None, vararg: ast.arg | None=None, kwonlyargs: list[ast.arg] | None=None, kw_defaults: Sequence[ast.expr | None] | None=None, kwarg: ast.arg | None=None, defaults: Sequence[ast.expr] | None=None) -> ast.arguments:
-        """Make an `ast.arguments` object for the complete parameter specification of a function definition.
+        """Make an `ast.arguments` specification for a function or `lambda`.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.arguments` object collects all parameter categories for a function definition: positional-only
-        parameters, regular positional parameters, a variadic parameter, keyword-only parameters, a keyword variadic
-        parameter, and their associated default values.
+        The `ast.arguments` specification collects the parameters by calling convention and stores
+        their default expressions in separate lists.
 
         Parameters
         ----------
-        posonlyargs : list[ast.arg] | None = None
-            (***pos***itional-only ***arg***ument***s***) Positional-only parameters that appear before the `/`
-            separator.
-        list_arg : list[ast.arg] | None = None
-            (list of ast.***arg***ument) Regular positional parameters. This parameter corresponds to
-            `ast.arguments.args`.
+        posonlyargs : list[ast.arg] = []
+            (***pos***itional-only ***arg***ument***s***) Positional-only parameters that appear
+            before the `/` separator (`ast.arg`, ***arg***ument).
+        list_arg : list[ast.arg] = []
+            (list of ast.***arg***ument) Positional-or-keyword parameters. This is
+            `ast.arguments.args` (***arg***ument***s***).
         vararg : ast.arg | None = None
-            (***var***iadic ***arg***ument) The single `*args` parameter that collects extra positional arguments.
-        kwonlyargs : list[ast.arg] | None = None
-            (***k***ey***w***ord-only ***arg***ument***s***) Keyword-only parameters that appear after `*` or `*args`.
-        kw_defaults : Sequence[ast.expr | None] | None = None
-            (***k***ey***w***ord defaults) Default value expressions for keyword-only parameters. `None` at a position
-            indicates that the corresponding keyword-only parameter is required.
+            (***var***iadic ***arg***ument) The single `*args` parameter that collects extra
+            positional arguments.
+        kwonlyargs : list[ast.arg] = []
+            (***k***ey***w***ord-only ***arg***ument***s***) Keyword-only parameters that appear after
+            `*` or `*args`.
+        kw_defaults : Sequence[ast.expr | None] = []
+            (***k***ey***w***ord defaults) Default expressions aligned with `kwonlyargs`. Use `None`
+            for each required parameter and `Make.Constant(None)` for an explicit `None` default
+            (`ast.expr`, ***expr***ession).
         kwarg : ast.arg | None = None
-            (***k***ey***w***ord ***arg***ument) The single `**kwargs` parameter that collects extra keyword arguments.
-        defaults : Sequence[ast.expr] | None = None
-            Default value expressions for the trailing N regular positional parameters. The length must be less than or
-            equal to the number of regular positional parameters.
+            (***k***ey***w***ord ***arg***ument) The single `**kwargs` parameter that collects extra
+            keyword arguments.
+        defaults : Sequence[ast.expr] = []
+            Default expressions for the last parameters in the combined `posonlyargs` and `list_arg`
+            lists, in that order.
 
         Returns
         -------
         functionSignature : ast.arguments
             An `ast.arguments` object holding the complete parameter specification.
-
-        Field Mapping
-        -------------
-        `Make.arguments` renames `ast.arguments.args` to `list_arg` to avoid shadowing the Python built-in identifier `args`. Internally, `Make.arguments`
-        passes `list_arg` as the `args` keyword argument to `ast.arguments`.
         """
         return ast.arguments(posonlyargs=posonlyargs or [], args=list_arg or [], vararg=vararg, kwonlyargs=kwonlyargs or [], kw_defaults=list(kw_defaults) if kw_defaults else [], kwarg=kwarg, defaults=list(defaults) if defaults else [])
 
     @staticmethod
     def Assert(test: ast.expr, msg: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Assert:
-        """Make an `ast.Assert` object for an `assert` statement.
+        """Make an `ast.Assert` for an `assert` statement.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Assert` object represents an `assert` statement. When the `test` expression evaluates to `False`, the
-        Python interpreter raises `AssertionError`. The optional `msg` (***m***e***s***sa***g***e) expression provides
-        the error message attached to that `AssertionError`.
+        An `ast.Assert` represents a condition checked at runtime. A false test raises
+        `AssertionError`. Python omits assertions when compiling with optimization enabled.
 
         Parameters
         ----------
         test : ast.expr
-            Boolean expression to evaluate. When `test` is falsy, `AssertionError` is raised.
+            Expression whose truth value is checked (`ast.expr`, ***expr***ession).
         msg : ast.expr | None = None
-            (***m***e***s***sa***g***e) Optional expression providing the `AssertionError` message.
+            (***m***e***s***sa***g***e) Expression evaluated when the test is false. Its value becomes
+            the argument to `AssertionError`.
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         assertStatement : ast.Assert
             An `ast.Assert` object representing an assertion statement.
-
-        Runtime Behavior
-        ----------------
-        Python's `-O` (optimize) flag removes `assert` statements from compiled bytecode entirely. Code that uses `assert` for input validation rather than
-        debugging will silently skip those checks when Python runs under optimization.
         """
         return ast.Assert(test=test, msg=msg, **keywordArguments)
 
     @staticmethod
     def Assign(targets: Sequence[ast.expr], value: ast.expr, **keywordArguments: Unpack[ast_attributes_type_comment]) -> ast.Assign:
-        """Make an `ast.Assign` object for a variable assignment without a type annotation.
+        """Make an `ast.Assign` for an assignment statement.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Assign` object represents a simple assignment such as `x = 5` or a chained assignment such as `a = b =
-        value`. A single-element `targets` sequence is the common case; multiple targets create a chained assignment
-        where each target receives the same evaluated `value`.
+        An `ast.Assign` represents a simple assignment such as `x = 5`, an unpacking assignment such
+        as `a, b = pair`, or a chained assignment such as `a = b = value`.
 
         Parameters
         ----------
         targets : Sequence[ast.expr]
-            Sequence of assignment targets. Each target receives the evaluated `value`. Multiple targets create a
-            chained assignment.
+            One or more assignment targets in `Make.Store()` context. Use one tuple or list target for
+            unpacking, or separate targets for chained assignment (`ast.expr`, ***expr***ession).
         value : ast.expr
-            Expression whose result is assigned to every target.
+            Expression evaluated once. Python assigns the result to each target in order.
+        type_comment : str | None = None
+            (a `type` annotation in a comment) Type annotation text from a `# type: ...` comment on
+            the assignment.
+        **keywordArguments : ast_attributes_type_comment
+            Optional source positions and `type_comment`. See `Make` for source positions.
 
         Returns
         -------
@@ -392,127 +398,137 @@ class Make:
 
     @staticmethod
     def AST() -> ast.AST:
-        """Make a base `ast.AST` (Abstract Syntax Tree) object.
+        """Make an instance of the base class `ast.AST` (Abstract Syntax Tree).
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.AST` (Abstract Syntax Tree) object is the base class for all AST node types. In most cases, use a
-        specific factory method such as `Make.Name`, `Make.Call`, or `Make.Assign` rather than `Make.AST`.
+        Use a specific factory such as `Make.Name`, `Make.Call`, or `Make.Assign` to represent Python
+        syntax.
 
         Returns
         -------
-        baseNode : ast.AST
-            A base `ast.AST` (Abstract Syntax Tree) object.
-
-        AST Architecture
-        ----------------
-        `ast.AST` (Abstract Syntax Tree) provides two class-level tuples that govern each subclass: `_fields`, which lists the names of domain-specific child
-        nodes, and `_attributes`, which lists the four source-position attributes (`lineno`, `col_offset`, `end_lineno`, `end_col_offset`). This factory method
-        creates a minimal instance with no `_fields` populated and no attributes set.
+        astAST : ast.AST
+            An instance of the common base class for Python syntax objects.
         """
         return ast.AST()
 
     @staticmethod
     def AsyncFor(target: ast.expr, iter: ast.expr, body: Sequence[ast.stmt], orElse: Sequence[ast.stmt] | None=None, **keywordArguments: Unpack[ast_attributes_type_comment]) -> ast.AsyncFor:
-        """Make an `ast.AsyncFor` (***Async***hronous For loop) object for an `async for` loop.
+        """Make an `ast.AsyncFor` (***Async***hronous For loop) for an `async for` loop.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.AsyncFor` object represents an `async for` loop that iterates over an asynchronous iterable. The loop
-        body executes once per item yielded by the `iter` (***iter***able) expression. The optional `orElse` (or Else
-        execute this) body executes when the iterator is exhausted without a `break` statement.
+        An `ast.AsyncFor` (***Async***hronous For loop) consumes an asynchronous iterable. The
+        optional `orElse` (or Else execute this) clause runs when the asynchronous iterator is
+        exhausted.
 
         Parameters
         ----------
         target : ast.expr
-            Loop variable expression that receives each yielded item.
+            Assignment target in `Make.Store()` context that receives each item (`ast.expr`,
+            ***expr***ession).
         iter : ast.expr
-            (***iter***able) Asynchronous iterable expression being consumed by the loop.
+            (***iter***able) Expression that supplies the asynchronous iterable.
         body : Sequence[ast.stmt]
-            Sequence of statements executed once per item from the async iterable.
-        orElse : Sequence[ast.stmt] | None = None
-            (or Else execute this) Optional statements executed when the async iterator is exhausted without a `break`
-            statement. This parameter corresponds to `ast.AsyncFor.orelse`.
+            Statements executed once per item (`ast.stmt`, ***st***ate***m***en***t***).
+        orElse : Sequence[ast.stmt] = []
+            (or Else execute this) Statements executed on exhaustion. `break` skips them. This is
+            `ast.AsyncFor.orelse` (`AsyncFor` ***Async***hronous For loop, `orelse` or else execute
+            this).
+        type_comment : str | None = None
+            (a `type` annotation in a comment) Type annotation text for the loop target, from a `#
+            type: ...` comment.
+        **keywordArguments : ast_attributes_type_comment
+            Optional source positions and `type_comment`. See `Make` for source positions.
 
         Returns
         -------
         asyncForLoop : ast.AsyncFor
-            An `ast.AsyncFor` (***Async***hronous For loop) object representing an asynchronous `for` loop.
+            An `ast.AsyncFor` (***Async***hronous For loop) object representing an asynchronous `for`
+            loop.
 
         Async Context
         -------------
-        `ast.AsyncFor` nodes are valid only inside an `ast.AsyncFunctionDef` body. Placing an `ast.AsyncFor` node inside a synchronous function body produces a
-        `SyntaxError` at compile time.
+        Use `async for` inside an `async def` body. To compile it at the top level, pass
+        `ast.PyCF_ALLOW_TOP_LEVEL_AWAIT` to `compile()`.
         """
         return ast.AsyncFor(target=target, iter=iter, body=list(body), orelse=list(orElse) if orElse else [], **keywordArguments)
 
     @staticmethod
     def AsyncFunctionDef(name: str, argumentSpecification: ast.arguments | None=None, body: Sequence[ast.stmt] | None=None, decorator_list: Sequence[ast.expr] | None=None, returns: ast.expr | None=None, type_params: Sequence[ast.type_param] | None=None, **keywordArguments: Unpack[ast_attributes_type_comment]) -> ast.AsyncFunctionDef:
-        """Make an `ast.AsyncFunctionDef` (***Async***hronous Function ***Def***inition) object for an `async def` function declaration.
+        """Make an `ast.AsyncFunctionDef` (***Async***hronous Function ***Def***inition) for `async def`.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.AsyncFunctionDef` object represents an `async def` function definition. The function body may contain
-        `await` expressions, `async for` loops, and `async with` statements. The `type_params` (type
-        ***param***eter***s***) parameter supports generic `async def` functions introduced in Python 3.12.
+        An `ast.AsyncFunctionDef` (***Async***hronous Function ***Def***inition) represents a
+        coroutine function or, when its body contains `yield`, an asynchronous generator function.
 
         Parameters
         ----------
         name : str
             Function name as a string identifier.
-        argumentSpecification : ast.arguments | None = None
-            Complete parameter specification for the function. Defaults to an empty `ast.arguments` object when `None`.
-        body : Sequence[ast.stmt] | None = None
-            Sequence of statements forming the function body.
-        decorator_list : Sequence[ast.expr] | None = None
-            Sequence of decorator expressions applied to the function, in declaration order.
+        argumentSpecification : ast.arguments = Make.arguments()
+            Complete parameter specification from `Make.arguments`. Omit it for a function with no
+            parameters. This is `ast.AsyncFunctionDef.args` (`AsyncFunctionDef` ***Async***hronous
+            Function ***Def***inition, `args` ***arg***ument***s***).
+        body : Sequence[ast.stmt] = []
+            Statements in the function body. Supply `Make.Pass()` for a body with no other statements
+            (`ast.stmt`, ***st***ate***m***en***t***).
+        decorator_list : Sequence[ast.expr] = []
+            Decorator expressions in source order. Python applies them from the last decorator to the
+            first. (`ast.expr`, ***expr***ession)
         returns : ast.expr | None = None
-            (this returns) Optional return type annotation expression.
-        type_params : Sequence[ast.type_param] | None = None
-            (type ***param***eter***s***) Optional sequence of type parameters for generic `async def` functions.
-            Requires Python 3.12 or later.
+            (this returns) Return annotation following `->`.
+        type_params : Sequence[ast.type_param] = []
+            (type ***param***eter***s***) Type parameters declared in brackets after the function name
+            (`ast.type_param`, type ***param***eter).
+        type_comment : str | None = None
+            (a `type` annotation in a comment) Function signature text from a `# type: ...` comment,
+            such as `'(int) -> str'`.
+        **keywordArguments : ast_attributes_type_comment
+            Optional source positions and `type_comment`. See `Make` for source positions.
 
         Returns
         -------
         asyncFunction : ast.AsyncFunctionDef
-            An `ast.AsyncFunctionDef` (***Async***hronous Function ***Def***inition) object representing an asynchronous
-            function definition.
-
-        Field Mapping
-        -------------
-        `Make.AsyncFunctionDef` renames `ast.AsyncFunctionDef.args` to `argumentSpecification` to avoid shadowing the Python built-in identifier `args`.
-        Internally, `Make.AsyncFunctionDef` passes `argumentSpecification` as the `args` keyword argument to `ast.AsyncFunctionDef`.
+            An `ast.AsyncFunctionDef` (***Async***hronous Function ***Def***inition) object
+            representing an asynchronous function definition.
         """
         return ast.AsyncFunctionDef(name=name, args=argumentSpecification or ast.arguments(), body=list(body) if body else [], decorator_list=list(decorator_list) if decorator_list else [], returns=returns, type_params=list(type_params) if type_params else [], **keywordArguments)
 
     @staticmethod
     def AsyncWith(items: list[ast.withitem], body: Sequence[ast.stmt], **keywordArguments: Unpack[ast_attributes_type_comment]) -> ast.AsyncWith:
-        """Make an `ast.AsyncWith` (***Async***hronous With statement) object for an `async with` statement.
+        """Make an `ast.AsyncWith` (***Async***hronous With statement) for an `async with` statement.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.AsyncWith` object represents an `async with` statement that manages one or more asynchronous context
-        managers. Each element of `items` specifies one context manager expression and an optional variable binding for
-        the value returned by the context manager's `__aenter__` coroutine.
+        An `ast.AsyncWith` (***Async***hronous With statement) manages one or more asynchronous
+        context managers. Each `ast.withitem` (with item) provides a manager expression and an
+        optional `as` target for the value returned by `__aenter__`.
 
         Parameters
         ----------
         items : list[ast.withitem]
-            Sequence of `ast.withitem` objects, each specifying one async context manager expression and an optional
-            `as` variable binding.
+            Context manager specifications in entry order (`ast.withitem`, with item).
         body : Sequence[ast.stmt]
-            Sequence of statements executed within the async context manager scope.
+            Statements executed after entering all the context managers (`ast.stmt`,
+            ***st***ate***m***en***t***).
+        type_comment : str | None = None
+            (a `type` annotation in a comment) Type annotation text for the `as` targets, from a `#
+            type: ...` comment.
+        **keywordArguments : ast_attributes_type_comment
+            Optional source positions and `type_comment`. See `Make` for source positions.
 
         Returns
         -------
         asyncWithStatement : ast.AsyncWith
-            An `ast.AsyncWith` (***Async***hronous With statement) object representing an asynchronous context manager
-            statement.
+            An `ast.AsyncWith` (***Async***hronous With statement) object representing an asynchronous
+            context manager statement.
 
         Async Context
         -------------
-        `ast.AsyncWith` nodes are valid only inside an `ast.AsyncFunctionDef` body. Placing an `ast.AsyncWith` node inside a synchronous function body produces
-        a `SyntaxError` at compile time.
+        Use `async with` inside an `async def` body. To compile it at the top level, pass
+        `ast.PyCF_ALLOW_TOP_LEVEL_AWAIT` to `compile()`.
         """
         return ast.AsyncWith(items=items, body=list(body), **keywordArguments)
 
@@ -520,21 +536,24 @@ class Make:
     def Attribute(value: ast.expr, attribute: str, context: ast.expr_context | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Attribute:
         """Make an `ast.Attribute` object for dot notation attribute access.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Attribute` object represents attribute access using dot notation such as `object.method` or
-        `module.Class`.
+        The `ast.Attribute` object represents attribute access using dot notation such as
+        `object.method` or `module.Class`.
 
         Parameters
         ----------
         value : ast.expr
-            Base expression providing the object on which attribute access begins.
+            Base expression providing the object on which attribute access begins (`ast.expr`,
+            ***expr***ession).
         attribute : str
-            Attribute name string to access.
-        context : ast.expr_context | None = None
-            (***c***on***t***e***x***t) Expression context for the attribute access. Use `ast.Load()` to read,
-            `ast.Store()` to assign, or `ast.Del()` (***Del***ete) to delete. Defaults to `ast.Load()`. This parameter
-            corresponds to `ast.Attribute.ctx`.
+            Name following `.`. This is `ast.Attribute.attr` (***attr***ibute).
+        context : ast.expr_context = Make.Load()
+            Use `Make.Load()` to read, `Make.Store()` to assign, or `Make.Del()` (***Del***ete) to
+            delete. This is `ast.Attribute.ctx` (***c***on***t***e***x***t) (`ast.expr_context`,
+            ***expr***ession ***context***).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
@@ -545,276 +564,285 @@ class Make:
 
     @staticmethod
     def AugAssign(target: ast.Name | ast.Attribute | ast.Subscript, op: ast.operator, value: ast.expr, **keywordArguments: Unpack[ast_attributes]) -> ast.AugAssign:
-        """Make an `ast.AugAssign` (***Aug***mented ***Assign***ment) object for a compound assignment operation.
+        """Make an `ast.AugAssign` (***Aug***mented ***Assign***ment) for augmented assignment.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.AugAssign` object represents compound assignment operators such as `+=`, `-=`, `*=`, and `/=`. The `op`
-        (***op***erator) specifies which binary operation is applied to the current `target` value combined with the
-        `value` expression before the result is stored back into `target`.
+        An `ast.AugAssign` (***Aug***mented ***Assign***ment) represents an operation such as `total
+        += item`. Python evaluates the target once and assigns the operation's result back to it.
+        Augmented assignment delimiters include `+=`, `-=`, `*=`, `@=`, `/=`, `//=`, `%=`, `**=`,
+        `|=`, `&=`, `^=`, `<<=`, `>>=`.
 
         Parameters
         ----------
         target : ast.Name | ast.Attribute | ast.Subscript
-            Assignment target being modified. Must be an `ast.Name`, `ast.Attribute`, or `ast.Subscript`.
+            One `ast.Name`, `ast.Attribute`, or `ast.Subscript` in `Make.Store()` context.
         op : ast.operator
-            (***op***erator) Binary operator instance defining the augmentation, such as `ast.Add()` for `+=` or
-            `ast.Mult()` (***Mult***iplication) for `*=`.
+            (***op***erator) Binary operator for the augmented assignment. For example, `Make.Add()`
+            represents the operation in `+=`.
         value : ast.expr
-            Expression whose result is combined with the current target value using `op` before the result is assigned
-            back to `target`.
+            Right-hand operand of the operation (`ast.expr`, ***expr***ession).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         augmentedAssignment : ast.AugAssign
-            An `ast.AugAssign` (***Aug***mented ***Assign***ment) object representing a compound assignment statement.
-
-        AST Grammar
-        -----------
-        The Python grammar restricts `ast.AugAssign.target` to three expression node types: `ast.Name`, `ast.Attribute`, and `ast.Subscript`. Any other
-        expression node type in the `target` position is a grammar violation and raises `SyntaxError` at compile time.
+            An `ast.AugAssign` (***Aug***mented ***Assign***ment) object representing a compound
+            assignment statement.
         """
         return ast.AugAssign(target=target, op=op, value=value, **keywordArguments)
 
     @staticmethod
     def Await(value: ast.expr, **keywordArguments: Unpack[ast_attributes]) -> ast.Await:
-        """Make an `ast.Await` (***Await*** the asynchronous operation) object for an `await` expression.
+        """Make an `ast.Await` (***Await*** the asynchronous operation) expression.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Await` object represents an `await` expression that suspends the enclosing coroutine until the awaited
-        object completes. The `value` must be an awaitable object such as a coroutine call, `asyncio.Task`, or
-        `asyncio.Future`.
+        An `ast.Await` (***Await*** the asynchronous operation) can suspend a coroutine until an
+        awaitable produces a result.
 
         Parameters
         ----------
         value : ast.expr
-            The awaitable expression to suspend on, such as a coroutine call or `asyncio.Future`.
+            Expression that evaluates to an awaitable, such as a call to an `async def` function
+            (`ast.expr`, ***expr***ession).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         awaitExpression : ast.Await
-            An `ast.Await` (***Await*** the asynchronous operation) object representing a suspension point in a
-            coroutine.
+            An `ast.Await` (***Await*** the asynchronous operation) object representing a suspension
+            point in a coroutine.
 
         Async Context
         -------------
-        `ast.Await` nodes are valid only inside an `ast.AsyncFunctionDef` body. Placing an `ast.Await` node in a synchronous function body produces a
-        `SyntaxError` at compile time.
+        Use `await` (***await*** the asynchronous operation) inside an `async def` body. To compile it
+        at the top level, pass `ast.PyCF_ALLOW_TOP_LEVEL_AWAIT` to `compile()`.
         """
         return ast.Await(value=value, **keywordArguments)
 
     @staticmethod
     def BinOp(left: ast.expr, op: ast.operator, right: ast.expr, **keywordArguments: Unpack[ast_attributes]) -> ast.BinOp:
-        """Make an `ast.BinOp` (***Bin***ary ***Op***eration) object for a binary operation between two expressions.
+        """Make an `ast.BinOp` (***Bin***ary ***Op***eration) for a binary operation.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.BinOp` object represents a two-operand operation determined by `op` (***op***erator). The `left` (left-
-        hand-side operand) and `right` (right-hand-side operand) parameters provide the two operands.
+        An `ast.BinOp` (***Bin***ary ***Op***eration) represents one operation on two operands, such
+        as `a + b` or `a | b`. Use an operator class's `join()` to build a left-associated series of
+        operations.
 
         Parameters
         ----------
         left : ast.expr
-            (left-hand-side operand) Left operand expression.
+            (left-hand-side operand) Left operand (`ast.expr`, ***expr***ession).
         op : ast.operator
-            (***op***erator) Binary operator instance, such as `ast.Add()`, `ast.Sub()` (***Sub***traction),
-            `ast.Mult()` (***Mult***iplication), `ast.Div()` (***Div***ision), or any other `ast.operator` subclass.
+            (***op***erator) Binary operator, such as `Make.Add()`, `Make.Sub()` (***Sub***traction),
+            or `Make.MatMult()` (***Mat***rix ***Mult***iplication).
         right : ast.expr
-            (right-hand-side operand) Right operand expression.
+            (right-hand-side operand) Right operand.
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         binaryOperation : ast.BinOp
-            An `ast.BinOp` (***Bin***ary ***Op***eration) object representing a two-operand arithmetic, bitwise, or
-            other binary operation.
+            An `ast.BinOp` (***Bin***ary ***Op***eration) object representing a two-operand
+            arithmetic, bitwise, or other binary operation.
 
-        Operator Subclasses
-        -------------------
-        The complete set of `ast.operator` subclasses usable as `op`: `ast.Add`, `ast.Sub`, `ast.Mult`, `ast.Div`, `ast.FloorDiv`, `ast.Mod`, `ast.Pow`,
-        `ast.LShift`, `ast.RShift`, `ast.BitOr`, `ast.BitXor`, `ast.BitAnd`, `ast.MatMult`. Each subclass in `Make` also provides a `join()` classmethod that
-        chains an iterable of expressions into a left-associative tree of `ast.BinOp` nodes.
+        See Also
+        --------
+        `Make.Add.join`
+            Build a series of additions.
         """
         return ast.BinOp(left=left, op=op, right=right, **keywordArguments)
 
     class BitAnd(ast.BitAnd):
-        """Identical to the `ast` (abstract syntax tree) class but with a method, `join()`, that 'joins' expressions using the `ast.BinOp` (***Bin***ary ***Op***eration) class."""
+        """Make an `ast.BitAnd` (***Bit***wise And) operator for `&`.
+
+        This subclass of `ast.BitAnd` (***Bit***wise And) adds `join()`, which combines expressions
+        into nested `ast.BinOp` (***Bin***ary ***Op***eration) operations.
+        """
 
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
-            """Make a single `ast.expr` (***expr***ession) from a `Sequence` of `ast.expr` by creating nested `ast.BinOp` (***Bin***ary ***Op***eration) `object` that are logically 'joined' by the `ast.operator` subclass.
+            """Join expressions in left-associated `ast.BinOp` (***Bin***ary ***Op***eration) operations.
 
-            Like str.join() (***str***ing) but for AST (Abstract Syntax Tree) expressions.
+            Like `str.join()` (***str***ing) but for `AST` (Abstract Syntax Tree) expressions. Joining
+            `a`, `b`, and `c` with `Make.Sub.join()` represents `(a - b) - c`.
 
             Parameters
             ----------
             expressions : Iterable[ast.expr]
-                Collection of expressions to join.
+                Operands in evaluation order (`ast.expr`, ***expr***ession).
             **keywordArguments : ast_attributes
-
+                Source positions for every constructed expression. A single input keeps its existing
+                positions.
 
             Returns
             -------
             joinedExpression : ast.expr
-                Single expression representing the joined expressions.
+                Nested `ast.BinOp` (***Bin***ary ***Op***eration) operations for two or more operands,
+                the original operand for a single input, or an empty string literal for an empty
+                input.
 
             Examples
             --------
-            ```python
-            # Instead of manually constructing nested ast.BinOp structures:
-            ast.BinOp(
-                left=ast.BinOp(
-            left=ast.Name('Crosby')
-                    , op=ast.BitOr()
-                    , right=ast.Name('Stills'))
-                , op=ast.BitOr()
-            , right=ast.Name('Nash')
-            )
+                ```python
+                import ast
+                from astToolkit import Make
 
-            # Simply use:
-            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'),
-            ast.Name('Nash')])
-
-            # Both produce the same AST structure but the join() method eliminates the manual nesting.
-            ```
+                # Both expressions represent (Crosby | Stills) | Nash.
+                ast.BinOp(
+                    left=ast.BinOp(left=Make.Name('Crosby'), op=ast.BitOr(), right=Make.Name('Stills')),
+                    op=ast.BitOr(),
+                    right=Make.Name('Nash'),
+                )
+                Make.BitOr.join([Make.Name('Crosby'), Make.Name('Stills'), Make.Name('Nash')])
+                ```
             """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     class BitOr(ast.BitOr):
-        """Identical to the `ast` (abstract syntax tree) class but with a method, `join()`, that 'joins' expressions using the `ast.BinOp` (***Bin***ary ***Op***eration) class."""
+        """Make an `ast.BitOr` (***Bit***wise Or) operator for `|`.
+
+        This subclass of `ast.BitOr` (***Bit***wise Or) adds `join()`, which combines expressions into
+        nested `ast.BinOp` (***Bin***ary ***Op***eration) operations.
+        """
 
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
-            """Make a single `ast.expr` (***expr***ession) from a `Sequence` of `ast.expr` by creating nested `ast.BinOp` (***Bin***ary ***Op***eration) `object` that are logically 'joined' by the `ast.operator` subclass.
+            """Join expressions in left-associated `ast.BinOp` (***Bin***ary ***Op***eration) operations.
 
-            Like str.join() (***str***ing) but for AST (Abstract Syntax Tree) expressions.
+            Like `str.join()` (***str***ing) but for `AST` (Abstract Syntax Tree) expressions. Joining
+            `a`, `b`, and `c` with `Make.Sub.join()` represents `(a - b) - c`.
 
             Parameters
             ----------
             expressions : Iterable[ast.expr]
-                Collection of expressions to join.
+                Operands in evaluation order (`ast.expr`, ***expr***ession).
             **keywordArguments : ast_attributes
-
+                Source positions for every constructed expression. A single input keeps its existing
+                positions.
 
             Returns
             -------
             joinedExpression : ast.expr
-                Single expression representing the joined expressions.
+                Nested `ast.BinOp` (***Bin***ary ***Op***eration) operations for two or more operands,
+                the original operand for a single input, or an empty string literal for an empty
+                input.
 
             Examples
             --------
-            ```python
-            # Instead of manually constructing nested ast.BinOp structures:
-            ast.BinOp(
-                left=ast.BinOp(
-            left=ast.Name('Crosby')
-                    , op=ast.BitOr()
-                    , right=ast.Name('Stills'))
-                , op=ast.BitOr()
-            , right=ast.Name('Nash')
-            )
+                ```python
+                import ast
+                from astToolkit import Make
 
-            # Simply use:
-            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'),
-            ast.Name('Nash')])
-
-            # Both produce the same AST structure but the join() method eliminates the manual nesting.
-            ```
+                # Both expressions represent (Crosby | Stills) | Nash.
+                ast.BinOp(
+                    left=ast.BinOp(left=Make.Name('Crosby'), op=ast.BitOr(), right=Make.Name('Stills')),
+                    op=ast.BitOr(),
+                    right=Make.Name('Nash'),
+                )
+                Make.BitOr.join([Make.Name('Crosby'), Make.Name('Stills'), Make.Name('Nash')])
+                ```
             """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     class BitXor(ast.BitXor):
-        """Identical to the `ast` (abstract syntax tree) class but with a method, `join()`, that 'joins' expressions using the `ast.BinOp` (***Bin***ary ***Op***eration) class."""
+        """Make an `ast.BitXor` (***Bit***wise e***X***clusive Or) operator for `^`.
+
+        This subclass of `ast.BitXor` (***Bit***wise e***X***clusive Or) adds `join()`, which combines
+        expressions into nested `ast.BinOp` (***Bin***ary ***Op***eration) operations.
+        """
 
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
-            """Make a single `ast.expr` (***expr***ession) from a `Sequence` of `ast.expr` by creating nested `ast.BinOp` (***Bin***ary ***Op***eration) `object` that are logically 'joined' by the `ast.operator` subclass.
+            """Join expressions in left-associated `ast.BinOp` (***Bin***ary ***Op***eration) operations.
 
-            Like str.join() (***str***ing) but for AST (Abstract Syntax Tree) expressions.
+            Like `str.join()` (***str***ing) but for `AST` (Abstract Syntax Tree) expressions. Joining
+            `a`, `b`, and `c` with `Make.Sub.join()` represents `(a - b) - c`.
 
             Parameters
             ----------
             expressions : Iterable[ast.expr]
-                Collection of expressions to join.
+                Operands in evaluation order (`ast.expr`, ***expr***ession).
             **keywordArguments : ast_attributes
-
+                Source positions for every constructed expression. A single input keeps its existing
+                positions.
 
             Returns
             -------
             joinedExpression : ast.expr
-                Single expression representing the joined expressions.
+                Nested `ast.BinOp` (***Bin***ary ***Op***eration) operations for two or more operands,
+                the original operand for a single input, or an empty string literal for an empty
+                input.
 
             Examples
             --------
-            ```python
-            # Instead of manually constructing nested ast.BinOp structures:
-            ast.BinOp(
-                left=ast.BinOp(
-            left=ast.Name('Crosby')
-                    , op=ast.BitOr()
-                    , right=ast.Name('Stills'))
-                , op=ast.BitOr()
-            , right=ast.Name('Nash')
-            )
+                ```python
+                import ast
+                from astToolkit import Make
 
-            # Simply use:
-            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'),
-            ast.Name('Nash')])
-
-            # Both produce the same AST structure but the join() method eliminates the manual nesting.
-            ```
+                # Both expressions represent (Crosby | Stills) | Nash.
+                ast.BinOp(
+                    left=ast.BinOp(left=Make.Name('Crosby'), op=ast.BitOr(), right=Make.Name('Stills')),
+                    op=ast.BitOr(),
+                    right=Make.Name('Nash'),
+                )
+                Make.BitOr.join([Make.Name('Crosby'), Make.Name('Stills'), Make.Name('Nash')])
+                ```
             """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
     def BoolOp(op: ast.boolop, values: Sequence[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.BoolOp:
-        """Make an `ast.BoolOp` (***Bool***ean ***Op***eration) object for a logical operation over multiple operands.
+        """Make an `ast.BoolOp` (***Bool***ean ***Op***eration) for an `and` or `or` expression.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.BoolOp` object represents `and` or `or` applied to two or more operands collected in `values`. A single
-        `ast.BoolOp` with `op` = `ast.And()` and three `values` is equivalent to `a and b and c`; the Python grammar
-        flattens chained boolean operators into one node rather than nesting multiple `ast.BoolOp` nodes.
+        An `ast.BoolOp` (***Bool***ean ***Op***eration) stores all operands in an unparenthesized
+        chain such as `a and b and c`. Python evaluates them from left to right until the result is
+        determined and returns the last operand evaluated.
 
         Parameters
         ----------
         op : ast.boolop
-            (***bool***ean ***op***erator) Boolean operator instance: either `ast.And()` or `ast.Or()`.
+            (***op***erator) Operator for the entire chain. Use `Make.And()` or `Make.Or()`
+            (`ast.boolop`, ***bool***ean ***op***erator).
         values : Sequence[ast.expr]
-            Sequence of two or more operand expressions to combine with `op`.
+            Two or more operand expressions in evaluation order (`ast.expr`, ***expr***ession).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         booleanOperation : ast.BoolOp
-            An `ast.BoolOp` (***Bool***ean ***Op***eration) object representing a logical operation over multiple
-            operands.
+            The expression combining all operands in order.
 
-        AST Structure
-        -------------
-        The Python grammar represents `a and b and c` as `ast.BoolOp(op=ast.And(), values=[a, b, c])`, not as nested `ast.BoolOp` nodes. `values` must contain
-        at least two elements; a single-element `values` list is syntactically valid in the AST but does not correspond to any source-level boolean expression.
+        See Also
+        --------
+        `Make.And.join`
+            Join expressions with `and`.
+        `Make.Or.join`
+            Join expressions with `or`.
         """
         return ast.BoolOp(op=op, values=list(values), **keywordArguments)
 
     @staticmethod
     def boolop() -> ast.boolop:
-        """Make a base `ast.boolop` (***bool***ean ***op***erator) object.
+        """Make an instance of the base class `ast.boolop` (***bool***ean ***op***erator).
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.boolop` abstract class is the parent of `ast.And` and `ast.Or`. Use `Make.And()`, `Make.Or()`, or
-        `Make.BoolOp()` for concrete boolean operations. `Make.boolop` creates the abstract base instance, which is
-        useful only in antecedent-action patterns with visitor classes.
+        Use `Make.And()` or `Make.Or()` to supply a concrete operator to `Make.BoolOp` (***Bool***ean
+        ***Op***eration).
 
         Returns
         -------
         baseBooleanOperator : ast.boolop
             A base `ast.boolop` (***bool***ean ***op***erator) object.
-
-        Visitor Pattern
-        ---------------
-        `Make.boolop()` is used in antecedent-action patterns where a visitor method must match any boolean operator node without specifying a concrete
-        subclass. Concrete subclasses `ast.And` and `ast.Or` carry no fields; they are distinguished only by their type.
         """
         return ast.boolop()
 
@@ -822,136 +850,115 @@ class Make:
     def Break() -> ast.Break:
         """Make an `ast.Break` object for a `break` statement.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Break` object represents a `break` statement that immediately terminates the nearest enclosing `for` or
-        `while` loop. When a `break` is encountered, the optional `else` clause of the enclosing loop does not execute.
+        A `break` statement exits the nearest enclosing loop and skips its `else` clause.
 
         Returns
         -------
         breakStatement : ast.Break
             An `ast.Break` object representing a loop termination statement.
-
-        Loop Interaction
-        ----------------
-        `ast.Break` suppresses the `orelse` body of the enclosing `ast.For`, `ast.AsyncFor`, or `ast.While` node. A `break` placed outside any loop body raises
-        `SyntaxError` at compile time.
         """
         return ast.Break()
 
     @staticmethod
     def Call(callee: ast.expr, listParameters: Sequence[ast.expr] | None=None, list_keyword: list[ast.keyword] | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Call:
-        """Make an `ast.Call` object for a function or method invocation.
+        """Make an `ast.Call` for a call expression.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Call` object represents a call expression such as `func(a, b, key=val)`. `callee` holds the callable
-        expression; `listParameters` holds positional arguments; `list_keyword` ({diminutive2etymology['list_keyword']})
-        holds keyword arguments as a list of `ast.keyword` objects, including `**unpacked` arguments where
-        `ast.keyword.arg` is `None`.
+        An `ast.Call` represents a call such as `callback(a, *items, key=val, **options)`.
 
         Parameters
         ----------
         callee : ast.expr
-            Callable expression, such as an `ast.Name`, `ast.Attribute`, or any other expression that evaluates to a
-            callable.
-        listParameters : Sequence[ast.expr] | None = None
-            Sequence of positional argument expressions, including `*unpacked` arguments represented as `ast.Starred`
-            nodes.
-        list_keyword : list[ast.keyword] | None = None
-            (list of ast.***keyword***) Keyword argument objects. Pass `ast.keyword(None, expr)` to represent `**expr`
-            unpacking.
+            Expression that evaluates to the callable. This is `ast.Call.func` (***func***tion)
+            (`ast.expr`, ***expr***ession).
+        listParameters : Sequence[ast.expr] = []
+            Positional argument expressions in call order. Use `Make.Starred` for each `*iterable`
+            argument. This is `ast.Call.args` (***arg***ument***s***).
+        list_keyword : list[ast.keyword] = []
+            (list of ast.***keyword***) Keyword arguments in call order. Use `Make.keyword(None,
+            value)` for `**mapping`. This is `ast.Call.keywords`.
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         functionCall : ast.Call
             An `ast.Call` object representing a call expression with positional and keyword arguments.
-
-        Field Mapping
-        -------------
-        `Make.Call` renames `ast.Call.func` to `callee` and `ast.Call.args` to `listParameters` to avoid shadowing the Python `func` and `args` identifiers.
-        Internally these are passed as `func` and `args` keyword arguments to `ast.Call`.
         """
         return ast.Call(func=callee, args=list(listParameters) if listParameters else [], keywords=list_keyword or [], **keywordArguments)
 
     @staticmethod
     def ClassDef(name: str, bases: Sequence[ast.expr] | None=None, list_keyword: list[ast.keyword] | None=None, body: Sequence[ast.stmt] | None=None, decorator_list: Sequence[ast.expr] | None=None, type_params: Sequence[ast.type_param] | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.ClassDef:
-        """Make an `ast.ClassDef` (***Class*** ***Def***inition) object for a `class` declaration.
+        """Make an `ast.ClassDef` (***Class*** ***Def***inition) for a class statement.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.ClassDef` object represents a `class` statement including base classes, keyword arguments (such as
-        `metaclass=`), decorators, body statements, and optional type parameters. The `type_params` (type
-        ***param***eter***s***) parameter supports generic classes introduced in Python 3.12.
+        An `ast.ClassDef` (***Class*** ***Def***inition) can include base classes, class keywords,
+        decorators, and a list of type parameters for a generic class.
 
         Parameters
         ----------
         name : str
             Class name as a string identifier.
-        bases : Sequence[ast.expr] | None = None
-            () Sequence of base class expressions for inheritance. An empty sequence produces a class with no explicit
-            bases.
-        list_keyword : list[ast.keyword] | None = None
-            (list of ast.***keyword***) Keyword arguments to the class definition such as `metaclass=ABCMeta`. This
-            parameter corresponds to `ast.ClassDef.keywords`.
-        body : Sequence[ast.stmt] | None = None
-            Sequence of statements forming the class body.
-        decorator_list : Sequence[ast.expr] | None = None
-            Sequence of decorator expressions applied to the class, in declaration order.
-        type_params : Sequence[ast.type_param] | None = None
-            (type ***param***eter***s***) Sequence of type parameters for generic classes. Requires Python 3.12 or
-            later.
+        bases : Sequence[ast.expr] = []
+            Sequence of base class expressions for inheritance. An empty sequence produces a class
+            with no explicit bases (`ast.expr`, ***expr***ession).
+        list_keyword : list[ast.keyword] = []
+            (list of ast.***keyword***) Class keywords such as `metaclass=ABCMeta`. This is
+            `ast.ClassDef.keywords` (***Class*** ***Def***inition).
+        body : Sequence[ast.stmt] = []
+            Statements in the class body. Supply `Make.Pass()` for a class body with no other
+            statements (`ast.stmt`, ***st***ate***m***en***t***).
+        decorator_list : Sequence[ast.expr] = []
+            Decorator expressions in source order. Python applies them from the last decorator to the
+            first.
+        type_params : Sequence[ast.type_param] = []
+            (type ***param***eter***s***) Type parameters declared in brackets after the class name.
+            (`ast.type_param`, type ***param***eter)
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         classDefinition : ast.ClassDef
-            An `ast.ClassDef` (***Class*** ***Def***inition) object representing a complete class declaration.
-
-        Field Mapping
-        -------------
-        `Make.ClassDef` renames `ast.ClassDef.keywords` to `list_keyword` for consistency with other `Make` methods that accept keyword argument lists.
-        Internally `list_keyword` is passed as the `keywords` field of `ast.ClassDef`.
+            An `ast.ClassDef` (***Class*** ***Def***inition) object representing a complete class
+            declaration.
 
         Examples
         --------
-        ```python
-        # Creates AST equivalent to: class Vehicle: pass
-        simpleClass = Make.ClassDef('Vehicle', body=[Make.Pass()])
+            ```python
+            from astToolkit import Make
 
-        # Creates
-        AST equivalent to: class Bicycle(Vehicle, metaclass=ABCMeta): pass
-        inheritedClass = Make.ClassDef(
-            'Bicycle',
-        bases=[Make.Name('Vehicle')],
-            list_keyword=[Make.keyword('metaclass', Make.Name('ABCMeta'))],
-            body=[Make.Pass()]
-        )
-        ```
+            # Creates AST equivalent to: class Vehicle: pass
+            simpleClass = Make.ClassDef('Vehicle', body=[Make.Pass()])
+
+            # Creates AST equivalent to: class Bicycle(Vehicle, metaclass=ABCMeta): pass
+            inheritedClass = Make.ClassDef(
+                'Bicycle',
+                bases=[Make.Name('Vehicle')],
+                list_keyword=[Make.keyword('metaclass', Make.Name('ABCMeta'))],
+                body=[Make.Pass()]
+            )
+            ```
         """
         return ast.ClassDef(name=name, bases=list(bases) if bases else [], keywords=list_keyword or [], body=list(body) if body else [], decorator_list=list(decorator_list) if decorator_list else [], type_params=list(type_params) if type_params else [], **keywordArguments)
 
     @staticmethod
     def cmpop() -> ast.cmpop:
-        """Make a base `ast.cmpop` (***c***o***mp***arison ***op***erator) object.
+        """Make an instance of the base class `ast.cmpop` (***c***o***mp***arison ***op***erator).
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.cmpop` abstract class is the parent of all comparison operator classes used in `ast.Compare`.
-        `Make.cmpop` creates the abstract base instance, which is useful only in antecedent-action patterns with visitor
-        classes. Use a concrete subclass for actual comparison operations: `ast.Eq` (is ***Eq***ual to), `ast.NotEq` (is
-        Not ***Eq***ual to), `ast.Lt` (is Less than), `ast.LtE` (is Less than or Equal to), `ast.Gt` (is Greater than),
-        `ast.GtE` (is Greater than or Equal to), `ast.Is`, `ast.IsNot`, `ast.In`, `ast.NotIn` (is Not ***In***cluded in
-        or does Not have membership In).
+        Use a concrete comparison operator such as `Make.Eq()` (is ***Eq***ual to) or `Make.Lt()` (is
+        ***L***ess ***t***han) in `Make.Compare`.
 
         Returns
         -------
         comparisonOperator : ast.cmpop
             A base `ast.cmpop` (***c***o***mp***arison ***op***erator) object.
-
-        Visitor Pattern
-        ---------------
-        `Make.cmpop()` is used in antecedent-action patterns where a visitor method must match any comparison operator node without specifying a concrete
-        subclass. All `ast.cmpop` concrete subclasses carry no fields; they are distinguished only by their type.
         """
         return ast.cmpop()
 
@@ -959,92 +966,77 @@ class Make:
     def Compare(left: ast.expr, ops: Sequence[ast.cmpop], comparators: Sequence[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.Compare:
         """Make an `ast.Compare` object for a comparison expression, including chained comparisons.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Compare` object represents a comparison expression such as `x == 0` or a chained comparison such as `0
-        <= x < 100`. The `left` (left-hand-side operand) expression is compared to each element of `comparators` using
-        the corresponding operator from `ops` (***op***erator***s***). `ops` and `comparators` must have the same
-        length.
+        An `ast.Compare` represents a comparison such as `x == 0` or a chain such as `0 <= x < 100`. A
+        chain compares adjacent operands from left to right, evaluates each intermediate operand once,
+        and stops at the first false comparison.
 
         Parameters
         ----------
         left : ast.expr
-            (left-hand-side operand) Leftmost expression in the comparison.
+            (left-hand-side operand) Leftmost operand (`ast.expr`, ***expr***ession).
         ops : Sequence[ast.cmpop]
-            (***op***erator***s***) Sequence of `ast.cmpop` (***c***o***mp***arison ***op***erator) instances, one per
-            comparator. Valid operators: `ast.Eq` (is ***Eq***ual to), `ast.NotEq` (is Not ***Eq***ual to), `ast.Lt` (is
-            Less than), `ast.LtE` (is Less than or Equal to), `ast.Gt` (is Greater than), `ast.GtE` (is Greater than or
-            Equal to), `ast.Is`, `ast.IsNot`, `ast.In`, `ast.NotIn` (is Not ***In***cluded in or does Not have
-            membership In).
+            (***op***erator***s***) One or more comparison operators, with one operator per entry in
+            `comparators` (`ast.cmpop`, ***c***o***mp***arison ***op***erator).
         comparators : Sequence[ast.expr]
-            Sequence of right-hand expressions, one per operator. The N-th comparator is compared to the (N−1)-th
-            expression using `ops[N−1]`.
+            Operands following `left`, in source order. For `a < b <= c`, supply `[b, c]`.
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         comparison : ast.Compare
             An `ast.Compare` object representing a comparison or chained comparison expression.
 
-        Chained Comparison Structure
-        ----------------------------
-        Python represents `a < b <= c` as `ast.Compare(left=a, ops=[Lt(), LtE()], comparators=[b, c])`, not as nested `ast.BoolOp` or `ast.BinOp` nodes. The
-        semantics of a chained comparison are: each consecutive pair is evaluated from left to right and the results are combined with short-circuit `and`. The
-        `ops` and `comparators` sequences must have identical length; a mismatch is a grammar error.
-
         Examples
         --------
-        ```python
-        # Creates AST equivalent to: `temperature == 72`
-        temperatureCheck = Make.Compare(
-            left=Make.Name('temperature'),
-        ops=[Make.Eq()],
-            comparators=[Make.Constant(72)]
-        )
+            ```python
+            from astToolkit import Make
 
-        # Creates AST equivalent to: `0 <= inventory < 100`
-        inventoryRange = Make.Compare(
-            left=Make.Constant(0),
-            ops=[Make.LtE(), Make.Lt()],
-        comparators=[Make.Name('inventory'), Make.Constant(100)]
-        )
-        ```
+            # Creates AST equivalent to: `temperature == 72`
+            temperatureCheck = Make.Compare(
+                left=Make.Name('temperature'),
+                ops=[Make.Eq()],
+                comparators=[Make.Constant(72)]
+            )
+
+            # Creates AST equivalent to: `0 <= inventory < 100`
+            inventoryRange = Make.Compare(
+                left=Make.Constant(0),
+                ops=[Make.LtE(), Make.Lt()],
+                comparators=[Make.Name('inventory'), Make.Constant(100)]
+            )
+            ```
         """
         return ast.Compare(left=left, ops=list(ops), comparators=list(comparators), **keywordArguments)
 
     @staticmethod
     def comprehension(target: ast.expr, iter: ast.expr, ifs: Sequence[ast.expr], is_async: int=0) -> ast.comprehension:
-        """Make an `ast.comprehension` object for one `for` clause in a comprehension or generator expression.
+        """Make an `ast.comprehension` for one `for` clause and its filters.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.comprehension` object represents a single `for` clause within a list comprehension, set comprehension,
-        dictionary comprehension, or generator expression. The `target` receives each item from `iter` (***iter***able);
-        the optional `ifs` (if clauses) sequence filters items before the enclosing expression body is evaluated.
+        The `generators` list of a comprehension or generator expression holds these clauses. Write
+        them in source order, from the outermost to the innermost loop.
 
         Parameters
         ----------
         target : ast.expr
-            Variable expression that receives each item yielded by `iter`. May be a name, tuple, or other valid
-            assignment target.
+            Assignment target in `Make.Store()` context that receives each item (`ast.expr`,
+            ***expr***ession).
         iter : ast.expr
-            (***iter***able) Iterable expression whose items are bound to `target` on each step.
+            (***iter***able) Expression supplying the iterable or asynchronous iterable.
         ifs : Sequence[ast.expr]
-            (if clauses) Sequence of filter expressions. An item proceeds to the body only when every expression in
-            `ifs` evaluates to `True`. An empty sequence applies no filter.
+            (if clauses) Filter expressions following this `for` clause. All must be truthy for an
+            item to proceed. An empty sequence applies no filter.
         is_async : int = 0
-            (is ***async***hronous) Set to `1` to indicate an `async for` clause inside an `async def` body; `0` for a
-            synchronous clause.
+            (is ***async***hronous) Use `1` for `async for` or `0` for `for`.
 
         Returns
         -------
         comprehensionClause : ast.comprehension
             An `ast.comprehension` object representing one `for` clause with optional filters.
-
-        Multiple Clauses
-        ----------------
-        A comprehension with multiple `for` clauses uses a list of `ast.comprehension` objects in the `generators` field of the enclosing `ast.ListComp`,
-        `ast.SetComp`, `ast.DictComp`, or `ast.GeneratorExp`. The first `ast.comprehension` in `generators` is the outermost loop; subsequent objects are nested
-        inner loops, equivalent to `for … for …` written left to right in source.
         """
         return ast.comprehension(target=target, iter=iter, ifs=list(ifs), is_async=is_async)
 
@@ -1052,31 +1044,25 @@ class Make:
     def Constant(value: ast_ConstantValue, kind: str | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Constant:
         """Make an `ast.Constant` object for a literal value in Python source.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Constant` object is the unified representation for all Python literal constants: integers, floats,
-        complex numbers, strings, bytes, booleans, and `None`. `ast.Constant` replaced the deprecated node types
-        `ast.Num`, `ast.Str`, `ast.Bytes`, `ast.NameConstant`, and `ast.Ellipsis` starting in Python 3.8.
+        An `ast.Constant` stores a literal's Python value. Use `Make.UnaryOp` (***Un***ary
+        ***Op***eration) for a sign attached to a numeric literal in source.
 
         Parameters
         ----------
         value : ast_ConstantValue
-            The literal constant value. May be any type accepted by `ast.Constant.value`: `int`, `float`, `complex`,
-            `str`, `bytes`, `bool`, `None`, or `...` (Ellipsis).
+            Literal value, such as an integer, float, complex number, string, bytes, `True`, `False`,
+            `None`, or `Ellipsis`.
         kind : str | None = None
-            Optional string hint preserved for compatibility with `u`-prefixed string literals (`u"..."``). Pass `None`
-            for all other constant types.
+            Use `'u'` for a `u`-prefixed string literal. Omit `kind` for other literals.
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         constantValue : ast.Constant
             An `ast.Constant` object holding the specified literal value.
-
-        Deprecated Predecessors
-        -----------------------
-        Before Python 3.8, separate node classes represented each constant category: `ast.Num` for numeric literals, `ast.Str` for string literals, `ast.Bytes`
-        for bytes literals, `ast.NameConstant` for `True`, `False`, and `None`, and `ast.Ellipsis` for `...`. These classes were removed in Python 3.12. All
-        literal constants are now uniformly represented by `ast.Constant`.
         """
         return ast.Constant(value=value, kind=kind, **keywordArguments)
 
@@ -1084,898 +1070,1038 @@ class Make:
     def Continue() -> ast.Continue:
         """Make an `ast.Continue` object for a `continue` statement.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Continue` object represents a `continue` statement that skips the remaining statements in the current
-        loop body and proceeds to the next iteration of the nearest enclosing `for` or `while` loop. The optional `else`
-        clause of the enclosing loop is not affected by `continue`.
+        A `continue` statement skips the rest of the current iteration of the nearest enclosing loop.
 
         Returns
         -------
         continueStatement : ast.Continue
             An `ast.Continue` object representing a loop continuation statement.
-
-        Loop Interaction
-        ----------------
-        `ast.Continue` does not suppress the `orelse` body of the enclosing loop—only `ast.Break` suppresses it. A `continue` placed outside any loop body
-        raises `SyntaxError` at compile time.
         """
         return ast.Continue()
 
     @staticmethod
     def Del() -> ast.Del:
-        """Make a delete context for removing expressions from memory.
+        """Make an `ast.Del` (***Del***ete) context for a deletion target.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Del` (***Del***ete) context indicates expressions are deletion targets in `del` statements. Note that
-        `ast.Del` is the expression context, not the `del` keyword itself - `ast.Delete` represents the `del` statement.
+        Use `Make.Del()` (***Del***ete) as `context` on an expression passed to `Make.Delete`, such as
+        an attribute in `del bicycle.wheel`.
 
         Returns
         -------
-        deleteContext :
-            AST context object indicating deletion operations on expressions.
-
-        Examples
-        --------
-        Creates AST equivalent to deletion: del bicycle.wheel
-        ```python
-        wheelDeletion = Make.Attribute(Make.Name('bicycle'), 'wheel',
-        Make.Del())
-        ```
+        deleteContext : ast.Del
+            Expression context for deletion.
         """
         return ast.Del()
 
     @staticmethod
     def Delete(targets: Sequence[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.Delete:
-        """Create an `ast.Delete` node for deletion statements.
+        """Make an `ast.Delete` for a `del` statement.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `Delete` node represents a `del` statement that removes references to objects. Can delete variables,
-        attributes, subscripts, or slices.
+        A `del` statement can remove a name binding, an attribute, an item, or a slice.
 
         Parameters
         ----------
-        targets :
-            List of expressions identifying what to delete.
+        targets : Sequence[ast.expr]
+            One or more targets in `Make.Del()` (***Del***ete) context, in deletion order.
+            (`ast.expr`, ***expr***ession)
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
-        nodeDelete : ast.Delete
-            The constructed deletion statement node.
+        deleteStatement : ast.Delete
+            The `del` statement for the supplied targets.
         """
         return ast.Delete(targets=list(targets), **keywordArguments)
 
     @staticmethod
     def Dict(keys: Sequence[ast.expr | None] | None=None, values: Sequence[ast.expr] | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Dict:
-        """Combine `keys` and `values` into an AST (Abstract Syntax Tree) representation of the Python built-in `class` `dict` (***dict***ionary).
+        """Make an `ast.Dict` (***Dict***ionary) for a dictionary display.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Dict` (***Dict***ionary) `object` represents dictionary literals using curly brace notation. It
-        supports both regular key-value pairs and dictionary unpacking operations where keys can be None to indicate
-        unpacking expressions.
+        An `ast.Dict` (***Dict***ionary) represents entries such as `{'name': value, **options}`. Each
+        key has a corresponding expression in `values`. Later entries replace earlier entries with the
+        same key.
 
         Parameters
         ----------
-        keys :
-            Sequence of key expressions or None for unpacking operations.
-        values :
-            Sequence of value expressions corresponding to the keys.
+        keys : Sequence[ast.expr | None] = []
+            Key expressions. Use `None` as the key for each `**mapping` entry (`ast.expr`,
+            ***expr***ession).
+        values : Sequence[ast.expr] = []
+            Value expressions paired with `keys`. For an unpacking entry, provide the mapping
+            expression.
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         dictionaryLiteral : ast.Dict
-            (***Dict***ionary) AST `object` representing a dictionary literal with specified key-value pairs.
+            `AST` (Abstract Syntax Tree) object representing a dictionary literal with specified
+            key-value pairs.
         """
         return ast.Dict(keys=list(keys) if keys else [], values=list(values) if values else [], **keywordArguments)
 
     @staticmethod
     def DictComp(key: ast.expr, value: ast.expr, generators: list[ast.comprehension], **keywordArguments: Unpack[ast_attributes]) -> ast.DictComp:
-        """Make a dictionary comprehension AST `object` for dynamic dictionary construction.
+        """Make an `ast.DictComp` (***Dict***ionary ***c***o***mp***rehension) expression.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.DictComp` (***Dict***ionary ***c***o***mp***rehension) `object` represents dictionary comprehensions
-        that make dictionaries using iterator expressions. It combines key-value generation with filtering and nested
-        iteration capabilities.
+        An `ast.DictComp` (***Dict***ionary ***c***o***mp***rehension) represents key-value generation
+        such as `{recipe: difficulty for recipe in cookbook}`. For dictionary unpacking, such as
+        `{**mapping for mapping in mappings}`, pass the mapping expression as `key` and `None` as
+        `value` [1].
 
         Parameters
         ----------
-        key :
-            Expression that generates dictionary keys.
-        value :
-            Expression that generates dictionary values.
-        generators :
-            Sequence of `ast.comprehension` defining iteration and filtering.
+        key : ast.expr
+            Expression for each key, or for the mapping to unpack when `value` is `None` (`ast.expr`,
+            ***expr***ession).
+        value : ast.expr | None
+            Expression for each value. Use `None` to represent `**` unpacking. The factory forwards
+            `None` to `ast.DictComp` (***Dict***ionary ***c***o***mp***rehension) even though its
+            annotation lists only `ast.expr`.
+        generators : list[ast.comprehension]
+            `for` clauses and filters in source order.
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
-        dictionaryComprehension :
-            (***Dict***ionary ***c***o***mp***rehension) AST `object` representing a dictionary comprehension
-            expression.
+        dictionaryComprehension : ast.DictComp
+            `AST` (Abstract Syntax Tree) object representing a dictionary comprehension expression.
+
+        See Also
+        --------
+        `Make.comprehension`
+            Create one `for` clause and its filters.
 
         Examples
         --------
-        ```
-        # Creates AST equivalent to: `{recipe: difficulty for recipe in cookbook}`
-        recipeDifficulty = Make.DictComp(
-        key=Make.Name('recipe'),
-            value=Make.Name('difficulty'),
-            generators=[Make.comprehension(
-        target=Make.Name('recipe'),
-                iter=Make.Name('cookbook'),
-                ifs=[]
-            )]
-        )
-        ```
+            ```python
+            from astToolkit import Make
+
+            # Creates AST equivalent to: `{recipe: difficulty for recipe in cookbook}`
+            recipeDifficulty = Make.DictComp(
+                key=Make.Name('recipe'),
+                value=Make.Name('difficulty'),
+                generators=[Make.comprehension(
+                    target=Make.Name('recipe', Make.Store()),
+                    iter=Make.Name('cookbook'),
+                    ifs=[]
+                )]
+            )
+            ```
+
+        References
+        ----------
+        [1] Unpacking in comprehensions
+            https://docs.python.org/3.15/reference/expressions.html#unpacking-in-comprehensions
         """
         return ast.DictComp(key=key, value=value, generators=generators, **keywordArguments)
 
     class Div(ast.Div):
-        """Identical to the `ast` (abstract syntax tree) class but with a method, `join()`, that 'joins' expressions using the `ast.BinOp` (***Bin***ary ***Op***eration) class."""
+        """Make an `ast.Div` (***Div***ision) operator for `/`.
+
+        This subclass of `ast.Div` (***Div***ision) adds `join()`, which combines expressions into
+        nested `ast.BinOp` (***Bin***ary ***Op***eration) operations.
+        """
 
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
-            """Make a single `ast.expr` (***expr***ession) from a `Sequence` of `ast.expr` by creating nested `ast.BinOp` (***Bin***ary ***Op***eration) `object` that are logically 'joined' by the `ast.operator` subclass.
+            """Join expressions in left-associated `ast.BinOp` (***Bin***ary ***Op***eration) operations.
 
-            Like str.join() (***str***ing) but for AST (Abstract Syntax Tree) expressions.
+            Like `str.join()` (***str***ing) but for `AST` (Abstract Syntax Tree) expressions. Joining
+            `a`, `b`, and `c` with `Make.Sub.join()` represents `(a - b) - c`.
 
             Parameters
             ----------
             expressions : Iterable[ast.expr]
-                Collection of expressions to join.
+                Operands in evaluation order (`ast.expr`, ***expr***ession).
             **keywordArguments : ast_attributes
-
+                Source positions for every constructed expression. A single input keeps its existing
+                positions.
 
             Returns
             -------
             joinedExpression : ast.expr
-                Single expression representing the joined expressions.
+                Nested `ast.BinOp` (***Bin***ary ***Op***eration) operations for two or more operands,
+                the original operand for a single input, or an empty string literal for an empty
+                input.
 
             Examples
             --------
-            ```python
-            # Instead of manually constructing nested ast.BinOp structures:
-            ast.BinOp(
-                left=ast.BinOp(
-            left=ast.Name('Crosby')
-                    , op=ast.BitOr()
-                    , right=ast.Name('Stills'))
-                , op=ast.BitOr()
-            , right=ast.Name('Nash')
-            )
+                ```python
+                import ast
+                from astToolkit import Make
 
-            # Simply use:
-            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'),
-            ast.Name('Nash')])
-
-            # Both produce the same AST structure but the join() method eliminates the manual nesting.
-            ```
+                # Both expressions represent (Crosby | Stills) | Nash.
+                ast.BinOp(
+                    left=ast.BinOp(left=Make.Name('Crosby'), op=ast.BitOr(), right=Make.Name('Stills')),
+                    op=ast.BitOr(),
+                    right=Make.Name('Nash'),
+                )
+                Make.BitOr.join([Make.Name('Crosby'), Make.Name('Stills'), Make.Name('Nash')])
+                ```
             """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
     def Eq() -> ast.Eq:
-        """'Eq', meaning 'is ***Eq***ual to', is the `object` representation of Python comparison operator '`==`'.
+        """Make an `ast.Eq` (is ***Eq***ual to) comparison operator.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        `class` `ast.Eq` is a subclass of `ast.cmpop`, '***c***o***mp***arison ***op***erator', and only used in `class`
-        `ast.Compare`, parameter '`ops`', ***op***erator***s***.
+        Use `ast.Eq` (is ***Eq***ual to) in the `ops` (***op***erator***s***) of `Make.Compare` to
+        represent `==`.
 
         Returns
         -------
         equalityOperator : ast.Eq
-            AST `object` representing the '`==`' equality comparison operator for use in `ast.Compare`.
+            The operator to put in `ast.Compare.ops` (***op***erator***s***).
         """
         return ast.Eq()
 
     @staticmethod
     def ExceptHandler(type: ast.expr | None=None, name: str | None=None, body: Sequence[ast.stmt] | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.ExceptHandler:
-        """Exception handler clause for try-except statements.
+        """Make an `ast.ExceptHandler` (***Except***ion ***Handler***) clause.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.ExceptHandler` (***Except***ion ***Handler***) object represents individual `except` clauses that catch
-        and handle specific exceptions. It defines the exception type to catch, optional variable binding, and
-        statements to execute when matched.
+        The enclosing `ast.Try` represents `except`. The enclosing `ast.TryStar` (Try executing this,
+        protected by `except*` ("except star")) represents `except*` and handles matching members of
+        an exception group.
 
         Parameters
         ----------
-        type :
-            Exception type expression to catch; None catches all exceptions.
-        name :
-            Variable name string to bind caught exception; None for no binding.
-        body :
-            List of statements to execute when exception is caught.
+        type : ast.expr | None = None
+            Exception type expression or tuple of types. Omit it for a bare `except` (`ast.expr`,
+            ***expr***ession).
+        name : str | None = None
+            Identifier after `as`, if supplied.
+        body : Sequence[ast.stmt] = []
+            Statements executed when the handler matches (`ast.stmt`, ***st***ate***m***en***t***).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         exceptionHandler : ast.ExceptHandler
-            AST object representing an except clause in try-except statements.
+            `AST` (Abstract Syntax Tree) object representing an except clause in try-except
+            statements.
         """
         return ast.ExceptHandler(type=type, name=name, body=list(body) if body else [], **keywordArguments)
 
     @staticmethod
     def excepthandler(**keywordArguments: Unpack[ast_attributes]) -> ast.excepthandler:
-        """Exception handler abstract base class for try-except constructs.
+        """Make an instance of the base class `ast.excepthandler` (***except***ion ***handler***).
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.excepthandler` (***except***ion ***handler***) abstract base class represents exception handling
-        clauses in try-except statements. This is the foundation for `ast.ExceptHandler` which implements the actual
-        exception catching logic.
+        Use `Make.ExceptHandler` (***Except***ion ***Handler***) to make a concrete handler for
+        `Make.Try` or `Make.TryStar` (Try executing this, protected by `except*` ("except star")).
+
+        Parameters
+        ----------
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         exceptionHandler : ast.excepthandler
-            Abstract AST object for exception handling clause classification.
+            Abstract `AST` (Abstract Syntax Tree) object for exception handling clause classification.
         """
         return ast.excepthandler(**keywordArguments)
 
     @staticmethod
     def Expr(value: ast.expr, **keywordArguments: Unpack[ast_attributes]) -> ast.Expr:
-        """Create an `ast.Expr` node for expression statements.
+        """Make an `ast.Expr` (***Expr***ession) for an expression statement.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `Expr` node represents a statement that consists of a single expression whose value is discarded. This is
-        used for expressions evaluated for their side effects rather than their return value.
+        Use an `ast.Expr` (***Expr***ession) to put an expression in a statement list, such as a call
+        made for its side effects or a string used as a docstring.
 
         Parameters
         ----------
-        value :
-            Expression to evaluate as a statement.
+        value : ast.expr
+            Expression evaluated as a standalone statement (`ast.expr`, ***expr***ession).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
-        nodeExpr : ast.Expr
-            The constructed expression statement node.
+        expressionStatement : ast.Expr
+            A statement containing the supplied expression.
         """
         return ast.Expr(value=value, **keywordArguments)
 
     @staticmethod
     def expr(**keywordArguments: Unpack[ast_attributes]) -> ast.expr:
-        """Abstract ***expr***ession `object` for base expression operations.
+        """Make an instance of the base class `ast.expr` (***expr***ession).
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.expr` class serves as the abstract base class for all expression objects in Python's AST. Unlike
-        `ast.stmt` which represents statements that perform actions, `ast.expr` represents expressions that evaluate to
-        values and can be used within larger expressions or as parts of statements.          Expressions vs Statements:
-        - **expr**: Evaluates to a value and can be composed into larger expressions. Examples include literals (`42`,
-        `"hello"`), operations (`x + y`), function calls (`len(data)`), and attribute access (`obj.method`).         -
-        **stmt**: Performs an action and does not evaluate to a usable value. Examples include assignments (`x = 5`),
-        control flow (`if`, `for`, `while`), function definitions (`def`), and imports (`import`).
+        Use a concrete expression factory, such as `Make.Name` or `Make.Call`, to represent syntax
+        that evaluates to a value. Use `Make.Expr` (***Expr***ession) to place an expression where
+        Python expects a statement.
+
+        Parameters
+        ----------
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
-        expression :
-            Abstract expression `object` that serves as the base class for all Python expressions in AST structures.
+        expression : ast.expr
+            An instance of the common base class for expressions.
+
+        See Also
+        --------
+        `Make.Expr`
+            Use an expression as a statement.
         """
         return ast.expr(**keywordArguments)
 
     @staticmethod
     def expr_context() -> ast.expr_context:
-        """Expression context abstract base class for expression usage patterns.
+        """Make an instance of the base class `ast.expr_context` (***expr***ession ***context***).
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.expr_context` (***expr***ession ***context***) abstract base class represents how expressions are used
-        in code: whether they load values, store values, or delete them. This is the foundation for `ast.Load`,
-        `ast.Store`, and `ast.Del` contexts.
+        Use `Make.Load()`, `Make.Store()`, or `Make.Del()` (***Del***ete) to mark an expression as a
+        read, an assignment target, or a deletion target.
 
         Returns
         -------
         expressionContext : ast.expr_context
-            Abstract AST context object for expression usage classification.
+            Abstract `AST` (Abstract Syntax Tree) context object for expression usage classification.
         """
         return ast.expr_context()
 
     @staticmethod
     def Expression(body: ast.expr) -> ast.Expression:
-        """Create an `ast.Expression` node for expression-only modules.
+        """Make an `ast.Expression` for compilation in `eval` mode.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `Expression` node represents a module that contains only a single expression. This is used in contexts where
-        only an expression is expected, such as with `eval()` or interactive mode single expressions.
+        An `ast.Expression` is the outermost object returned by `ast.parse(..., mode='eval')`.
 
         Parameters
         ----------
-        body :
-            The single expression that forms the module body
+        body : ast.expr
+            Single expression to evaluate (`ast.expr`, ***expr***ession).
 
         Returns
         -------
-        nodeExpression : ast.Expression
-            The constructed expression module node
+        expression : ast.Expression
+            The expression and its `eval`-mode container.
         """
         return ast.Expression(body=body)
 
     class FloorDiv(ast.FloorDiv):
-        """Identical to the `ast` (abstract syntax tree) class but with a method, `join()`, that 'joins' expressions using the `ast.BinOp` (***Bin***ary ***Op***eration) class."""
+        """Make an `ast.FloorDiv` (Floor ***Div***ision) operator for `//`.
+
+        This subclass of `ast.FloorDiv` (Floor ***Div***ision) adds `join()`, which combines
+        expressions into nested `ast.BinOp` (***Bin***ary ***Op***eration) operations.
+        """
 
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
-            """Make a single `ast.expr` (***expr***ession) from a `Sequence` of `ast.expr` by creating nested `ast.BinOp` (***Bin***ary ***Op***eration) `object` that are logically 'joined' by the `ast.operator` subclass.
+            """Join expressions in left-associated `ast.BinOp` (***Bin***ary ***Op***eration) operations.
 
-            Like str.join() (***str***ing) but for AST (Abstract Syntax Tree) expressions.
+            Like `str.join()` (***str***ing) but for `AST` (Abstract Syntax Tree) expressions. Joining
+            `a`, `b`, and `c` with `Make.Sub.join()` represents `(a - b) - c`.
 
             Parameters
             ----------
             expressions : Iterable[ast.expr]
-                Collection of expressions to join.
+                Operands in evaluation order (`ast.expr`, ***expr***ession).
             **keywordArguments : ast_attributes
-
+                Source positions for every constructed expression. A single input keeps its existing
+                positions.
 
             Returns
             -------
             joinedExpression : ast.expr
-                Single expression representing the joined expressions.
+                Nested `ast.BinOp` (***Bin***ary ***Op***eration) operations for two or more operands,
+                the original operand for a single input, or an empty string literal for an empty
+                input.
 
             Examples
             --------
-            ```python
-            # Instead of manually constructing nested ast.BinOp structures:
-            ast.BinOp(
-                left=ast.BinOp(
-            left=ast.Name('Crosby')
-                    , op=ast.BitOr()
-                    , right=ast.Name('Stills'))
-                , op=ast.BitOr()
-            , right=ast.Name('Nash')
-            )
+                ```python
+                import ast
+                from astToolkit import Make
 
-            # Simply use:
-            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'),
-            ast.Name('Nash')])
-
-            # Both produce the same AST structure but the join() method eliminates the manual nesting.
-            ```
+                # Both expressions represent (Crosby | Stills) | Nash.
+                ast.BinOp(
+                    left=ast.BinOp(left=Make.Name('Crosby'), op=ast.BitOr(), right=Make.Name('Stills')),
+                    op=ast.BitOr(),
+                    right=Make.Name('Nash'),
+                )
+                Make.BitOr.join([Make.Name('Crosby'), Make.Name('Stills'), Make.Name('Nash')])
+                ```
             """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
     def For(target: ast.expr, iter: ast.expr, body: Sequence[ast.stmt], orElse: Sequence[ast.stmt] | None=None, **keywordArguments: Unpack[ast_attributes_type_comment]) -> ast.For:
-        """Make a for loop AST `object` for iterating over iterable expressions.
+        """Make an `ast.For` for a `for` loop.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.For` `object` represents traditional `for` loops that iterate over sequences, generators, or any
-        iterable object. It supports optional else clauses that execute when the loop completes normally.
+        An `ast.For` consumes an iterable. The optional `orElse` (or Else execute this) clause runs
+        when the iterator is exhausted.
 
         Parameters
         ----------
-        target :
-            The loop variable that receives each item from the iterable expression.
-        iter :
-            (***iter***able) The iterable expression being iterated over, such as a list, range, or generator.
-        body :
-            Sequence of statements executed for each iteration of the loop.
-        orelse :
-            (or Else execute this) Optional statements executed when the loop completes normally without encountering a
-            break statement.
+        target : ast.expr
+            Assignment target in `Make.Store()` context that receives each item (`ast.expr`,
+            ***expr***ession).
+        iter : ast.expr
+            (***iter***able) Expression that supplies the iterable.
+        body : Sequence[ast.stmt]
+            Statements executed once per item (`ast.stmt`, ***st***ate***m***en***t***).
+        orElse : Sequence[ast.stmt] = []
+            (or Else execute this) Statements executed on exhaustion. `break` skips them. This is
+            `ast.For.orelse` (or else execute this).
+        type_comment : str | None = None
+            (a `type` annotation in a comment) Type annotation text for the loop target, from a `#
+            type: ...` comment.
+        **keywordArguments : ast_attributes_type_comment
+            Optional source positions and `type_comment`. See `Make` for source positions.
 
         Returns
         -------
         forLoop : ast.For
-            AST `object` representing a for loop iteration construct.
+            `AST` (Abstract Syntax Tree) object representing a for loop iteration construct.
         """
         return ast.For(target=target, iter=iter, body=list(body), orelse=list(orElse) if orElse else [], **keywordArguments)
 
     @staticmethod
     def FormattedValue(value: ast.expr, conversion: int, format_spec: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.FormattedValue:
-        """Make a formatted value AST `object` for f-string interpolation components.
+        """Make an `ast.FormattedValue` for a replacement field in an f-string.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.FormattedValue` `object` represents individual expressions within f-string literals, including format
-        specifications and conversion options. It handles the interpolation mechanics of formatted string literals.
+        Use `Make.JoinedStr` (Joined ***Str***ing) to combine replacement fields and literal text into
+        an f-string.
 
         Parameters
         ----------
-        value :
-            The expression to be formatted and interpolated.
-        conversion :
-            Conversion flag (0=no conversion, 115='s', 114='r', 97='a').
-        format_spec :
-            (format ***spec***ification) Optional format specification expression.
+        value : ast.expr
+            Expression inside the braces (`ast.expr`, ***expr***ession).
+        conversion : int
+            Use `-1` for no explicit conversion, or `ord('s')`, `ord('r')`, or `ord('a')` for `!s`,
+            `!r`, or `!a`.
+        format_spec : ast.expr | None = None
+            (format ***spec***ification) Format specification following `:` as an `ast.JoinedStr`
+            (Joined ***Str***ing). Omit it when the field has no format specification.
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         formattedValue : ast.FormattedValue
-            AST `object` representing a formatted value within an f-string expression.
+            `AST` (Abstract Syntax Tree) object representing a formatted value within an f-string
+            expression.
         """
         return ast.FormattedValue(value=value, conversion=conversion, format_spec=format_spec, **keywordArguments)
 
     @staticmethod
     def FunctionDef(name: str, argumentSpecification: ast.arguments | None=None, body: Sequence[ast.stmt] | None=None, decorator_list: Sequence[ast.expr] | None=None, returns: ast.expr | None=None, type_params: Sequence[ast.type_param] | None=None, **keywordArguments: Unpack[ast_attributes_type_comment]) -> ast.FunctionDef:
-        """Make a function definition AST object for standard `def` declarations with typing support.
+        """Make an `ast.FunctionDef` (Function ***Def***inition) for a function.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.FunctionDef` object represents standard function definitions including parameters, return annotations,
-        decorators, and function body. Supports modern Python typing features and generic type parameters.
+        An `ast.FunctionDef` (Function ***Def***inition) can include a parameter specification,
+        decorators, a return annotation, and type parameters for a generic function.
 
         Parameters
         ----------
-        name :
+        name : str
             Function name as string identifier.
-        args :
-            Function parameter specification.
-        body :
-            List of statements forming the function body.
-        decorator_list :
-            List of decorator expressions applied to function.
-        returns :
-            (this returns) Optional return type annotation expression.
-        type_params :
-            (type ***param***eter***s***) List of type parameters for generic functions (Python 3.12+).
+        argumentSpecification : ast.arguments = Make.arguments()
+            Complete parameter specification from `Make.arguments`. Omit it for a function with no
+            parameters. This is `ast.FunctionDef.args` (`FunctionDef` Function ***Def***inition,
+            `args` ***arg***ument***s***).
+        body : Sequence[ast.stmt] = []
+            Statements in the function body. Supply `Make.Pass()` for a body with no other statements
+            (`ast.stmt`, ***st***ate***m***en***t***).
+        decorator_list : Sequence[ast.expr] = []
+            Decorator expressions in source order. Python applies them from the last decorator to the
+            first. (`ast.expr`, ***expr***ession)
+        returns : ast.expr | None = None
+            (this returns) Return annotation following `->`.
+        type_params : Sequence[ast.type_param] = []
+            (type ***param***eter***s***) Type parameters declared in brackets after the function name
+            (`ast.type_param`, type ***param***eter).
+        type_comment : str | None = None
+            (a `type` annotation in a comment) Function signature text from a `# type: ...` comment,
+            such as `'(int) -> str'`.
+        **keywordArguments : ast_attributes_type_comment
+            Optional source positions and `type_comment`. See `Make` for source positions.
 
         Returns
         -------
-        functionDefinition :
-            AST object representing a complete function definition with metadata.
+        functionDefinition : ast.FunctionDef
+            `AST` (Abstract Syntax Tree) object representing a complete function definition with
+            metadata.
 
         Examples
         --------
-        ```
-        # Creates AST equivalent to: def cook(): pass
-        simpleFunction = Make.FunctionDef('cook', body=[Make.Pass()])
+            ```python
+            from astToolkit import Make
 
-        # Creates AST
-        equivalent to: def bake(recipe: str, temperature: int = 350) -> bool: return True
-        typedFunction = Make.FunctionDef(
-            'bake',
-        Make.arguments(
-                args=[Make.arg('recipe', Make.Name('str')), Make.arg('temperature', Make.Name('int'))],
-        defaults=[Make.Constant(350)]
-            ),
-            [Make.Return(Make.Constant(True))],
-            returns=Make.Name('bool')
-        )
-        ```
+            # Creates AST equivalent to: def cook(): pass
+            simpleFunction = Make.FunctionDef('cook', body=[Make.Pass()])
+
+            # Define bake with an annotated signature and a default temperature.
+            typedFunction = Make.FunctionDef(
+                'bake',
+                Make.arguments(
+                    list_arg=[Make.arg('recipe', Make.Name('str')), Make.arg('temperature', Make.Name('int'))],
+                    defaults=[Make.Constant(350)]
+                ),
+                [Make.Return(Make.Constant(True))],
+                returns=Make.Name('bool')
+            )
+            ```
         """
         return ast.FunctionDef(name=name, args=argumentSpecification or ast.arguments(), body=list(body) if body else [], decorator_list=list(decorator_list) if decorator_list else [], returns=returns, type_params=list(type_params) if type_params else [], **keywordArguments)
 
     @staticmethod
     def FunctionType(argtypes: Sequence[ast.expr], returns: ast.expr) -> ast.FunctionType:
-        """Create an `ast.FunctionType` node for function type annotations.
+        """Make an `ast.FunctionType` (Function Type) for a function type comment.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `FunctionType` node represents function type annotations of the form `(arg_types) -> return_type`. This is
-        used in type annotations and variable annotations for callable types.
+        An `ast.FunctionType` (Function Type) represents text such as `(int, str) -> bool`, as
+        returned by `ast.parse(..., mode='func_type')`. To attach the comment to a function, supply
+        the text as `type_comment` (a `type` annotation in a comment) to `Make.FunctionDef` (Function
+        ***Def***inition).
 
         Parameters
         ----------
-        argtypes :
-            (***arg***ument types) List of expressions representing argument types
-        returns :
-            (this returns) Expression representing the return type
+        argtypes : Sequence[ast.expr]
+            (***arg***ument types) Parameter type expressions in order (`ast.expr`, ***expr***ession).
+        returns : ast.expr
+            (this returns) Return type expression following `->`.
 
         Returns
         -------
-        nodeFunctionType : ast.FunctionType
-            The constructed function type annotation node
+        functionType : ast.FunctionType
+            The parameter types and return type from a function type comment.
         """
         return ast.FunctionType(argtypes=list(argtypes), returns=returns)
 
     @staticmethod
     def GeneratorExp(element: ast.expr, generators: list[ast.comprehension], **keywordArguments: Unpack[ast_attributes]) -> ast.GeneratorExp:
-        """Make a generator expression object for memory-efficient iteration.
+        """Make an `ast.GeneratorExp` (Generator ***Exp***ression) for a generator expression.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.GeneratorExp` (Generator ***Exp***ression) object represents generator expressions that create iterator
-        objects without constructing intermediate collections. It provides lazy evaluation and memory efficiency for
-        large datasets.
+        An `ast.GeneratorExp` (Generator ***Exp***ression) represents an expression such as
+        `(item.name for item in items)`. Python evaluates the first iterable when creating the
+        generator, then produces values as the generator advances.
 
         Parameters
         ----------
-        element :
-            Expression that generates each element of the generator.
-        generators :
-            Sequence of `ast.comprehension` objects defining iteration and filtering.
+        element : ast.expr
+            Expression that produces a value. For `(*items for items in groups)`, use `Make.Starred`
+            to yield each unpacked item. This is `ast.GeneratorExp.elt` (`GeneratorExp` Generator
+            ***Exp***ression, `elt` ***e***lemen***t***) (`ast.expr`, ***expr***ession).
+        generators : list[ast.comprehension]
+            `for` clauses and filters in source order.
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         generatorExpression : ast.GeneratorExp
-            AST object representing a generator expression for lazy evaluation.
+            `AST` (Abstract Syntax Tree) object representing a generator expression for lazy
+            evaluation.
         """
         return ast.GeneratorExp(elt=element, generators=generators, **keywordArguments)
 
     @staticmethod
     def Global(names: list[str], **keywordArguments: Unpack[ast_attributes]) -> ast.Global:
-        """Create an `ast.Global` node for global declarations.
+        """Make an `ast.Global` for a `global` declaration.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `Global` node represents a `global` statement that declares variables as referring to global scope rather
-        than local scope. This affects variable lookup and assignment within the current function.
+        A `global` declaration directs references and assignments to the specified names to module
+        scope throughout the enclosing code block.
 
         Parameters
         ----------
-        names :
-            List of variable names to declare as global.
+        names : list[str]
+            Identifiers declared global.
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
-        nodeGlobal : ast.Global
-            The constructed global declaration node.
+        globalStatement : ast.Global
+            The declaration for the supplied names.
         """
         return ast.Global(names=names, **keywordArguments)
 
     @staticmethod
     def Gt() -> ast.Gt:
-        """'Gt', meaning 'Greater than', is the `object` representation of Python operator '`>`'.
+        """Make an `ast.Gt` (is ***G***reater ***t***han) comparison operator.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        `class` `ast.Gt` is a subclass of `ast.cmpop`, '***c***o***mp***arison ***op***erator', and only used in `class`
-        `ast.Compare`, parameter '`ops`', ***op***erator***s***.
+        Use `ast.Gt` (is ***G***reater ***t***han) in the `ops` (***op***erator***s***) of
+        `Make.Compare` to represent `>`.
 
         Returns
         -------
         greaterThanOperator : ast.Gt
-            AST `object` representing the '`>`' greater-than comparison operator for use in `ast.Compare`.
+            The operator to put in `ast.Compare.ops` (***op***erator***s***).
         """
         return ast.Gt()
 
     @staticmethod
     def GtE() -> ast.GtE:
-        """'GtE', meaning 'is Greater than or Equal to', is the `object` representation of Python comparison operator '`>=`'.
+        """Make an `ast.GtE` (is ***G***reater ***t***han or ***E***qual to) comparison operator.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        `class` `ast.GtE` is a subclass of `ast.cmpop`, '***c***o***mp***arison ***op***erator', and only used in
-        `class` `ast.Compare`, parameter '`ops`', ***op***erator***s***.
+        Use `ast.GtE` (is ***G***reater ***t***han or ***E***qual to) in the `ops`
+        (***op***erator***s***) of `Make.Compare` to represent `>=`.
 
         Returns
         -------
         greaterThanOrEqualOperator : ast.GtE
-            AST `object` representing the '`>=`' greater-than-or-equal comparison operator for use in `ast.Compare`.
+            The operator to put in `ast.Compare.ops` (***op***erator***s***).
         """
         return ast.GtE()
 
     @staticmethod
     def If(test: ast.expr, body: Sequence[ast.stmt], orElse: Sequence[ast.stmt] | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.If:
-        """Make a conditional statement AST `object` for branching execution paths.
+        """Make an `ast.If` for an `if` statement.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.If` `object` represents `if` statements that conditionally execute code blocks based on boolean test
-        expressions. It supports optional else clauses for alternative execution paths.
+        Use another `ast.If` as the only statement in `orElse` (or Else execute this) to represent an
+        `elif` clause.
 
         Parameters
         ----------
-        test :
-            The boolean expression that determines which branch to execute.
-        body :
-            Sequence of statements executed when the test expression evaluates to True.
-        orElse :
-            (or Else execute this) Optional statements executed when the test expression evaluates to False. This
-            parameter corresponds with `ast.If.orelse` (or else execute this).
+        test : ast.expr
+            Condition expression evaluated for truth (`ast.expr`, ***expr***ession).
+        body : Sequence[ast.stmt]
+            Statements executed when `test` is truthy (`ast.stmt`, ***st***ate***m***en***t***).
+        orElse : Sequence[ast.stmt] = []
+            (or Else execute this) Statements executed when `test` is falsy. This is `ast.If.orelse`
+            (or else execute this).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
-        conditionalStatement :
-            AST `object` representing a conditional branching statement.
+        conditionalStatement : ast.If
+            `AST` (Abstract Syntax Tree) object representing a conditional branching statement.
 
         Examples
         --------
-        ```python
-        # Creates AST for: if userLoggedIn:
-        #                     showDashboard()
-        simpleIf = Make.If(
-        Make.Name('userLoggedIn'),
-            [Make.Expr(Make.Call(Make.Name('showDashboard')))]
-        )
+            ```python
+            from astToolkit import Make
 
-        # Creates AST for: if temperature > 100:
-        #                     activateCooling()
-        #                 else:
-        #                     maintainTemperature()
-        ifElse = Make.If(
-        Make.Compare(Make.Name('temperature'), [Make.Gt()], [Make.Constant(100)]),
-            [Make.Expr(Make.Call(Make.Name('activateCooling')))],
-        [Make.Expr(Make.Call(Make.Name('maintainTemperature')))]
-        )
+            # Creates AST for: if userLoggedIn:
+            #                     showDashboard()
+            simpleIf = Make.If(
+                Make.Name('userLoggedIn'),
+                [Make.Expr(Make.Call(Make.Name('showDashboard')))]
+            )
 
-        # Creates AST for nested if-elif-else chains
-        ifElifElse = Make.If(
-        Make.Compare(Make.Name('score'), [Make.GtE()], [Make.Constant(90)]),
-            [Make.Assign([Make.Name('grade')], Make.Constant('A'))],
-        [Make.If(
-                Make.Compare(Make.Name('score'), [Make.GtE()], [Make.Constant(80)]),
-                [Make.Assign([Make.Name('grade')],
-        Make.Constant('B'))],
-                [Make.Assign([Make.Name('grade')], Make.Constant('C'))]
-            )]
-        )
-        ```
+            # Creates AST for: if temperature > 100:
+            #                     activateCooling()
+            #                 else:
+            #                     maintainTemperature()
+            ifElse = Make.If(
+                Make.Compare(Make.Name('temperature'), [Make.Gt()], [Make.Constant(100)]),
+                [Make.Expr(Make.Call(Make.Name('activateCooling')))],
+                [Make.Expr(Make.Call(Make.Name('maintainTemperature')))]
+            )
+
+            # Creates AST for nested if-elif-else chains
+            ifElifElse = Make.If(
+                Make.Compare(Make.Name('score'), [Make.GtE()], [Make.Constant(90)]),
+                [Make.Assign([Make.Name('grade', Make.Store())], Make.Constant('A'))],
+                [Make.If(
+                    Make.Compare(Make.Name('score'), [Make.GtE()], [Make.Constant(80)]),
+                    [Make.Assign([Make.Name('grade', Make.Store())], Make.Constant('B'))],
+                    [Make.Assign([Make.Name('grade', Make.Store())], Make.Constant('C'))]
+                )]
+            )
+            ```
         """
         return ast.If(test=test, body=list(body), orelse=list(orElse) if orElse else [], **keywordArguments)
 
     @staticmethod
     def IfExp(test: ast.expr, body: ast.expr, orElse: ast.expr, **keywordArguments: Unpack[ast_attributes]) -> ast.IfExp:
-        """Make a 'ChooseThis `if` ConditionIsTrue `else` ChooseThat' conditional expression.
+        """Make an `ast.IfExp` (If ***Exp***ression) for a conditional expression.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.IfExp` (If ***Exp***ression) `object` represents inline conditional expressions using the ternary
-        operator syntax `execute_if_true if condition else execute_if_false`.
+        An `ast.IfExp` (If ***Exp***ression) represents `valueIfTrue if condition else valueIfFalse`.
+        Python evaluates the condition and then evaluates only the selected expression.
 
         Parameters
         ----------
-        test :
-            The `True`/`False` condition expression.
-        body :
-            If `test` is `True`, the interpreter executes this singular expression.
-        orElse :
-            (or Else execute this) If `test` is `False`, the interpreter executes this singular expression. This
-            parameter corresponds with `ast.IfExp.orelse` (or else execute this).
+        test : ast.expr
+            Condition expression evaluated for truth (`ast.expr`, ***expr***ession).
+        body : ast.expr
+            Expression selected when `test` is truthy.
+        orElse : ast.expr
+            (or Else execute this) Expression selected when `test` is falsy. This is
+            `ast.IfExp.orelse` (`IfExp` If ***Exp***ression, `orelse` or else execute this).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
-        conditionalExpression :
-            `ast.AST` (Abstract Syntax Tree) `object` representing an inline conditional expression.
+        conditionalExpression : ast.IfExp
+            The conditional expression with both alternatives.
 
         Examples
         --------
-        ```python
-        # To create the `ast.AST` representation of `maxVolume if amplified else defaultVolume`:
-        Make.IfExp(
-            test =
-        Make.Name('amplified'),
-            body = Make.Name('maxVolume'),
-            orElse = Make.Name('defaultVolume')
-        )
+            ```python
+            from astToolkit import Make
 
-        # To create the
-        `ast.AST` representation of `"sunny" if weather > 70 else "cloudy"`:
-        Make.IfExp(
-            test = Make.Compare(Make.Name('weather'), [
-        Make.Gt() ], [ Make.Constant(70) ]),
-            body = Make.Constant("sunny"),
-            orElse = Make.Constant("cloudy")
-        )
-        ```
+            # To create the `ast.AST` representation of `maxVolume if amplified else defaultVolume`:
+            Make.IfExp(
+                test = Make.Name('amplified'),
+                body = Make.Name('maxVolume'),
+                orElse = Make.Name('defaultVolume')
+            )
+
+            # To create the `ast.AST` representation of `"sunny" if weather > 70 else "cloudy"`:
+            Make.IfExp(
+                test = Make.Compare(Make.Name('weather'), [ Make.Gt() ], [ Make.Constant(70) ]),
+                body = Make.Constant("sunny"),
+                orElse = Make.Constant("cloudy")
+            )
+            ```
         """
         return ast.IfExp(test=test, body=body, orelse=orElse, **keywordArguments)
     if sys.version_info >= (3, 15):
 
         @staticmethod
-        def Import(dotModule: identifierDotAttribute, asName: str | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Import:
-            """Make an `ast.Import` `object` representing a single `import` statement.
+        def Import(dotModule: identifierDotAttribute, asName: str | None=None, is_lazy: bool | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Import:
+            """Make an `ast.Import` for one module in an `import` statement.
 
-        (AI generated docstring.)
+            (AI generated docstring)
 
-        The `ast.Import` `object` represents one `import` statement with zero or more module names separated by commas.
-        Each module name is an `ast.alias` `object`. The series of module names is stored in `ast.Import.names` as a
-        `list` of `ast.alias`.      Nevertheless, with `Make.Import`, you must create exactly one `ast.alias` `object`
-        to be placed in `ast.Import.names`.
+            `Make.Import` supplies the single `ast.alias` stored in `ast.Import.names`. A plain `import`
+            accepts an absolute module path such as `collections.abc`. Use `Make.ImportFrom` for relative
+            imports.
 
-        Parameters
-        ----------
-        dotModule :
-            (package.Module notation) The name of the module to import: the name may be in dot notation, also called
-            attribute access; the name may be an absolute or relative import. This parameter corresponds with
-            `ast.alias.name` in `ast.Import.names[0]`; or, written as one dot-notation statement, it corresponds with
-            `ast.Import.names[0].name`.
-        asName :
-            (as Name) The identifier of the module in the local scope: `asName` must be a valid identifier, so it cannot
-            be in dot notation. This parameter corresponds with `ast.alias.asname` in `ast.Import.names[0]`; or, written
-            as one dot-notation statement, it corresponds with `ast.Import.names[0].asname`.
+            Parameters
+            ----------
+            dotModule : identifierDotAttribute
+                (package.Module notation) Absolute module name, optionally dotted. This is
+                `ast.Import.names[0].name`.
+            asName : str | None = None
+                (as Name) Local identifier after `as`. When omitted, the import binds the first component
+                of `dotModule`. This is `ast.Import.names[0].asname` (as name).
+            is_lazy : bool | None = None
+                Use `True` to represent the `lazy` prefix. Omit it or use `False` for a regular `import`
+                statement. Explicit lazy imports require module scope and exclude `try` blocks [1].
+            **keywordArguments : ast_attributes
+                Optional source positions. See `Make` for line numbers and byte offsets.
 
-        Returns
-        -------
-        importStatement :
-            An `ast.Import` `object` with one `ast.alias` `object` representing a single `import` statement with a
-            single module name.
+            Returns
+            -------
+            importStatement : ast.Import
+                An `ast.Import` object with one `ast.alias` object representing a single `import`
+                statement with a single module name.
 
-        Examples
-        --------
-        ```python
-        # To represent: `import os`
-        Make.Import(dotModule = 'os')
+            See Also
+            --------
+            `Make.ImportFrom`
+                Import names from a module.
 
-        # To represent: `import re as regex`
-        Make.Import(dotModule = 're', asName = 'regex')
+            Examples
+            --------
+                ```python
+                from astToolkit import Make
 
-        # To represent: `import collections.abc`
-        Make.Import(dotModule = 'collections.abc')
-        # To represent: `import scipy.signal.windows as SciPy`
-        Make.Import(dotModule = 'scipy.signal.windows', asName = 'SciPy')
-        ```
-        """
-            return ast.Import(names=[Make.alias(dotModule, asName)], **keywordArguments)
+                # To represent: `import os`
+                Make.Import(dotModule = 'os')
+
+                # To represent: `import re as regex`
+                Make.Import(dotModule = 're', asName = 'regex')
+
+                # To represent: `import collections.abc`
+                Make.Import(dotModule = 'collections.abc')
+
+                # To represent: `import scipy.signal.windows as SciPy`
+                Make.Import(dotModule = 'scipy.signal.windows', asName = 'SciPy')
+                ```
+
+            References
+            ----------
+            [1] Lazy imports.
+                https://docs.python.org/3.15/reference/simple_stmts.html#lazy-imports
+            """
+            return ast.Import(names=[Make.alias(dotModule, asName)], is_lazy=is_lazy, **keywordArguments)
     else:
 
         @staticmethod
         def Import(dotModule: identifierDotAttribute, asName: str | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Import:
-            """Make an `ast.Import` `object` representing a single `import` statement.
+            """Make an `ast.Import` for one module in an `import` statement.
 
-        (AI generated docstring.)
+            (AI generated docstring)
 
-        The `ast.Import` `object` represents one `import` statement with zero or more module names separated by commas.
-        Each module name is an `ast.alias` `object`. The series of module names is stored in `ast.Import.names` as a
-        `list` of `ast.alias`.      Nevertheless, with `Make.Import`, you must create exactly one `ast.alias` `object`
-        to be placed in `ast.Import.names`.
+            `Make.Import` supplies the single `ast.alias` stored in `ast.Import.names`. A plain `import`
+            accepts an absolute module path such as `collections.abc`. Use `Make.ImportFrom` for relative
+            imports.
 
-        Parameters
-        ----------
-        dotModule :
-            (package.Module notation) The name of the module to import: the name may be in dot notation, also called
-            attribute access; the name may be an absolute or relative import. This parameter corresponds with
-            `ast.alias.name` in `ast.Import.names[0]`; or, written as one dot-notation statement, it corresponds with
-            `ast.Import.names[0].name`.
-        asName :
-            (as Name) The identifier of the module in the local scope: `asName` must be a valid identifier, so it cannot
-            be in dot notation. This parameter corresponds with `ast.alias.asname` in `ast.Import.names[0]`; or, written
-            as one dot-notation statement, it corresponds with `ast.Import.names[0].asname`.
+            Parameters
+            ----------
+            dotModule : identifierDotAttribute
+                (package.Module notation) Absolute module name, optionally dotted. This is
+                `ast.Import.names[0].name`.
+            asName : str | None = None
+                (as Name) Local identifier after `as`. When omitted, the import binds the first component
+                of `dotModule`. This is `ast.Import.names[0].asname` (as name).
+            is_lazy : bool | None = None
+                Use `True` to represent the `lazy` prefix. Omit it or use `False` for a regular `import`
+                statement. Explicit lazy imports require module scope and exclude `try` blocks [1].
+            **keywordArguments : ast_attributes
+                Optional source positions. See `Make` for line numbers and byte offsets.
 
-        Returns
-        -------
-        importStatement :
-            An `ast.Import` `object` with one `ast.alias` `object` representing a single `import` statement with a
-            single module name.
+            Returns
+            -------
+            importStatement : ast.Import
+                An `ast.Import` object with one `ast.alias` object representing a single `import`
+                statement with a single module name.
 
-        Examples
-        --------
-        ```python
-        # To represent: `import os`
-        Make.Import(dotModule = 'os')
+            See Also
+            --------
+            `Make.ImportFrom`
+                Import names from a module.
 
-        # To represent: `import re as regex`
-        Make.Import(dotModule = 're', asName = 'regex')
+            Examples
+            --------
+                ```python
+                from astToolkit import Make
 
-        # To represent: `import collections.abc`
-        Make.Import(dotModule = 'collections.abc')
-        # To represent: `import scipy.signal.windows as SciPy`
-        Make.Import(dotModule = 'scipy.signal.windows', asName = 'SciPy')
-        ```
-        """
+                # To represent: `import os`
+                Make.Import(dotModule = 'os')
+
+                # To represent: `import re as regex`
+                Make.Import(dotModule = 're', asName = 'regex')
+
+                # To represent: `import collections.abc`
+                Make.Import(dotModule = 'collections.abc')
+
+                # To represent: `import scipy.signal.windows as SciPy`
+                Make.Import(dotModule = 'scipy.signal.windows', asName = 'SciPy')
+                ```
+
+            References
+            ----------
+            [1] Lazy imports.
+                https://docs.python.org/3.15/reference/simple_stmts.html#lazy-imports
+            """
             return ast.Import(names=[Make.alias(dotModule, asName)], **keywordArguments)
     if sys.version_info >= (3, 15):
 
         @staticmethod
         def ImportFrom(dotModule: str | None, list_alias: list[ast.alias], level: int=0, is_lazy: bool | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.ImportFrom:
-            """Make a from-import statement AST `object` for selective module imports.
+            """Make an `ast.ImportFrom` for a `from ... import` statement.
 
-            (AI generated docstring.)
+            (AI generated docstring)
 
-            The `ast.ImportFrom` `object` represents `from ... import` statements that selectively import specific names
-            from modules. It supports relative imports and multiple import aliases.
+            An `ast.ImportFrom` represents one source module and one or more names from it. For a relative
+            import, supply the leading dots as `level` (relative import level).
 
             Parameters
             ----------
-            module :
-                The source module name using dot notation, or None for relative imports that rely solely on the level
-                parameter.
-            names :
-                List of alias objects specifying which names to import and their optional aliases.
-            level :
-                (relative import level) Import level controlling relative vs absolute imports. Zero indicates absolute
-                import, positive values indicate relative import depth.
+            dotModule : str | None
+                (package.Module notation) Module name without leading dots. Use `None` for a statement
+                such as `from . import sibling`. This is `ast.ImportFrom.module`.
+            list_alias : list[ast.alias]
+                Imported names and any local aliases from `Make.alias`. Use `[Make.alias('*')]` for a
+                wildcard import. This is `ast.ImportFrom.names`.
+            level : int = 0
+                (relative import level) Number of leading dots. `0` means an absolute import, `1` means
+                the current package, and `2` means the parent package.
+            is_lazy : bool | None = None
+                Use `True` to represent the `lazy` prefix. Omit it or use `False` for a regular `from ...
+                import` statement. Explicit lazy imports require module scope and exclude `try` blocks,
+                wildcard imports, and future imports [1].
+            **keywordArguments : ast_attributes
+                Optional source positions. See `Make` for line numbers and byte offsets.
 
             Returns
             -------
             fromImportStatement : ast.ImportFrom
-                AST `object` representing a selective module import statement.
+                `AST` (Abstract Syntax Tree) object representing a selective module import statement.
+
+            See Also
+            --------
+            `Make.Import`
+                Import a module by its absolute name.
+
+            References
+            ----------
+            [1] Lazy imports.
+                https://docs.python.org/3.15/reference/simple_stmts.html#lazy-imports
             """
             return ast.ImportFrom(module=dotModule, names=list_alias, level=level, is_lazy=is_lazy, **keywordArguments)
     else:
 
         @staticmethod
         def ImportFrom(dotModule: str | None, list_alias: list[ast.alias], level: int=0, **keywordArguments: Unpack[ast_attributes]) -> ast.ImportFrom:
-            """Make a from-import statement AST `object` for selective module imports.
+            """Make an `ast.ImportFrom` for a `from ... import` statement.
 
-            (AI generated docstring.)
+            (AI generated docstring)
 
-            The `ast.ImportFrom` `object` represents `from ... import` statements that selectively import specific names
-            from modules. It supports relative imports and multiple import aliases.
+            An `ast.ImportFrom` represents one source module and one or more names from it. For a relative
+            import, supply the leading dots as `level` (relative import level).
 
             Parameters
             ----------
-            module :
-                The source module name using dot notation, or None for relative imports that rely solely on the level
-                parameter.
-            names :
-                List of alias objects specifying which names to import and their optional aliases.
-            level :
-                (relative import level) Import level controlling relative vs absolute imports. Zero indicates absolute
-                import, positive values indicate relative import depth.
+            dotModule : str | None
+                (package.Module notation) Module name without leading dots. Use `None` for a statement
+                such as `from . import sibling`. This is `ast.ImportFrom.module`.
+            list_alias : list[ast.alias]
+                Imported names and any local aliases from `Make.alias`. Use `[Make.alias('*')]` for a
+                wildcard import. This is `ast.ImportFrom.names`.
+            level : int = 0
+                (relative import level) Number of leading dots. `0` means an absolute import, `1` means
+                the current package, and `2` means the parent package.
+            is_lazy : bool | None = None
+                Use `True` to represent the `lazy` prefix. Omit it or use `False` for a regular `from ...
+                import` statement. Explicit lazy imports require module scope and exclude `try` blocks,
+                wildcard imports, and future imports [1].
+            **keywordArguments : ast_attributes
+                Optional source positions. See `Make` for line numbers and byte offsets.
 
             Returns
             -------
             fromImportStatement : ast.ImportFrom
-                AST `object` representing a selective module import statement.
+                `AST` (Abstract Syntax Tree) object representing a selective module import statement.
+
+            See Also
+            --------
+            `Make.Import`
+                Import a module by its absolute name.
+
+            References
+            ----------
+            [1] Lazy imports.
+                https://docs.python.org/3.15/reference/simple_stmts.html#lazy-imports
             """
             return ast.ImportFrom(module=dotModule, names=list_alias, level=level, **keywordArguments)
 
     @staticmethod
     def In() -> ast.In:
-        """'In', meaning 'is ***In***cluded in' or 'has membership In', is the `object` representation of Python keyword '`in`'.
+        """Make an `ast.In` comparison operator.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        `class` `ast.In` is a subclass of `ast.cmpop`, '***c***o***mp***arison ***op***erator', and only used in `class`
-        `ast.Compare`, parameter '`ops`', ***op***erator***s***. The Python interpreter declares *This* `object` 'is
-        ***In***cluded in' *That* `iterable` if *This* `object` matches a part of *That* `iterable`.
+        Use `ast.In` in the `ops` (***op***erator***s***) of `Make.Compare` to represent `in`. Python
+        tests the left operand for membership in the right operand.
 
         Returns
         -------
         membershipOperator : ast.In
-            AST `object` representing the keyword '`in`' membership test operator for use in `ast.Compare`.
+            The operator to put in `ast.Compare.ops` (***op***erator***s***).
         """
         return ast.In()
 
     @staticmethod
     def Interactive(body: Sequence[ast.stmt]) -> ast.Interactive:
-        """Create an `ast.Interactive` (Interactive mode) node for interactive mode modules.
+        """Make an `ast.Interactive` (Interactive mode) for compilation in `single` mode.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `Interactive` node represents a module intended for interactive execution, such as in the Python REPL.
-        Unlike regular modules, interactive modules can contain multiple statements that are executed sequentially.
+        An `ast.Interactive` (Interactive mode) is the outermost object returned by `ast.parse(...,
+        mode='single')`. Interactive execution displays the result of an expression statement when the
+        result is other than `None`.
 
         Parameters
         ----------
-        body :
-            List of statements forming the interactive module body
+        body : Sequence[ast.stmt]
+            Statements to execute in interactive mode (`ast.stmt`, ***st***ate***m***en***t***).
 
         Returns
         -------
-        nodeInteractive : ast.Interactive
-            The constructed interactive module node
+        interactive : ast.Interactive
+            The statements and their `single`-mode container.
         """
         return ast.Interactive(body=list(body))
 
     @staticmethod
     def Interpolation(value: ast.expr, string: builtins.str, conversion: int, format_spec: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Interpolation:
-        """Make an interpolation AST `object` for template strings.
+        """Make an `ast.Interpolation` for a replacement field in a t-string.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Interpolation` `object` represents a single interpolation within a template string. It captures the
-        expression being interpolated, along with any conversion flags and format specifiers.
+        Use `Make.TemplateStr` (Template ***Str***ing) to combine replacement fields with literal
+        text. Each field records its expression, original source text, conversion, and format
+        specification.
 
         Parameters
         ----------
         value : ast.expr
-            The expression to be evaluated and interpolated.
-        string : builtins.str
-            The original string representation of the interpolation. https://github.com/python/cpython/issues/143661
+            Expression inside the braces (`ast.expr`, ***expr***ession).
+        string : str | None
+            Original source text of the expression, stored in `ast.Interpolation.str` (***str***ing).
+            `None` asks `ast.unparse()` to regenerate the text from `value` [1]. The factory accepts
+            `None` at runtime while its annotation lists `str`.
         conversion : int
-            The conversion flag (e.g., -1 for none, 115 for 's', 114 for 'r', 97 for 'a').
+            Use `-1` for no explicit conversion, or `ord('s')`, `ord('r')`, or `ord('a')` for `!s`,
+            `!r`, or `!a`.
         format_spec : ast.expr | None = None
-            Optional format specifier expression.
+            (format ***spec***ification) Format specification following `:` as an `ast.JoinedStr`
+            (Joined ***Str***ing). Omit it when the field has no format specification.
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
-        nodeInterpolation : ast.Interpolation
-            AST `object` representing an interpolation component of a template string.
+        interpolation : ast.Interpolation
+            `AST` (Abstract Syntax Tree) object representing an interpolation component of a template
+            string.
+
+        References
+        ----------
+        [1] `ast.Interpolation`.
+            https://docs.python.org/3.15/library/ast.html#ast.Interpolation
         """
         return ast.Interpolation(value=value, str=string, conversion=conversion, format_spec=format_spec, **keywordArguments)
 
     @staticmethod
     def Invert() -> ast.Invert:
-        """Make a bitwise complement operator representing Python '`~`' operator.
+        """Make an `ast.Invert` operator for `~value`.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        Class `ast.Invert` is a subclass of `ast.unaryop` and represents the bitwise complement or inversion operator
-        '`~`' in Python source code. This operator performs bitwise NOT operation, flipping all bits of its operand.
-        Used within `ast.UnaryOp` as the `op` parameter.
+        Use `ast.Invert` as `op` (***op***erator) in `Make.UnaryOp` (***Un***ary ***Op***eration). For
+        an integer `x`, `~x` evaluates to `-(x + 1)`.
 
         Returns
         -------
         bitwiseComplementOperator : ast.Invert
-            AST `object` representing the '`~`' bitwise complement operator for use in `ast.UnaryOp`.
+            `AST` (Abstract Syntax Tree) object representing the '`~`' bitwise complement operator for
+            use in `ast.UnaryOp` (***Un***ary ***Op***eration).
         """
         return ast.Invert()
 
@@ -1983,88 +2109,83 @@ class Make:
     def Is() -> ast.Is:
         """'Is', meaning 'Is identical to', is the `object` representation of Python keyword '`is`'.
 
-        `class` `ast.Is` is a subclass of `ast.cmpop`, '***c***o***mp***arison ***op***erator', and only used in `class`
-        `ast.Compare`, parameter '`ops`', ***op***erator***s***.          The Python interpreter declares *This* logical
-        `object` 'Is identical to' *That* logical `object` if they use the same physical memory location. Therefore,
-        modifying one `object` will necessarily modify the other `object`.          What's the difference between
-        equality and identity? - The work of Jane Austen 'is Equal to' the work of Franz Kafka. - The work of Mark Twain
-        'is Equal to' the work of Samuel Clemens. - And Mark Twain 'Is identical to' Samuel Clemens: because they are
-        the same person.
+        `ast.Is` is a subclass of `ast.cmpop` (***c***o***mp***arison ***op***erator). Use it in the
+        `ops` (***op***erator***s***) of `Make.Compare` to represent `is`. Both operands must refer to
+        the same object for the comparison to be true.
+
+        What's the difference between equality and identity? The work of Jane Austen 'is Equal to' the
+        work of Franz Kafka. The work of Mark Twain 'is Equal to' the work of Samuel Clemens. And Mark
+        Twain 'Is identical to' Samuel Clemens because they are the same person.
 
         Returns
         -------
-        identityOperator :
-            AST `object` representing the '`is`' identity comparison operator for use in `ast.Compare`.
+        identityOperator : ast.Is
+            The `is` operator for use in `ast.Compare`.
 
         Examples
         --------
-        ```python
-        # Logically equivalent to: `... valueAttributes is None ...` comparisonNode =
-        Make.Compare(
-        left=Make.Name('valueAttributes'), ops=[Make.Is()], comparators=[Make.Constant(None)]
-        )
-        ```
+            ```python
+            from astToolkit import Make
 
-        In the first example, the two
-        statements are logically equal but they cannot be identical.
+            # Equivalent to valueAttributes is None.
+            Make.Compare(
+                left=Make.Name('valueAttributes'), ops=[Make.Is()], comparators=[Make.Constant(None)]
+            )
+            ```
         """
         return ast.Is()
 
     @staticmethod
     def IsNot() -> ast.IsNot:
-        """'IsNot', meaning 'Is Not identical to', is the `object` representation of Python keywords '`is not`'.
+        """Make an `ast.IsNot` operator for `is not`.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        `class` `ast.IsNot` is a subclass of `ast.cmpop`, '***c***o***mp***arison ***op***erator',         and only used
-        in `class` `ast.Compare`, parameter '`ops`', ***op***erator***s***.          The Python interpreter declares
-        *This* logical `object` 'Is Not identical to' *That* logical         `object` if they do not use the same
-        physical memory location.          What's the difference between equality and identity? - The work of Jane
-        Austen 'is Equal to'         the work of Franz Kafka. - The work of Mark Twain 'is Equal to' the work of Samuel
-        Clemens.         - And Mark Twain 'Is identical to' Samuel Clemens: because they are the same person.
-        Python programmers frequently use '`is not None`' because keyword `None` does not have a         physical memory
-        location, so `if chicken is not None`, `chicken` must have a physical memory         location (and be in the
-        current scope and blah blah blah...).
+        Use `ast.IsNot` in the `ops` (***op***erator***s***) of `Make.Compare` to represent `is not`.
+        Python evaluates `a is not b` as true when the operands refer to different objects. For
+        example, `chicken is not None` checks whether `chicken` refers to an object other than the
+        `None` singleton.
 
         Returns
         -------
-        identityNegationOperator :
-            AST `object` representing the '`is not`' identity comparison operator for use in `ast.Compare`.
+        identityNegationOperator : ast.IsNot
+            The identity comparison operator for use in `ast.Compare`.
 
         Examples
         --------
-        ```python
-        # Logically equivalent to: `... chicken is not None ...` comparisonNode =
-        Make.Compare(
-            left=Make.Name('chicken'),
-        ops=[Make.IsNot()], comparators=[Make.Constant(None)]
-        )
-        ```
+            ```python
+            from astToolkit import Make
 
-        In the first example, the two statements are logically equal but
-        they cannot be identical.
+            # Equivalent to chicken is not None.
+            Make.Compare(
+                left=Make.Name('chicken'), ops=[Make.IsNot()], comparators=[Make.Constant(None)]
+            )
+            ```
         """
         return ast.IsNot()
 
     @staticmethod
     def JoinedStr(values: Sequence[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.JoinedStr:
-        """Make a joined string AST `object` for f-string literal construction.
+        """Make an `ast.JoinedStr` (Joined ***Str***ing) for an f-string.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.JoinedStr` (Joined ***Str***ing) `object` represents f-string literals that combine constant text with
-        interpolated expressions. It coordinates multiple string components and formatted values into a single string
-        literal.
+        An `ast.JoinedStr` (Joined ***Str***ing) combines literal text and formatted values in source
+        order. You can also use it for the format specification of a replacement field.
 
         Parameters
         ----------
-        values :
-            Sequence of string components, including `ast.Constant` and `ast.FormattedValue` objects.
+        values : Sequence[ast.expr]
+            Use an `ast.Constant` containing a string for each literal part and an
+            `ast.FormattedValue` for each replacement field (`ast.expr`, ***expr***ession).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         joinedString : ast.JoinedStr
-            AST `object` representing an f-string literal with interpolated values.
+            `AST` (Abstract Syntax Tree) object representing an f-string literal with interpolated
+            values.
         """
         return ast.JoinedStr(values=list(values), **keywordArguments)
 
@@ -2080,526 +2201,566 @@ class Make:
 
     @staticmethod
     def keyword(Buffalo_buffalo_Buffalo_buffalo_buffalo_buffalo_Buffalo_buffalo: str | None, value: ast.expr, **keywordArguments: Unpack[ast_attributes]) -> ast.keyword: # pyright: ignore[reportInconsistentOverload]
-        """Make a keyword argument AST object for named parameters in function calls.
+        """Make an `ast.keyword` for a keyword argument or `**` unpacking.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.keyword` object represents keyword arguments passed to function calls or class constructors. Contains
-        the parameter name and corresponding value expression, including support for **keywordArguments unpacking.
+        Use an `ast.keyword` in a call or class definition to represent forms such as
+        `temperature=350` or `**settings`.
 
         Parameters
         ----------
-        Buffalo_buffalo_Buffalo_buffalo_buffalo_buffalo_Buffalo_buffalo :
-            Parameter name string; None for **keywordArguments unpacking. This corresponds to `ast.keyword.arg`.
-        value :
-            Expression providing the argument value.
+        Buffalo_buffalo_Buffalo_buffalo_buffalo_buffalo_Buffalo_buffalo : str | None
+            Keyword name, stored in `ast.keyword.arg` (***arg***ument). Pass `None` explicitly for
+            `**mapping`.
+        value : ast.expr
+            Argument value expression. For `**mapping`, this is the expression that provides the
+            mapping (`ast.expr`, ***expr***ession).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
-        keywordArgument :
-            AST object representing a named argument in function calls.
+        keywordArgument : ast.keyword
+            `AST` (Abstract Syntax Tree) object representing a named argument in function calls.
 
         Examples
         --------
-        Creates AST equivalent to: temperature=350
-        ```python
-        namedArgument = Make.keyword('temperature', Make.Constant(350))
-        ```
-        Creates AST equivalent to: **settings (keyword arguments unpacking)
-        ```python
-        unpackedArguments = Make.keyword(None,
-        Make.Name('settings'))
-        ```
+        Creates AST equivalent to temperature=350.
+            ```python
+            from astToolkit import Make
+
+            namedArgument = Make.keyword('temperature', Make.Constant(350))
+            ```
+
+        Creates AST equivalent to **settings (keyword arguments unpacking).
+            ```python
+            from astToolkit import Make
+
+            unpackedArguments = Make.keyword(None, Make.Name('settings'))
+            ```
         """
         return ast.keyword(arg=Buffalo_buffalo_Buffalo_buffalo_buffalo_buffalo_Buffalo_buffalo, value=value, **keywordArguments)
 
     @staticmethod
     def Lambda(argumentSpecification: ast.arguments, body: ast.expr, **keywordArguments: Unpack[ast_attributes]) -> ast.Lambda:
-        """Make a lambda function AST `object` for anonymous function expressions.
+        """Make an `ast.Lambda` (Lambda function) for a `lambda` expression.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Lambda` (Lambda function) `object` represents lambda expressions that define anonymous functions with a
-        single expression body. Lambda functions are limited to expressions and cannot contain statements or multiple
-        lines.
+        A `lambda` creates a function whose result is the value of its body expression.
 
         Parameters
         ----------
-        argumentSpecification :
-            The function arguments specification as `ast.arguments`.
-        body :
-            Single expression that forms the lambda function body.
+        argumentSpecification : ast.arguments
+            Parameter specification from `Make.arguments`. This is `ast.Lambda.args` (`Lambda` Lambda
+            function, `args` ***arg***ument***s***).
+        body : ast.expr
+            Expression evaluated on each call (`ast.expr`, ***expr***ession).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         lambdaFunction : ast.Lambda
-            AST `object` representing an anonymous lambda function expression.
+            `AST` (Abstract Syntax Tree) object representing an anonymous lambda function expression.
         """
         return ast.Lambda(args=argumentSpecification, body=body, **keywordArguments)
 
     @staticmethod
     def List(listElements: Sequence[ast.expr] | None=None, context: ast.expr_context | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.List:
-        """Make a list literal AST `object` with ordered element collection.
+        """Make an `ast.List` for a list display or unpacking target.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.List` `object` represents list literals using square bracket notation. It creates ordered, mutable
-        collections and supports various contexts like loading values, storing to variables, or deletion operations.
+        An `ast.List` represents bracketed forms such as `[a, b]`. The context indicates how Python
+        uses the expression.
 
         Parameters
         ----------
-        listElements :
-            Sequence of expressions that become list elements.
-        context :
-            Expression context for how the list is used.
+        listElements : Sequence[ast.expr] = []
+            Element expressions in order. This is `ast.List.elts` (***e***lemen***t***s) (`ast.expr`,
+            ***expr***ession).
+        context : ast.expr_context = Make.Load()
+            Use `Make.Load()` to build a list, `Make.Store()` for an assignment target, or
+            `Make.Del()` (***Del***ete) for a deletion target. This is `ast.List.ctx`
+            (***c***on***t***e***x***t) (`ast.expr_context`, ***expr***ession ***context***).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         listLiteral : ast.List
-            AST `object` representing a list literal with specified elements.
+            `AST` (Abstract Syntax Tree) object representing a list literal with specified elements.
         """
         return ast.List(elts=list(listElements) if listElements else [], ctx=context or ast.Load(), **keywordArguments)
 
     @staticmethod
     def ListComp(element: ast.expr, generators: list[ast.comprehension], **keywordArguments: Unpack[ast_attributes]) -> ast.ListComp:
-        """Make a list comprehension AST `object` for dynamic list construction.
+        """Make an `ast.ListComp` (List ***c***o***mp***rehension) for a list comprehension.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.ListComp` (List ***c***o***mp***rehension) `object` represents list comprehensions that create lists
-        using iterator expressions. It provides concise syntax for filtering and transforming collections into new
-        lists.
+        An `ast.ListComp` (List ***c***o***mp***rehension) represents a list comprehension such as
+        `[item.name for item in items]`.
 
         Parameters
         ----------
-        element :
-            (***e***lemen***t***) Expression that generates each element of the resulting list.
-        generators :
-            Sequence of `ast.comprehension` objects defining iterator and filtering.
+        element : ast.expr
+            Expression that supplies each element. Use `Make.Starred` for unpacking, as in `[*items
+            for items in groups]`. This is `ast.ListComp.elt` (`ListComp` List
+            ***c***o***mp***rehension, `elt` ***e***lemen***t***) (`ast.expr`, ***expr***ession).
+        generators : list[ast.comprehension]
+            `for` clauses and filters in source order.
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         listComprehension : ast.ListComp
-            AST `object` representing a list comprehension expression.
+            `AST` (Abstract Syntax Tree) object representing a list comprehension expression.
         """
         return ast.ListComp(elt=element, generators=generators, **keywordArguments)
 
     @staticmethod
     def Load() -> ast.Load:
-        """Make a load context for reading expression values.
+        """Make an `ast.Load` context for reading a value.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Load` context indicates expressions are being read or evaluated to retrieve their values. This is the
-        default context for most expressions like `bicycle.wheel` when accessing the wheel attribute value.
+        Use `Make.Load()` to represent an expression such as `bicycle.wheel` when it retrieves the
+        wheel attribute. Value references made by `Make.Name` and `Make.Attribute` use this context by
+        default.
 
         Returns
         -------
         loadContext : ast.Load
-            AST context object indicating value retrieval operations.
+            `AST` (Abstract Syntax Tree) context object indicating value retrieval operations.
         """
         return ast.Load()
 
     class LShift(ast.LShift):
-        """Identical to the `ast` (abstract syntax tree) class but with a method, `join()`, that 'joins' expressions using the `ast.BinOp` (***Bin***ary ***Op***eration) class."""
+        """Make an `ast.LShift` (***L***eft Shift) operator for `<<`.
+
+        This subclass of `ast.LShift` (***L***eft Shift) adds `join()`, which combines expressions
+        into nested `ast.BinOp` (***Bin***ary ***Op***eration) operations.
+        """
 
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
-            """Make a single `ast.expr` (***expr***ession) from a `Sequence` of `ast.expr` by creating nested `ast.BinOp` (***Bin***ary ***Op***eration) `object` that are logically 'joined' by the `ast.operator` subclass.
+            """Join expressions in left-associated `ast.BinOp` (***Bin***ary ***Op***eration) operations.
 
-            Like str.join() (***str***ing) but for AST (Abstract Syntax Tree) expressions.
+            Like `str.join()` (***str***ing) but for `AST` (Abstract Syntax Tree) expressions. Joining
+            `a`, `b`, and `c` with `Make.Sub.join()` represents `(a - b) - c`.
 
             Parameters
             ----------
             expressions : Iterable[ast.expr]
-                Collection of expressions to join.
+                Operands in evaluation order (`ast.expr`, ***expr***ession).
             **keywordArguments : ast_attributes
-
+                Source positions for every constructed expression. A single input keeps its existing
+                positions.
 
             Returns
             -------
             joinedExpression : ast.expr
-                Single expression representing the joined expressions.
+                Nested `ast.BinOp` (***Bin***ary ***Op***eration) operations for two or more operands,
+                the original operand for a single input, or an empty string literal for an empty
+                input.
 
             Examples
             --------
-            ```python
-            # Instead of manually constructing nested ast.BinOp structures:
-            ast.BinOp(
-                left=ast.BinOp(
-            left=ast.Name('Crosby')
-                    , op=ast.BitOr()
-                    , right=ast.Name('Stills'))
-                , op=ast.BitOr()
-            , right=ast.Name('Nash')
-            )
+                ```python
+                import ast
+                from astToolkit import Make
 
-            # Simply use:
-            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'),
-            ast.Name('Nash')])
-
-            # Both produce the same AST structure but the join() method eliminates the manual nesting.
-            ```
+                # Both expressions represent (Crosby | Stills) | Nash.
+                ast.BinOp(
+                    left=ast.BinOp(left=Make.Name('Crosby'), op=ast.BitOr(), right=Make.Name('Stills')),
+                    op=ast.BitOr(),
+                    right=Make.Name('Nash'),
+                )
+                Make.BitOr.join([Make.Name('Crosby'), Make.Name('Stills'), Make.Name('Nash')])
+                ```
             """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
     def Lt() -> ast.Lt:
-        """'Lt', meaning 'is Less than', is the `object` representation of Python comparison operator '`<`'.
+        """Make an `ast.Lt` (is ***L***ess ***t***han) comparison operator.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        `class` `ast.Lt` is a subclass of `ast.cmpop`, '***c***o***mp***arison ***op***erator', and only used in `class`
-        `ast.Compare`, parameter '`ops`', ***op***erator***s***.
+        Use `ast.Lt` (is ***L***ess ***t***han) in the `ops` (***op***erator***s***) of `Make.Compare`
+        to represent `<`.
 
         Returns
         -------
         lessThanOperator : ast.Lt
-            AST `object` representing the '`<`' less-than comparison operator for use in `ast.Compare`.
+            The operator to put in `ast.Compare.ops` (***op***erator***s***).
         """
         return ast.Lt()
 
     @staticmethod
     def LtE() -> ast.LtE:
-        """'LtE', meaning 'is Less than or Equal to', is the `object` representation of Python comparison operator '`<=`'.
+        """Make an `ast.LtE` (is ***L***ess ***t***han or ***E***qual to) comparison operator.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        `class` `ast.LtE` is a subclass of `ast.cmpop`, '***c***o***mp***arison ***op***erator', and only used in
-        `class` `ast.Compare`, parameter '`ops`', ***op***erator***s***.
+        Use `ast.LtE` (is ***L***ess ***t***han or ***E***qual to) in the `ops`
+        (***op***erator***s***) of `Make.Compare` to represent `<=`.
 
         Returns
         -------
         lessThanOrEqualOperator : ast.LtE
-            AST `object` representing the '`<=`' less-than-or-equal comparison operator for use in `ast.Compare`.
+            The operator to put in `ast.Compare.ops` (***op***erator***s***).
         """
         return ast.LtE()
 
     @staticmethod
     def Match(subject: ast.expr, cases: list[ast.match_case] | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Match:
-        """Make a match statement AST object for pattern matching with multiple cases.
+        """Make an `ast.Match` (Match this) for a `match` statement.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Match` (Match this) object represents match statements that perform pattern matching against a subject
-        expression. Contains the value being matched and a list of case clauses with their patterns and corresponding
-        actions.
+        An `ast.Match` (Match this) evaluates the subject once and tries the cases in source order.
+        The first case whose pattern matches and whose guard succeeds supplies the body to execute.
 
         Parameters
         ----------
-        subject :
-            Expression being matched against the case patterns.
-        cases :
-            (match case) List of match_case objects defining pattern-action pairs.
+        subject : ast.expr
+            Expression that supplies the value to match (`ast.expr`, ***expr***ession).
+        cases : list[ast.match_case] = []
+            Case clauses in source order. Supply at least one `Make.match_case` (match case) for a
+            complete statement.
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         matchStatement : ast.Match
-            AST object representing a complete pattern matching statement.
+            `AST` (Abstract Syntax Tree) object representing a complete pattern matching statement.
         """
         return ast.Match(subject=subject, cases=cases or [], **keywordArguments)
 
     @staticmethod
     def match_case(pattern: ast.pattern, guard: ast.expr | None=None, body: Sequence[ast.stmt] | None=None) -> ast.match_case:
-        """Make a match case clause AST object for individual cases in `match` statements.
+        """Make an `ast.match_case` (match case) for one `case` clause.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.match_case` (match case) object represents individual case clauses within match statements. Contains
-        the pattern to match, optional guard condition, and statements to execute when the pattern matches successfully.
+        A case selects a body when its pattern matches and its optional guard is truthy.
 
         Parameters
         ----------
-        pattern :
-            Pattern expression defining what values match this case.
-        guard :
-            Optional conditional expression for additional filtering.
-        body :
-            List of statements to execute when pattern matches.
+        pattern : ast.pattern
+            Pattern applied to the subject of the enclosing `match`.
+        guard : ast.expr | None = None
+            Condition evaluated after the pattern matches and its names are bound (`ast.expr`,
+            ***expr***ession).
+        body : Sequence[ast.stmt] = []
+            Statements executed when the case is selected (`ast.stmt`, ***st***ate***m***en***t***).
 
         Returns
         -------
         matchCase : ast.match_case
-            AST object representing a single case clause in match statements.
+            `AST` (Abstract Syntax Tree) object representing a single case clause in match statements.
         """
         return ast.match_case(pattern=pattern, guard=guard, body=list(body) if body else [])
 
     @staticmethod
     def MatchAs(pattern: ast.pattern | None=None, name: str | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchAs:
-        """Create an `ast.MatchAs` node representing a capture pattern or wildcard.
+        """Make an `ast.MatchAs` (Match As) for an `as` pattern or a capture.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.MatchAs` (Match As) node represents match patterns that capture values or serve as wildcards. This
-        includes bare name patterns like `bicycle` that capture the matched value, "as" patterns like `Point(x, y) as
-        location` that match a pattern and capture the result, and the wildcard pattern `_`.
+        An `ast.MatchAs` (Match As) can represent `Point(x, y) as location`, a capture such as
+        `location`, or the wildcard `_`.
 
         Parameters
         ----------
-        pattern :
-            Optional pattern to match against. When `None`, creates a capture pattern (bare name) if `name` is provided,
-            or wildcard if both are `None`.
-        name :
-            Optional identifier to bind the matched value. When `None` and pattern is also `None`, creates the wildcard
-            pattern.
+        pattern : ast.pattern | None = None
+            Pattern to match before binding `name`. Supply `name` with any explicit `pattern`.
+        name : str | None = None
+            Identifier to bind to the matched subject. When both fields are `None`, the result
+            represents `_`.
+        **keywordArguments : ast_attributes_int
+            Optional source positions. Supply integer end positions when setting them. See `Make`.
 
         Returns
         -------
-        matchAsNode : ast.MatchAs
-            An `ast.MatchAs` node with the specified pattern and name.
+        matchAs : ast.MatchAs
+            An `ast.MatchAs` (Match As) object with the specified pattern and name.
         """
         return ast.MatchAs(pattern=pattern, name=name, **keywordArguments)
 
     @staticmethod
     def MatchClass(cls: ast.expr, patterns: Sequence[ast.pattern] | None=None, kwd_attrs: list[str] | None=None, kwd_patterns: Sequence[ast.pattern] | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchClass: # pyright: ignore[reportSelfClsParameterName]
-        """Create an `ast.MatchClass` node for matching class instances.
+        """Make an `ast.MatchClass` (Match Class) for a class pattern.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.MatchClass` (Match Class) node represents patterns that match instances of a specific class, checking
-        both the class type and extracting values from the instance's attributes. This enables structural pattern
-        matching against objects.
+        An `ast.MatchClass` (Match Class) represents a pattern such as `Point(x, y=0)`. Python checks
+        the subject with `isinstance()` and matches attribute values against the supplied subpatterns.
 
         Parameters
         ----------
-        cls :
-            (***cl***a***s***s) Expression identifying the class to match against.
-        patterns :
-            Sequence of pattern nodes for positional matching against class-defined attributes.
-        kwd_attrs :
-            (***k***ey***w***or***d*** ***attr***ibute***s***) List of attribute names for keyword-style matching.
-        kwd_patterns :
-            (***k***ey***w***or***d*** ***patterns***) Sequence of pattern nodes corresponding to the keyword
+        cls : ast.expr
+            (***cl***a***s***s) Expression identifying the class, such as `Point` or `geometry.Point`
+            (`ast.expr`, ***expr***ession).
+        patterns : Sequence[ast.pattern] = []
+            Positional subpatterns. For most classes, `__match_args__` determines the corresponding
             attributes.
+        kwd_attrs : list[str] = []
+            (***k***ey***w***or***d*** ***attr***ibute***s***) Attribute names from keyword
+            subpatterns, in source order.
+        kwd_patterns : Sequence[ast.pattern] = []
+            (***k***ey***w***or***d*** ***patterns***) Subpatterns paired with `kwd_attrs`, in the
+            same order.
+        **keywordArguments : ast_attributes_int
+            Optional source positions. Supply integer end positions when setting them. See `Make`.
 
         Returns
         -------
-        matchClassNode : ast.MatchClass
-            An `ast.MatchClass` node configured for the specified class and patterns.
+        matchClass : ast.MatchClass
+            An `ast.MatchClass` (Match Class) object configured for the specified class and patterns.
         """
         return ast.MatchClass(cls=cls, patterns=list(patterns) if patterns else [], kwd_attrs=kwd_attrs or [], kwd_patterns=list(kwd_patterns) if kwd_patterns else [], **keywordArguments)
 
     @staticmethod
     def MatchMapping(keys: Sequence[ast.expr] | None=None, patterns: Sequence[ast.pattern] | None=None, rest: str | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchMapping:
-        """Create an `ast.MatchMapping` node for matching dictionary-like objects.
+        """Make an `ast.MatchMapping` (Match Mapping) for a mapping pattern.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.MatchMapping` (Match Mapping) node represents patterns that match mapping objects like dictionaries,
-        checking for specific keys and extracting their values. The pattern can also capture remaining unmapped keys.
+        An `ast.MatchMapping` (Match Mapping) represents a pattern such as `{'name': name, **extra}`.
+        A mapping can match when it contains additional keys.
 
         Parameters
         ----------
-        keys :
-            Sequence of expression nodes representing the keys to match.
-        patterns :
-            Sequence of pattern nodes corresponding to the values associated with each key.
-        rest :
-            (the rest of the mapping elements) Optional identifier to capture remaining mapping elements not otherwise
-            matched.
+        keys : Sequence[ast.expr] = []
+            Literal or dotted-name key expressions (`ast.expr`, ***expr***ession).
+        patterns : Sequence[ast.pattern] = []
+            Patterns for the values associated with `keys`, in the same order.
+        rest : str | None = None
+            (the rest of the mapping elements) Capture name after `**`. When supplied, it receives a
+            dictionary of the remaining items.
+        **keywordArguments : ast_attributes_int
+            Optional source positions. Supply integer end positions when setting them. See `Make`.
 
         Returns
         -------
-        matchMappingNode : ast.MatchMapping
-            An `ast.MatchMapping` node for the specified key-value patterns and optional rest capture.
+        matchMapping : ast.MatchMapping
+            An `ast.MatchMapping` (Match Mapping) object for the specified key-value patterns and
+            optional rest capture.
         """
         return ast.MatchMapping(keys=list(keys) if keys else [], patterns=list(patterns) if patterns else [], rest=rest, **keywordArguments)
 
     @staticmethod
     def MatchOr(patterns: Sequence[ast.pattern] | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchOr:
-        """Create an `ast.MatchOr` node for alternative pattern matching.
+        """Make an `ast.MatchOr` (Match this Or that) for alternative patterns.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.MatchOr` (Match this Or that) node represents or-patterns that match if any of the alternative
-        subpatterns succeed. The pattern tries each alternative in sequence until one matches or all fail.
+        An `ast.MatchOr` (Match this Or that) represents alternatives separated by `|`. Python tries
+        them from left to right. Every alternative must bind the same names.
 
         Parameters
         ----------
-        patterns :
-            Sequence of alternative pattern nodes. The match succeeds if any subpattern matches the subject.
+        patterns : Sequence[ast.pattern] = []
+            Two or more alternatives in matching order.
+        **keywordArguments : ast_attributes_int
+            Optional source positions. Supply integer end positions when setting them. See `Make`.
 
         Returns
         -------
-        matchOrNode : ast.MatchOr
-            An `ast.MatchOr` node containing the alternative patterns.
+        matchOr : ast.MatchOr
+            An `ast.MatchOr` (Match this Or that) object containing the alternative patterns.
         """
         return ast.MatchOr(patterns=list(patterns) if patterns else [], **keywordArguments)
 
     @staticmethod
     def MatchSequence(patterns: Sequence[ast.pattern] | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchSequence:
-        """Create an `ast.MatchSequence` node for matching sequences.
+        """Make an `ast.MatchSequence` (Match this Sequence) for a sequence pattern.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.MatchSequence` (Match this Sequence) node represents patterns that match sequence objects like lists
-        and tuples, checking both length and element patterns. Supports both fixed-length and variable-length sequence
-        matching.
+        An `ast.MatchSequence` (Match this Sequence) represents patterns such as `[first, *rest]` or
+        `(x, y)`. Sequence patterns exclude strings, bytes, and byte arrays.
 
         Parameters
         ----------
-        patterns :
-            Sequence of pattern nodes to match against sequence elements. If any pattern is `MatchStar`, enables
-            variable-length matching; otherwise requires exact length match.
+        patterns : Sequence[ast.pattern] = []
+            Element patterns in order. One `ast.MatchStar` (Match Star) can capture a variable-length
+            portion of the sequence.
+        **keywordArguments : ast_attributes_int
+            Optional source positions. Supply integer end positions when setting them. See `Make`.
 
         Returns
         -------
-        matchSequenceNode : ast.MatchSequence
-            An `ast.MatchSequence` node for the specified element patterns.
+        matchSequence : ast.MatchSequence
+            An `ast.MatchSequence` (Match this Sequence) object for the specified element patterns.
         """
         return ast.MatchSequence(patterns=list(patterns) if patterns else [], **keywordArguments)
 
     @staticmethod
     def MatchSingleton(value: bool | None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchSingleton: # noqa: FBT001
-        """Create an `ast.MatchSingleton` node for matching singleton values.
+        """Make an `ast.MatchSingleton` (Match Singleton) for a singleton pattern.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.MatchSingleton` (Match Singleton) node represents patterns that match singleton constants by identity
-        rather than equality. This pattern succeeds only if the match subject is the exact same object as the specified
-        constant.
+        An `ast.MatchSingleton` (Match Singleton) compares the subject by identity with `None`,
+        `True`, or `False`.
 
         Parameters
         ----------
-        value :
-            The singleton constant to match against. Must be `None`, `True`, or `False`. Matching uses identity
-            comparison (`is`) rather than equality comparison (`==`).
+        value : bool | None
+            Singleton to match. Use `None`, `True`, or `False`.
+        **keywordArguments : ast_attributes_int
+            Optional source positions. Supply integer end positions when setting them. See `Make`.
 
         Returns
         -------
-        matchSingletonNode : ast.MatchSingleton
-            An `ast.MatchSingleton` node for the specified singleton value.
+        matchSingleton : ast.MatchSingleton
+            An `ast.MatchSingleton` (Match Singleton) object for the specified singleton value.
         """
         return ast.MatchSingleton(value=value, **keywordArguments)
 
     @staticmethod
     def MatchStar(name: str | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchStar:
-        """Create an `ast.MatchStar` node for capturing sequence remainder.
+        """Make an `ast.MatchStar` (Match Star) for a starred sequence pattern.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.MatchStar` (Match Star) node represents star patterns that capture remaining elements in variable-
-        length sequence patterns. This enables flexible sequence matching where some elements are specifically matched
-        and others are collected.
+        An `ast.MatchStar` (Match Star) represents `*rest` or `*_` inside a sequence pattern. It
+        matches the elements left after the fixed positions on either side are accounted for.
 
         Parameters
         ----------
-        name :
-            Optional identifier to bind the remaining sequence elements. When `None`, the remaining elements are matched
-            but not captured.
+        name : str | None = None
+            Capture name for the list of remaining elements. Use `None` for `*_`.
+        **keywordArguments : ast_attributes_int
+            Optional source positions. Supply integer end positions when setting them. See `Make`.
 
         Returns
         -------
-        matchStarNode : ast.MatchStar
-            An `ast.MatchStar` node with the specified capture name.
+        matchStar : ast.MatchStar
+            An `ast.MatchStar` (Match Star) object with the specified capture name.
         """
         return ast.MatchStar(name=name, **keywordArguments)
 
     @staticmethod
     def MatchValue(value: ast.expr, **keywordArguments: Unpack[ast_attributes_int]) -> ast.MatchValue:
-        """Create an `ast.MatchValue` node for matching literal values.
+        """Make an `ast.MatchValue` (Match Value) for a value pattern.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.MatchValue` (Match Value) node represents patterns that match by equality comparison against a literal
-        value or expression. The pattern succeeds if the match subject equals the evaluated value expression.
+        An `ast.MatchValue` (Match Value) compares the subject with a literal or the value of a dotted
+        name using `==`. Use `Make.MatchSingleton` (Match Singleton) for `None`, `True`, and `False`.
 
         Parameters
         ----------
-        value :
-            Expression node representing the value to match against. Typically a constant, name, or attribute access.
-            The expression is evaluated and compared using equality (`==`).
+        value : ast.expr
+            Literal expression or dotted name such as `Color.RED` (`ast.expr`, ***expr***ession).
+        **keywordArguments : ast_attributes_int
+            Optional source positions. Supply integer end positions when setting them. See `Make`.
 
         Returns
         -------
-        matchValueNode : ast.MatchValue
-            An `ast.MatchValue` node for the specified value expression.
+        matchValue : ast.MatchValue
+            An `ast.MatchValue` (Match Value) object for the specified value expression.
         """
         return ast.MatchValue(value=value, **keywordArguments)
 
     class MatMult(ast.MatMult):
-        """Identical to the `ast` (abstract syntax tree) class but with a method, `join()`, that 'joins' expressions using the `ast.BinOp` (***Bin***ary ***Op***eration) class."""
+        """Make an `ast.MatMult` (***Mat***rix ***Mult***iplication) operator for `@`.
+
+        This subclass of `ast.MatMult` (***Mat***rix ***Mult***iplication) adds `join()`, which
+        combines expressions into nested `ast.BinOp` (***Bin***ary ***Op***eration) operations.
+        """
 
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
-            """Make a single `ast.expr` (***expr***ession) from a `Sequence` of `ast.expr` by creating nested `ast.BinOp` (***Bin***ary ***Op***eration) `object` that are logically 'joined' by the `ast.operator` subclass.
+            """Join expressions in left-associated `ast.BinOp` (***Bin***ary ***Op***eration) operations.
 
-            Like str.join() (***str***ing) but for AST (Abstract Syntax Tree) expressions.
+            Like `str.join()` (***str***ing) but for `AST` (Abstract Syntax Tree) expressions. Joining
+            `a`, `b`, and `c` with `Make.Sub.join()` represents `(a - b) - c`.
 
             Parameters
             ----------
             expressions : Iterable[ast.expr]
-                Collection of expressions to join.
+                Operands in evaluation order (`ast.expr`, ***expr***ession).
             **keywordArguments : ast_attributes
-
+                Source positions for every constructed expression. A single input keeps its existing
+                positions.
 
             Returns
             -------
             joinedExpression : ast.expr
-                Single expression representing the joined expressions.
+                Nested `ast.BinOp` (***Bin***ary ***Op***eration) operations for two or more operands,
+                the original operand for a single input, or an empty string literal for an empty
+                input.
 
             Examples
             --------
-            ```python
-            # Instead of manually constructing nested ast.BinOp structures:
-            ast.BinOp(
-                left=ast.BinOp(
-            left=ast.Name('Crosby')
-                    , op=ast.BitOr()
-                    , right=ast.Name('Stills'))
-                , op=ast.BitOr()
-            , right=ast.Name('Nash')
-            )
+                ```python
+                import ast
+                from astToolkit import Make
 
-            # Simply use:
-            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'),
-            ast.Name('Nash')])
-
-            # Both produce the same AST structure but the join() method eliminates the manual nesting.
-            ```
+                # Both expressions represent (Crosby | Stills) | Nash.
+                ast.BinOp(
+                    left=ast.BinOp(left=Make.Name('Crosby'), op=ast.BitOr(), right=Make.Name('Stills')),
+                    op=ast.BitOr(),
+                    right=Make.Name('Nash'),
+                )
+                Make.BitOr.join([Make.Name('Crosby'), Make.Name('Stills'), Make.Name('Nash')])
+                ```
             """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     class Mod(ast.Mod):
-        """Identical to the `ast` (abstract syntax tree) class but with a method, `join()`, that 'joins' expressions using the `ast.BinOp` (***Bin***ary ***Op***eration) class."""
+        """Make an `ast.Mod` (***Mod***ulo) operator for `%`.
+
+        This subclass of `ast.Mod` (***Mod***ulo) adds `join()`, which combines expressions into
+        nested `ast.BinOp` (***Bin***ary ***Op***eration) operations.
+        """
 
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
-            """Make a single `ast.expr` (***expr***ession) from a `Sequence` of `ast.expr` by creating nested `ast.BinOp` (***Bin***ary ***Op***eration) `object` that are logically 'joined' by the `ast.operator` subclass.
+            """Join expressions in left-associated `ast.BinOp` (***Bin***ary ***Op***eration) operations.
 
-            Like str.join() (***str***ing) but for AST (Abstract Syntax Tree) expressions.
+            Like `str.join()` (***str***ing) but for `AST` (Abstract Syntax Tree) expressions. Joining
+            `a`, `b`, and `c` with `Make.Sub.join()` represents `(a - b) - c`.
 
             Parameters
             ----------
             expressions : Iterable[ast.expr]
-                Collection of expressions to join.
+                Operands in evaluation order (`ast.expr`, ***expr***ession).
             **keywordArguments : ast_attributes
-
+                Source positions for every constructed expression. A single input keeps its existing
+                positions.
 
             Returns
             -------
             joinedExpression : ast.expr
-                Single expression representing the joined expressions.
+                Nested `ast.BinOp` (***Bin***ary ***Op***eration) operations for two or more operands,
+                the original operand for a single input, or an empty string literal for an empty
+                input.
 
             Examples
             --------
-            ```python
-            # Instead of manually constructing nested ast.BinOp structures:
-            ast.BinOp(
-                left=ast.BinOp(
-            left=ast.Name('Crosby')
-                    , op=ast.BitOr()
-                    , right=ast.Name('Stills'))
-                , op=ast.BitOr()
-            , right=ast.Name('Nash')
-            )
+                ```python
+                import ast
+                from astToolkit import Make
 
-            # Simply use:
-            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'),
-            ast.Name('Nash')])
-
-            # Both produce the same AST structure but the join() method eliminates the manual nesting.
-            ```
+                # Both expressions represent (Crosby | Stills) | Nash.
+                ast.BinOp(
+                    left=ast.BinOp(left=Make.Name('Crosby'), op=ast.BitOr(), right=Make.Name('Stills')),
+                    op=ast.BitOr(),
+                    right=Make.Name('Nash'),
+                )
+                Make.BitOr.join([Make.Name('Crosby'), Make.Name('Stills'), Make.Name('Nash')])
+                ```
             """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
@@ -2610,1104 +2771,1230 @@ class Make:
 
     @staticmethod
     def Module(body: Sequence[ast.stmt], type_ignores: list[ast.TypeIgnore] | None=None) -> ast.Module:
-        """Make a module AST object representing complete Python modules with statements and type ignores.
+        """Make an `ast.Module` for a sequence of top-level statements.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Module` object represents entire Python modules as parsed from source files. Contains all top-level
-        statements and tracks type ignore comments for static analysis tools and type checkers.
+        An `ast.Module` represents source compiled in `exec` mode. You can also store the module's `#
+        type: ignore` comments.
 
         Parameters
         ----------
-        body :
-            List of statements forming the module content.
-        type_ignores :
-            (type ***ignore*** comments) List of TypeIgnore objects for `# noqa: ` comments.
+        body : Sequence[ast.stmt]
+            Top-level statements in source order (`ast.stmt`, ***st***ate***m***en***t***).
+        type_ignores : list[ast.TypeIgnore] = []
+            (type ***ignore*** comments) Line-specific `ast.TypeIgnore` (this Type (`type`) error,
+            Ignore it) directives for `# type: ignore` comments.
 
         Returns
         -------
-        moduleDefinition :
-            AST object representing a complete Python module structure.
+        moduleDefinition : ast.Module
+            `AST` (Abstract Syntax Tree) object representing a complete Python module structure.
 
         Examples
         --------
-        Creates AST equivalent to: x = 42
-        ```python
-        simpleModule = Make.Module([Make.Assign([Make.Name('x')], Make.Constant(42))])
-        ```
+        Creates AST equivalent to x = 42.
+            ```python
+            from astToolkit import Make
+
+            simpleModule = Make.Module([Make.Assign([Make.Name('x', Make.Store())], Make.Constant(42))])
+            ```
+
         Creates AST equivalent to module with function and assignment
-        ```python
-        moduleWithFunction = Make.Module([
-        Make.FunctionDef('calculate', body=[Make.Return(Make.Constant(100))]),
-            Make.Assign([Make.Name('result')], Make.Call(Make.Name('calculate'),
-        []))
-        ])
-        ```
+            ```python
+            from astToolkit import Make
+
+            moduleWithFunction = Make.Module([
+                Make.FunctionDef('calculate', body=[Make.Return(Make.Constant(100))]),
+                Make.Assign([Make.Name('result', Make.Store())], Make.Call(Make.Name('calculate'), []))
+            ])
+            ```
         """
         return ast.Module(body=list(body), type_ignores=type_ignores or [])
 
     class Mult(ast.Mult):
-        """Identical to the `ast` (abstract syntax tree) class but with a method, `join()`, that 'joins' expressions using the `ast.BinOp` (***Bin***ary ***Op***eration) class."""
+        """Make an `ast.Mult` (***Mult***iplication) operator for `*`.
+
+        This subclass of `ast.Mult` (***Mult***iplication) adds `join()`, which combines expressions
+        into nested `ast.BinOp` (***Bin***ary ***Op***eration) operations.
+        """
 
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
-            """Make a single `ast.expr` (***expr***ession) from a `Sequence` of `ast.expr` by creating nested `ast.BinOp` (***Bin***ary ***Op***eration) `object` that are logically 'joined' by the `ast.operator` subclass.
+            """Join expressions in left-associated `ast.BinOp` (***Bin***ary ***Op***eration) operations.
 
-            Like str.join() (***str***ing) but for AST (Abstract Syntax Tree) expressions.
+            Like `str.join()` (***str***ing) but for `AST` (Abstract Syntax Tree) expressions. Joining
+            `a`, `b`, and `c` with `Make.Sub.join()` represents `(a - b) - c`.
 
             Parameters
             ----------
             expressions : Iterable[ast.expr]
-                Collection of expressions to join.
+                Operands in evaluation order (`ast.expr`, ***expr***ession).
             **keywordArguments : ast_attributes
-
+                Source positions for every constructed expression. A single input keeps its existing
+                positions.
 
             Returns
             -------
             joinedExpression : ast.expr
-                Single expression representing the joined expressions.
+                Nested `ast.BinOp` (***Bin***ary ***Op***eration) operations for two or more operands,
+                the original operand for a single input, or an empty string literal for an empty
+                input.
 
             Examples
             --------
-            ```python
-            # Instead of manually constructing nested ast.BinOp structures:
-            ast.BinOp(
-                left=ast.BinOp(
-            left=ast.Name('Crosby')
-                    , op=ast.BitOr()
-                    , right=ast.Name('Stills'))
-                , op=ast.BitOr()
-            , right=ast.Name('Nash')
-            )
+                ```python
+                import ast
+                from astToolkit import Make
 
-            # Simply use:
-            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'),
-            ast.Name('Nash')])
-
-            # Both produce the same AST structure but the join() method eliminates the manual nesting.
-            ```
+                # Both expressions represent (Crosby | Stills) | Nash.
+                ast.BinOp(
+                    left=ast.BinOp(left=Make.Name('Crosby'), op=ast.BitOr(), right=Make.Name('Stills')),
+                    op=ast.BitOr(),
+                    right=Make.Name('Nash'),
+                )
+                Make.BitOr.join([Make.Name('Crosby'), Make.Name('Stills'), Make.Name('Nash')])
+                ```
             """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
     def Name(id: str, context: ast.expr_context | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Name:
-        """Make a name AST `object` for variable and identifier references.
+        """Make an `ast.Name` for an identifier in an expression.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Name` `object` represents identifiers like variable names, function names, and class names in Python
-        code. The context parameter determines whether the name is being loaded, stored to, or deleted.
+        An `ast.Name` represents a bare name such as `inventory`. The context indicates a read, an
+        assignment target, or a deletion target.
 
         Parameters
         ----------
-        id :
-            (***id***entifier) The identifier string representing the name.
-        context :
-            Expression context specifying how the name is used.
+        id : str
+            (***id***entifier) Identifier string, such as `inventory`. Use `Make.Attribute` for a
+            dotted reference.
+        context : ast.expr_context = Make.Load()
+            Use `Make.Load()` to read, `Make.Store()` to assign, or `Make.Del()` (***Del***ete) to
+            delete. This is `ast.Name.ctx` (***c***on***t***e***x***t) (`ast.expr_context`,
+            ***expr***ession ***context***).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         nameReference : ast.Name
-            AST `object` representing an identifier reference with specified context.
+            `AST` (Abstract Syntax Tree) object representing an identifier reference with specified
+            context.
         """
         return ast.Name(id=id, ctx=context or ast.Load(), **keywordArguments)
 
     @staticmethod
     def NamedExpr(target: ast.Name, value: ast.expr, **keywordArguments: Unpack[ast_attributes]) -> ast.NamedExpr:
-        """Make a named expression AST `object` for assignment expressions (walrus operator).
+        """Make an `ast.NamedExpr` (Named ***Expr***ession) for an assignment expression.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.NamedExpr` (Named ***Expr***ession) `object` represents assignment expressions using the walrus
-        operator `:=` introduced in Python 3.8. It allows assignment within expressions and is commonly used in
-        comprehensions and conditional statements.
+        An `ast.NamedExpr` (Named ***Expr***ession) represents a form such as `(inventory := count)`.
+        Python assigns the expression's value to the name and returns that same value.
 
         Parameters
         ----------
-        target :
-            The `ast.Name` `object` representing the variable being assigned to.
-        value :
-            The expression whose value is assigned to the target.
+        target : ast.Name
+            Name in `Make.Store()` context that receives the value.
+        value : ast.expr
+            Expression evaluated for assignment and returned by the assignment expression (`ast.expr`,
+            ***expr***ession).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
-        namedExpression :
-            AST `object` representing an assignment expression with the walrus operator.
+        namedExpression : ast.NamedExpr
+            `AST` (Abstract Syntax Tree) object representing an assignment expression with the walrus
+            operator.
 
         Examples
         --------
-        ```python
-        # Creates AST equivalent to: `(inventory := len(warehouse)) > 10`
-        inventoryCheck = Make.Compare(
-        left=Make.NamedExpr(
-                target=Make.Name('inventory', ast.Store()),
-                value=Make.Call(Make.Name('len'),
-        [Make.Name('warehouse')])
-            ),
-            ops=[Make.Gt()],
-            comparators=[Make.Constant(10)]
-        )
-        ```
+            ```python
+            from astToolkit import Make
+
+            # Creates AST equivalent to: `(inventory := len(warehouse)) > 10`
+            inventoryCheck = Make.Compare(
+                left=Make.NamedExpr(
+                    target=Make.Name('inventory', Make.Store()),
+                    value=Make.Call(Make.Name('len'), [Make.Name('warehouse')])
+                ),
+                ops=[Make.Gt()],
+                comparators=[Make.Constant(10)]
+            )
+            ```
         """
         return ast.NamedExpr(target=target, value=value, **keywordArguments)
 
     @staticmethod
     def Nonlocal(names: list[str], **keywordArguments: Unpack[ast_attributes]) -> ast.Nonlocal:
-        """Create an `ast.Nonlocal` node for nonlocal declarations.
+        """Make an `ast.Nonlocal` for a `nonlocal` declaration.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `Nonlocal` node represents a `nonlocal` statement that declares variables as referring to the nearest
-        enclosing scope that is not global. This is used in nested functions to modify variables from outer scopes.
+        Each declared name refers to an existing binding in the nearest enclosing function scope that
+        binds it.
 
         Parameters
         ----------
-        names :
-            List of variable names to declare as nonlocal.
+        names : list[str]
+            Identifiers declared nonlocal.
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
-        nodeNonlocal : ast.Nonlocal
-            The constructed nonlocal declaration node.
+        nonlocalStatement : ast.Nonlocal
+            The declaration for the supplied names.
         """
         return ast.Nonlocal(names=names, **keywordArguments)
 
     @staticmethod
     def Not() -> ast.Not:
-        """Make a logical negation operator representing Python keyword '`not`'.
+        """Make an `ast.Not` operator for `not value`.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        Class `ast.Not` is a subclass of `ast.unaryop` and represents the logical negation operator keyword '`not`' in
-        Python source code. This operator returns the boolean inverse of its operand's truthiness. Used within
-        `ast.UnaryOp` as the `op` parameter.
+        Use `ast.Not` as `op` (***op***erator) in `Make.UnaryOp` (***Un***ary ***Op***eration). Python
+        evaluates `not value` as true when `value` is falsy.
 
         Returns
         -------
         logicalNegationOperator : ast.Not
-            AST `object` representing the keyword '`not`' logical negation operator for use in `ast.UnaryOp`.
+            `AST` (Abstract Syntax Tree) object representing the keyword '`not`' logical negation
+            operator for use in `ast.UnaryOp` (***Un***ary ***Op***eration).
         """
         return ast.Not()
 
     @staticmethod
     def NotEq() -> ast.NotEq:
-        """'NotEq' meaning 'is ***Not*** ***Eq***ual to', is the `object` representation of Python comparison operator '`!=`'.
+        """Make an `ast.NotEq` (is Not ***Eq***ual to) comparison operator.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        `class` `ast.NotEq` is a subclass of `ast.cmpop`, '***c***o***mp***arison ***op***erator', and only used in
-        `class` `ast.Compare`, parameter '`ops`', ***op***erator***s***.
+        Use `ast.NotEq` (is Not ***Eq***ual to) in the `ops` (***op***erator***s***) of `Make.Compare`
+        to represent `!=`.
 
         Returns
         -------
         inequalityOperator : ast.NotEq
-            AST `object` representing the '`!=`' inequality comparison operator for use in `ast.Compare`.
+            The operator to put in `ast.Compare.ops` (***op***erator***s***).
         """
         return ast.NotEq()
 
     @staticmethod
     def NotIn() -> ast.NotIn:
-        """'NotIn', meaning 'is Not ***In***cluded in' or 'does Not have membership In', is the `object` representation of Python keywords '`not in`'.
+        """Make an `ast.NotIn` (is Not ***In***cluded in or does Not have membership In) operator.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        `class` `ast.NotIn` is a subclass of `ast.cmpop`, '***c***o***mp***arison ***op***erator', and only used in
-        `class` `ast.Compare`, parameter '`ops`', ***op***erator***s***. The Python interpreter declares *This* `object`
-        'is Not ***In***cluded in' *That* `iterable` if *This* `object` does not match a part of *That* `iterable`.
+        Use `ast.NotIn` (is Not ***In***cluded in or does Not have membership In) in the `ops`
+        (***op***erator***s***) of `Make.Compare` to represent `not in`. Python tests the left operand
+        for membership in the right operand.
 
         Returns
         -------
         negativeMembershipOperator : ast.NotIn
-            AST `object` representing the keywords '`not in`' negative membership test operator for use in
-            `ast.Compare`.
+            The operator to put in `ast.Compare.ops` (***op***erator***s***).
         """
         return ast.NotIn()
 
     @staticmethod
     def operator() -> ast.operator:
-        """Create an `ast.operator` node for arithmetic and bitwise operations.
+        """Make an instance of the base class `ast.operator`.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `operator` method creates operator nodes used in binary operations, unary operations, and comparison
-        operations. These represent the specific operation to be performed.
+        Use a concrete binary operator such as `Make.Add()` or `Make.BitOr()` (***Bit***wise Or) in
+        `Make.BinOp` (***Bin***ary ***Op***eration) or `Make.AugAssign` (***Aug***mented
+        ***Assign***ment).
 
         Returns
         -------
-        nodeOperator : ast.operator
-            The constructed operator node
+        binaryOperator : ast.operator
+            An instance of the common base class for binary operators.
         """
         return ast.operator()
 
     class Or(ast.Or):
-        """Identical to the `ast` (abstract syntax tree) class but with a method, `join()`, that 'joins' expressions using the `ast.BoolOp` (***Bool***ean ***Op***eration) class."""
+        """Make an `ast.Or` operator for `or`.
+
+        This subclass of `ast.Or` adds `join()`, which combines expressions into one `ast.BoolOp`
+        (***Bool***ean ***Op***eration).
+        """
 
         @classmethod
         def join(cls, expressions: Sequence[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
-            """Make a single `ast.expr` (***expr***ession) from a `Sequence` of `ast.expr` by creating an `ast.BoolOp` (***Bool***ean ***Op***eration) `object` that logically 'joins' the `Sequence`.
+            """Join expressions in one `ast.BoolOp` (***Bool***ean ***Op***eration).
 
-            Like str.join() (***str***ing) but for AST (Abstract Syntax Tree) expressions.
+            Like `str.join()` (***str***ing) but for `AST` (Abstract Syntax Tree) expressions.
 
             Parameters
             ----------
             expressions : Sequence[ast.expr]
-                Collection of expressions to join.
+                Operands in evaluation order (`ast.expr`, ***expr***ession).
             **keywordArguments : ast_attributes
-
+                Source positions for the constructed expression. A single input keeps its existing
+                positions.
 
             Returns
             -------
             joinedExpression : ast.expr
-                Single expression representing the joined expressions.
+                One `ast.BoolOp` (***Bool***ean ***Op***eration) for two or more operands, the
+                original operand for a single input, or an empty string literal for an empty input.
 
             Examples
             --------
-            ```python
-            # Instead of manually constructing ast.BoolOp structures:
-            ast.BoolOp(
-                op=ast.And(),
-            values=[ast.Name('Lions'), ast.Name('tigers'), ast.Name('bears')]
-            )
+                ```python
+                import ast
+                from astToolkit import Make
 
-            # Simply use:
-            astToolkit.And.join([ast.Name('Lions'), ast.Name('tigers'), ast.Name('bears')])
-
-            # Both produce the same AST structure but the join()
-            method eliminates the manual construction.
-            ```
+                # Both expressions represent Lions and tigers and bears.
+                ast.BoolOp(
+                    op=ast.And(),
+                    values=[Make.Name('Lions'), Make.Name('tigers'), Make.Name('bears')],
+                )
+                Make.And.join([Make.Name('Lions'), Make.Name('tigers'), Make.Name('bears')])
+                ```
             """
             return Make._boolopJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
     def ParamSpec(name: str, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.ParamSpec:
-        """Make a parameter specification type parameter for generic callable types.
+        """Make an `ast.ParamSpec` (***Param***eter ***Spec***ification) type parameter.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.ParamSpec` (***Param***eter ***Spec***ification) object represents parameter specification type
-        parameters used in generic callable types. Captures both positional and keyword argument signatures for type-
-        safe function composition and higher-order functions.
+        An `ast.ParamSpec` (***Param***eter ***Spec***ification) represents a type parameter such as
+        `**P` in a generic declaration. It can preserve a callable's positional and keyword parameter
+        types.
 
         Parameters
         ----------
-        name :
-            Type parameter name as string identifier.
-        default_value :
-            Optional default type expression (Python 3.13+).
+        name : str
+            Type parameter name without the `**` prefix.
+        default_value : ast.expr | None = None
+            Default parameter list expression, such as `[int, str]`, when supplied (`ast.expr`,
+            ***expr***ession).
+        **keywordArguments : ast_attributes_int
+            Optional source positions. Supply integer end positions when setting them. See `Make`.
 
         Returns
         -------
         parameterSpecification : ast.ParamSpec
-            AST object representing a parameter specification type parameter.
+            `AST` (Abstract Syntax Tree) object representing a parameter specification type parameter.
         """
         return ast.ParamSpec(name=name, default_value=default_value, **keywordArguments)
 
     @staticmethod
     def Pass() -> ast.Pass:
-        """Create an `ast.Pass` node for pass statements.
+        """Make an `ast.Pass` for a `pass` statement.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `Pass` node represents a `pass` statement, which is a null operation that does nothing when executed. It
-        serves as syntactic placeholder where a statement is required but no action is needed.
+        Use `Make.Pass()` where Python requires a statement and the body needs no action.
 
         Returns
         -------
-        nodePass : ast.Pass
-            The constructed pass statement node.
+        passStatement : ast.Pass
+            A `pass` statement.
         """
         return ast.Pass()
 
     @staticmethod
     def pattern(**keywordArguments: Unpack[ast_attributes_int]) -> ast.pattern:
-        """Create a base `ast.pattern` node.
+        """Make an instance of the base class `ast.pattern`.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        Creates a generic `ast.pattern` node that serves as the abstract base for all pattern types in match statements.
-        This method is typically used for creating pattern node instances programmatically when the specific pattern
-        type is determined at runtime.
+        Use a concrete pattern factory such as `Make.MatchClass` (Match Class) or `Make.MatchValue`
+        (Match Value) to build a case pattern.
+
+        Parameters
+        ----------
+        **keywordArguments : ast_attributes_int
+            Optional source positions. Supply integer end positions when setting them. See `Make`.
 
         Returns
         -------
-        patternNode : ast.pattern
-            A base `ast.pattern` node with the specified attributes.
+        pattern : ast.pattern
+            A base `ast.pattern` object with the specified attributes.
         """
         return ast.pattern(**keywordArguments)
 
     class Pow(ast.Pow):
-        """Identical to the `ast` (abstract syntax tree) class but with a method, `join()`, that 'joins' expressions using the `ast.BinOp` (***Bin***ary ***Op***eration) class."""
+        """Make an `ast.Pow` (***Pow***er) operator for `**`.
+
+        This subclass of `ast.Pow` (***Pow***er) adds `join()`, which combines expressions into nested
+        `ast.BinOp` (***Bin***ary ***Op***eration) operations.
+        """
 
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
-            """Make a single `ast.expr` (***expr***ession) from a `Sequence` of `ast.expr` by creating nested `ast.BinOp` (***Bin***ary ***Op***eration) `object` that are logically 'joined' by the `ast.operator` subclass.
+            """Join expressions in left-associated `ast.BinOp` (***Bin***ary ***Op***eration) operations.
 
-            Like str.join() (***str***ing) but for AST (Abstract Syntax Tree) expressions.
+            Like `str.join()` (***str***ing) but for `AST` (Abstract Syntax Tree) expressions. Joining
+            `a`, `b`, and `c` with `Make.Sub.join()` represents `(a - b) - c`.
 
             Parameters
             ----------
             expressions : Iterable[ast.expr]
-                Collection of expressions to join.
+                Operands in evaluation order (`ast.expr`, ***expr***ession).
             **keywordArguments : ast_attributes
-
+                Source positions for every constructed expression. A single input keeps its existing
+                positions.
 
             Returns
             -------
             joinedExpression : ast.expr
-                Single expression representing the joined expressions.
+                Nested `ast.BinOp` (***Bin***ary ***Op***eration) operations for two or more operands,
+                the original operand for a single input, or an empty string literal for an empty
+                input.
 
             Examples
             --------
-            ```python
-            # Instead of manually constructing nested ast.BinOp structures:
-            ast.BinOp(
-                left=ast.BinOp(
-            left=ast.Name('Crosby')
-                    , op=ast.BitOr()
-                    , right=ast.Name('Stills'))
-                , op=ast.BitOr()
-            , right=ast.Name('Nash')
-            )
+                ```python
+                import ast
+                from astToolkit import Make
 
-            # Simply use:
-            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'),
-            ast.Name('Nash')])
-
-            # Both produce the same AST structure but the join() method eliminates the manual nesting.
-            ```
+                # Both expressions represent (Crosby | Stills) | Nash.
+                ast.BinOp(
+                    left=ast.BinOp(left=Make.Name('Crosby'), op=ast.BitOr(), right=Make.Name('Stills')),
+                    op=ast.BitOr(),
+                    right=Make.Name('Nash'),
+                )
+                Make.BitOr.join([Make.Name('Crosby'), Make.Name('Stills'), Make.Name('Nash')])
+                ```
             """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
     def Raise(exc: ast.expr | None=None, cause: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Raise:
-        """Create an `ast.Raise` node for raise statements.
+        """Make an `ast.Raise` for a `raise` statement.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `Raise` node represents a `raise` statement that raises an exception. Can re-raise the current exception,
-        raise a new exception, or raise with an explicit cause chain.
+        An `ast.Raise` represents `raise`, `raise exc`, or `raise exc from cause`.
 
         Parameters
         ----------
-        exc :
-            (***exc***eption) Optional expression for the exception to raise.
-        cause :
-            Optional expression for the exception cause.
+        exc : ast.expr | None = None
+            (***exc***eption) Expression that supplies an exception instance or class. Omit it to
+            re-raise the active exception (`ast.expr`, ***expr***ession).
+        cause : ast.expr | None = None
+            Expression following `from`. Use `Make.Constant(None)` for `from None`, which suppresses
+            display of the implicit exception context.
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
-        nodeRaise : ast.Raise
-            The constructed raise statement node.
+        raiseStatement : ast.Raise
+            The `raise` statement with the supplied exception and cause.
         """
         return ast.Raise(exc=exc, cause=cause, **keywordArguments)
 
     @staticmethod
     def Return(value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Return:
-        """Make a return statement AST object for function value returns and early exits.
+        """Make an `ast.Return` for a `return` statement.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Return` object represents return statements that exit functions and optionally provide return values.
-        Used for both value-returning functions and procedures that return None implicitly or explicitly.
+        A `return` statement exits the enclosing function. In a generator, it ends iteration.
 
         Parameters
         ----------
-        value :
-            Optional expression providing the return value; None for empty return.
+        value : ast.expr | None = None
+            Expression returned by the function. Omit it for a bare `return`. An asynchronous
+            generator requires the bare form (`ast.expr`, ***expr***ession).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         returnStatement : ast.Return
-            AST object representing a function return with optional value.
+            `AST` (Abstract Syntax Tree) object representing a function return with optional value.
         """
         return ast.Return(value=value, **keywordArguments)
 
     class RShift(ast.RShift):
-        """Identical to the `ast` (abstract syntax tree) class but with a method, `join()`, that 'joins' expressions using the `ast.BinOp` (***Bin***ary ***Op***eration) class."""
+        """Make an `ast.RShift` (***R***ight Shift) operator for `>>`.
+
+        This subclass of `ast.RShift` (***R***ight Shift) adds `join()`, which combines expressions
+        into nested `ast.BinOp` (***Bin***ary ***Op***eration) operations.
+        """
 
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
-            """Make a single `ast.expr` (***expr***ession) from a `Sequence` of `ast.expr` by creating nested `ast.BinOp` (***Bin***ary ***Op***eration) `object` that are logically 'joined' by the `ast.operator` subclass.
+            """Join expressions in left-associated `ast.BinOp` (***Bin***ary ***Op***eration) operations.
 
-            Like str.join() (***str***ing) but for AST (Abstract Syntax Tree) expressions.
+            Like `str.join()` (***str***ing) but for `AST` (Abstract Syntax Tree) expressions. Joining
+            `a`, `b`, and `c` with `Make.Sub.join()` represents `(a - b) - c`.
 
             Parameters
             ----------
             expressions : Iterable[ast.expr]
-                Collection of expressions to join.
+                Operands in evaluation order (`ast.expr`, ***expr***ession).
             **keywordArguments : ast_attributes
-
+                Source positions for every constructed expression. A single input keeps its existing
+                positions.
 
             Returns
             -------
             joinedExpression : ast.expr
-                Single expression representing the joined expressions.
+                Nested `ast.BinOp` (***Bin***ary ***Op***eration) operations for two or more operands,
+                the original operand for a single input, or an empty string literal for an empty
+                input.
 
             Examples
             --------
-            ```python
-            # Instead of manually constructing nested ast.BinOp structures:
-            ast.BinOp(
-                left=ast.BinOp(
-            left=ast.Name('Crosby')
-                    , op=ast.BitOr()
-                    , right=ast.Name('Stills'))
-                , op=ast.BitOr()
-            , right=ast.Name('Nash')
-            )
+                ```python
+                import ast
+                from astToolkit import Make
 
-            # Simply use:
-            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'),
-            ast.Name('Nash')])
-
-            # Both produce the same AST structure but the join() method eliminates the manual nesting.
-            ```
+                # Both expressions represent (Crosby | Stills) | Nash.
+                ast.BinOp(
+                    left=ast.BinOp(left=Make.Name('Crosby'), op=ast.BitOr(), right=Make.Name('Stills')),
+                    op=ast.BitOr(),
+                    right=Make.Name('Nash'),
+                )
+                Make.BitOr.join([Make.Name('Crosby'), Make.Name('Stills'), Make.Name('Nash')])
+                ```
             """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
     def Set(listElements: Sequence[ast.expr] | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Set:
-        """Make a set literal AST `object` for unordered unique element collections.
+        """Make an `ast.Set` for a set display.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Set` `object` represents set literals using curly brace notation. It creates unordered collections of
-        unique elements with efficient membership testing and set operations.
+        An `ast.Set` represents set displays such as `{a, b}` or `{a, *items}`. An empty set
+        expression unparses as `{*()}`.
 
         Parameters
         ----------
-        listElements :
-            Sequence of expressions that become set elements.
+        listElements : Sequence[ast.expr] = []
+            Element expressions in source order. This is `ast.Set.elts` (***e***lemen***t***s)
+            (`ast.expr`, ***expr***ession).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         setLiteral : ast.Set
-            AST `object` representing a set literal with specified unique elements.
+            `AST` (Abstract Syntax Tree) object representing a set literal with specified unique
+            elements.
         """
         return ast.Set(elts=list(listElements) if listElements else [], **keywordArguments)
 
     @staticmethod
     def SetComp(element: ast.expr, generators: list[ast.comprehension], **keywordArguments: Unpack[ast_attributes]) -> ast.SetComp:
-        """Make a set comprehension AST `object` for dynamic set construction.
+        """Make an `ast.SetComp` (Set ***c***o***mp***rehension) for a set comprehension.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.SetComp` (Set ***c***o***mp***rehension) `object` represents set comprehensions that create sets using
-        iterator expressions. It automatically handles uniqueness while providing concise syntax for filtering and
-        transforming collections.
+        An `ast.SetComp` (Set ***c***o***mp***rehension) represents a set comprehension such as
+        `{item.name for item in items}`.
 
         Parameters
         ----------
-        element :
-            Expression that generates each element of the resulting set.
-        generators :
-            Sequence of `ast.comprehension` objects defining iteration and filtering.
+        element : ast.expr
+            Expression that supplies each element. Use `Make.Starred` for unpacking, as in `{*items
+            for items in groups}`. This is `ast.SetComp.elt` (`SetComp` Set ***c***o***mp***rehension,
+            `elt` ***e***lemen***t***) (`ast.expr`, ***expr***ession).
+        generators : list[ast.comprehension]
+            `for` clauses and filters in source order.
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         setComprehension : ast.SetComp
-            AST `object` representing a set comprehension expression.
+            `AST` (Abstract Syntax Tree) object representing a set comprehension expression.
         """
         return ast.SetComp(elt=element, generators=generators, **keywordArguments)
 
     @staticmethod
     def Slice(lower: ast.expr | None=None, upper: ast.expr | None=None, step: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Slice:
-        """Make a slice AST `object` for sequence slicing operations.
+        """Make an `ast.Slice` for a slice inside a subscription.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Slice` `object` represents slice expressions used with subscription operations to extract subsequences
-        from collections. It supports the full Python slicing syntax with optional start, stop, and step parameters.
+        Use an `ast.Slice` as `slice` in `Make.Subscript` to represent forms such as
+        `items[start:stop:step]`.
 
         Parameters
         ----------
-        lower :
-            (lower bound) Optional expression for slice start position.
-        upper :
-            (upper bound) Optional expression for slice end position.
-        step :
-            Optional expression for slice step size.
+        lower : ast.expr | None = None
+            (lower bound) Start expression before the first `:`. Omit it for an open start
+            (`ast.expr`, ***expr***ession).
+        upper : ast.expr | None = None
+            (upper bound) Stop expression after the first `:`. For built-in sequences, the stop
+            position is exclusive.
+        step : ast.expr | None = None
+            Stride expression after the second `:`. Built-in sequences use a stride of `1` when
+            omitted.
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         sliceExpression : ast.Slice
-            AST `object` representing a slice operation for sequence subscripting.
+            `AST` (Abstract Syntax Tree) object representing a slice operation for sequence
+            subscripting.
         """
         return ast.Slice(lower=lower, upper=upper, step=step, **keywordArguments)
 
     @staticmethod
     def Starred(value: ast.expr, context: ast.expr_context | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Starred:
-        """Make a starred expression AST `object` for unpacking operations.
+        """Make an `ast.Starred` for the `*` form of an expression or target.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Starred` `object` represents starred expressions using the `*` operator for unpacking iterables in
-        various contexts like function calls, assignments, and collection literals.
+        Use an `ast.Starred` for unpacking in calls and displays or to capture remaining items in an
+        assignment target.
 
         Parameters
         ----------
-        value :
-            The expression to be unpacked with the star operator.
-        context :
-            Expression context determining how the starred expression is used.
+        value : ast.expr
+            Iterable expression to unpack, or target that receives the remaining items (`ast.expr`,
+            ***expr***ession).
+        context : ast.expr_context = Make.Load()
+            Use `Make.Load()` for unpacking an iterable or `Make.Store()` for an assignment target.
+            This is `ast.Starred.ctx` (***c***on***t***e***x***t) (`ast.expr_context`,
+            ***expr***ession ***context***).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
-        starredExpression :
-            AST `object` representing a starred expression for unpacking operations.
+        starredExpression : ast.Starred
+            `AST` (Abstract Syntax Tree) object representing a starred expression for unpacking
+            operations.
 
         Examples
         --------
-        ```python
-        # Creates AST equivalent to: `*ingredients` in function call
-        unpackIngredients = Make.Starred(Make.Name('ingredients'))
-        # Creates AST equivalent to: `*remaining` in assignment like `first, *remaining = groceries`
-        unpackRemaining =
-        Make.Starred(Make.Name('remaining'), ast.Store())
-        ```
+            ```python
+            from astToolkit import Make
+
+            # Call cook(*ingredients).
+            cookCall = Make.Call(Make.Name('cook'), [Make.Starred(Make.Name('ingredients'))])
+
+            # Assign first, *remaining = groceries.
+            targets = Make.Tuple(
+                [Make.Name('first', Make.Store()),
+                 Make.Starred(Make.Name('remaining', Make.Store()), Make.Store())],
+                Make.Store(),
+            )
+            unpackGroceries = Make.Assign([targets], Make.Name('groceries'))
+            ```
         """
         return ast.Starred(value=value, ctx=context or ast.Load(), **keywordArguments)
 
     @staticmethod
     def stmt(**keywordArguments: Unpack[ast_attributes]) -> ast.stmt:
-        """`class` `ast.stmt` (***st***ate***m***en***t***) is the base class for all statement nodes.
+        """Make an instance of the base class `ast.stmt` (***st***ate***m***en***t***).
 
-        (AI generated docstring.)
+        (AI generated docstring)
+
+        Use a concrete statement factory such as `Make.Assign` or `Make.Return` to represent an
+        executable statement.
 
         Parameters
         ----------
-        **keywordArguments :
-            Positional attributes.
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
-        nodeStmt : ast.stmt
-            The constructed statement node.
+        statement : ast.stmt
+            An instance of the common base class for statements.
         """
         return ast.stmt(**keywordArguments)
 
     @staticmethod
     def Store() -> ast.Store:
-        """Make a store context for assigning values to expressions.
+        """Make an `ast.Store` context for an assignment target.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Store` context indicates expressions are assignment targets receiving new values. Used in assignments,
-        loop targets, and function parameters where expressions store rather than load values.
+        Use `Make.Store()` for targets that receive a value in assignments, loops, comprehensions, or
+        an `as` clause of a `with` statement.
 
         Returns
         -------
-        storeContext :
-            AST context object indicating value assignment operations.
-
-        Examples
-        --------
-        Creates AST equivalent to assignment: bicycle.wheel = newWheel
-        ```python
-        wheelAssignment = Make.Attribute(Make.Name('bicycle'), 'wheel',
-        Make.Store())
-        ```
+        storeContext : ast.Store
+            Expression context for an assignment target.
         """
         return ast.Store()
 
     class Sub(ast.Sub):
-        """Identical to the `ast` (abstract syntax tree) class but with a method, `join()`, that 'joins' expressions using the `ast.BinOp` (***Bin***ary ***Op***eration) class."""
+        """Make an `ast.Sub` (***Sub***traction) operator for `-`.
+
+        This subclass of `ast.Sub` (***Sub***traction) adds `join()`, which combines expressions into
+        nested `ast.BinOp` (***Bin***ary ***Op***eration) operations.
+        """
 
         @classmethod
         def join(cls, expressions: Iterable[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.expr:
-            """Make a single `ast.expr` (***expr***ession) from a `Sequence` of `ast.expr` by creating nested `ast.BinOp` (***Bin***ary ***Op***eration) `object` that are logically 'joined' by the `ast.operator` subclass.
+            """Join expressions in left-associated `ast.BinOp` (***Bin***ary ***Op***eration) operations.
 
-            Like str.join() (***str***ing) but for AST (Abstract Syntax Tree) expressions.
+            Like `str.join()` (***str***ing) but for `AST` (Abstract Syntax Tree) expressions. Joining
+            `a`, `b`, and `c` with `Make.Sub.join()` represents `(a - b) - c`.
 
             Parameters
             ----------
             expressions : Iterable[ast.expr]
-                Collection of expressions to join.
+                Operands in evaluation order (`ast.expr`, ***expr***ession).
             **keywordArguments : ast_attributes
-
+                Source positions for every constructed expression. A single input keeps its existing
+                positions.
 
             Returns
             -------
             joinedExpression : ast.expr
-                Single expression representing the joined expressions.
+                Nested `ast.BinOp` (***Bin***ary ***Op***eration) operations for two or more operands,
+                the original operand for a single input, or an empty string literal for an empty
+                input.
 
             Examples
             --------
-            ```python
-            # Instead of manually constructing nested ast.BinOp structures:
-            ast.BinOp(
-                left=ast.BinOp(
-            left=ast.Name('Crosby')
-                    , op=ast.BitOr()
-                    , right=ast.Name('Stills'))
-                , op=ast.BitOr()
-            , right=ast.Name('Nash')
-            )
+                ```python
+                import ast
+                from astToolkit import Make
 
-            # Simply use:
-            astToolkit.BitOr().join([ast.Name('Crosby'), ast.Name('Stills'),
-            ast.Name('Nash')])
-
-            # Both produce the same AST structure but the join() method eliminates the manual nesting.
-            ```
+                # Both expressions represent (Crosby | Stills) | Nash.
+                ast.BinOp(
+                    left=ast.BinOp(left=Make.Name('Crosby'), op=ast.BitOr(), right=Make.Name('Stills')),
+                    op=ast.BitOr(),
+                    right=Make.Name('Nash'),
+                )
+                Make.BitOr.join([Make.Name('Crosby'), Make.Name('Stills'), Make.Name('Nash')])
+                ```
             """
             return Make._operatorJoinMethod(cls, expressions, **keywordArguments)
 
     @staticmethod
     def Subscript(value: ast.expr, slice: ast.expr, context: ast.expr_context | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Subscript:
-        """Make a subscript AST `object` for indexing and slicing operations.
+        """Make an `ast.Subscript` for a subscription such as `items[key]`.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Subscript` `object` represents subscription operations using square brackets for indexing, slicing, and
-        key access in dictionaries and other subscriptable objects.
+        The expression in brackets can supply a key, index, slice, or tuple of subscription arguments.
 
         Parameters
         ----------
-        value :
-            The expression being subscripted (e.g., list, dict, string).
-        slice :
-            The subscript expression, which can be an index, slice, or key.
-        context :
-            Expression context for how the subscript is used.
+        value : ast.expr
+            Expression for the object being subscripted (`ast.expr`, ***expr***ession).
+        slice : ast.expr
+            Expression inside brackets. Use `Make.Slice` for colon-separated bounds or `Make.Tuple`
+            for comma-separated arguments.
+        context : ast.expr_context = Make.Load()
+            Use `Make.Load()` to read, `Make.Store()` to assign, or `Make.Del()` (***Del***ete) to
+            delete. This is `ast.Subscript.ctx` (***c***on***t***e***x***t) (`ast.expr_context`,
+            ***expr***ession ***context***).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         subscriptExpression : ast.Subscript
-            AST `object` representing a subscription operation with brackets.
+            `AST` (Abstract Syntax Tree) object representing a subscription operation with brackets.
         """
         return ast.Subscript(value=value, slice=slice, ctx=context or ast.Load(), **keywordArguments)
 
     @staticmethod
     def TemplateStr(values: Sequence[ast.expr], **keywordArguments: Unpack[ast_attributes]) -> ast.TemplateStr:
-        """Make a template string AST `object`.
+        """Make an `ast.TemplateStr` (Template ***Str***ing) for a t-string.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.TemplateStr` `object` represents a template string. It consists of a sequence of components which can
-        be constant strings or interpolations.
+        A t-string evaluates to a template containing literal text and structured interpolations. You
+        can use each interpolation's value and formatting information when processing the template.
 
         Parameters
         ----------
         values : Sequence[ast.expr]
-            A sequence of nodes (typically `ast.Constant` or `ast.Interpolation`) forming the template string.
+            Use `ast.Constant` strings for literal text and `ast.Interpolation` objects for
+            replacement fields, in source order (`ast.expr`, ***expr***ession).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         templateString : ast.TemplateStr
-            AST `object` representing a template string.
+            `AST` (Abstract Syntax Tree) object representing a template string.
         """
         return ast.TemplateStr(values=list(values), **keywordArguments)
 
     @staticmethod
     def Try(body: Sequence[ast.stmt], handlers: list[ast.ExceptHandler], orElse: Sequence[ast.stmt] | None=None, finalbody: Sequence[ast.stmt] | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Try:
-        """Make a try-except statement AST `object` for exception handling and resource cleanup.
+        """Make an `ast.Try` for a `try` statement.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Try` `object` represents `try-except` statements that handle exceptions and provide cleanup mechanisms.
-        It supports multiple exception handlers, optional else clauses, and finally blocks for guaranteed cleanup.
+        An `ast.Try` can handle exceptions with `except`, run an `else` body after normal completion,
+        or run a `finally` body on exit.
 
         Parameters
         ----------
-        body :
-            Sequence of statements in the try block that may raise exceptions.
-        handlers :
-            List of exception handler objects that catch and process specific exception types or patterns.
-        orelse :
-            (or Else execute this) Optional statements executed when the try block completes without raising exceptions.
-        finalbody :
-            (final body) Optional statements always executed for cleanup, regardless of whether exceptions occurred.
+        body : Sequence[ast.stmt]
+            Statements in the `try` block (`ast.stmt`, ***st***ate***m***en***t***).
+        handlers : list[ast.ExceptHandler]
+            `except` clauses in matching order. Use an empty list for `try ... finally` without
+            handlers (`ast.ExceptHandler`, ***Except***ion ***Handler***).
+        orElse : Sequence[ast.stmt] = []
+            (or Else execute this) Statements executed if the `try` block reaches its end normally.
+            Requires at least one handler. This is `ast.Try.orelse` (or else execute this).
+        finalbody : Sequence[ast.stmt] = []
+            (final body) `finally` statements executed when control leaves the `try` statement.
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         tryStatement : ast.Try
-            AST `object` representing an exception handling statement with optional cleanup.
+            `AST` (Abstract Syntax Tree) object representing an exception handling statement with
+            optional cleanup.
         """
         return ast.Try(body=list(body), handlers=handlers, orelse=list(orElse) if orElse else [], finalbody=list(finalbody) if finalbody else [], **keywordArguments)
 
     @staticmethod
     def TryStar(body: Sequence[ast.stmt], handlers: list[ast.ExceptHandler], orElse: Sequence[ast.stmt] | None=None, finalbody: Sequence[ast.stmt] | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.TryStar:
-        """Make a try-except* statement AST `object` for exception group handling.
+        """Make an `ast.TryStar` (Try executing this, protected by `except*` ("except star")) statement.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.TryStar` (Try executing this, protected by `except*` ("except star")) `object` represents `try-except*`
-        statements introduced in Python 3.11 for handling exception groups. It enables catching and processing multiple
-        related exceptions that occur simultaneously.
+        An `ast.TryStar` (Try executing this, protected by `except*` ("except star")) represents
+        handlers that each receive the subgroup of exceptions matching their type. A single exception
+        can also match an `except*` clause as a group of one.
 
         Parameters
         ----------
-        body :
-            Sequence of statements in the try block that may raise exception groups.
-        handlers :
-            List of exception handler objects that catch and process specific exception types within exception groups.
-        orelse :
-            (or Else execute this) Optional statements executed when the try block completes without raising exceptions.
-        finalbody :
-            (final body) Optional statements always executed for cleanup, regardless of whether exception groups
-            occurred.
+        body : Sequence[ast.stmt]
+            Statements in the `try` block (`ast.stmt`, ***st***ate***m***en***t***).
+        handlers : list[ast.ExceptHandler]
+            One or more `except*` clauses in matching order, supplied as `ast.ExceptHandler`
+            (***Except***ion ***Handler***) objects with an exception type.
+        orElse : Sequence[ast.stmt] = []
+            (or Else execute this) Statements executed if the `try` block reaches its end normally.
+            This is `ast.TryStar.orelse` (`TryStar` Try executing this, protected by `except*`
+            ("except star"), `orelse` or else execute this).
+        finalbody : Sequence[ast.stmt] = []
+            (final body) `finally` statements executed when control leaves the `try` statement.
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         tryStarStatement : ast.TryStar
-            AST `object` representing an exception group handling statement with optional cleanup.
+            `AST` (Abstract Syntax Tree) object representing an exception group handling statement
+            with optional cleanup.
         """
         return ast.TryStar(body=list(body), handlers=handlers, orelse=list(orElse) if orElse else [], finalbody=list(finalbody) if finalbody else [], **keywordArguments)
 
     @staticmethod
     def Tuple(listElements: Sequence[ast.expr] | None=None, context: ast.expr_context | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Tuple:
-        """Make a tuple literal AST `object` for ordered immutable collections.
+        """Make an `ast.Tuple` for a tuple display or unpacking target.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Tuple` `object` represents tuple literals using parentheses or comma separation. Tuples are immutable,
-        ordered collections often used for multiple assignments and function return values.
+        An `ast.Tuple` represents comma-separated forms such as `(x, y)` or `(x,)`, as well as the
+        empty tuple `()`.
 
         Parameters
         ----------
-        listElements :
-            Sequence of expressions that become tuple elements.
-        context :
-            Expression context for how the tuple is used.
+        listElements : Sequence[ast.expr] = []
+            Element expressions in order. This is `ast.Tuple.elts` (***e***lemen***t***s) (`ast.expr`,
+            ***expr***ession).
+        context : ast.expr_context = Make.Load()
+            Use `Make.Load()` to build a tuple, `Make.Store()` for an assignment target, or
+            `Make.Del()` (***Del***ete) for a deletion target. This is `ast.Tuple.ctx`
+            (***c***on***t***e***x***t) (`ast.expr_context`, ***expr***ession ***context***).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         tupleLiteral : ast.Tuple
-            AST `object` representing a tuple literal with specified elements.
+            `AST` (Abstract Syntax Tree) object representing a tuple literal with specified elements.
         """
         return ast.Tuple(elts=list(listElements) if listElements else [], ctx=context or ast.Load(), **keywordArguments)
 
     @staticmethod
     def type_ignore() -> ast.type_ignore:
-        """`class` `ast.type_ignore` (this `type` error, you ignore it) is the base class for `ast.TypeIgnore`.
+        """Make an instance of the base class `ast.type_ignore` (this `type` error, you ignore it).
 
-        (AI generated docstring.)
+        (AI generated docstring)
+
+        Use `Make.TypeIgnore` (this Type (`type`) error, Ignore it) for a `# type: ignore` comment in
+        a module.
+
+        Returns
+        -------
+        typeIgnore : ast.type_ignore
+            An instance of the common base class for type ignore directives.
         """
         return ast.type_ignore()
 
     @staticmethod
     def type_param(**keywordArguments: Unpack[ast_attributes_int]) -> ast.type_param:
-        """Abstract type parameter base for generic type constructs.
+        """Make an instance of the base class `ast.type_param` (type ***param***eter).
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.type_param` (type ***param***eter) object serves as the abstract base for type parameters including
-        TypeVar, ParamSpec, and TypeVarTuple. Provides common functionality for generic type definitions in classes,
-        functions, and type aliases.
+        Use `Make.TypeVar` (Type ***Var***iable), `Make.ParamSpec` (***Param***eter
+        ***Spec***ification), or `Make.TypeVarTuple` (Type ***Var***iable ***Tuple***) for a type
+        parameter in a generic declaration.
+
+        Parameters
+        ----------
+        **keywordArguments : ast_attributes_int
+            Optional source positions. Supply integer end positions when setting them. See `Make`.
 
         Returns
         -------
         typeParameter : ast.type_param
-            Abstract AST object representing the base of type parameter hierarchy.
+            Abstract `AST` (Abstract Syntax Tree) object representing the base of type parameter
+            hierarchy.
         """
         return ast.type_param(**keywordArguments)
 
     @staticmethod
     def TypeAlias(name: ast.Name, type_params: Sequence[ast.type_param], value: ast.expr, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeAlias:
-        """Make a type alias definition AST object for `type` statement declarations.
+        """Make an `ast.TypeAlias` (Type Alias) for a `type` statement.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.TypeAlias` (Type Alias) object represents type alias definitions using the `type` statement syntax.
-        Associates a name with a type expression, supporting generic type parameters for flexible type definitions.
+        An `ast.TypeAlias` (Type Alias) represents a declaration such as `type Vector[T] = list[T]`.
 
         Parameters
         ----------
-        name :
-            Name expression (typically ast.Name) for the alias identifier.
-        type_params :
-            (type ***param***eter***s***) List of type parameters for generic aliases.
-        value :
-            Type expression defining what the alias represents.
+        name : ast.Name
+            Name of the alias as an `ast.Name` in `Make.Store()` context.
+        type_params : Sequence[ast.type_param]
+            (type ***param***eter***s***) Type parameters declared in brackets after the name. Use an
+            empty sequence for a non-generic alias (`ast.type_param`, type ***param***eter).
+        value : ast.expr
+            Expression defining the aliased type (`ast.expr`, ***expr***ession).
+        **keywordArguments : ast_attributes_int
+            Optional source positions. Supply integer end positions when setting them. See `Make`.
 
         Returns
         -------
         typeAliasDefinition : ast.TypeAlias
-            AST object representing a complete type alias declaration.
+            `AST` (Abstract Syntax Tree) object representing a complete type alias declaration.
         """
         return ast.TypeAlias(name=name, type_params=list(type_params), value=value, **keywordArguments)
 
     @staticmethod
     def TypeIgnore(lineno: int, tag: str) -> ast.TypeIgnore:
-        """Make a type ignore comment AST object for `# noqa: ` directives.
+        """Make an `ast.TypeIgnore` (this Type (`type`) error, Ignore it) directive.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.TypeIgnore` (this Type (`type`) error, Ignore it) object represents `# noqa: ` comments that
-        instruct static type checkers to skip type analysis for specific lines. Includes optional tags for categorizing
-        different types of ignores.
+        Add an `ast.TypeIgnore` (this Type (`type`) error, Ignore it) to `Make.Module` to record an
+        ignore directive at a specific source line.
 
         Parameters
         ----------
-        lineno :
-            (line _**n**umer**o**_ (_Latin_ "number")) Line number where the ignore comment appears.
-        tag :
-            Optional string tag for categorizing the ignore (e.g., '[assignment]').
+        lineno : int
+            (line _**n**umer**o**_ (_Latin_ "number")) One-based source line of the directive.
+        tag : str
+            Text following `ignore`, such as `'[assignment]'`. Use `''` for an unqualified ignore.
 
         Returns
         -------
-        typeIgnoreDirective :
-            AST object representing a type checker ignore comment.
+        typeIgnoreDirective : ast.TypeIgnore
+            `AST` (Abstract Syntax Tree) object representing a type checker ignore comment.
 
         Examples
         --------
-        Creates AST equivalent to: # noqa:  (on line 42)
-        ```python
-        simpleIgnore = Make.TypeIgnore(42, '')
-        ```
+        Creates AST equivalent to # type: ignore (on line 42).
+            ```python
+            from astToolkit import Make
 
-        Creates AST
-        equivalent to: # pyright: ignore[assignment] (on line 15)
-        ```python
-        taggedIgnore = Make.TypeIgnore(15, '[assignment]')
-        ```
+            simpleIgnore = Make.TypeIgnore(42, '')
+            ```
+
+        Creates AST equivalent to # type: ignore[assignment] (on line 15).
+            ```python
+            from astToolkit import Make
+
+            taggedIgnore = Make.TypeIgnore(15, '[assignment]')
+            ```
         """
         return ast.TypeIgnore(lineno=lineno, tag=tag)
 
     @staticmethod
     def TypeVar(name: str, bound: ast.expr | None=None, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVar:
-        """Make a type variable parameter for generic types with optional bounds and defaults.
+        """Make an `ast.TypeVar` (Type ***Var***iable) for a type variable.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.TypeVar` (Type ***Var***iable) object represents type variable parameters used in generic classes,
-        functions, and type aliases. Supports type bounds, constraints, and default values for flexible generic
-        programming.
+        An `ast.TypeVar` (Type ***Var***iable) represents a type parameter such as `T`, `T: Base`, or
+        `T: (int, str)`.
 
         Parameters
         ----------
-        name :
-            Type variable name as string identifier.
-        bound :
-            Optional type expression constraining allowed types.
-        default_value :
-            Optional default type expression (Python 3.13+).
+        name : str
+            Type variable name.
+        bound : ast.expr | None = None
+            Upper-bound expression, or an `ast.Tuple` of allowed types for constraints. Omit it for an
+            unrestricted type variable (`ast.expr`, ***expr***ession).
+        default_value : ast.expr | None = None
+            Default type expression following `=`.
+        **keywordArguments : ast_attributes_int
+            Optional source positions. Supply integer end positions when setting them. See `Make`.
 
         Returns
         -------
         typeVariable : ast.TypeVar
-            AST object representing a type variable with optional constraints.
+            `AST` (Abstract Syntax Tree) object representing a type variable with optional
+            constraints.
         """
         return ast.TypeVar(name=name, bound=bound, default_value=default_value, **keywordArguments)
 
     @staticmethod
     def TypeVarTuple(name: str, default_value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes_int]) -> ast.TypeVarTuple:
-        """Make a type variable tuple for variadic generic types.
+        """Make an `ast.TypeVarTuple` (Type ***Var***iable ***Tuple***) for a variadic type parameter.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.TypeVarTuple` (Type ***Var***iable ***Tuple***) object represents type variable tuples used for
-        variadic generic types that accept variable numbers of type arguments. Enables generic types that work with
-        arbitrary-length type sequences.
+        An `ast.TypeVarTuple` (Type ***Var***iable ***Tuple***) represents a type parameter such as
+        `*Ts` that accepts a sequence of type arguments.
 
         Parameters
         ----------
-        name :
-            Type variable tuple name as string identifier.
-        default_value :
-            Optional default type tuple expression (Python 3.13+).
+        name : str
+            Type parameter name without the `*` prefix.
+        default_value : ast.expr | None = None
+            Default type sequence expression, such as `*tuple[int, str]` or `()` (`ast.expr`,
+            ***expr***ession).
+        **keywordArguments : ast_attributes_int
+            Optional source positions. Supply integer end positions when setting them. See `Make`.
 
         Returns
         -------
         typeVariableTuple : ast.TypeVarTuple
-            AST object representing a variadic type variable.
+            `AST` (Abstract Syntax Tree) object representing a variadic type variable.
         """
         return ast.TypeVarTuple(name=name, default_value=default_value, **keywordArguments)
 
     @staticmethod
     def UAdd() -> ast.UAdd:
-        """Unary addition operator representing Python '`+`' operator.
+        """Make an `ast.UAdd` (***U***nary ***Add***ition) operator for `+value`.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        Class `ast.UAdd` (***U***nary ***Add***ition) is a subclass of `ast.unaryop` and represents the unary positive
-        operator '`+`' in Python source code. This operator explicitly indicates a positive numeric value. Used within
-        `ast.UnaryOp` as the `op` parameter.
+        Use `ast.UAdd` (***U***nary ***Add***ition) as `op` (***op***erator) in `Make.UnaryOp`
+        (***Un***ary ***Op***eration). Unary `+` leaves a built-in numeric operand's sign as it was.
 
         Returns
         -------
         unaryPositiveOperator : ast.UAdd
-            AST `object` representing the '`+`' unary positive operator for use in `ast.UnaryOp`.
+            `AST` (Abstract Syntax Tree) object representing the '`+`' unary positive operator for use
+            in `ast.UnaryOp` (***Un***ary ***Op***eration).
         """
         return ast.UAdd()
 
     @staticmethod
     def UnaryOp(op: ast.unaryop, operand: ast.expr, **keywordArguments: Unpack[ast_attributes]) -> ast.UnaryOp:
-        """Unary operation AST `object` for single-operand operations.
+        """Make an `ast.UnaryOp` (***Un***ary ***Op***eration) for an operation on one operand.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.UnaryOp` (***Un***ary ***Op***eration) `object` represents unary operations that take a single operand,
-        such as negation, logical not, bitwise inversion, and positive sign operations.
+        An `ast.UnaryOp` (***Un***ary ***Op***eration) represents prefix operations such as `-value`,
+        `not value`, and `~value`.
 
         Parameters
         ----------
-        op :
-            (***op***erator) The unary operator like `ast.UAdd()`, `ast.USub()`, `ast.Not()`, `ast.Invert()`.
-        operand :
-            The expression that the unary operator is applied to.
+        op : ast.unaryop
+            (***op***erator) Unary operator, such as `Make.UAdd()` (***U***nary ***Add***ition),
+            `Make.USub()` (***U***nary ***Sub***traction), `Make.Not()`, or `Make.Invert()`
+            (`ast.unaryop`, ***un***ary ***op***erator).
+        operand : ast.expr
+            Expression operated on (`ast.expr`, ***expr***ession).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         unaryOperation : ast.UnaryOp
-            (***Un***ary ***Op***eration) AST `object` representing a unary operation on a single expression.
+            `AST` (Abstract Syntax Tree) object representing a unary operation on a single expression.
         """
         return ast.UnaryOp(op=op, operand=operand, **keywordArguments)
 
     @staticmethod
     def unaryop() -> ast.unaryop:
-        """Abstract unary operator `object` for use in AST construction.
+        """Make an instance of the base class `ast.unaryop` (***un***ary ***op***erator).
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        Class `ast.unaryop` (***un***ary ***op***erator) is the base for all unary operators in Python's AST. It serves
-        as the abstract parent for specific unary operators: `ast.Invert`, `ast.Not`, `ast.UAdd`, `ast.USub`. This
-        factory method makes a generic unary operator `object` that can be used in the antecedent-action pattern with
-        visitor classes.          Unlike `ast.cmpop` which handles binary comparison operations between two operands,
-        `ast.unaryop` represents operators that act on a single operand. Both serve as abstract base classes but for
-        different categories of operations: `ast.cmpop` for comparisons and `ast.unaryop` for unary transformations.
+        Use `Make.Invert()`, `Make.Not()`, `Make.UAdd()` (***U***nary ***Add***ition), or
+        `Make.USub()` (***U***nary ***Sub***traction) as a concrete operator in `Make.UnaryOp`
+        (***Un***ary ***Op***eration).
 
         Returns
         -------
-        unaryOperator :
-            Abstract unary operator `object` that serves as the base `class` for all Python unary operators in AST
-            structures.
+        unaryOperator : ast.unaryop
+            Abstract unary operator object that serves as the base class for all Python unary
+            operators in `AST` (Abstract Syntax Tree) structures.
         """
         return ast.unaryop()
 
     @staticmethod
     def USub() -> ast.USub:
-        """Unary subtraction operator representing Python '`-`' operator.
+        """Make an `ast.USub` (***U***nary ***Sub***traction) operator for `-value`.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        Class `ast.USub` (***U***nary ***Sub***traction) is a subclass of `ast.unaryop` and represents the unary
-        negation operator '`-`' in Python source code. This operator makes the arithmetic negative of its operand. Used
-        within `ast.UnaryOp` as the `op` parameter.
+        Use `ast.USub` (***U***nary ***Sub***traction) as `op` (***op***erator) in `Make.UnaryOp`
+        (***Un***ary ***Op***eration) to represent arithmetic negation.
 
         Returns
         -------
         unaryNegativeOperator : ast.USub
-            AST `object` representing the '`-`' unary negation operator for use in `ast.UnaryOp`.
+            `AST` (Abstract Syntax Tree) object representing the '`-`' unary negation operator for use
+            in `ast.UnaryOp` (***Un***ary ***Op***eration).
         """
         return ast.USub()
 
     @staticmethod
     def While(test: ast.expr, body: Sequence[ast.stmt], orElse: Sequence[ast.stmt] | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.While:
-        """Make a while loop AST `object` for condition-based iteration.
+        """Make an `ast.While` for a `while` loop.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.While` `object` represents `while` loops that repeatedly execute a block of statements as long as a
-        test condition remains True. It supports optional else clauses that execute when the loop exits normally.
+        A `while` loop checks the condition before each iteration and runs the body while the
+        condition is truthy.
 
         Parameters
         ----------
-        test :
-            The boolean expression evaluated before each iteration to determine whether the loop should continue
-            executing.
-        body :
-            Sequence of statements executed repeatedly while the test condition is True.
-        orelse :
-            (or Else execute this) Optional statements executed when the loop exits normally without encountering a
-            break statement.
+        test : ast.expr
+            Condition expression evaluated before each iteration (`ast.expr`, ***expr***ession).
+        body : Sequence[ast.stmt]
+            Statements executed while `test` is truthy (`ast.stmt`, ***st***ate***m***en***t***).
+        orElse : Sequence[ast.stmt] = []
+            (or Else execute this) Statements executed when the test is falsy. `break` skips them.
+            This is `ast.While.orelse` (or else execute this).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         whileLoop : ast.While
-            AST `object` representing a condition-based iteration statement.
+            `AST` (Abstract Syntax Tree) object representing a condition-based iteration statement.
         """
         return ast.While(test=test, body=list(body), orelse=list(orElse) if orElse else [], **keywordArguments)
 
     @staticmethod
     def With(items: list[ast.withitem], body: Sequence[ast.stmt], **keywordArguments: Unpack[ast_attributes_type_comment]) -> ast.With:
-        """Make a context manager statement AST `object` for resource management and cleanup.
+        """Make an `ast.With` for a `with` statement.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.With` `object` represents `with` statements that manage resources using context managers. These ensure
-        proper setup and cleanup of resources like files, database connections, or locks.
+        A `with` statement enters context managers in source order and exits them in reverse order.
+        Each item can assign the result of `__enter__` to an `as` target.
 
         Parameters
         ----------
-        items :
-            Sequence of context manager items, each specifying a context manager expression and optional variable
-            binding for the managed resource.
-        body :
-            Sequence of statements executed within the context manager scope.
+        items : list[ast.withitem]
+            Context manager specifications from `Make.withitem` (with item), in entry order.
+        body : Sequence[ast.stmt]
+            Statements executed after entering all the context managers (`ast.stmt`,
+            ***st***ate***m***en***t***).
+        type_comment : str | None = None
+            (a `type` annotation in a comment) Type annotation text for the `as` targets, from a `#
+            type: ...` comment.
+        **keywordArguments : ast_attributes_type_comment
+            Optional source positions and `type_comment`. See `Make` for source positions.
 
         Returns
         -------
         withStatement : ast.With
-            AST `object` representing a context manager statement for resource management.
+            `AST` (Abstract Syntax Tree) object representing a context manager statement for resource
+            management.
         """
         return ast.With(items=items, body=list(body), **keywordArguments)
 
     @staticmethod
     def withitem(context_expr: ast.expr, optional_vars: ast.expr | None=None) -> ast.withitem:
-        """Make a context manager item AST object for individual items in `with` statements.
+        """Make an `ast.withitem` (with item) for one context manager in a `with` statement.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.withitem` (with item) object represents individual context manager specifications within `with`
-        statements. Contains the context expression and optional variable binding for the context manager's return
-        value.
+        Use an `ast.withitem` (with item) for forms such as `manager` or `manager as resource` in
+        `Make.With` or `Make.AsyncWith` (***Async***hronous With statement).
 
         Parameters
         ----------
-        context_expr :
-            (***context*** ***expr***ession) Expression providing the context manager object.
-        optional_vars :
-            (optional ***var***iable***s***) Optional variable expression for `as` binding.
+        context_expr : ast.expr
+            (***context*** ***expr***ession) Expression that supplies the context manager (`ast.expr`,
+            ***expr***ession).
+        optional_vars : ast.expr | None = None
+            (optional ***var***iable***s***) Assignment target after `as`, in `Make.Store()` context.
+            Omit it to leave the result of entering the manager unbound.
 
         Returns
         -------
         contextItem : ast.withitem
-            AST object representing a single context manager in with statements.
+            `AST` (Abstract Syntax Tree) object representing a single context manager in with
+            statements.
         """
         return ast.withitem(context_expr=context_expr, optional_vars=optional_vars)
 
     @staticmethod
     def Yield(value: ast.expr | None=None, **keywordArguments: Unpack[ast_attributes]) -> ast.Yield:
-        """Make a yield expression AST `object` for generator function values.
+        """Make an `ast.Yield` (Yield an element) for a `yield` expression.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.Yield` (Yield an element) `object` represents yield expressions that produce values in generator
-        functions. It suspends function execution and yields a value to the caller, allowing resumption from the same
-        point.
+        A `yield` expression suspends the generator and produces a value. On resumption, the
+        expression evaluates to the value sent into the generator, or to `None` when advanced
+        normally.
 
         Parameters
         ----------
-        value :
-            Optional expression to yield; None yields None value.
+        value : ast.expr | None = None
+            Expression whose value the generator yields. Omit it for a bare `yield`, which yields
+            `None` (`ast.expr`, ***expr***ession).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         yieldExpression : ast.Yield
-            (Yield an element) AST `object` representing a yield expression for generator functions.
+            `AST` (Abstract Syntax Tree) object representing a yield expression for generator
+            functions.
         """
         return ast.Yield(value=value, **keywordArguments)
 
     @staticmethod
     def YieldFrom(value: ast.expr, **keywordArguments: Unpack[ast_attributes]) -> ast.YieldFrom:
-        """Make a yield from expression AST `object` for delegating to sub-generators.
+        """Make an `ast.YieldFrom` (Yield an element From) for a `yield from` expression.
 
-        (AI generated docstring.)
+        (AI generated docstring)
 
-        The `ast.YieldFrom` (Yield an element From) `object` represents `yield from` expressions that delegate generator
-        execution to another iterable or generator. It provides efficient sub-generator delegation introduced in Python
-        3.3.
+        A `yield from` expression delegates to another iterable. When iteration ends, the expression
+        takes the iterator's `StopIteration.value` as its result. Use it in a synchronous generator.
 
         Parameters
         ----------
-        value :
-            The iterable or generator expression to delegate to.
+        value : ast.expr
+            Expression supplying the iterable to delegate to (`ast.expr`, ***expr***ession).
+        **keywordArguments : ast_attributes
+            Optional source positions. See `Make` for line numbers and byte offsets.
 
         Returns
         -------
         yieldFromExpression : ast.YieldFrom
-            (Yield an element From) AST `object` representing a yield from expression for generator delegation.
+            `AST` (Abstract Syntax Tree) object representing a yield from expression for generator
+            delegation.
         """
         return ast.YieldFrom(value=value, **keywordArguments)

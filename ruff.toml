@@ -90,6 +90,7 @@ ignore = [
   "too-many-locals",
   "too-many-nested-blocks",
   "too-many-positional-arguments",
+  "too-many-public-methods",
   "too-many-statements",
   "type-name-incorrect-variance",
   "typed-argument-default-in-stub",
