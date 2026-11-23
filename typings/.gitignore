@@ -1,0 +1,3 @@
+# The type checkers expect this directory. Keep local stub overrides untracked.
+*
+!.gitignore

@@ -1,1 +1,2 @@
+include typings/.gitignore
 recursive-include tests *.py
