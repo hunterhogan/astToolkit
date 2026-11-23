@@ -31,6 +31,18 @@ Requires **Python 3.14 or later**.
 pip install astToolkit
 ```
 
+### Development
+
+From the repository root with your virtual environment active and pip 25.1 or newer, run:
+
+```bash
+pip install --group testing -e .
+pytest
+```
+
+The `testing` dependency group replaces the former `astToolkit[testing]` extra.
+Use `pip install --group dev -e .` to install the test, build, formatting, and type-checking tools.
+
 ## Compose the operation you need
 
 The core pattern is **predicate + action + visitor**. A predicate identifies a node; an action reads or changes it; a visitor applies that operation throughout a tree.
