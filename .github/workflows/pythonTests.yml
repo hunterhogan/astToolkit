@@ -1,4 +1,5 @@
-# path-sync copy -n shared
+# path-sync copy -n hunterhogan
+# === DO_NOT_EDIT: path-sync hunterhogan ===
 name: Python Tests
 
 on: [push, pull_request]
@@ -57,5 +58,7 @@ jobs:
           python-version: ${{ matrix.tests-python-versions }}
           cache: pip
           cache-dependency-path: pyproject.toml
+      - run: python -m pip install "pip>=25.1"
       - run: pip install -e .[testing]
       - run: pytest
+# === OK_EDIT: path-sync hunterhogan ===

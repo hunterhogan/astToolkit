@@ -1,4 +1,4 @@
-# path-sync copy -n shared
+# path-sync copy -n hunterhogan
 [project]
 name = "astToolkit"
 version = "0.14.1"
@@ -67,7 +67,7 @@ report = { exclude_also = [
 ], ignore_errors = false }
 run = { branch = true, data_file = "tests/coverage/.coverage", omit = ["tests/*"], source = ["."] }
 
-# === DO_NOT_EDIT: path-sync shared ===
+# === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.isort]
 add_imports = ["from __future__ import annotations"]
 combine_as_imports = true
@@ -84,9 +84,9 @@ multi_line_output = 4
 no_sections = true
 overwrite_in_place = true
 use_parentheses = true
-# === OK_EDIT: path-sync shared ===
+# === OK_EDIT: path-sync hunterhogan ===
 
-# === DO_NOT_EDIT: path-sync shared ===
+# === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.pyrefly]
 preset = "strict"
 enabled-ignores = ["pyrefly"]
@@ -100,18 +100,19 @@ project-excludes = [
   ".venv",
   ".vAnalysis",
 ]
-# === OK_EDIT: path-sync shared ===
+site-packages-path = ["./typings"]
+# === OK_EDIT: path-sync hunterhogan ===
 
-# === DO_NOT_EDIT: path-sync shared ===
+# === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.pyrefly.errors]
 bad-return = "warn"
 invalid-type-var = "warn"
 invalid-yield = "warn"
 protected-access = "warn"
 redundant-condition = "warn"
-# === OK_EDIT: path-sync shared ===
+# === OK_EDIT: path-sync hunterhogan ===
 
-# === DO_NOT_EDIT: path-sync shared ===
+# === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.pyright]
 deprecateTypingAliases = true
 disableBytesTypePromotions = true
@@ -132,7 +133,7 @@ strictDictionaryInference = true
 strictListInference = true
 strictSetInference = true
 typeCheckingMode = "strict"
-# === OK_EDIT: path-sync shared ===
+# === OK_EDIT: path-sync hunterhogan ===
 
 [tool.pytest]
 addopts = ["--color=yes"]
@@ -147,12 +148,12 @@ minversion = "9.0"
 strict = true
 testpaths = ["tests"]
 
-# === DO_NOT_EDIT: path-sync shared ===
+# === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.ruff]
 line-length = 140
-# === OK_EDIT: path-sync shared ===
+# === OK_EDIT: path-sync hunterhogan ===
 
-# === DO_NOT_EDIT: path-sync shared ===
+# === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.ruff.lint]
 preview = true
 allowed-confusables = [
@@ -256,19 +257,19 @@ ignore = [
 ]
 select = ["ALL"]
 task-tags = ["DEVELOPMENT", "FailEarly", "NOTE", "SEMIOTICS", "TODO"]
-# === OK_EDIT: path-sync shared ===
+# === OK_EDIT: path-sync hunterhogan ===
 
-# === DO_NOT_EDIT: path-sync shared ===
+# === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.ruff.lint.flake8-comprehensions]
 allow-dict-calls-with-keyword-arguments = true
-# === OK_EDIT: path-sync shared ===
+# === OK_EDIT: path-sync hunterhogan ===
 
-# === DO_NOT_EDIT: path-sync shared ===
+# === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.ruff.lint.flake8-import-conventions]
 banned-aliases = { numpy = ["np"], optype = ["op"], pandas = ["pd"], polars = ["pl"], regex = ["re"] }
-# === OK_EDIT: path-sync shared ===
+# === OK_EDIT: path-sync hunterhogan ===
 
-# === DO_NOT_EDIT: path-sync shared ===
+# === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.ruff.lint.flake8-import-conventions.aliases]
 "accelerate.utils.dataclasses" = "accelerate_dataclasses"
 "fs.path" = "fs_path"
@@ -295,14 +296,14 @@ numpy = "numpy"
 pandas = "pandas"
 polars = "polars"
 re = "regex"
-# === OK_EDIT: path-sync shared ===
+# === OK_EDIT: path-sync hunterhogan ===
 
-# === DO_NOT_EDIT: path-sync shared ===
+# === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.ruff.lint.flake8-quotes]
 inline-quotes = "single"
-# === OK_EDIT: path-sync shared ===
+# === OK_EDIT: path-sync hunterhogan ===
 
-# === DO_NOT_EDIT: path-sync shared ===
+# === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["useless-import-alias"]
 "*test*.py" = [
@@ -317,40 +318,40 @@ inline-quotes = "single"
   "suspicious-non-cryptographic-random-usage",
   "TRY",
 ]
-# === OK_EDIT: path-sync shared ===
+# === OK_EDIT: path-sync hunterhogan ===
 
-# === DO_NOT_EDIT: path-sync shared ===
+# === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
-# === OK_EDIT: path-sync shared ===
+# === OK_EDIT: path-sync hunterhogan ===
 
-# === DO_NOT_EDIT: path-sync shared ===
+# === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.ruff.format]
 docstring-code-format = true
 quote-style = "single"
 indent-style = "tab"
 skip-magic-trailing-comma = true
-# === OK_EDIT: path-sync shared ===
+# === OK_EDIT: path-sync hunterhogan ===
 
 [tool.setuptools]
 package-data = { "*" = ["py.typed"] }
 packages = { find = {} }
 
-# === DO_NOT_EDIT: path-sync shared ===
+# === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.tombi.format.rules]
 line-ending = "lf"
-# === OK_EDIT: path-sync shared ===
+# === OK_EDIT: path-sync hunterhogan ===
 
-# === DO_NOT_EDIT: path-sync shared ===
+# === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.ty.analysis]
 respect-type-ignore-comments = false
-# === OK_EDIT: path-sync shared ===
+# === OK_EDIT: path-sync hunterhogan ===
 
-# === DO_NOT_EDIT: path-sync shared ===
+# === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.ty.environment]
 extra-paths = ["./typings"]
 python-platform = "all"
-# === OK_EDIT: path-sync shared ===
+# === OK_EDIT: path-sync hunterhogan ===
 
 [tool.updateCitation]
 filenameCitationDOTcff = "CITATION.cff"

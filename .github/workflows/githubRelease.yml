@@ -1,4 +1,5 @@
-# path-sync copy -n shared
+# path-sync copy -n hunterhogan
+# === DO_NOT_EDIT: path-sync hunterhogan ===
 name: Make GitHub Release
 
 on:
@@ -39,3 +40,4 @@ jobs:
               raise urllib.error.HTTPError from thisIsAStupidSystem
             urllib.request.urlopen(urllib.request.Request(url,json.dumps({'tag_name': tag, 'name': tag}).encode(),headers, method='POST'))
           "
+# === OK_EDIT: path-sync hunterhogan ===

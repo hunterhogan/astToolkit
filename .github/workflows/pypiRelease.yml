@@ -1,4 +1,5 @@
-# path-sync copy -n shared
+# path-sync copy -n hunterhogan
+# === DO_NOT_EDIT: path-sync hunterhogan ===
 # See https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#publishing-to-package-registries
 
 name: Make PyPI Release
@@ -61,3 +62,4 @@ jobs:
         with:
           attestations: false
           packages-dir: dist/
+# === OK_EDIT: path-sync hunterhogan ===

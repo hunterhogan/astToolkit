@@ -1,7 +1,9 @@
-# path-sync copy -n shared
+# path-sync copy -n hunterhogan
+# === DO_NOT_EDIT: path-sync hunterhogan ===
 version: 2
 updates:
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
       interval: monthly
+# === OK_EDIT: path-sync hunterhogan ===

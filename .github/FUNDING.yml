@@ -1,4 +1,5 @@
-# path-sync copy -n shared
+# path-sync copy -n hunterhogan
+# === DO_NOT_EDIT: path-sync hunterhogan ===
 # https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository
 
 patreon: integrated
@@ -13,3 +14,4 @@ thanks_dev: u/gh/hunterhogan
 # open_collective: # Replace with a single Open Collective username
 # tidelift: # Replace with a single Tidelift platform-name/package-name e.g., npm/babel. https://support.tidelift.com/hc/en-us
 # polar: # Replace with a single Polar username. https://polar.sh/
+# === OK_EDIT: path-sync hunterhogan ===
