@@ -1,3 +1,4 @@
+# path-sync copy -n shared
 name: Make GitHub Release
 
 on:

@@ -1,3 +1,4 @@
+# path-sync copy -n shared
 name: Python Tests
 
 on: [push, pull_request]
