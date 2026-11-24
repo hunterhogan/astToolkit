@@ -46,7 +46,6 @@ classifiers = [
   "Typing :: Typed",
 ]
 dependencies = ["hunterMakesPy>=0.10.0"]
-optional-dependencies = { testing = ["hypothesis", "pytest-cov", "pytest-xdist", "pytest>=9.0"] }
 
 [project.urls]
 Donate = "https://www.patreon.com/integrated"
@@ -54,8 +53,11 @@ Homepage = "https://github.com/hunterhogan/astToolkit"
 Issues = "https://github.com/hunterhogan/astToolkit/issues"
 Repository = "https://github.com/hunterhogan/astToolkit.git"
 
+[dependency-groups]
+testing = ["hypothesis", "pytest-cov", "pytest-xdist", "pytest>=9.0"]
+
 [build-system]
-requires = ["setuptools"]
+requires = ["setuptools>=77.0.3"]
 build-backend = "setuptools.build_meta"
 
 [tool.coverage]
@@ -335,7 +337,7 @@ skip-magic-trailing-comma = true
 
 [tool.setuptools]
 package-data = { "*" = ["py.typed"] }
-packages = { find = {} }
+packages = { find = { include = ["astToolkit", "astToolkit.*"], namespaces = false } }
 
 # === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.tombi.format.rules]
