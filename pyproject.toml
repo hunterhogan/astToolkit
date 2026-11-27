@@ -72,8 +72,10 @@ run = { branch = true, data_file = "tests/coverage/.coverage", omit = ["tests/*"
 # === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.isort]
 add_imports = ["from __future__ import annotations"]
+append_only = true
+atomic = true
 combine_as_imports = true
-extend_skip_glob = ["*.ipynb", "*.pyi"]
+extend_skip_glob = ["*.pyi"]
 filter_files = true
 force_alphabetical_sort_within_sections = true
 from_first = true
@@ -84,26 +86,23 @@ lines_after_imports = 1
 lines_between_types = 0
 multi_line_output = 4
 no_sections = true
-overwrite_in_place = true
+skip_gitignore = true
 use_parentheses = true
 # === OK_EDIT: path-sync hunterhogan ===
 
 # === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.pyrefly]
-preset = "strict"
 enabled-ignores = ["pyrefly"]
+# ignore-errors-in-generated-code = true
 infer-with-first-use = false
-project-excludes = ["typings", "typings/**/*", "**/node_modules", "**/__pycache__", "**/.*", ".v*"]
-site-packages-path = ["./typings"]
+preset = "strict"
+python-platform = "all"
 # === OK_EDIT: path-sync hunterhogan ===
 
 # === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.pyrefly.errors]
 bad-return = "warn"
-invalid-type-var = "warn"
 invalid-yield = "warn"
-protected-access = "warn"
-redundant-condition = "warn"
 # === OK_EDIT: path-sync hunterhogan ===
 
 [tool.pytest]
@@ -249,7 +248,10 @@ inline-quotes = "single"
 
 # === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.ruff.lint.per-file-ignores]
-"*test*.py" = ["ARG", "assert", "BLE", "D", "DTZ", "FBT", "PT", "suspicious-non-cryptographic-random-usage", "TRY"]
+"**/*_test.py" = ["ARG", "assert", "BLE", "D", "DTZ", "FBT", "PT", "suspicious-non-cryptographic-random-usage", "TRY"]
+"**/conftest*.py" = ["ARG", "assert", "BLE", "D", "DTZ", "FBT", "PT", "suspicious-non-cryptographic-random-usage", "TRY"]
+"**/test_*.py" = ["ARG", "assert", "BLE", "D", "DTZ", "FBT", "PT", "suspicious-non-cryptographic-random-usage", "TRY"]
+"**/tests/**" = ["ARG", "assert", "BLE", "D", "DTZ", "FBT", "PT", "suspicious-non-cryptographic-random-usage", "TRY"]
 # === OK_EDIT: path-sync hunterhogan ===
 
 # === DO_NOT_EDIT: path-sync hunterhogan ===
@@ -260,8 +262,10 @@ convention = "numpy"
 # === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.ruff.format]
 docstring-code-format = true
-quote-style = "single"
 indent-style = "tab"
+line-ending = "lf"
+nested-string-quote-style = "preferred"
+quote-style = "single"
 skip-magic-trailing-comma = true
 # === OK_EDIT: path-sync hunterhogan ===
 
@@ -277,12 +281,24 @@ line-ending = "lf"
 # === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.ty.analysis]
 respect-type-ignore-comments = false
+return-type-inference = "always"
 # === OK_EDIT: path-sync hunterhogan ===
 
 # === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.ty.environment]
 extra-paths = ["./typings"]
 python-platform = "all"
+# === OK_EDIT: path-sync hunterhogan ===
+
+# === DO_NOT_EDIT: path-sync hunterhogan ===
+[tool.ty.rules]
+blanket-ignore-comment = "error"
+missing-override-decorator = "error"
+missing-type-argument = "error"
+possibly-missing-attribute = "warn"  # Might annoy you: ty's docs say this rule produces many false positives.
+possibly-unresolved-reference = "warn"  # Might annoy you: ty's docs say this rule produces many false positives.
+truthiness-test-of-none-union = "warn"  # Might annoy you: flags `if value:` on `int | None` or `str | None` even when treating 0 or '' like None is deliberate.
+unsound-assignment = "warn"  # Might annoy you: flags assigning an `Any` value to an annotated variable, which is common with untyped libraries.
 # === OK_EDIT: path-sync hunterhogan ===
 
 [tool.updateCitation]
