@@ -33,7 +33,7 @@ maintainable AST manipulation code.
 from __future__ import annotations
 
 from collections.abc import Iterable
-from typing import overload, TYPE_CHECKING
+from typing import overload, override, TYPE_CHECKING
 import ast
 
 if TYPE_CHECKING:
@@ -127,6 +127,7 @@ class NodeTourist[木: ast.AST, 归个](ast.NodeVisitor):
 	def _matches(self, node: ast.AST) -> TypeGuard[木]:
 		return self.findThis(node)
 
+	@override
 	def visit(self, node: ast.AST) -> None:
 		"""Apply predicate and action functions during AST traversal.
 
@@ -278,6 +279,7 @@ class NodeChanger[木: ast.AST, 归木: ast.AST | Iterable[ast.AST] | None](ast.
 	def _matches(self, node: ast.AST) -> TypeGuard[木]:
 		return self.findThis(node)
 
+	@override
 	def visit(self, node: ast.AST) -> 归木 | ast.AST:
 		"""Apply predicate and action functions during AST transformation.
 

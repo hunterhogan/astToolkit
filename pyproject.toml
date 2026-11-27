@@ -1,7 +1,7 @@
 # path-sync copy -n hunterhogan
 [project]
 name = "astToolkit"
-version = "0.14.1"
+version = "0.14.2"
 description = "A powerfully composable, type-safe toolkit for Python abstract syntax tree (AST) manipulation, analysis, transformation, and code generation with a layered architecture designed for building sophisticated code processing assembly-lines."
 readme = "README.md"
 requires-python = ">=3.14"
@@ -54,7 +54,7 @@ Issues = "https://github.com/hunterhogan/astToolkit/issues"
 Repository = "https://github.com/hunterhogan/astToolkit.git"
 
 [dependency-groups]
-testing = ["hypothesis", "pytest-cov", "pytest-xdist", "pytest>=9.0"]
+testing = ["hypothesis", "pytest>=9.0", "pytest-cov", "pytest-xdist"]
 
 [build-system]
 requires = ["setuptools>=77.0.3"]
@@ -93,15 +93,7 @@ use_parentheses = true
 preset = "strict"
 enabled-ignores = ["pyrefly"]
 infer-with-first-use = false
-project-excludes = [
-  "typings",
-  "typings/**/*",
-  "**/node_modules",
-  "**/__pycache__",
-  "**/.*",
-  ".venv",
-  ".vAnalysis",
-]
+project-excludes = ["typings", "typings/**/*", "**/node_modules", "**/__pycache__", "**/.*", ".v*"]
 site-packages-path = ["./typings"]
 # === OK_EDIT: path-sync hunterhogan ===
 
@@ -112,29 +104,6 @@ invalid-type-var = "warn"
 invalid-yield = "warn"
 protected-access = "warn"
 redundant-condition = "warn"
-# === OK_EDIT: path-sync hunterhogan ===
-
-# === DO_NOT_EDIT: path-sync hunterhogan ===
-[tool.pyright]
-deprecateTypingAliases = true
-disableBytesTypePromotions = true
-enableReachabilityAnalysis = true
-enableTypeIgnoreComments = false
-exclude = ["typings", "typings/**", "**/node_modules", "**/__pycache__", "**/.*", ".venv", ".vAnalysis"]
-reportConstantRedefinition = false
-reportInvalidTypeVarUse = false
-reportPrivateUsage = false
-reportReturnType = "warning"
-reportUnnecessaryIsInstance = false
-reportUnusedClass = "information"
-reportUnusedExpression = "information"
-reportUnusedFunction = "information"
-reportUnusedImport = "information"
-reportUnusedVariable = "information"
-strictDictionaryInference = true
-strictListInference = true
-strictSetInference = true
-typeCheckingMode = "strict"
 # === OK_EDIT: path-sync hunterhogan ===
 
 [tool.pytest]
@@ -157,107 +126,80 @@ line-length = 140
 
 # === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.ruff.lint]
-preview = true
-allowed-confusables = [
-  "–",
-  "’",
-  "′",
-  "×",
-  "−",
-  "∖",
-  "∗",
-  "∣",
-  "∨",
-  "∪",
-  "∼",
-  "⊗",
-  "ℂ",
-  "ℋ",
-  "ℒ",
-  "ℓ",
-  "ℕ",
-  "ℙ",
-  "ℚ",
-  "ℝ",
-  "ℤ",
-  "ℰ",
-  "ℱ",
-  "𝒪",
-  "𝒮",
-  "𝔼",
-  "𝕀",
-  "𝟙",
-  "α",
-  "Β",
-  "γ",
-  "ι",
-  "Κ",
-  "ν",
-  "ο",
-  "ρ",
-  "σ",
-]
+allowed-confusables = ["–", "’", "′", "×", "−", "∖", "∗", "∣", "∨", "∪", "∼", "⊗", "ℂ", "ℋ", "ℒ", "ℓ", "ℕ", "ℙ", "ℚ", "ℝ", "ℤ", "ℰ", "ℱ", "𝒪", "𝒮", "𝔼", "𝕀", "𝟙", "α", "Β", "γ", "ι", "Κ", "ν", "ο", "ρ", "σ"]
+future-annotations = true
 ignore = [
-  "any-type",
+  # ====== Linters ===========
+  "FIX",  # flake8-fixme
+  "I",  # isort
+  "N",  # pep8-naming
+  "TD",  # flake8-todos
+  # ====== complexity ========
+  "dict-index-missing-items",
+  "explicit-f-string-type-conversion",
+  "non-pep695-type-alias",
+  "redundant-numeric-union",
+  "static-join-to-f-string",
+  "unnecessary-literal-dict",
+  "useless-import-alias",
+  # ====== correctness =======
+  "unused-variable",
+  # ====== formatting ========
   "bad-quotes-inline-string",
   "blank-lines-after-function-or-class",
   "blank-lines-top-level",
+  "docstring-tab-indentation",
+  "incorrect-blank-line-after-class",
+  "line-too-long",
+  "missing-newline-at-end-of-file",
+  "missing-trailing-comma",
+  "no-space-after-block-comment",
+  "tab-indentation",
+  "too-many-blank-lines",
+  # ====== pedantic ==========
+  "any-type",
   "blanket-noqa",
-  "complex-structure",
-  "dict-index-missing-items",
   "docstring-in-stub",
   "docstring-missing-exception",
   "docstring-missing-returns",
   "docstring-missing-yields",
-  "docstring-tab-indentation",
-  "explicit-f-string-type-conversion",
-  "FIX",
-  "I",
   "if-else-block-instead-of-if-exp",
-  "incorrect-blank-line-after-class",
   "incorrect-section-order",
-  "line-too-long",
   "magic-value-comparison",
   "missing-copyright-notice",
-  "missing-newline-at-end-of-file",
-  "missing-trailing-comma",
   "missing-trailing-period",
-  "N",
-  "no-space-after-block-comment",
   "non-ascii-import-name",
   "non-ascii-name",
   "non-imperative-mood",
-  "non-pep695-type-alias",
   "redefined-loop-name",
-  "redundant-numeric-union",
-  "self-or-cls-assignment",
-  "snake-case-type-alias",
-  "static-join-to-f-string",
-  "subclass-builtin",
-  "subprocess-without-shell-equals-true",
   "superfluous-else-continue",
   "superfluous-else-return",
-  "suspicious-pickle-import",
-  "tab-indentation",
-  "TD",
   "too-many-arguments",
-  "too-many-blank-lines",
   "too-many-branches",
   "too-many-locals",
   "too-many-nested-blocks",
   "too-many-positional-arguments",
   "too-many-public-methods",
   "too-many-statements",
-  "type-name-incorrect-variance",
   "typed-argument-default-in-stub",
-  "unnecessary-literal-dict",
-  "unused-import",
-  "unused-variable",
-  "useless-else-on-loop",
-  "useless-import-alias",
   "yoda-conditions",
+  # ====== restriction =======
+  "complex-structure",
+  # ====== security ==========
+  "subprocess-without-shell-equals-true",
+  "suspicious-pickle-import",
+  # ====== style =============
+  "snake-case-type-alias",
+  "type-name-incorrect-variance",
+  # ====== suspicious ========
+  "self-or-cls-assignment",
+  "subclass-builtin",
+  "unused-import",
+  "useless-else-on-loop",
 ]
+preview = true
 select = ["ALL"]
+extend-select = ["missing-terminal-punctuation", "undocumented-param", "undocumented-public-init"]
 task-tags = ["DEVELOPMENT", "FailEarly", "NOTE", "SEMIOTICS", "TODO"]
 # === OK_EDIT: path-sync hunterhogan ===
 
@@ -268,7 +210,7 @@ allow-dict-calls-with-keyword-arguments = true
 
 # === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.ruff.lint.flake8-import-conventions]
-banned-aliases = { numpy = ["np"], optype = ["op"], pandas = ["pd"], polars = ["pl"], regex = ["re"] }
+banned-aliases = { altair = ["alt"], datetime = ["dt"], holoviews = ["hv"], matplotlib = ["mpl"], "matplotlib.pyplot" = ["plt"], networkx = ["nx"], numpy = ["np"], "numpy.typing" = ["npt"], optype = ["op"], pandas = ["pd"], panel = ["pn"], "plotly.express" = ["px"], polars = ["pl"], pyarrow = ["pa"], regex = ["re"], seaborn = ["sns"], tensorflow = ["tf"], tkinter = ["tk"], "xml.etree.ElementTree" = ["ET"] }
 # === OK_EDIT: path-sync hunterhogan ===
 
 # === DO_NOT_EDIT: path-sync hunterhogan ===
@@ -307,19 +249,7 @@ inline-quotes = "single"
 
 # === DO_NOT_EDIT: path-sync hunterhogan ===
 [tool.ruff.lint.per-file-ignores]
-"__init__.py" = ["useless-import-alias"]
-"*test*.py" = [
-  "ARG",
-  "assert",
-  "BLE",
-  "D",
-  "docstring-missing-returns",
-  "DTZ",
-  "FBT",
-  "PT",
-  "suspicious-non-cryptographic-random-usage",
-  "TRY",
-]
+"*test*.py" = ["ARG", "assert", "BLE", "D", "DTZ", "FBT", "PT", "suspicious-non-cryptographic-random-usage", "TRY"]
 # === OK_EDIT: path-sync hunterhogan ===
 
 # === DO_NOT_EDIT: path-sync hunterhogan ===

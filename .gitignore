@@ -1,6 +1,9 @@
+# path-sync copy -n hunterhogan
+# === DO_NOT_EDIT: path-sync hunterhogan ===
 __pycache__/
 *.egg-info/
 *.pyd
 /build/
 .coverage
 .hypothesis/
+# === OK_EDIT: path-sync hunterhogan ===

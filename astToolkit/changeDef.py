@@ -31,6 +31,7 @@ Functions
 from __future__ import annotations
 
 from astToolkit import Be, DOT, Grab, IfThis, Make, NodeChanger, NodeTourist, Then
+from collections.abc import Mapping
 from copy import deepcopy
 import ast
 
@@ -137,6 +138,8 @@ def inlineFunctionDef(identifierToInline: str, astModule: ast.Module) -> ast.Fun
 
 	Supported Substitutions
 	-----------------------
+	A docstring is never substituted, and it does not count as a statement of the body.
+
 	A function with a one-statement body supplies the expression from its last `ast.Return`.
 	Such a body must contain a return expression suitable for the call site.
 
@@ -156,7 +159,7 @@ def inlineFunctionDef(identifierToInline: str, astModule: ast.Module) -> ast.Fun
 	"""
 	dictionaryFunctionDef: dict[str, ast.FunctionDef] = makeDictionaryFunctionDef(astModule)
 	try:
-		FunctionDefToInline = dictionaryFunctionDef[identifierToInline]
+		FunctionDefToInline: ast.FunctionDef = dictionaryFunctionDef[identifierToInline]
 	except KeyError as 拦message:
 		message: str = f"I was unable to find an `ast.FunctionDef` with name {identifierToInline = } in {astModule = }."
 		raise ValueError(message) from 拦message
@@ -182,28 +185,34 @@ def inlineFunctionDef(identifierToInline: str, astModule: ast.Module) -> ast.Fun
 			keepGoing = True
 			for identifier in listIdentifiersCalledFunctions:
 				if NodeTourist(IfThis.matchesMeButNotAnyDescendant(IfThis.isCallIdentifier(identifier)), Then.extractIt).captureLastMatch(astModule) is not None:
-					FunctionDefTarget = dictionaryFunctionDef[identifier]
-					if len(FunctionDefTarget.body) == 1:
-						replacement = NodeTourist[ast.AST, ast.expr](Be.Return, Then.extractIt(DOT.value)).captureLastMatch(FunctionDefTarget)
+					FunctionDefTarget: ast.FunctionDef = dictionaryFunctionDef[identifier]
+					if len(_getBodySansDocstring(FunctionDefTarget)) == 1:
+						replacement = NodeTourist[ast.Return, ast.expr | None](Be.Return, DOT.value).captureLastMatch(FunctionDefTarget)
 						inliner = NodeChanger(
 							findThis=IfThis.isCallIdentifier(identifier), doThat=Then.replaceWith(replacement))
 						for astFunctionDef in dictionary4Inlining.values():
 							inliner.visit(astFunctionDef)
 					else:
-						inliner = NodeChanger(Be.Assign.valueIs(IfThis.isCallIdentifier(identifier)), Then.replaceWith(FunctionDefTarget.body[0:-1]))
+						inliner: NodeChanger[ast.Assign, list[ast.stmt]] = NodeChanger(Be.Assign.valueIs(IfThis.isCallIdentifier(identifier)), Then.replaceWith(_getBodySansDocstring(FunctionDefTarget)[0:-1]))
 						for astFunctionDef in dictionary4Inlining.values():
 							inliner.visit(astFunctionDef)
 
 	for identifier, FunctionDefTarget in dictionary4Inlining.items():
-		if len(FunctionDefTarget.body) == 1:
-			replacement = NodeTourist[ast.AST, ast.expr](Be.Return, Then.extractIt(DOT.value)).captureLastMatch(FunctionDefTarget)
+		if len(_getBodySansDocstring(FunctionDefTarget)) == 1:
+			replacement = NodeTourist[ast.Return, ast.expr | None](Be.Return, DOT.value).captureLastMatch(FunctionDefTarget)
 			inliner = NodeChanger(IfThis.isCallIdentifier(identifier), Then.replaceWith(replacement))
 			inliner.visit(FunctionDefToInline)
 		else:
-			inliner = NodeChanger(Be.Assign.valueIs(IfThis.isCallIdentifier(identifier)), Then.replaceWith(FunctionDefTarget.body[0:-1]))
+			inliner = NodeChanger(Be.Assign.valueIs(IfThis.isCallIdentifier(identifier)), Then.replaceWith(_getBodySansDocstring(FunctionDefTarget)[0:-1]))
 			inliner.visit(FunctionDefToInline)
 	ast.fix_missing_locations(FunctionDefToInline)
 	return FunctionDefToInline
+
+def _getBodySansDocstring(astFunctionDef: ast.FunctionDef) -> list[ast.stmt]:
+	body: list[ast.stmt] = astFunctionDef.body
+	if ast.get_docstring(astFunctionDef, clean=False) is not None:
+		body = body[1:]
+	return body
 
 def makeDictionaryAsyncFunctionDef(astAST: ast.AST) -> dict[str, ast.AsyncFunctionDef]:
 	"""Index asynchronous function definitions by name.
@@ -234,7 +243,8 @@ def makeDictionaryAsyncFunctionDef(astAST: ast.AST) -> dict[str, ast.AsyncFuncti
 		Combine asynchronous functions, classes, and synchronous functions in one index.
 	"""
 	dictionaryIdentifier2AsyncFunctionDef: dict[str, ast.AsyncFunctionDef] = {}
-	NodeTourist(Be.AsyncFunctionDef, Then.updateKeyValueIn(DOT.name, Then.extractIt, dictionaryIdentifier2AsyncFunctionDef)).visit(astAST)
+	NodeTourist[ast.AsyncFunctionDef, Mapping[str, ast.AsyncFunctionDef]](
+		Be.AsyncFunctionDef, Then.updateKeyValueIn(DOT.name, Then.extractIt, dictionaryIdentifier2AsyncFunctionDef)).visit(astAST)
 	return dictionaryIdentifier2AsyncFunctionDef
 
 def makeDictionaryClassDef(astAST: ast.AST) -> dict[str, ast.ClassDef]:
@@ -266,7 +276,8 @@ def makeDictionaryClassDef(astAST: ast.AST) -> dict[str, ast.ClassDef]:
 		Combine classes and function definitions in one index.
 	"""
 	dictionaryIdentifier2ClassDef: dict[str, ast.ClassDef] = {}
-	NodeTourist(Be.ClassDef, Then.updateKeyValueIn(DOT.name, Then.extractIt, dictionaryIdentifier2ClassDef)).visit(astAST)
+	NodeTourist[ast.ClassDef, Mapping[str, ast.ClassDef]](
+		Be.ClassDef, Then.updateKeyValueIn(DOT.name, Then.extractIt, dictionaryIdentifier2ClassDef)).visit(astAST)
 	return dictionaryIdentifier2ClassDef
 
 def makeDictionaryFunctionDef(astAST: ast.AST) -> dict[str, ast.FunctionDef]:
@@ -300,7 +311,8 @@ def makeDictionaryFunctionDef(astAST: ast.AST) -> dict[str, ast.FunctionDef]:
 		Combine function definitions and classes in one index.
 	"""
 	dictionaryIdentifier2FunctionDef: dict[str, ast.FunctionDef] = {}
-	NodeTourist(Be.FunctionDef, Then.updateKeyValueIn(DOT.name, Then.extractIt, dictionaryIdentifier2FunctionDef)).visit(astAST)
+	NodeTourist[ast.FunctionDef, Mapping[str, ast.FunctionDef]](
+		Be.FunctionDef, Then.updateKeyValueIn(DOT.name, Then.extractIt, dictionaryIdentifier2FunctionDef)).visit(astAST)
 	return dictionaryIdentifier2FunctionDef
 
 def makeDictionaryMosDef(astAST: ast.AST) -> dict[str, ast.AsyncFunctionDef | ast.ClassDef | ast.FunctionDef]:
@@ -387,22 +399,22 @@ def removeUnusedParameters(FunctionDef: ast.FunctionDef) -> ast.FunctionDef:
 	remaining parameter annotations that are present, so unannotated parameters have no
 	corresponding annotation entry.
 	"""
-	list_argCuzMyBrainRefusesToThink = FunctionDef.args.args + FunctionDef.args.posonlyargs + FunctionDef.args.kwonlyargs
+	list_argCuzMyBrainRefusesToThink: list[ast.arg] = FunctionDef.args.args + FunctionDef.args.posonlyargs + FunctionDef.args.kwonlyargs
 	list_arg_arg: list[str] = [ast_arg.arg for ast_arg in list_argCuzMyBrainRefusesToThink]
 	listName: list[ast.Name] = []
-	fauxFunctionDef = deepcopy(FunctionDef)
-	NodeChanger(Be.Return, Then.removeIt).visit(fauxFunctionDef)
-	NodeTourist(Be.Name, Then.appendTo(listName)).visit(fauxFunctionDef)
+	fauxFunctionDef: ast.FunctionDef = deepcopy(FunctionDef)
+	NodeChanger[ast.Return, None](Be.Return, Then.removeIt).visit(fauxFunctionDef)
+	NodeTourist[ast.Name, ast.Name](Be.Name, Then.appendTo(listName)).visit(fauxFunctionDef)
 	listIdentifiers: list[str] = [astName.id for astName in listName]
 	listIdentifiersNotUsed: list[str] = list(set(list_arg_arg) - set(listIdentifiers))
 	for argIdentifier in listIdentifiersNotUsed:
-		remove_arg = NodeChanger(IfThis.is_argIdentifier(argIdentifier), Then.removeIt)
+		remove_arg: NodeChanger[ast.arg, None] = NodeChanger(IfThis.is_argIdentifier(argIdentifier), Then.removeIt)
 		remove_arg.visit(FunctionDef)
 
 	list_argCuzMyBrainRefusesToThink = FunctionDef.args.args + FunctionDef.args.posonlyargs + FunctionDef.args.kwonlyargs
 
 	listName = [Make.Name(ast_arg.arg) for ast_arg in list_argCuzMyBrainRefusesToThink]
-	replaceReturn = NodeChanger(Be.Return, Then.replaceWith(Make.Return(Make.Tuple(listName))))
+	replaceReturn = NodeChanger[ast.Return, ast.Return](Be.Return, Then.replaceWith(Make.Return(Make.Tuple(listName))))
 	replaceReturn.visit(FunctionDef)
 
 	list_annotation: list[ast.expr] = [ast_arg.annotation for ast_arg in list_argCuzMyBrainRefusesToThink if ast_arg.annotation is not None]
