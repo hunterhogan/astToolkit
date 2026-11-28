@@ -1,7 +1,7 @@
 # path-sync copy -n hunterhogan
 [project]
 name = "astToolkit"
-version = "0.14.2"
+version = "0.14.3"
 description = "A powerfully composable, type-safe toolkit for Python abstract syntax tree (AST) manipulation, analysis, transformation, and code generation with a layered architecture designed for building sophisticated code processing assembly-lines."
 readme = "README.md"
 requires-python = ">=3.14"
@@ -298,7 +298,6 @@ missing-type-argument = "error"
 possibly-missing-attribute = "warn"  # Might annoy you: ty's docs say this rule produces many false positives.
 possibly-unresolved-reference = "warn"  # Might annoy you: ty's docs say this rule produces many false positives.
 truthiness-test-of-none-union = "warn"  # Might annoy you: flags `if value:` on `int | None` or `str | None` even when treating 0 or '' like None is deliberate.
-unsound-assignment = "warn"  # Might annoy you: flags assigning an `Any` value to an annotated variable, which is common with untyped libraries.
 # === OK_EDIT: path-sync hunterhogan ===
 
 [tool.updateCitation]

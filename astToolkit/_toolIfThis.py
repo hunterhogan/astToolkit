@@ -90,8 +90,47 @@ class IfThis:
 			return all(antecedent(node) for antecedent in predicate)
 		return workhorse
 
+	@overload
 	@staticmethod
-	def isAnyOf[归个: ast.AST](*predicate: Callable[[ast.AST], TypeIs[归个] | bool]) -> Callable[[ast.AST], TypeIs[归个] | bool]:
+	def isAnyOf[归一: ast.AST, 归二: ast.AST](predicate一: Callable[[ast.AST], TypeIs[归一]], predicate二: Callable[[ast.AST], TypeIs[归二]], /) -> Callable[[ast.AST], TypeIs[归一 | 归二]]: ...
+	@overload
+	@staticmethod
+	def isAnyOf[归一: ast.AST, 归二: ast.AST](predicate一: Callable[[ast.AST], TypeIs[归一]], predicate二: Callable[[ast.AST], TypeGuard[归二]], /) -> Callable[[ast.AST], TypeGuard[归一 | 归二]]: ...
+	@overload
+	@staticmethod
+	def isAnyOf[归一: ast.AST, 归二: ast.AST](predicate一: Callable[[ast.AST], TypeGuard[归一]], predicate二: Callable[[ast.AST], TypeIs[归二]], /) -> Callable[[ast.AST], TypeGuard[归一 | 归二]]: ...
+	@overload
+	@staticmethod
+	def isAnyOf[归一: ast.AST, 归二: ast.AST](predicate一: Callable[[ast.AST], TypeGuard[归一]], predicate二: Callable[[ast.AST], TypeGuard[归二]], /) -> Callable[[ast.AST], TypeGuard[归一 | 归二]]: ...
+	@overload
+	@staticmethod
+	def isAnyOf[归一: ast.AST, 归二: ast.AST, 归三: ast.AST](predicate一: Callable[[ast.AST], TypeIs[归一]], predicate二: Callable[[ast.AST], TypeIs[归二]], predicate三: Callable[[ast.AST], TypeIs[归三]], /) -> Callable[[ast.AST], TypeIs[归一 | 归二 | 归三]]: ...
+	@overload
+	@staticmethod
+	def isAnyOf[归一: ast.AST, 归二: ast.AST, 归三: ast.AST](predicate一: Callable[[ast.AST], TypeIs[归一]], predicate二: Callable[[ast.AST], TypeIs[归二]], predicate三: Callable[[ast.AST], TypeGuard[归三]], /) -> Callable[[ast.AST], TypeGuard[归一 | 归二 | 归三]]: ...
+	@overload
+	@staticmethod
+	def isAnyOf[归一: ast.AST, 归二: ast.AST, 归三: ast.AST](predicate一: Callable[[ast.AST], TypeIs[归一]], predicate二: Callable[[ast.AST], TypeGuard[归二]], predicate三: Callable[[ast.AST], TypeIs[归三]], /) -> Callable[[ast.AST], TypeGuard[归一 | 归二 | 归三]]: ...
+	@overload
+	@staticmethod
+	def isAnyOf[归一: ast.AST, 归二: ast.AST, 归三: ast.AST](predicate一: Callable[[ast.AST], TypeIs[归一]], predicate二: Callable[[ast.AST], TypeGuard[归二]], predicate三: Callable[[ast.AST], TypeGuard[归三]], /) -> Callable[[ast.AST], TypeGuard[归一 | 归二 | 归三]]: ...
+	@overload
+	@staticmethod
+	def isAnyOf[归一: ast.AST, 归二: ast.AST, 归三: ast.AST](predicate一: Callable[[ast.AST], TypeGuard[归一]], predicate二: Callable[[ast.AST], TypeIs[归二]], predicate三: Callable[[ast.AST], TypeIs[归三]], /) -> Callable[[ast.AST], TypeGuard[归一 | 归二 | 归三]]: ...
+	@overload
+	@staticmethod
+	def isAnyOf[归一: ast.AST, 归二: ast.AST, 归三: ast.AST](predicate一: Callable[[ast.AST], TypeGuard[归一]], predicate二: Callable[[ast.AST], TypeIs[归二]], predicate三: Callable[[ast.AST], TypeGuard[归三]], /) -> Callable[[ast.AST], TypeGuard[归一 | 归二 | 归三]]: ...
+	@overload
+	@staticmethod
+	def isAnyOf[归一: ast.AST, 归二: ast.AST, 归三: ast.AST](predicate一: Callable[[ast.AST], TypeGuard[归一]], predicate二: Callable[[ast.AST], TypeGuard[归二]], predicate三: Callable[[ast.AST], TypeIs[归三]], /) -> Callable[[ast.AST], TypeGuard[归一 | 归二 | 归三]]: ...
+	@overload
+	@staticmethod
+	def isAnyOf[归一: ast.AST, 归二: ast.AST, 归三: ast.AST](predicate一: Callable[[ast.AST], TypeGuard[归一]], predicate二: Callable[[ast.AST], TypeGuard[归二]], predicate三: Callable[[ast.AST], TypeGuard[归三]], /) -> Callable[[ast.AST], TypeGuard[归一 | 归二 | 归三]]: ...
+	@overload
+	@staticmethod
+	def isAnyOf(*predicate: Callable[[ast.AST], bool]) -> Callable[[ast.AST], bool]: ...
+	@staticmethod
+	def isAnyOf(*predicate: Callable[[ast.AST], bool]) -> Callable[[ast.AST], bool]:
 		"""Combine predicates that allow any one match on an AST node.
 
 		(AI generated docstring)
@@ -109,7 +148,10 @@ class IfThis:
 		Returns
 		-------
 		findThis : Callable[[ast.AST], bool]
-			Predicate returning `True` when at least one supplied condition holds.
+			Predicate returning `True` when at least one supplied condition holds. For two or three
+			conditions, `TypeIs` predicates combine into a `TypeIs` predicate for the union of their
+			node types, and a mixture of `TypeIs` and `TypeGuard` predicates combines into a `TypeGuard`
+			predicate for that union.
 
 		See Also
 		--------
@@ -127,7 +169,7 @@ class IfThis:
 				IfThis.isAnyOf(Be.ImportFrom, Be.Import), Then.removeIt)
 			```
 		"""
-		def workhorse(node: ast.AST) -> TypeIs[归个] | bool:
+		def workhorse(node: ast.AST) -> bool:
 			return any(antecedent(node) for antecedent in predicate)
 		return workhorse
 
